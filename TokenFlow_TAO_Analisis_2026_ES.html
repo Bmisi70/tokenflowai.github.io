@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenFlow AI – Análisis TAO (Bittensor) 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'JetBrains Mono', monospace; background: #0a0e1a; color: #e2e8f0; line-height: 1.7; font-size: 14px; }
+
+  /* HEADER */
+  .header { background: linear-gradient(135deg, #0f172a 0%, #0c1f3a 50%, #0f172a 100%); border-bottom: 1px solid #1e3a5f; padding: 44px 32px 36px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; background: radial-gradient(ellipse, rgba(34,211,238,0.07) 0%, transparent 70%); pointer-events: none; }
+  .brand { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #22d3ee; margin-bottom: 14px; font-weight: 600; }
+  .title { font-size: 38px; font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -1px; }
+  .title span { color: #22d3ee; }
+  .subtitle { font-size: 12px; color: #64748b; margin-bottom: 22px; letter-spacing: 1px; }
+  .verdict-badge { display: inline-block; padding: 8px 24px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid; font-family: 'JetBrains Mono', monospace; }
+  .badge-green { background: #052e16; color: #4ade80; border-color: #166534; }
+  .badge-warning { background: #451a03; color: #fb923c; border-color: #9a3412; }
+  .badge-blue { background: #0c2a47; color: #38bdf8; border-color: #0284c7; }
+
+  /* LAYOUT */
+  .container { max-width: 920px; margin: 0 auto; padding: 36px 20px; }
+
+  /* STAT CARDS */
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 36px; }
+  .stat-card { background: #0d1525; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; text-align: center; transition: border-color 0.2s; }
+  .stat-card:hover { border-color: #22d3ee33; }
+  .stat-label { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .stat-value { font-size: 22px; font-weight: 800; color: #f8fafc; }
+  .stat-sub { font-size: 10px; color: #64748b; margin-top: 4px; }
+  .stat-cyan { color: #22d3ee; }
+  .stat-green { color: #4ade80; }
+  .stat-yellow { color: #fbbf24; }
+  .stat-red { color: #f87171; }
+  .stat-orange { color: #fb923c; }
+
+  /* SECTIONS */
+  .section { background: #0d1525; border: 1px solid #1e293b; border-radius: 8px; padding: 26px; margin-bottom: 18px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #1e293b; }
+  .section-icon { width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .icon-cyan { background: #083344; }
+  .icon-orange { background: #431407; }
+  .icon-green { background: #052e16; }
+  .icon-purple { background: #2e1065; }
+  .icon-red { background: #450a0a; }
+  .icon-yellow { background: #422006; }
+  .icon-blue { background: #0c2a47; }
+  .section-title { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+  .section-tag { font-size: 10px; color: #475569; margin-left: auto; letter-spacing: 1px; text-transform: uppercase; }
+
+  /* TABLES */
+  .alloc-table { width: 100%; border-collapse: collapse; }
+  .alloc-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .alloc-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; font-size: 13px; vertical-align: middle; }
+  .alloc-table tr:last-child td { border-bottom: none; }
+  .alloc-bar-wrap { background: #1e293b; border-radius: 2px; height: 5px; width: 90px; display: inline-block; vertical-align: middle; margin-left: 8px; }
+  .alloc-bar { height: 5px; border-radius: 2px; display: block; }
+
+  /* PILLS */
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 1px; font-family: 'JetBrains Mono', monospace; }
+  .pill-green { background: #052e16; color: #4ade80; }
+  .pill-yellow { background: #422006; color: #fbbf24; }
+  .pill-red { background: #450a0a; color: #f87171; }
+  .pill-cyan { background: #083344; color: #22d3ee; }
+
+  /* HALVING BOXES */
+  .halving-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  .halving-card { border-radius: 6px; padding: 22px; text-align: center; }
+  .halving-before { background: #1e293b; border: 1px solid #334155; }
+  .halving-after { background: #052e16; border: 1px solid #166534; }
+  .halving-number { font-size: 30px; font-weight: 800; margin-bottom: 6px; }
+  .halving-label { font-size: 10px; opacity: 0.7; text-transform: uppercase; letter-spacing: 2px; }
+  .halving-sub { font-size: 12px; margin-top: 10px; opacity: 0.8; }
+
+  /* EMISSION FLOW */
+  .flow-box { background: #0c1f3a; border: 1px solid #1e3a5f; border-radius: 6px; padding: 20px; text-align: center; margin: 16px 0; }
+  .flow-title { font-size: 10px; color: #22d3ee; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; }
+  .flow-numbers { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; }
+  .flow-item { text-align: center; }
+  .flow-pct { font-size: 28px; font-weight: 800; }
+  .flow-name { font-size: 10px; color: #64748b; margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+  .flow-sep { font-size: 20px; color: #334155; font-weight: 300; }
+
+  /* METERS */
+  .pressure-meter { margin: 14px 0; }
+  .meter-label { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+  .meter-bar-wrap { background: #1e293b; border-radius: 3px; height: 10px; position: relative; overflow: hidden; }
+  .meter-bar { height: 10px; border-radius: 3px; }
+  .meter-green { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .meter-orange { background: linear-gradient(90deg, #ea580c, #fb923c); }
+  .meter-red { background: linear-gradient(90deg, #dc2626, #f87171); }
+  .meter-cyan { background: linear-gradient(90deg, #0891b2, #22d3ee); }
+  .meter-yellow { background: linear-gradient(90deg, #ca8a04, #fbbf24); }
+  .meter-footer { display: flex; justify-content: space-between; font-size: 10px; color: #475569; margin-top: 4px; }
+
+  /* VERDICT */
+  .verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .verdict-card { border-radius: 6px; padding: 20px; }
+  .verdict-bull { background: #052e16; border: 1px solid #166534; }
+  .verdict-bear { background: #450a0a; border: 1px solid #7f1d1d; }
+  .verdict-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .verdict-bull .verdict-title { color: #4ade80; }
+  .verdict-bear .verdict-title { color: #f87171; }
+  .verdict-item { font-size: 12px; color: #cbd5e1; margin-bottom: 9px; padding-left: 18px; position: relative; line-height: 1.5; }
+  .verdict-item::before { content: '→'; position: absolute; left: 0; font-weight: 700; }
+  .verdict-bull .verdict-item::before { color: #4ade80; }
+  .verdict-bear .verdict-item::before { color: #f87171; }
+
+  /* FINAL VERDICT */
+  .final-verdict { background: linear-gradient(135deg, #0c2a47, #0f172a); border: 1px solid #0284c7; border-radius: 8px; padding: 30px; margin-top: 8px; }
+  .final-title { font-size: 11px; color: #22d3ee; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 14px; font-weight: 700; }
+  .final-score { display: flex; align-items: center; gap: 22px; margin-bottom: 18px; }
+  .score-number { font-size: 68px; font-weight: 900; color: #4ade80; line-height: 1; }
+  .score-label { font-size: 20px; font-weight: 700; color: #f1f5f9; }
+  .score-sub { font-size: 12px; color: #64748b; margin-top: 6px; }
+  .final-text { font-size: 13px; color: #cbd5e1; line-height: 1.9; }
+
+  /* WATCH LIST */
+  .watch-item { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid #1e293b; font-size: 13px; }
+  .watch-item:last-child { border-bottom: none; }
+  .watch-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #22c55e; }
+  .dot-cyan { background: #22d3ee; }
+  .watch-text { color: #cbd5e1; }
+  .watch-text strong { color: #f8fafc; }
+
+  /* COMP TABLE */
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .comp-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .comp-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; vertical-align: middle; }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table tr.highlight-row { background: #0c2a47; }
+
+  /* NOTE BOXES */
+  .note-box { background: #0d1a2e; border-left: 3px solid #22d3ee; border-radius: 0 6px 6px 0; padding: 14px 16px; font-size: 12px; color: #94a3b8; margin: 14px 0; line-height: 1.8; }
+  .note-box.warning { border-left-color: #f59e0b; }
+  .note-box.danger { border-left-color: #ef4444; }
+  .note-box.success { border-left-color: #22c55e; }
+
+  /* TIMELINE */
+  .timeline { margin: 16px 0; }
+  .timeline-item { display: flex; gap: 16px; padding: 12px 0; border-bottom: 1px solid #1e293b; }
+  .timeline-item:last-child { border-bottom: none; }
+  .timeline-date { font-size: 10px; color: #22d3ee; font-weight: 700; min-width: 100px; letter-spacing: 1px; padding-top: 2px; }
+  .timeline-text { font-size: 12px; color: #cbd5e1; line-height: 1.6; }
+  .timeline-text strong { color: #f8fafc; }
+
+  /* FOOTER */
+  .footer { text-align: center; padding: 28px; color: #334155; font-size: 11px; border-top: 1px solid #1e293b; margin-top: 36px; letter-spacing: 0.5px; line-height: 2; }
+
+  @media (max-width: 600px) {
+    .halving-compare, .verdict-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .score-number { font-size: 52px; }
+    .flow-numbers { gap: 10px; }
+    .title { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">🔵 TokenFlow AI · Investigación de Tokenómica AI</div>
+  <div class="title">Bittensor <span>TAO</span></div>
+  <div class="subtitle">Análisis completo de tokenómica y estructura de emisiones · 20 de marzo de 2026</div>
+  <div class="verdict-badge badge-green">✅ Estructura sólida · Primer halving activo · Narrativa institucional</div>
+</div>
+
+<div class="container">
+
+  <!-- ESTADÍSTICAS RÁPIDAS -->
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Precio (USD)</div><div class="stat-value stat-cyan">$284</div><div class="stat-sub">20 de marzo, 2026</div></div>
+    <div class="stat-card"><div class="stat-label">Cap. de Mercado</div><div class="stat-value">$2.73B</div><div class="stat-sub">#38 CoinGecko</div></div>
+    <div class="stat-card"><div class="stat-label">FDV</div><div class="stat-value stat-yellow">$5.82B</div><div class="stat-sub">Mcap/FDV = 47%</div></div>
+    <div class="stat-card"><div class="stat-label">Desde ATH</div><div class="stat-value stat-red">-62%</div><div class="stat-sub">ATH: $757 (abr. 2024)</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Circ.</div><div class="stat-value stat-cyan">9.6M</div><div class="stat-sub">46% del máximo</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Máx.</div><div class="stat-value">21M</div><div class="stat-sub">Idéntico a Bitcoin</div></div>
+    <div class="stat-card"><div class="stat-label">Volumen 24h</div><div class="stat-value">$338M</div><div class="stat-sub">41 exchanges activos</div></div>
+    <div class="stat-card"><div class="stat-label">7 días</div><div class="stat-value stat-green">+42%</div><div class="stat-sub">vs mercado: +7%</div></div>
+  </div>
+
+  <!-- SUPPLY ESTRUCTURA -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-cyan">📊</div>
+      <div class="section-title">Estructura del suministro y distribución</div>
+      <div class="section-tag">Supply Analysis</div>
+    </div>
+
+    <table class="alloc-table">
+      <thead>
+        <tr>
+          <th>Categoría</th>
+          <th>Porcentaje</th>
+          <th>Cantidad</th>
+          <th>Estado</th>
+          <th>Riesgo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Circulación actual</strong></td>
+          <td>46% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:46%;background:#22d3ee;"></div></div></td>
+          <td>~9.6M TAO</td>
+          <td><span class="status-pill pill-cyan">En mercado</span></td>
+          <td style="color:#94a3b8;">Liquidez activa</td>
+        </tr>
+        <tr>
+          <td><strong>Emisiones pendientes</strong></td>
+          <td>54% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:54%;background:#f59e0b;"></div></div></td>
+          <td>~11.4M TAO</td>
+          <td><span class="status-pill pill-yellow">Por emitir (hasta 2041)</span></td>
+          <td style="color:#fb923c;">⚠ Dilución continua ~15 años</td>
+        </tr>
+        <tr>
+          <td><strong>TAO stakeado</strong></td>
+          <td>~70% del circ. <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:70%;background:#4ade80;"></div></div></td>
+          <td>~6.7M TAO</td>
+          <td><span class="status-pill pill-green">Bloqueado en red</span></td>
+          <td style="color:#4ade80;">✅ Supply efectivo muy bajo</td>
+        </tr>
+        <tr>
+          <td><strong>VCs / Insiders</strong></td>
+          <td>0% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:0%;background:#4ade80;"></div></div></td>
+          <td>0 TAO</td>
+          <td><span class="status-pill pill-green">Fair launch total</span></td>
+          <td style="color:#4ade80;">✅ Sin vesting overhang</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box success" style="margin-top:20px;">
+      <strong>🔑 Dato clave — Fair Launch absoluto:</strong> TAO es uno de los pocos tokens en el sector AI que tuvo un lanzamiento completamente justo: sin pre-minado, sin asignación a VCs, sin reserva de fundadores. Cada TAO en existencia fue ganado a través de participación en la red. Esto elimina el "vesting overhang" que presiona a tokens como IO o AKT. La contraparte: el 54% restante se emite gradualmente hasta 2041.
+    </div>
+
+    <div class="note-box warning">
+      <strong>⚠ Mcap/FDV = 47%:</strong> A diferencia de RENDER (97%), TAO tiene una dilución futura significativa. Todavía quedan ~11.4M TAO por emitir. Sin embargo, el ritmo de esa emisión decrece con cada halving, y el alto staking (~70%) reduce la presión vendedora real en mercado.
+    </div>
+  </div>
+
+  <!-- HALVING / EMISIONES -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">⚡</div>
+      <div class="section-title">El Halving de TAO — La mecánica que cambia todo</div>
+      <div class="section-tag">Emisión y Escasez</div>
+    </div>
+
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">El 14 de diciembre de 2025, Bittensor ejecutó su primer halving programado. Al igual que Bitcoin, el protocolo reduce a la mitad las nuevas emisiones cada vez que el suministro total alcanza un umbral predefinido. El resultado es una reducción estructural de la presión vendedora de mineros y validadores.</p>
+
+    <div class="halving-compare">
+      <div class="halving-card halving-before">
+        <div class="halving-label" style="color:#94a3b8;">🔴 ANTES del halving</div>
+        <div class="halving-number" style="color:#f87171;">7,200 TAO</div>
+        <div style="font-size:12px;color:#94a3b8;">por día</div>
+        <div class="halving-sub" style="color:#94a3b8;">1 TAO / bloque · Pre-dic. 2025<br>Inflación anual: ~20–25%</div>
+      </div>
+      <div class="halving-card halving-after">
+        <div class="halving-label" style="color:#86efac;">🟢 DESPUÉS del halving</div>
+        <div class="halving-number" style="color:#4ade80;">3,600 TAO</div>
+        <div style="font-size:12px;color:#86efac;">por día</div>
+        <div class="halving-sub" style="color:#86efac;">0.5 TAO / bloque · Post-dic. 2025<br>Inflación anual: ~13%</div>
+      </div>
+    </div>
+
+    <div class="flow-box">
+      <div class="flow-title">Distribución de emisiones por bloque (post-halving)</div>
+      <div class="flow-numbers">
+        <div class="flow-item">
+          <div class="flow-pct" style="color:#22d3ee;">41%</div>
+          <div class="flow-name">Mineros AI</div>
+        </div>
+        <div class="flow-sep">+</div>
+        <div class="flow-item">
+          <div class="flow-pct" style="color:#4ade80;">41%</div>
+          <div class="flow-name">Validadores</div>
+        </div>
+        <div class="flow-sep">+</div>
+        <div class="flow-item">
+          <div class="flow-pct" style="color:#fbbf24;">18%</div>
+          <div class="flow-name">Creadores subnet</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;">
+      <div class="pressure-meter">
+        <div class="meter-label">Calendario de halvings TAO</div>
+        <div style="display:grid;gap:10px;margin-top:8px;">
+          <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:4px;"><span>Pre-halving (hasta dic. 2025)</span><span>7,200 TAO / día</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:100%;"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:4px;"><span>Halving 1 — activo (desde dic. 2025)</span><span>3,600 TAO / día</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-cyan" style="width:50%;"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:4px;"><span>Halving 2 — estimado (finales 2029)</span><span>1,800 TAO / día</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:25%;"></div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <strong>📌 Diferencia clave con Bitcoin:</strong> Bitcoin halvea basado en número de bloque. TAO halvea cuando el suministro total circulante alcanza un umbral predefinido (10.5M, 15.75M, etc.). Esto lo hace más impredecible en timing, pero igual de determinista en mecánica. El siguiente halving se estima para finales de 2029.
+    </div>
+
+    <div class="note-box success">
+      <strong>✅ Impacto del alto staking:</strong> Con ~70% del TAO circulante bloqueado en staking, el supply líquido real es de apenas ~2.9M TAO. Cada día solo entran ~3,600 TAO nuevos, pero la oferta efectiva en mercado libre es extremadamente reducida. Esta es la razón estructural detrás de la alta volatilidad alcista de TAO.
+    </div>
+  </div>
+
+  <!-- MECANISMO dTAO / SUBNETS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">🔗</div>
+      <div class="section-title">dTAO y el ecosistema de subnets — La arquitectura real</div>
+      <div class="section-tag">Mecanismo de Red</div>
+    </div>
+
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">En febrero de 2025, Bittensor lanzó Dynamic TAO (dTAO): cada subnet tiene ahora su propio token Alpha (α), que cotiza contra TAO en mercados descentralizados. En noviembre de 2025, se introdujo el modelo de emisiones basado en flujos ("Taoflow"), reemplazando el modelo basado en precio.</p>
+
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Subnets activas</div><div class="stat-value stat-cyan">128</div><div class="stat-sub">Cap máximo fijado</div></div>
+      <div class="stat-card"><div class="stat-label">Subnet Mcap total</div><div class="stat-value stat-green">~27%</div><div class="stat-sub">del Mcap de TAO</div></div>
+      <div class="stat-card"><div class="stat-label">TAO stakeado</div><div class="stat-value stat-yellow">~70%</div><div class="stat-sub">del circulante</div></div>
+      <div class="stat-card"><div class="stat-label">Covenant-72B</div><div class="stat-value" style="font-size:14px;padding-top:4px;">MMLU 67.1</div><div class="stat-sub">Subnet 3 Templar</div></div>
+    </div>
+
+    <div class="note-box">
+      <strong>⚙ Cómo funciona Taoflow:</strong> Las emisiones de TAO ya no se asignan por precio del token Alpha, sino por flujo neto de TAO (staking minus unstaking). Las subnets con más entradas que salidas reciben más emisiones. Las subnets con flujo negativo reciben cero. Este modelo es resistente a manipulación y recompensa la utilidad real, no la especulación de precio.
+    </div>
+
+    <div class="timeline">
+      <div style="font-size:11px;color:#22d3ee;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;">Hitos recientes de la red</div>
+      <div class="timeline-item">
+        <div class="timeline-date">FEB 2025</div>
+        <div class="timeline-text"><strong>Lanzamiento de Dynamic TAO (dTAO):</strong> cada subnet obtiene su propio token Alpha. El ecosistema de subnets se convierte en un mercado tokenizado de servicios AI.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">OCT 2025</div>
+        <div class="timeline-text"><strong>Cap de 128 subnets:</strong> se fija el máximo de subnets simultáneas. Las nuevas deben superar a las peor rankeadas. Período de inmunidad de 4 meses para nuevas subnets.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">NOV 2025</div>
+        <div class="timeline-text"><strong>Taoflow activado:</strong> emisiones basadas en flujo neto de staking, no en precio. Elimina el gaming de "TAO treasuries" y favorece subnets con utilidad real.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">DIC 2025</div>
+        <div class="timeline-text"><strong>Primer halving:</strong> emisiones reducidas de 7,200 a 3,600 TAO/día. Presión vendedora de mineros y validadores cae un 50% estructuralmente.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">FEB 2026</div>
+        <div class="timeline-text"><strong>Protocolo "headless":</strong> el fundador Jacob Steeves deja la dirección. Bittensor opera como protocolo descentralizado sin CEO, gestionado por gobernanza on-chain.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">MAR 2026</div>
+        <div class="timeline-text"><strong>Covenant-72B en Subnet 3 (Templar):</strong> el mayor pre-entrenamiento de LLM descentralizado de la historia — 72B parámetros, 1.1 billones de tokens, MMLU 67.1. Supera a LLaMA-2-70B. TAO sube +40% en 7 días.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CATALIZADORES INSTITUCIONALES -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">🏦</div>
+      <div class="section-title">Catalizadores institucionales — Lo que el mercado aún no ha descontado</div>
+      <div class="section-tag">Demanda Futura</div>
+    </div>
+
+    <div class="watch-item">
+      <div class="watch-dot dot-cyan"></div>
+      <div class="watch-text"><strong>Grayscale Bittensor ETF (S-1 pendiente ante SEC):</strong> Grayscale presentó el 30 de diciembre de 2025 una solicitud para convertir su Grayscale Bittensor Trust en un ETF listado en NYSE Arca. Si se aprueba, sería el primer ETF regulado de TAO en EE.UU., abriendo el acceso institucional masivo.</div>
+    </div>
+    <div class="watch-item">
+      <div class="watch-dot dot-yellow"></div>
+      <div class="watch-text"><strong>Bitwise TAO ETF (también en trámite):</strong> Bitwise también presentó solicitud para un ETF de spot TAO. Dos gestoras de primer nivel compitiendo por el mismo producto es una señal de demanda institucional sólida y sostenida.</div>
+    </div>
+    <div class="watch-item">
+      <div class="watch-dot dot-green"></div>
+      <div class="watch-text"><strong>Nvidia NemoClaw + sector AI rally:</strong> El anuncio de la plataforma NemoClaw de Nvidia (9 marzo) desencadenó una rotación sectorial hacia AI tokens. TAO, como líder del segmento de AI decentralizada, capturó la mayor parte del flujo de capital. Futuros open interest: $160M → $221M en una semana.</div>
+    </div>
+    <div class="watch-item">
+      <div class="watch-dot dot-cyan"></div>
+      <div class="watch-text"><strong>Subnet token economy (~27% del Mcap TAO):</strong> el ecosistema de tokens Alpha en subnets ya representa el 27% de la capitalización de TAO. Esto crea un "flywheel" de demanda: más utilidad de subnets → más staking → más emisiones → más valor capturado en TAO.</div>
+    </div>
+
+    <div class="note-box">
+      <strong>📌 Contexto macro:</strong> El AI crypto sector en conjunto supera los $28B de capitalización en marzo 2026. TAO, con $2.73B, es el líder de la categoría "AI puro". Su distinción arquitectónica es única: no es infraestructura adyacente a AI (como GPU compute), sino un mercado para la inteligencia artificial misma.
+    </div>
+  </div>
+
+  <!-- MÉTRICAS DE RED -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">⚡</div>
+      <div class="section-title">Actividad on-chain y métricas de red</div>
+      <div class="section-tag">Datos Reales</div>
+    </div>
+
+    <div class="pressure-meter">
+      <div class="meter-label">Participación en staking (~70% del circulante)</div>
+      <div class="meter-bar-wrap" style="height:12px;border-radius:6px;"><div class="meter-bar meter-cyan" style="width:70%;height:12px;border-radius:6px;"></div></div>
+      <div class="meter-footer"><span>0%</span><span style="color:#22d3ee;font-weight:700;">70% stakeado — supply líquido real: ~2.9M TAO</span><span>100%</span></div>
+    </div>
+
+    <div class="pressure-meter">
+      <div class="meter-label">Utilización de cap de subnets (128/128)</div>
+      <div class="meter-bar-wrap" style="height:12px;border-radius:6px;"><div class="meter-bar meter-green" style="width:100%;height:12px;border-radius:6px;"></div></div>
+      <div class="meter-footer"><span>0</span><span style="color:#4ade80;font-weight:700;">128 subnets activas — cap 100% utilizado</span><span>128</span></div>
+    </div>
+
+    <div class="pressure-meter">
+      <div class="meter-label">Covenant-72B — score MMLU vs modelos de referencia</div>
+      <div class="meter-bar-wrap" style="height:12px;border-radius:6px;"><div class="meter-bar" style="width:67.1%;height:12px;border-radius:6px;background:linear-gradient(90deg,#7c3aed,#a78bfa);"></div></div>
+      <div class="meter-footer"><span>LLaMA-2-70B: 63.4</span><span style="color:#a78bfa;font-weight:700;">Covenant-72B: 67.1 ✅</span><span>GPT-4: ~87</span></div>
+    </div>
+
+    <div class="note-box danger" style="margin-top:16px;">
+      <strong>⚠ Riesgo de concentración de stake:</strong> Investigaciones académicas sobre Bittensor documentan que las recompensas están "overwhelmingly driven by stake" más que por performance real del modelo. Los validadores con mayor stake dominan la distribución de emisiones, independientemente de la calidad de su contribución AI. Este es el principal riesgo estructural interno del protocolo.
+    </div>
+  </div>
+
+  <!-- COMPETIDORES -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">⚔</div>
+      <div class="section-title">Posicionamiento competitivo — ¿Qué lugar ocupa TAO?</div>
+      <div class="section-tag">Panorama Competitivo</div>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Proyecto</th>
+          <th>Enfoque</th>
+          <th>Diferenciador</th>
+          <th>Relación con TAO</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="highlight-row">
+          <td><strong style="color:#22d3ee;">🔵 TAO (Bittensor)</strong></td>
+          <td>Mercado de inteligencia AI</td>
+          <td>Fair launch, halving, 128 subnets especializadas</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><strong>RENDER (RNDR)</strong></td>
+          <td>GPU rendering + inferencia AI</td>
+          <td>Industria creativa, BME, Dispersed.com</td>
+          <td>Complementario — GPU vs modelo AI</td>
+        </tr>
+        <tr>
+          <td><strong>io.net (IO)</strong></td>
+          <td>GPU compute para ML</td>
+          <td>300K+ GPUs, 90% ahorro vs AWS</td>
+          <td>Infraestructura que TAO puede usar</td>
+        </tr>
+        <tr>
+          <td><strong>Akash (AKT)</strong></td>
+          <td>Cloud compute general</td>
+          <td>$4.3M ARR, 7,200 GB200 en Starcluster</td>
+          <td>Capa de compute, no de inteligencia</td>
+        </tr>
+        <tr>
+          <td><strong>OpenAI / Anthropic</strong></td>
+          <td>AI centralizado</td>
+          <td>Velocidad, fiabilidad, recursos</td>
+          <td>TAO es la alternativa descentralizada</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box" style="margin-top:16px;">
+      <strong>Posición única de TAO:</strong> Ningún otro proyecto en crypto intenta ser lo que TAO es — un mercado descentralizado donde la inteligencia artificial se produce, evalúa y transa on-chain. RENDER, io.net y Akash proporcionan infraestructura de compute. TAO proporciona el mercado de inteligencia que usa esa infraestructura. Son más complementarios que competidores directos.
+    </div>
+  </div>
+
+  <!-- TÉCNICO -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📉</div>
+      <div class="section-title">Estructura técnica y contexto de precio</div>
+      <div class="section-tag">Estructura de Precio</div>
+    </div>
+
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Precio vs ATH</div><div class="stat-value stat-red">-62%</div><div class="stat-sub">ATH: $757 (abr. 2024)</div></div>
+      <div class="stat-card"><div class="stat-label">7 días</div><div class="stat-value stat-green">+42%</div><div class="stat-sub">Breakout confirmado</div></div>
+      <div class="stat-card"><div class="stat-label">Soporte clave</div><div class="stat-value">$210</div><div class="stat-sub">Resistencia rota → piso</div></div>
+      <div class="stat-card"><div class="stat-label">Resistencia</div><div class="stat-value">$270–300</div><div class="stat-sub">Zona de distribución 2025</div></div>
+    </div>
+
+    <div class="pressure-meter"><div class="meter-label">Tendencia de largo plazo (vs ATH $757)</div><div class="meter-bar-wrap"><div class="meter-bar meter-orange" style="width:55%;"></div></div><div class="meter-footer"><span>Bajista</span><span style="color:#fb923c;">⚠ En proceso de recuperación</span><span>ATH</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Impulso de corto plazo (breakout +42% en 7 días)</div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:85%;"></div></div><div class="meter-footer"><span>Neutral</span><span style="color:#4ade80;">🟢 Momentum alcista fuerte</span><span>Alcista máx.</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">RSI 7 días (79.3 — zona sobrecomprada)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:79%;"></div></div><div class="meter-footer"><span>0</span><span style="color:#f87171;">⚠ Sobrecomprado — posible consolidación</span><span>100</span></div></div>
+
+    <div class="note-box warning" style="margin-top:16px;">RSI 79.3 es una señal de cautela técnica. El escenario sano es consolidación en $250–$270 antes del próximo impulso. <strong style="color:#4ade80;">Por encima de $300</strong> abre la zona $350–$400. <strong style="color:#f87171;">Por debajo de $210</strong> invalida el breakout actual.</div>
+  </div>
+
+  <!-- ALCISTA VS BAJISTA -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">⚖</div>
+      <div class="section-title">Argumentos alcistas vs. bajistas</div>
+      <div class="section-tag">Veredicto TokenFlow</div>
+    </div>
+
+    <div class="verdict-grid">
+      <div class="verdict-card verdict-bull">
+        <div class="verdict-title">🟢 Argumentos alcistas</div>
+        <div class="verdict-item">Fair launch 100% — sin VCs, sin vesting overhang clásico</div>
+        <div class="verdict-item">Primer halving activo: emisiones -50% desde dic. 2025</div>
+        <div class="verdict-item">~70% del supply stakeado — presión vendedora real mínima</div>
+        <div class="verdict-item">128 subnets activas — cap agotado, competencia real</div>
+        <div class="verdict-item">Covenant-72B: primer LLM 72B entrenado descentralizado</div>
+        <div class="verdict-item">Grayscale + Bitwise ETF en trámite — acceso institucional</div>
+        <div class="verdict-item">Protocolo "headless" desde feb. 2026 — descentralización real</div>
+        <div class="verdict-item">Única narrativa: mercado de inteligencia AI, no solo compute</div>
+      </div>
+      <div class="verdict-card verdict-bear">
+        <div class="verdict-title">🔴 Argumentos bajistas</div>
+        <div class="verdict-item">Mcap/FDV = 47% — 11.4M TAO aún por emitir hasta 2041</div>
+        <div class="verdict-item">-62% desde ATH — estructura de largo plazo aún bajista</div>
+        <div class="verdict-item">RSI 79.3 — sobrecomprado a corto plazo, riesgo de corrección</div>
+        <div class="verdict-item">Recompensas dominadas por stake, no por performance AI real</div>
+        <div class="verdict-item">Complejidad técnica alta — barrera de adopción masiva</div>
+        <div class="verdict-item">ETF aún pendiente de aprobación SEC — incertidumbre regulatoria</div>
+        <div class="verdict-item">Concentración de stake: top validadores dominan emisiones</div>
+        <div class="verdict-item">Inflación anual aún ~13% — no tan escaso como Bitcoin</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VEREDICTO FINAL -->
+  <div class="final-verdict">
+    <div class="final-title">TokenFlow AI · Veredicto Final</div>
+    <div class="final-score">
+      <div class="score-number">7</div>
+      <div>
+        <div class="score-label">Estructura sólida / Momentum activo</div>
+        <div class="score-sub">sobre 10 · La tokenómica más parecida a Bitcoin en el sector AI</div>
+      </div>
+    </div>
+    <div class="final-text">
+      TAO tiene algo que pocos tokens en el sector AI pueden reclamar: <strong>una tokenómica honesta</strong>. Sin VCs, sin reservas de fundador, sin vesting que presione el precio. Todo el TAO existente fue ganado a través de participación real en la red. El primer halving redujo las emisiones diarias un 50%, y el ~70% del supply bloqueado en staking convierte el mercado líquido en algo extremadamente comprimido.<br><br>
+      La narrativa es también única. RENDER y io.net son infraestructura de compute para AI. TAO <em>es</em> el mercado de la inteligencia: donde modelos AI compiten, se evalúan y se remunera la utilidad real. El hito de Covenant-72B —el LLM de 72B parámetros entrenado completamente de forma descentralizada— demuestra que la arquitectura puede escalar a nivel enterprise sin infraestructura centralizada.<br><br>
+      <strong>¿Qué falta?</strong> El Mcap/FDV del 47% implica dilución continua hasta 2041. La concentración de stake genera dudas sobre si las recompensas reflejan utilidad AI real o simplemente capital. Y con RSI 79 tras un +42% semanal, el timing de entrada importa.<br><br>
+      <strong>¿Qué vigilar?</strong> Aprobación del ETF de Grayscale, evolución del ratio staking/supply, y si las subnets muestran utilidad real medible más allá del capital especulativo.
+    </div>
+  </div>
+
+  <!-- LISTA DE SEGUIMIENTO -->
+  <div class="section" style="margin-top:20px;">
+    <div class="section-header">
+      <div class="section-icon icon-cyan">👁</div>
+      <div class="section-title">Qué vigilar en los próximos 30–90 días</div>
+      <div class="section-tag">Lista de Monitoreo</div>
+    </div>
+
+    <div class="watch-item"><div class="watch-dot dot-cyan"></div><div class="watch-text"><strong>Decisión SEC sobre ETF de Grayscale:</strong> Si se aprueba, es el catalizador más importante para demanda institucional. Monitorear comunicados de Grayscale y SEC directamente.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-yellow"></div><div class="watch-text"><strong>Ratio de staking vs supply circulante:</strong> Si el % stakeado cae por debajo del 60%, más supply entra en mercado libre — señal bajista. Si supera el 75%, la escasez se intensifica.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Nivel técnico $210:</strong> Mientras TAO mantenga $210 como soporte, el breakout está intacto. Una caída sostenida por debajo invalida el escenario alcista de corto plazo.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-cyan"></div><div class="watch-text"><strong>Crecimiento del Mcap de subnets:</strong> Si el Mcap de tokens Alpha supera el 35% del Mcap de TAO, es señal de que el ecosistema dTAO está atrayendo capital real, no solo especulativo.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-yellow"></div><div class="watch-text"><strong>Nuevas propuestas de gobernanza:</strong> Especialmente cualquier propuesta que aborde la concentración de stake o que refuerce la correlación entre performance AI y emisiones — sería un catalizador estructural positivo.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Métricas de Covenant-72B y Subnet 3:</strong> Seguimiento en taostats.io — si Subnet 3 (Templar) mantiene la mayor emisión y el score MMLU sigue mejorando, valida la narrativa de "AI real" sobre Bittensor.</div></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong style="color:#22d3ee;">TokenFlow AI</strong> · Investigación de tokenómica AI y DePIN · Sin hype. Solo estructura.<br>
+  Fecha del análisis: 20 de marzo de 2026 · Este análisis no constituye asesoramiento de inversión. DYOR.<br>
+  Fuentes: CoinGecko, CoinMarketCap, Tokenomist, Grayscale Research, docs.learnbittensor.org, taostats.io, coincub.com, datos on-chain
+</div>
+
+</body>
+</html>
