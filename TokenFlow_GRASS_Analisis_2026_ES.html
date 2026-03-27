@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenFlow AI – Análisis GRASS 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'JetBrains Mono', monospace; background: #0a0e1a; color: #e2e8f0; line-height: 1.7; font-size: 14px; }
+
+  .header { background: linear-gradient(135deg, #0a1a0f 0%, #0f1f14 50%, #0a0e1a 100%); border-bottom: 1px solid #1a3a22; padding: 44px 32px 36px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; background: radial-gradient(ellipse, rgba(74,222,128,0.06) 0%, transparent 70%); pointer-events: none; }
+  .brand { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #4ade80; margin-bottom: 14px; font-weight: 600; }
+  .title { font-size: 38px; font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -1px; }
+  .title span { color: #4ade80; }
+  .subtitle { font-size: 12px; color: #64748b; margin-bottom: 22px; letter-spacing: 1px; }
+  .verdict-badge { display: inline-block; padding: 8px 24px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid; font-family: 'JetBrains Mono', monospace; }
+  .badge-warning { background: #451a03; color: #fb923c; border-color: #9a3412; }
+  .badge-green { background: #052e16; color: #4ade80; border-color: #166534; }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 36px 20px; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 36px; }
+  .stat-card { background: #0d1525; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; text-align: center; transition: border-color 0.2s; }
+  .stat-card:hover { border-color: #4ade8033; }
+  .stat-label { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .stat-value { font-size: 22px; font-weight: 800; color: #f8fafc; }
+  .stat-sub { font-size: 10px; color: #64748b; margin-top: 4px; }
+  .stat-green { color: #4ade80; }
+  .stat-yellow { color: #fbbf24; }
+  .stat-red { color: #f87171; }
+  .stat-orange { color: #fb923c; }
+
+  .section { background: #0d1525; border: 1px solid #1e293b; border-radius: 8px; padding: 26px; margin-bottom: 18px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #1e293b; }
+  .section-icon { width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .icon-green { background: #052e16; }
+  .icon-orange { background: #431407; }
+  .icon-red { background: #450a0a; }
+  .icon-yellow { background: #422006; }
+  .icon-blue { background: #0c2a47; }
+  .icon-purple { background: #2e1065; }
+  .icon-cyan { background: #083344; }
+  .section-title { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+  .section-tag { font-size: 10px; color: #475569; margin-left: auto; letter-spacing: 1px; text-transform: uppercase; }
+
+  .alloc-table { width: 100%; border-collapse: collapse; }
+  .alloc-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .alloc-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; font-size: 13px; vertical-align: middle; }
+  .alloc-table tr:last-child td { border-bottom: none; }
+  .alloc-bar-wrap { background: #1e293b; border-radius: 2px; height: 5px; width: 90px; display: inline-block; vertical-align: middle; margin-left: 8px; }
+  .alloc-bar { height: 5px; border-radius: 2px; display: block; }
+
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+  .pill-green { background: #052e16; color: #4ade80; }
+  .pill-yellow { background: #422006; color: #fbbf24; }
+  .pill-red { background: #450a0a; color: #f87171; }
+  .pill-orange { background: #431407; color: #fb923c; }
+
+  .unlock-timeline { margin: 16px 0; }
+  .unlock-item { display: flex; gap: 16px; padding: 14px; border-radius: 6px; margin-bottom: 10px; align-items: flex-start; }
+  .unlock-past { background: #1e293b; border: 1px solid #334155; }
+  .unlock-future { background: #450a0a22; border: 1px solid #7f1d1d44; }
+  .unlock-next { background: #42200622; border: 1px solid #9a341244; }
+  .unlock-date { font-size: 11px; font-weight: 700; min-width: 110px; padding-top: 2px; letter-spacing: 1px; }
+  .unlock-past .unlock-date { color: #64748b; }
+  .unlock-future .unlock-date { color: #f87171; }
+  .unlock-next .unlock-date { color: #fb923c; }
+  .unlock-text { font-size: 12px; color: #cbd5e1; line-height: 1.6; }
+  .unlock-text strong { color: #f8fafc; }
+
+  .pressure-meter { margin: 14px 0; }
+  .meter-label { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+  .meter-bar-wrap { background: #1e293b; border-radius: 3px; height: 10px; position: relative; overflow: hidden; }
+  .meter-bar { height: 10px; border-radius: 3px; }
+  .meter-green { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .meter-orange { background: linear-gradient(90deg, #ea580c, #fb923c); }
+  .meter-red { background: linear-gradient(90deg, #dc2626, #f87171); }
+  .meter-yellow { background: linear-gradient(90deg, #ca8a04, #fbbf24); }
+  .meter-footer { display: flex; justify-content: space-between; font-size: 10px; color: #475569; margin-top: 4px; }
+
+  .arch-box { background: #0c1f12; border: 1px solid #1a3a22; border-radius: 6px; padding: 20px; margin: 16px 0; }
+  .arch-title { font-size: 10px; color: #4ade80; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; font-weight: 700; }
+  .arch-flow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .arch-step { background: #052e16; border: 1px solid #166534; border-radius: 4px; padding: 10px 14px; text-align: center; font-size: 11px; }
+  .arch-step-name { color: #4ade80; font-weight: 700; font-size: 12px; }
+  .arch-step-desc { color: #64748b; font-size: 10px; margin-top: 3px; }
+  .arch-arrow { color: #166534; font-size: 16px; }
+
+  .verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .verdict-card { border-radius: 6px; padding: 20px; }
+  .verdict-bull { background: #052e16; border: 1px solid #166534; }
+  .verdict-bear { background: #450a0a; border: 1px solid #7f1d1d; }
+  .verdict-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .verdict-bull .verdict-title { color: #4ade80; }
+  .verdict-bear .verdict-title { color: #f87171; }
+  .verdict-item { font-size: 12px; color: #cbd5e1; margin-bottom: 9px; padding-left: 18px; position: relative; line-height: 1.5; }
+  .verdict-item::before { content: '→'; position: absolute; left: 0; font-weight: 700; }
+  .verdict-bull .verdict-item::before { color: #4ade80; }
+  .verdict-bear .verdict-item::before { color: #f87171; }
+
+  .final-verdict { background: linear-gradient(135deg, #0a1a0f, #0f172a); border: 1px solid #166534; border-radius: 8px; padding: 30px; margin-top: 8px; }
+  .final-title { font-size: 11px; color: #4ade80; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 14px; font-weight: 700; }
+  .final-score { display: flex; align-items: center; gap: 22px; margin-bottom: 18px; }
+  .score-number { font-size: 68px; font-weight: 900; color: #fbbf24; line-height: 1; }
+  .score-label { font-size: 20px; font-weight: 700; color: #f1f5f9; }
+  .score-sub { font-size: 12px; color: #64748b; margin-top: 6px; }
+  .final-text { font-size: 13px; color: #cbd5e1; line-height: 1.9; }
+
+  .watch-item { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid #1e293b; font-size: 13px; }
+  .watch-item:last-child { border-bottom: none; }
+  .watch-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #22c55e; }
+  .dot-orange { background: #f97316; }
+  .watch-text { color: #cbd5e1; }
+  .watch-text strong { color: #f8fafc; }
+
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .comp-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .comp-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; vertical-align: middle; }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table tr.highlight-row { background: #0c2a1a; }
+
+  .note-box { background: #0a1a0f; border-left: 3px solid #4ade80; border-radius: 0 6px 6px 0; padding: 14px 16px; font-size: 12px; color: #94a3b8; margin: 14px 0; line-height: 1.8; }
+  .note-box.warning { border-left-color: #f59e0b; background: #0d1408; }
+  .note-box.danger { border-left-color: #ef4444; background: #0d0808; }
+
+  .footer { text-align: center; padding: 28px; color: #334155; font-size: 11px; border-top: 1px solid #1e293b; margin-top: 36px; letter-spacing: 0.5px; line-height: 2; }
+
+  @media (max-width: 600px) {
+    .verdict-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .score-number { font-size: 52px; }
+    .arch-flow { flex-direction: column; }
+    .title { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">🟢 TokenFlow AI · Investigación de Tokenómica DePIN</div>
+  <div class="title">Grass <span>GRASS</span></div>
+  <div class="subtitle">Análisis completo de tokenómica y estructura de desbloqueos · 28 de marzo de 2026</div>
+  <div class="verdict-badge badge-warning">⚠ Narrativa sólida · Presión de unlocks estructural · Alta volatilidad</div>
+</div>
+
+<div class="container">
+
+  <!-- ESTADÍSTICAS RÁPIDAS -->
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Precio (USD)</div><div class="stat-value stat-green">$0.32</div><div class="stat-sub">28 de marzo, 2026</div></div>
+    <div class="stat-card"><div class="stat-label">Cap. de Mercado</div><div class="stat-value">$170M</div><div class="stat-sub">#189 CoinGecko</div></div>
+    <div class="stat-card"><div class="stat-label">FDV</div><div class="stat-value stat-yellow">$312M</div><div class="stat-sub">Mcap/FDV = 55%</div></div>
+    <div class="stat-card"><div class="stat-label">Desde ATH</div><div class="stat-value stat-red">-92%</div><div class="stat-sub">ATH: $3.89 (nov. 2024)</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Circ.</div><div class="stat-value">542M</div><div class="stat-sub">54% del máximo</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Máx.</div><div class="stat-value">1,000M</div><div class="stat-sub">Cap fijo — sin inflación</div></div>
+    <div class="stat-card"><div class="stat-label">Volumen 24h</div><div class="stat-value">$13M</div><div class="stat-sub">63 exchanges activos</div></div>
+    <div class="stat-card"><div class="stat-label">Holders</div><div class="stat-value stat-green">327K+</div><div class="stat-sub">Comunidad amplia</div></div>
+  </div>
+
+  <!-- QUÉ ES GRASS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">🌐</div>
+      <div class="section-title">¿Qué es GRASS? — El ancho de banda como commodity AI</div>
+      <div class="section-tag">Mecanismo de Red</div>
+    </div>
+
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">Solo dos compañías en el mundo pueden rastrear todo el internet de forma continua: Google y Microsoft. Sus capacidades de web scraping son la columna vertebral de modelos de lenguaje que valen billones. GRASS propone reemplazarlas con una red descentralizada de usuarios que comparten su ancho de banda inactivo.</p>
+
+    <div class="arch-box">
+      <div class="arch-title">Arquitectura — Sovereign Data Rollup sobre Solana</div>
+      <div class="arch-flow">
+        <div class="arch-step">
+          <div class="arch-step-name">🖥 Nodos</div>
+          <div class="arch-step-desc">Usuarios comparten<br>ancho de banda inactivo</div>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-step">
+          <div class="arch-step-name">🔀 Routers</div>
+          <div class="arch-step-desc">Conectan nodos al<br>rollup, verifican datos</div>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-step">
+          <div class="arch-step-name">✅ Validators</div>
+          <div class="arch-step-desc">Generan ZK proofs<br>de datos on-chain</div>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-step">
+          <div class="arch-step-name">📦 Data Ledger</div>
+          <div class="arch-step-desc">Registro inmutable<br>para clientes AI</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-grid" style="margin-top:16px;margin-bottom:0;">
+      <div class="stat-card"><div class="stat-label">Datos diarios</div><div class="stat-value stat-green">~1,000 TB</div><div class="stat-sub">Post-actualización Sion</div></div>
+      <div class="stat-card"><div class="stat-label">Nodos activos</div><div class="stat-value">2M+</div><div class="stat-sub">IP residenciales globales</div></div>
+      <div class="stat-card"><div class="stat-label">Clientes AI</div><div class="stat-value stat-yellow">7 cifras</div><div class="stat-sub">Labs confirmados 2025</div></div>
+      <div class="stat-card"><div class="stat-label">Revenue 2024</div><div class="stat-value stat-green">$33M</div><div class="stat-sub">Dato Polychain Capital</div></div>
+    </div>
+
+    <div class="note-box" style="margin-top:16px;">
+      <strong>🔑 Propuesta única:</strong> GRASS no compite con RENDER ni con io.net. No es compute — es datos. Los modelos AI necesitan enormes cantidades de datos web para entrenarse. GRASS convierte el ancho de banda inactivo de millones de usuarios en ese recurso, con pruebas ZK de autenticidad y procedencia. Es la capa de datos que los proyectos de AI compute necesitan para funcionar.
+    </div>
+  </div>
+
+  <!-- SUPPLY ESTRUCTURA -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">📊</div>
+      <div class="section-title">Estructura del suministro y distribución</div>
+      <div class="section-tag">Supply Analysis</div>
+    </div>
+
+    <table class="alloc-table">
+      <thead>
+        <tr><th>Categoría</th><th>Porcentaje</th><th>Tokens</th><th>Vesting</th><th>Riesgo</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Early Investors</strong></td>
+          <td>25.2% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:75%;background:#ef4444;"></div></div></td>
+          <td>252M GRASS</td>
+          <td><span class="status-pill pill-red">Cliff 1 año + vesting 1 año</span></td>
+          <td style="color:#f87171;">⚠ Principal fuente de presión</td>
+        </tr>
+        <tr>
+          <td><strong>Foundation & Ecosystem</strong></td>
+          <td>22.8% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:68%;background:#f59e0b;"></div></div></td>
+          <td>228M GRASS</td>
+          <td><span class="status-pill pill-yellow">Según gobernanza</span></td>
+          <td>Discrecional — riesgo moderado</td>
+        </tr>
+        <tr>
+          <td><strong>Contributors</strong></td>
+          <td>22% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:66%;background:#fb923c;"></div></div></td>
+          <td>220M GRASS</td>
+          <td><span class="status-pill pill-orange">Cliff 1 año + vesting 3 años</span></td>
+          <td>Largo plazo — menor presión</td>
+        </tr>
+        <tr>
+          <td><strong>Future Incentives</strong></td>
+          <td>17% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:51%;background:#4ade80;"></div></div></td>
+          <td>170M GRASS</td>
+          <td><span class="status-pill pill-green">Emisión gradual</span></td>
+          <td style="color:#4ade80;">✅ Recompensas a nodos</td>
+        </tr>
+        <tr>
+          <td><strong>Airdrop One</strong></td>
+          <td>10% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:30%;background:#94a3b8;"></div></div></td>
+          <td>100M GRASS</td>
+          <td><span class="status-pill pill-green">Distribuido</span></td>
+          <td>Ya en mercado</td>
+        </tr>
+        <tr>
+          <td><strong>Router Rewards</strong></td>
+          <td>3% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:9%;background:#4ade80;"></div></div></td>
+          <td>30M GRASS</td>
+          <td><span class="status-pill pill-green">Continuo</span></td>
+          <td style="color:#4ade80;">✅ Incentivo de red</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box warning" style="margin-top:20px;">
+      <strong>⚠ El problema estructural:</strong> El 47.2% del supply está en manos de early investors y contributors con cliff vesting. Estos actores tienen un coste de entrada muy bajo y son los más propensos a vender en unlocks. El Mcap/FDV del 55% significa que aún quedan ~458M tokens por desbloquear hasta 2028.
+    </div>
+  </div>
+
+  <!-- RADAR DE DESBLOQUEOS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">🗓</div>
+      <div class="section-title">Radar de Desbloqueos — El riesgo real de suministro</div>
+      <div class="section-tag">Unlock Schedule</div>
+    </div>
+
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:16px;">GRASS utiliza cliff vesting — los tokens se liberan de golpe tras un período de espera. Esto crea eventos de suministro discretos y predecibles, pero potencialmente disruptivos. El historial de unlocks muestra una presión de venta intensa y repetida.</p>
+
+    <div class="unlock-timeline">
+      <div class="unlock-item unlock-past">
+        <div class="unlock-date">OCT 28, 2025</div>
+        <div class="unlock-text"><strong>181M GRASS desbloqueados</strong> — el mayor cliff de la historia del token. Representó el 18% del supply total, valorado en ~$80M. Causó una caída del precio del 10–30% en días posteriores. Fue el evento de suministro más significativo del proyecto.</div>
+      </div>
+      <div class="unlock-item unlock-past">
+        <div class="unlock-date">FEB 28, 2026</div>
+        <div class="unlock-text"><strong>55M GRASS desbloqueados</strong> — segundo gran cliff para early investors. Contribuyó a que el precio tocara su mínimo histórico de $0.1663 el 23 de febrero de 2026. El mercado absorbió el unlock con dificultad ante la falta de catalizadores positivos.</div>
+      </div>
+      <div class="unlock-item unlock-next">
+        <div class="unlock-date">MAR 28, 2026 ⚠</div>
+        <div class="unlock-text"><strong>~4.58M GRASS pendientes HOY</strong> — unlock de Contributors (0.46% del supply máx.). Relativamente pequeño, pero su impacto depende del contexto de mercado. Los datos de CryptoRank confirman el evento para esta fecha.</div>
+      </div>
+      <div class="unlock-item unlock-future">
+        <div class="unlock-date">OCT 28, 2026</div>
+        <div class="unlock-text"><strong>Próximo unlock mayor — Contributors</strong>. El monto exacto aún no está publicado. Con el historial de eventos pasados, este unlock debe monitorearse con antelación. La schedule se extiende hasta 2028.</div>
+      </div>
+    </div>
+
+    <div class="pressure-meter" style="margin-top:16px;">
+      <div class="meter-label">Presión de unlock — historial de impacto en precio</div>
+      <div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:85%;"></div></div>
+      <div class="meter-footer"><span>Bajo</span><span style="color:#f87171;">🔴 Alto — unlocks cliff de early investors son la causa principal del -92% desde ATH</span><span>Máximo</span></div>
+    </div>
+
+    <div class="note-box danger">
+      <strong>⚠ Contexto importante:</strong> GRASS no tiene inflación continua como RENDER (BME). Su riesgo es diferente — son eventos discretos de cliff vesting donde early investors con bajo coste de entrada reciben grandes bloques de tokens. La lección del unlock de octubre 2025: 181M tokens de golpe destruyeron el momentum alcista del token en días.
+    </div>
+  </div>
+
+  <!-- MÉTRICAS DE RED -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">⚡</div>
+      <div class="section-title">Actividad de red y métricas reales</div>
+      <div class="section-tag">Datos On-Chain</div>
+    </div>
+
+    <div class="pressure-meter">
+      <div class="meter-label">Volumen de datos scrapeados diarios (post-Sion upgrade)</div>
+      <div class="meter-bar-wrap" style="height:12px;border-radius:6px;"><div class="meter-bar meter-green" style="width:82%;height:12px;border-radius:6px;"></div></div>
+      <div class="meter-footer"><span>0 TB</span><span style="color:#4ade80;font-weight:700;">~1,000 TB/día — ATH 1,700 TB</span><span>2,000 TB</span></div>
+    </div>
+
+    <div class="pressure-meter">
+      <div class="meter-label">Nodos activos — red de IPs residenciales</div>
+      <div class="meter-bar-wrap" style="height:12px;border-radius:6px;"><div class="meter-bar meter-yellow" style="width:65%;height:12px;border-radius:6px;"></div></div>
+      <div class="meter-footer"><span>0</span><span style="color:#fbbf24;font-weight:700;">2M+ nodos — diversidad geográfica global</span><span>5M+</span></div>
+    </div>
+
+    <div class="pressure-meter">
+      <div class="meter-label">Revenue acumulado (clientes AI labs)</div>
+      <div class="meter-bar-wrap" style="height:12px;border-radius:6px;"><div class="meter-bar meter-green" style="width:55%;height:12px;border-radius:6px;"></div></div>
+      <div class="meter-footer"><span>$0</span><span style="color:#4ade80;font-weight:700;">$33M reportado por Polychain Capital</span><span>$100M+</span></div>
+    </div>
+
+    <div class="note-box" style="margin-top:16px;">
+      <strong>📌 Sion Upgrade (febrero 2025):</strong> El upgrade más importante de la red. Introdujo algoritmos multimodales capaces de procesar texto, imágenes y video. El volumen diario pasó de ~10 TB a un ATH de 1,700 TB — un incremento de 170x. Actualmente estabilizado en ~1,000 TB/día, lo que confirma demanda sostenida y no especulativa.
+    </div>
+
+    <div class="note-box warning">
+      <strong>⚠ Riesgo de centralización de validators:</strong> La red opera actualmente con un validador centralizado. La transición a un comité descentralizado está en roadmap para 2026, pero aún no completada. Este es el principal riesgo técnico: un único punto de fallo en la capa de validación contradice la narrativa DePIN. Hasta que se complete la descentralización, el "Sovereign" en Sovereign Data Rollup es parcialmente aspiracional.
+    </div>
+  </div>
+
+  <!-- COMPETIDORES -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">⚔</div>
+      <div class="section-title">Posicionamiento competitivo</div>
+      <div class="section-tag">Panorama Competitivo</div>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr><th>Proyecto</th><th>Enfoque</th><th>Diferenciador</th><th>Relación con GRASS</th></tr>
+      </thead>
+      <tbody>
+        <tr class="highlight-row">
+          <td><strong style="color:#4ade80;">🟢 GRASS</strong></td>
+          <td>Web scraping → datos AI</td>
+          <td>2M+ IPs residenciales, ZK proofs, Sovereign Data Rollup</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><strong>Google / Microsoft</strong></td>
+          <td>Web crawling centralizado</td>
+          <td>Escala, velocidad, infraestructura propietaria</td>
+          <td>⚠ Competidor directo principal</td>
+        </tr>
+        <tr>
+          <td><strong>TAO (Bittensor)</strong></td>
+          <td>Mercado de inteligencia AI</td>
+          <td>128 subnets, halving, fair launch</td>
+          <td>Complementario — consume datos que GRASS provee</td>
+        </tr>
+        <tr>
+          <td><strong>RENDER (RNDR)</strong></td>
+          <td>GPU rendering + inferencia</td>
+          <td>OctaneRender, BME, Dispersed.com</td>
+          <td>Complementario — compute, no datos</td>
+        </tr>
+        <tr>
+          <td><strong>io.net (IO)</strong></td>
+          <td>GPU compute para ML</td>
+          <td>300K+ GPUs, 90% ahorro vs AWS</td>
+          <td>Complementario — infraestructura, no datos</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box" style="margin-top:16px;">
+      <strong>Ventaja competitiva clave:</strong> Las IPs residenciales de GRASS son insustituibles para ciertos tipos de scraping. Los modelos AI necesitan datos que parezcan provenir de usuarios reales — no de datacenters. Google puede bloquear IPs de datacenters fácilmente; bloquear 2 millones de IPs residenciales distribuidas globalmente es estructuralmente imposible. Este es el moat real de GRASS.
+    </div>
+  </div>
+
+  <!-- TÉCNICO -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📉</div>
+      <div class="section-title">Estructura técnica y contexto de precio</div>
+      <div class="section-tag">Estructura de Precio</div>
+    </div>
+
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Precio vs ATH</div><div class="stat-value stat-red">-92%</div><div class="stat-sub">ATH: $3.89 (nov. 2024)</div></div>
+      <div class="stat-card"><div class="stat-label">Precio vs ATL</div><div class="stat-value stat-green">+92%</div><div class="stat-sub">ATL: $0.166 (feb. 2026)</div></div>
+      <div class="stat-card"><div class="stat-label">Soporte clave</div><div class="stat-value">$0.28</div><div class="stat-sub">Zona de acumulación</div></div>
+      <div class="stat-card"><div class="stat-label">Resistencia</div><div class="stat-value">$0.475</div><div class="stat-sub">Máximo reciente mar. 2026</div></div>
+    </div>
+
+    <div class="pressure-meter"><div class="meter-label">Tendencia de largo plazo (-92% desde ATH)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:90%;"></div></div><div class="meter-footer"><span>ATH</span><span style="color:#f87171;">🔴 Estructura bajista — rebote desde ATL</span><span>ATL</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Momentum de corto plazo (+92% desde ATL feb. 2026)</div><div class="meter-bar-wrap"><div class="meter-bar meter-yellow" style="width:55%;"></div></div><div class="meter-footer"><span>Bajista</span><span style="color:#fbbf24;">⚠ Recuperación parcial — frágil</span><span>Alcista</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Sensibilidad al sector AI (correlación alta)</div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:80%;"></div></div><div class="meter-footer"><span>Baja</span><span style="color:#4ade80;">✅ Alta sensibilidad — sube fuerte con narrativa AI</span><span>Alta</span></div></div>
+
+    <div class="note-box warning" style="margin-top:16px;">
+      GRASS es de los tokens más volátiles del sector DePIN. El rally de marzo 2026 fue +28% en 24 horas tras el GTC de Nvidia — sin catalizadores propios. Esto confirma que el precio está impulsado principalmente por narrativa AI sectorial, no por fundamentales específicos del proyecto. Alta correlación = alta volatilidad en ambas direcciones.
+    </div>
+  </div>
+
+  <!-- ALCISTA VS BAJISTA -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">⚖</div>
+      <div class="section-title">Argumentos alcistas vs. bajistas</div>
+      <div class="section-tag">Veredicto TokenFlow</div>
+    </div>
+
+    <div class="verdict-grid">
+      <div class="verdict-card verdict-bull">
+        <div class="verdict-title">🟢 Argumentos alcistas</div>
+        <div class="verdict-item">Narrativa única — datos AI, no compute: nicho sin competidor DePIN directo</div>
+        <div class="verdict-item">2M+ IPs residenciales — moat técnico insustituible</div>
+        <div class="verdict-item">~1,000 TB/día de datos — demanda real, no especulativa</div>
+        <div class="verdict-item">$33M en revenue — clientes AI de 7 cifras confirmados</div>
+        <div class="verdict-item">Supply fijo 1B — sin inflación continua (a diferencia de BME)</div>
+        <div class="verdict-item">Sion upgrade: multimodal, 10x eficiencia — infraestructura escalable</div>
+        <div class="verdict-item">Android app 2026 — potencial de millones de nuevos nodos móviles</div>
+        <div class="verdict-item">Alta sensibilidad a narrativa AI — sube fuerte en ciclos alcistas</div>
+      </div>
+      <div class="verdict-card verdict-bear">
+        <div class="verdict-title">🔴 Argumentos bajistas</div>
+        <div class="verdict-item">-92% desde ATH — estructura bajista de largo plazo dominante</div>
+        <div class="verdict-item">Mcap/FDV = 55% — 458M tokens por desbloquear hasta 2028</div>
+        <div class="verdict-item">Unlocks cliff masivos — oct. 2025 (-80M$) y feb. 2026 destruyeron el precio</div>
+        <div class="verdict-item">Validador centralizado — "Sovereign" aún no es descentralizado de verdad</div>
+        <div class="verdict-item">Precio impulsado por narrativa sectorial, no por métricas propias</div>
+        <div class="verdict-item">Early investors con bajo coste de entrada — ventas estructuralmente probables</div>
+        <div class="verdict-item">Sin mecanismo de burn/quema — sin contrapeso a la dilución de unlocks</div>
+        <div class="verdict-item">Competencia de Google y Microsoft con recursos ilimitados</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VEREDICTO FINAL -->
+  <div class="final-verdict">
+    <div class="final-title">TokenFlow AI · Veredicto Final</div>
+    <div class="final-score">
+      <div class="score-number">5.5</div>
+      <div>
+        <div class="score-label">Narrativa real · Tokenómica problemática</div>
+        <div class="score-sub">sobre 10 · El producto funciona — la estructura de supply, no tanto</div>
+      </div>
+    </div>
+    <div class="final-text">
+      GRASS tiene algo genuino que pocos proyectos DePIN pueden decir: un producto que funciona y genera ingresos reales. Los $33M en revenue con clientes AI de 7 cifras no son narrativa — son contratos. Los 2 millones de nodos que scrapearon ~1,000 TB diarios en 2025 son infraestructura real. Y la ventaja de las IPs residenciales frente a cualquier solución centralizada es estructuralmente defensible.<br><br>
+      El problema es que la tokenómica no está alineada con esa historia positiva. Los cliff unlocks de early investors — 181M tokens de golpe en octubre 2025, 55M más en febrero 2026 — han sido sistemáticamente destructivos para el precio. El token ha caído un 92% desde su ATH no porque el producto falle, sino porque la estructura de distribución privilegia a quienes entraron antes que al mercado.<br><br>
+      <strong>¿Qué cambiaría el veredicto?</strong> La descentralización del validador eliminaría el principal riesgo técnico. Un mecanismo de quema vinculado a los ingresos de clientes AI convertiría el revenue real en escasez de token. Y la ausencia de nuevos cliff unlocks masivos en 2026 daría tiempo al mercado para recuperarse.<br><br>
+      Hasta entonces: narrativa válida, producto real, tokenómica que penaliza al holder de corto y medio plazo.
+    </div>
+  </div>
+
+  <!-- LISTA DE SEGUIMIENTO -->
+  <div class="section" style="margin-top:20px;">
+    <div class="section-header">
+      <div class="section-icon icon-cyan">👁</div>
+      <div class="section-title">Qué vigilar en los próximos 30–90 días</div>
+      <div class="section-tag">Lista de Monitoreo</div>
+    </div>
+    <div class="watch-item"><div class="watch-dot dot-red"></div><div class="watch-text"><strong>Unlock de octubre 28, 2026 — Contributors:</strong> El siguiente gran evento de suministro. Seguir en tokenomist.ai el monto exacto y la categoría de los receptores con al menos 30 días de antelación.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-orange"></div><div class="watch-text"><strong>Transición a validators descentralizados:</strong> Cuando Grass anuncie la fecha y el modelo del comité descentralizado, es el catalizador técnico más importante. Elimina el principal riesgo de centralización y fortalece la narrativa DePIN.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-yellow"></div><div class="watch-text"><strong>Volumen de datos diarios en grass.io:</strong> Si el promedio supera los 1,500 TB/día de forma sostenida, es señal de que la demanda de clientes AI está creciendo más rápido que la oferta de nodos. Catalizador bullish estructural.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Lanzamiento de la Android app:</strong> Potencialmente millones de nuevos nodos móviles. Más nodos = más datos = más revenue = más demanda de GRASS. Seguir anuncios oficiales en X y Telegram del proyecto.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-orange"></div><div class="watch-text"><strong>Contratos con AI labs confirmados públicamente:</strong> Hasta ahora, los clientes de "7 cifras" no están nombrados públicamente. Un anuncio de partnership con un AI lab reconocido sería el mayor catalizador de demanda institucional posible.</div></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong style="color:#4ade80;">TokenFlow AI</strong> · Investigación de tokenómica AI y DePIN · Sin hype. Solo estructura.<br>
+  Fecha del análisis: 28 de marzo de 2026 · Este análisis no constituye asesoramiento de inversión. DYOR.<br>
+  Fuentes: CoinGecko, CoinMarketCap, Tokenomist.ai, CryptoRank, MEXC Research, Polychain Capital, grass.io, datos on-chain
+</div>
+
+</body>
+</html>
