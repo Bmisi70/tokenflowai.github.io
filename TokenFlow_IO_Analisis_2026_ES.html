@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenFlow AI – Análisis io.net (IO) 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'JetBrains Mono', monospace; background: #0a0e1a; color: #e2e8f0; line-height: 1.7; font-size: 14px; }
+
+  .header { background: linear-gradient(135deg, #0f0a1a 0%, #1a0f2e 50%, #0a0e1a 100%); border-bottom: 1px solid #2a1a4a; padding: 44px 32px 36px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; background: radial-gradient(ellipse, rgba(168,85,247,0.07) 0%, transparent 70%); pointer-events: none; }
+  .brand { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #a855f7; margin-bottom: 14px; font-weight: 600; }
+  .title { font-size: 38px; font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -1px; }
+  .title span { color: #a855f7; }
+  .subtitle { font-size: 12px; color: #64748b; margin-bottom: 22px; letter-spacing: 1px; }
+  .verdict-badge { display: inline-block; padding: 8px 24px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid; font-family: 'JetBrains Mono', monospace; }
+  .badge-warning { background: #451a03; color: #fb923c; border-color: #9a3412; }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 36px 20px; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 36px; }
+  .stat-card { background: #0d1525; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; text-align: center; transition: border-color 0.2s; }
+  .stat-card:hover { border-color: #a855f733; }
+  .stat-label { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .stat-value { font-size: 22px; font-weight: 800; color: #f8fafc; }
+  .stat-sub { font-size: 10px; color: #64748b; margin-top: 4px; }
+  .stat-purple { color: #a855f7; }
+  .stat-green { color: #4ade80; }
+  .stat-yellow { color: #fbbf24; }
+  .stat-red { color: #f87171; }
+  .stat-orange { color: #fb923c; }
+
+  .section { background: #0d1525; border: 1px solid #1e293b; border-radius: 8px; padding: 26px; margin-bottom: 18px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #1e293b; }
+  .section-icon { width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .icon-purple { background: #2e1065; }
+  .icon-orange { background: #431407; }
+  .icon-red { background: #450a0a; }
+  .icon-yellow { background: #422006; }
+  .icon-blue { background: #0c2a47; }
+  .icon-green { background: #052e16; }
+  .icon-cyan { background: #083344; }
+  .section-title { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+  .section-tag { font-size: 10px; color: #475569; margin-left: auto; letter-spacing: 1px; text-transform: uppercase; }
+
+  .alloc-table { width: 100%; border-collapse: collapse; }
+  .alloc-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .alloc-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; font-size: 13px; vertical-align: middle; }
+  .alloc-table tr:last-child td { border-bottom: none; }
+  .alloc-bar-wrap { background: #1e293b; border-radius: 2px; height: 5px; width: 90px; display: inline-block; vertical-align: middle; margin-left: 8px; }
+  .alloc-bar { height: 5px; border-radius: 2px; display: block; }
+
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+  .pill-green { background: #052e16; color: #4ade80; }
+  .pill-yellow { background: #422006; color: #fbbf24; }
+  .pill-red { background: #450a0a; color: #f87171; }
+  .pill-orange { background: #431407; color: #fb923c; }
+  .pill-purple { background: #2e1065; color: #a855f7; }
+
+  .ide-box { background: #1a0f2e; border: 1px solid #4c1d95; border-radius: 8px; padding: 22px; margin: 16px 0; }
+  .ide-title { font-size: 11px; color: #a855f7; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px; font-weight: 700; }
+  .ide-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .ide-item { background: #0f0a1a; border: 1px solid #2e1065; border-radius: 6px; padding: 14px; }
+  .ide-item-title { font-size: 11px; color: #a855f7; font-weight: 700; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
+  .ide-item-text { font-size: 12px; color: #94a3b8; line-height: 1.6; }
+
+  .unlock-timeline { margin: 16px 0; }
+  .unlock-item { display: flex; gap: 16px; padding: 14px; border-radius: 6px; margin-bottom: 10px; align-items: flex-start; }
+  .unlock-past { background: #1e293b; border: 1px solid #334155; }
+  .unlock-warning { background: #45100322; border: 1px solid #9a341244; }
+  .unlock-danger { background: #450a0a33; border: 1px solid #7f1d1d66; }
+  .unlock-date { font-size: 11px; font-weight: 700; min-width: 110px; padding-top: 2px; letter-spacing: 1px; }
+  .unlock-past .unlock-date { color: #64748b; }
+  .unlock-warning .unlock-date { color: #fb923c; }
+  .unlock-danger .unlock-date { color: #f87171; }
+  .unlock-text { font-size: 12px; color: #cbd5e1; line-height: 1.6; }
+  .unlock-text strong { color: #f8fafc; }
+
+  .pressure-meter { margin: 14px 0; }
+  .meter-label { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+  .meter-bar-wrap { background: #1e293b; border-radius: 3px; height: 10px; overflow: hidden; }
+  .meter-bar { height: 10px; border-radius: 3px; }
+  .meter-green { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .meter-orange { background: linear-gradient(90deg, #ea580c, #fb923c); }
+  .meter-red { background: linear-gradient(90deg, #dc2626, #f87171); }
+  .meter-purple { background: linear-gradient(90deg, #7c3aed, #a855f7); }
+  .meter-yellow { background: linear-gradient(90deg, #ca8a04, #fbbf24); }
+  .meter-footer { display: flex; justify-content: space-between; font-size: 10px; color: #475569; margin-top: 4px; }
+
+  .verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .verdict-card { border-radius: 6px; padding: 20px; }
+  .verdict-bull { background: #052e16; border: 1px solid #166534; }
+  .verdict-bear { background: #450a0a; border: 1px solid #7f1d1d; }
+  .verdict-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .verdict-bull .verdict-title { color: #4ade80; }
+  .verdict-bear .verdict-title { color: #f87171; }
+  .verdict-item { font-size: 12px; color: #cbd5e1; margin-bottom: 9px; padding-left: 18px; position: relative; line-height: 1.5; }
+  .verdict-item::before { content: '→'; position: absolute; left: 0; font-weight: 700; }
+  .verdict-bull .verdict-item::before { color: #4ade80; }
+  .verdict-bear .verdict-item::before { color: #f87171; }
+
+  .final-verdict { background: linear-gradient(135deg, #1a0f2e, #0f172a); border: 1px solid #7c3aed; border-radius: 8px; padding: 30px; margin-top: 8px; }
+  .final-title { font-size: 11px; color: #a855f7; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 14px; font-weight: 700; }
+  .final-score { display: flex; align-items: center; gap: 22px; margin-bottom: 18px; }
+  .score-number { font-size: 68px; font-weight: 900; color: #fb923c; line-height: 1; }
+  .score-label { font-size: 20px; font-weight: 700; color: #f1f5f9; }
+  .score-sub { font-size: 12px; color: #64748b; margin-top: 6px; }
+  .final-text { font-size: 13px; color: #cbd5e1; line-height: 1.9; }
+
+  .watch-item { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid #1e293b; font-size: 13px; }
+  .watch-item:last-child { border-bottom: none; }
+  .watch-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #22c55e; }
+  .dot-purple { background: #a855f7; }
+  .watch-text { color: #cbd5e1; }
+  .watch-text strong { color: #f8fafc; }
+
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .comp-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .comp-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; vertical-align: middle; }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table tr.highlight-row { background: #1a0f2e; }
+
+  .note-box { background: #0f0a1a; border-left: 3px solid #a855f7; border-radius: 0 6px 6px 0; padding: 14px 16px; font-size: 12px; color: #94a3b8; margin: 14px 0; line-height: 1.8; }
+  .note-box.warning { border-left-color: #f59e0b; background: #0d1105; }
+  .note-box.danger { border-left-color: #ef4444; background: #0d0808; }
+  .note-box.success { border-left-color: #22c55e; background: #050f05; }
+
+  .footer { text-align: center; padding: 28px; color: #334155; font-size: 11px; border-top: 1px solid #1e293b; margin-top: 36px; letter-spacing: 0.5px; line-height: 2; }
+
+  @media (max-width: 600px) {
+    .verdict-grid, .ide-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .score-number { font-size: 52px; }
+    .title { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">🟣 TokenFlow AI · Investigación de Tokenómica DePIN</div>
+  <div class="title">io.net <span>IO</span></div>
+  <div class="subtitle">Análisis completo de tokenómica y el unlock del 28 de abril · 4 de abril de 2026</div>
+  <div class="verdict-badge badge-warning">⚠ GPU compute real · IDE en camino · Unlock crítico apr. 28</div>
+</div>
+
+<div class="container">
+
+  <!-- ESTADÍSTICAS RÁPIDAS -->
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Precio (USD)</div><div class="stat-value stat-purple">$0.10</div><div class="stat-sub">4 de abril, 2026</div></div>
+    <div class="stat-card"><div class="stat-label">Cap. de Mercado</div><div class="stat-value">$32M</div><div class="stat-sub">#596 CoinGecko</div></div>
+    <div class="stat-card"><div class="stat-label">FDV</div><div class="stat-value stat-yellow">$84M</div><div class="stat-sub">Mcap/FDV = 38%</div></div>
+    <div class="stat-card"><div class="stat-label">Desde ATH</div><div class="stat-value stat-red">-98%</div><div class="stat-sub">ATH: $6.43 (jun. 2024)</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Circ.</div><div class="stat-value">~300M</div><div class="stat-sub">37.5% del máximo</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Máx.</div><div class="stat-value">800M</div><div class="stat-sub">Cap fijo — 20 años</div></div>
+    <div class="stat-card"><div class="stat-label">GPUs activas</div><div class="stat-value stat-green">300K+</div><div class="stat-sub">130+ países</div></div>
+    <div class="stat-card"><div class="stat-label">Ahorro vs AWS</div><div class="stat-value stat-green">70%</div><div class="stat-sub">Compute verificable</div></div>
+  </div>
+
+  <!-- QUÉ ES IO.NET -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">🖥</div>
+      <div class="section-title">¿Qué es io.net? — El "Internet de las GPUs"</div>
+      <div class="section-tag">Mecanismo de Red</div>
+    </div>
+
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">io.net agrega GPUs infrautilizadas de centros de datos independientes, mineros de crypto y proyectos como Filecoin y Render, convirtiéndolas en una nube descentralizada de compute para AI y ML. Su propuesta es directa: el mismo poder de cómputo que AWS cobra a precio premium, disponible en io.net hasta un 70% más barato.</p>
+
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Compute leases</div><div class="stat-value stat-green">$20M+</div><div class="stat-sub">Verificables on-chain</div></div>
+      <div class="stat-card"><div class="stat-label">Países activos</div><div class="stat-value stat-purple">130+</div><div class="stat-sub">Distribución global</div></div>
+      <div class="stat-card"><div class="stat-label">AI Agents</div><div class="stat-value">18</div><div class="stat-sub">IO Intelligence (ene. 2026)</div></div>
+      <div class="stat-card"><div class="stat-label">Modelos AI</div><div class="stat-value stat-yellow">25+</div><div class="stat-sub">Open-source en IO Intel.</div></div>
+    </div>
+
+    <div class="note-box">
+      <strong>🔑 Ecosistema io.net:</strong> IO Cloud (marketplace GPU), IO Intelligence (plataforma AI con modelos preentrenados), IO Worker (interfaz para proveedores de GPU), IO Staking (gestión de recompensas), IO Explorer (monitoreo en tiempo real) e IO ID (seguimiento de earnings). Es el stack DePIN compute más completo del sector — no solo una red de GPUs, sino una infraestructura AI end-to-end.
+    </div>
+  </div>
+
+  <!-- SUPPLY ESTRUCTURA -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">📊</div>
+      <div class="section-title">Estructura del suministro y distribución</div>
+      <div class="section-tag">Supply Analysis</div>
+    </div>
+
+    <table class="alloc-table">
+      <thead>
+        <tr><th>Categoría</th><th>Porcentaje</th><th>Tokens</th><th>Vesting</th><th>Riesgo</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Emissions (GPU rewards)</strong></td>
+          <td>37.5% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:100%;background:#a855f7;"></div></div></td>
+          <td>300M IO</td>
+          <td><span class="status-pill pill-purple">20 años — desinflacionario</span></td>
+          <td>Presión continua controlada</td>
+        </tr>
+        <tr>
+          <td><strong>R&D y Ecosistema</strong></td>
+          <td>16% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:43%;background:#38bdf8;"></div></div></td>
+          <td>128M IO</td>
+          <td><span class="status-pill pill-yellow">Parcialmente emitido</span></td>
+          <td>Moderado</td>
+        </tr>
+        <tr>
+          <td><strong>Early Backers (Seed)</strong></td>
+          <td>12.5% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:33%;background:#ef4444;"></div></div></td>
+          <td>100M IO</td>
+          <td><span class="status-pill pill-red">Cliff vesting activo</span></td>
+          <td style="color:#f87171;">⚠ Principal fuente de presión</td>
+        </tr>
+        <tr>
+          <td><strong>Core Contributors</strong></td>
+          <td>11.34% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:30%;background:#fb923c;"></div></div></td>
+          <td>90.7M IO</td>
+          <td><span class="status-pill pill-orange">Cliff + vesting largo</span></td>
+          <td>Riesgo moderado-alto</td>
+        </tr>
+        <tr>
+          <td><strong>Series A Investors</strong></td>
+          <td>10.15% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:27%;background:#ef4444;"></div></div></td>
+          <td>81.2M IO</td>
+          <td><span class="status-pill pill-red">Cliff vesting activo</span></td>
+          <td style="color:#f87171;">⚠ Incluye el unlock abr. 28</td>
+        </tr>
+        <tr>
+          <td><strong>Community + Launchpool</strong></td>
+          <td>12.5% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:33%;background:#4ade80;"></div></div></td>
+          <td>100M IO</td>
+          <td><span class="status-pill pill-green">Distribuido en TGE</span></td>
+          <td style="color:#4ade80;">✅ Ya en mercado</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box warning" style="margin-top:20px;">
+      <strong>⚠ Mcap/FDV = 38%:</strong> El Mcap/FDV más bajo de todos los tokens analizados por TokenFlow AI. RENDER tiene 97%, TAO tiene 47%, GRASS tiene 55% — IO tiene solo el 38%. Quedan 500M+ tokens por entrar en circulación. La pregunta clave es si el IDE (Q2 2026) puede convertir esa dilución en deflación neta.
+    </div>
+  </div>
+
+  <!-- UNLOCK CRÍTICO -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">🗓</div>
+      <div class="section-title">Radar de Desbloqueos — El evento del 28 de abril</div>
+      <div class="section-tag">Unlock Schedule</div>
+    </div>
+
+    <div class="unlock-timeline">
+      <div class="unlock-item unlock-past">
+        <div class="unlock-date">MAR 11, 2026</div>
+        <div class="unlock-text"><strong>13.29M IO desbloqueados</strong> — múltiples stakeholders. Representó un 4.37% del circulante. Impacto limitado dada su distribución entre varios grupos.</div>
+      </div>
+      <div class="unlock-item unlock-warning">
+        <div class="unlock-date">ABR 11, 2026 ⚠</div>
+        <div class="unlock-text"><strong>13.29M IO pendientes</strong> — siguiente unlock mensual recurrente (~$1.4M). Múltiples stakeholders incluidos. Impacto moderado esperado.</div>
+      </div>
+      <div class="unlock-item unlock-danger">
+        <div class="unlock-date">ABR 28, 2026 🔴</div>
+        <div class="unlock-text"><strong>~95M IO — Team & Investors</strong>. El unlock más importante del año para IO. Representa el ~12% del circulante actual en un solo evento. Históricamente, unlocks de esta magnitud para insiders han generado presión vendedora intensa. Precio actual: $0.10 — near ATL.</div>
+      </div>
+    </div>
+
+    <div class="pressure-meter" style="margin-top:16px;">
+      <div class="meter-label">Impacto potencial unlock abr. 28 — 95M IO sobre 300M circulantes</div>
+      <div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:90%;"></div></div>
+      <div class="meter-footer"><span>Bajo</span><span style="color:#f87171;">🔴 Alto — +32% del supply circulante en un día</span><span>Máximo</span></div>
+    </div>
+
+    <div class="note-box danger">
+      <strong>⚠ Contexto crítico:</strong> El unlock de abril 28 es Team & Investors — los actores con el coste de entrada más bajo. Con IO ya en -98% desde ATH y cerca de su mínimo histórico, la presión psicológica para liquidar es máxima. Sin embargo, si el IDE se lanza en Q2 2026 con el mecanismo de burn activo, podría cambiar la narrativa antes del evento.
+    </div>
+  </div>
+
+  <!-- IDE — TOKENOMICS OVERHAUL -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">⚙</div>
+      <div class="section-title">IDE — El rediseño tokenómico que lo cambia todo</div>
+      <div class="section-tag">Q2 2026 · Lanzamiento</div>
+    </div>
+
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">En diciembre de 2025, io.net anunció el Incentive Dynamic Engine (IDE): un rediseño completo de su tokenómica. Reemplaza las emisiones fijas con un modelo demand-driven que ajusta la oferta en tiempo real según el uso real de GPUs. El lanzamiento está previsto para Q2 2026.</p>
+
+    <div class="ide-box">
+      <div class="ide-title">⚙ Cómo funciona el IDE — 4 mecanismos clave</div>
+      <div class="ide-grid">
+        <div class="ide-item">
+          <div class="ide-item-title">📊 Emisiones dinámicas</div>
+          <div class="ide-item-text">Los tokens se emiten según el uso real de GPUs, no según un calendario fijo. Más uso → más recompensas; menos uso → menos emisión. Elimina la presión vendedora artificial.</div>
+        </div>
+        <div class="ide-item">
+          <div class="ide-item-title">🔥 Burn mecanismo</div>
+          <div class="ide-item-text">Después de pagar a los proveedores, al menos el 50% de los ingresos restantes se quema. El objetivo es eliminar 150M+ IO del supply total — casi el 19% del máximo de 800M.</div>
+        </div>
+        <div class="ide-item">
+          <div class="ide-item-title">💰 Dual Vault</div>
+          <div class="ide-item-text">Un sistema de dos depósitos (Reward Vault + Fee Vault) actúa como amortiguador. En simulaciones: absorbe caídas del 50% en precio o del 55% en demanda sin dejar de pagar a proveedores.</div>
+        </div>
+        <div class="ide-item">
+          <div class="ide-item-title">🎯 USD-pegged payouts</div>
+          <div class="ide-item-text">Los GPU providers reciben recompensas estabilizadas en USD. Si el precio de IO cae, se emiten más tokens para compensar. Evita el "death spiral" de la tokenómica original.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note-box success">
+      <strong>✅ Por qué el IDE importa:</strong> Es el primer mecanismo en el sector DePIN GPU que introduce deflación real vinculada a ingresos. Si io.net genera $X en compute fees, al menos $X/2 va a quemar tokens. Con $20M+ en compute leases históricas, el burn potencial es significativo. El IDE convierte io.net de un token inflacionario en uno potencialmente deflacionario — si la demanda crece.
+    </div>
+
+    <div class="note-box warning">
+      <strong>⚠ El riesgo del IDE:</strong> El IDE aún no está live — lanzamiento previsto para Q2 2026. Si el unlock del 28 de abril ocurre antes de que el IDE esté activo y genere confianza en el mercado, la presión vendedora puede superar el efecto positivo del anuncio. El timing lo es todo.
+    </div>
+  </div>
+
+  <!-- MÉTRICAS DE RED -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">⚡</div>
+      <div class="section-title">Actividad de red y uso real</div>
+      <div class="section-tag">Datos On-Chain</div>
+    </div>
+
+    <div class="pressure-meter">
+      <div class="meter-label">GPUs activas en la red (300K+ en 130+ países)</div>
+      <div class="meter-bar-wrap" style="height:12px;border-radius:6px;"><div class="meter-bar meter-purple" style="width:75%;height:12px;border-radius:6px;"></div></div>
+      <div class="meter-footer"><span>0</span><span style="color:#a855f7;font-weight:700;">300K+ GPUs — red distribuida globalmente</span><span>1M+</span></div>
+    </div>
+
+    <div class="pressure-meter">
+      <div class="meter-label">Ahorro de coste vs. AWS/GCP (hasta 70%)</div>
+      <div class="meter-bar-wrap" style="height:12px;border-radius:6px;"><div class="meter-bar meter-green" style="width:70%;height:12px;border-radius:6px;"></div></div>
+      <div class="meter-footer"><span>0%</span><span style="color:#4ade80;font-weight:700;">70% más barato — ventaja competitiva verificable</span><span>100%</span></div>
+    </div>
+
+    <div class="pressure-meter">
+      <div class="meter-label">Compute leases verificables on-chain acumuladas</div>
+      <div class="meter-bar-wrap" style="height:12px;border-radius:6px;"><div class="meter-bar meter-yellow" style="width:40%;height:12px;border-radius:6px;"></div></div>
+      <div class="meter-footer"><span>$0</span><span style="color:#fbbf24;font-weight:700;">$20M+ — demanda real, no especulativa</span><span>$50M+</span></div>
+    </div>
+
+    <div class="note-box" style="margin-top:16px;">
+      <strong>📌 Partnerships estratégicos:</strong> RENDER y io.net tienen una alianza — Render añade su red de GPUs consumer a io.net, ampliando los casos de uso de rendering a ML. Bittensor usa io.net para compute de subnets. Gaia (AI agent network) integra io.net para inferencia. Estos partnerships crean demanda real de GPU compute que alimenta directamente el mecanismo de burn del IDE.
+    </div>
+  </div>
+
+  <!-- COMPETIDORES -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">⚔</div>
+      <div class="section-title">Posicionamiento competitivo</div>
+      <div class="section-tag">Panorama Competitivo</div>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr><th>Proyecto</th><th>Enfoque</th><th>GPU Count</th><th>Diferenciador vs IO</th></tr>
+      </thead>
+      <tbody>
+        <tr class="highlight-row">
+          <td><strong style="color:#a855f7;">🟣 io.net (IO)</strong></td>
+          <td>GPU compute AI/ML</td>
+          <td>300K+</td>
+          <td>— IDE burn, clusters geo-distributed</td>
+        </tr>
+        <tr>
+          <td><strong>Akash (AKT)</strong></td>
+          <td>Cloud compute general</td>
+          <td>7,200 GB200</td>
+          <td>Starcluster, $4.3M ARR — más enterprise</td>
+        </tr>
+        <tr>
+          <td><strong>RENDER (RNDR)</strong></td>
+          <td>GPU rendering + AI</td>
+          <td>5,600 nodos</td>
+          <td>Foco creativo, BME — nicho diferente</td>
+        </tr>
+        <tr>
+          <td><strong>Aethir (ATH)</strong></td>
+          <td>GPU cloud gaming + AI</td>
+          <td>Enterprise focus</td>
+          <td>$344M Strategic Reserve — más grande</td>
+        </tr>
+        <tr>
+          <td><strong>AWS / GCP</strong></td>
+          <td>Cloud centralizado</td>
+          <td>Millones</td>
+          <td>IO es 70% más barato — pero menos fiable</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box" style="margin-top:16px;">
+      <strong>Ventaja de io.net:</strong> El mayor pool de GPUs distribuidas del sector DePIN — 300K+ en 130+ países es inalcanzable para cualquier competidor descentralizado. Su debilidad: Mcap/FDV muy bajo genera desconfianza estructural hasta que el IDE esté live y el burn sea verificable.
+    </div>
+  </div>
+
+  <!-- TÉCNICO -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📉</div>
+      <div class="section-title">Estructura técnica y contexto de precio</div>
+      <div class="section-tag">Estructura de Precio</div>
+    </div>
+
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Precio vs ATH</div><div class="stat-value stat-red">-98%</div><div class="stat-sub">ATH: $6.43 (jun. 2024)</div></div>
+      <div class="stat-card"><div class="stat-label">Precio vs ATL</div><div class="stat-value stat-yellow">+13%</div><div class="stat-sub">ATL: $0.091 (feb. 2026)</div></div>
+      <div class="stat-card"><div class="stat-label">Soporte clave</div><div class="stat-value">$0.09</div><div class="stat-sub">ATL — zona crítica</div></div>
+      <div class="stat-card"><div class="stat-label">Resistencia</div><div class="stat-value">$0.15</div><div class="stat-sub">Máximo local feb. 2026</div></div>
+    </div>
+
+    <div class="pressure-meter"><div class="meter-label">Tendencia de largo plazo (-98% desde ATH)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:97%;"></div></div><div class="meter-footer"><span>ATH</span><span style="color:#f87171;">🔴 Estructura bajista extrema</span><span>ATL</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Posición vs ATL (cerca del mínimo histórico)</div><div class="meter-bar-wrap"><div class="meter-bar meter-orange" style="width:13%;"></div></div><div class="meter-footer"><span>ATL $0.09</span><span style="color:#fb923c;">⚠ Solo +13% sobre mínimo histórico</span><span>ATH $6.43</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Riesgo del unlock abr. 28 (95M IO = +32% circulante)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:88%;"></div></div><div class="meter-footer"><span>Bajo</span><span style="color:#f87171;">🔴 Muy alto — evento de suministro crítico</span><span>Máximo</span></div></div>
+
+    <div class="note-box warning" style="margin-top:16px;">
+      IO cotiza entre su ATH (-98%) y su ATL (+13%). No hay estructura técnica alcista de largo plazo. El único catalizador positivo que puede cambiar la narrativa antes del unlock es el lanzamiento del IDE con el mecanismo de burn activo y verificable. Sin eso, el unlock del 28 de abril enfrenta un mercado sin compra estructural.
+    </div>
+  </div>
+
+  <!-- ALCISTA VS BAJISTA -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-cyan">⚖</div>
+      <div class="section-title">Argumentos alcistas vs. bajistas</div>
+      <div class="section-tag">Veredicto TokenFlow</div>
+    </div>
+
+    <div class="verdict-grid">
+      <div class="verdict-card verdict-bull">
+        <div class="verdict-title">🟢 Argumentos alcistas</div>
+        <div class="verdict-item">300K+ GPUs en 130 países — el mayor pool DePIN del sector</div>
+        <div class="verdict-item">$20M+ en compute leases verificables — demanda real</div>
+        <div class="verdict-item">IDE Q2 2026 — burn del 50%+ de ingresos, target 150M+ IO quemados</div>
+        <div class="verdict-item">70% más barato que AWS — ventaja de precio estructural</div>
+        <div class="verdict-item">Partnerships con RENDER, TAO, Gaia — demanda cruzada</div>
+        <div class="verdict-item">18 AI Agents en IO Intelligence — expansión del ecosistema</div>
+        <div class="verdict-item">Precio near ATL — poco downside estructural adicional</div>
+        <div class="verdict-item">CEO con background sólido — equipo de builders</div>
+      </div>
+      <div class="verdict-card verdict-bear">
+        <div class="verdict-title">🔴 Argumentos bajistas</div>
+        <div class="verdict-item">-98% desde ATH — la peor caída de todos los tokens analizados</div>
+        <div class="verdict-item">Mcap/FDV = 38% — el más bajo del sector, máxima dilución pendiente</div>
+        <div class="verdict-item">Unlock abr. 28: 95M IO (Team & Investors) — +32% del circulante</div>
+        <div class="verdict-item">IDE aún no live — hasta Q2 2026, tokenómica inflacionaria activa</div>
+        <div class="verdict-item">Sin mecanismo de burn activo hasta lanzamiento del IDE</div>
+        <div class="verdict-item">Precio cerca de ATL — mercado sin confianza estructural</div>
+        <div class="verdict-item">Competencia de Aethir con $344M de capital institucional</div>
+        <div class="verdict-item">Hack histórico en 2024 — riesgo reputacional latente</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VEREDICTO FINAL -->
+  <div class="final-verdict">
+    <div class="final-title">TokenFlow AI · Veredicto Final</div>
+    <div class="final-score">
+      <div class="score-number">5</div>
+      <div>
+        <div class="score-label">Alto potencial · Alto riesgo de timing</div>
+        <div class="score-sub">sobre 10 · El IDE puede ser el catalizador — o el unlock puede destruirlo</div>
+      </div>
+    </div>
+    <div class="final-text">
+      io.net tiene la infraestructura GPU más grande del sector DePIN descentralizado — 300K+ GPUs en 130 países es un activo real y difícil de replicar. Los $20M en compute leases verificables on-chain no son narrativa: son contratos. Y el IDE, si se lanza correctamente, introduce el primer mecanismo de burn real en el sector: 50%+ de ingresos destruidos, con target de eliminar 150M+ IO de un supply de 800M.<br><br>
+      El problema es que todo esto coexiste con el peor Mcap/FDV del sector (38%), el precio más cercano a su ATL entre todos los tokens analizados, y un unlock del 28 de abril que añade 95M IO — Team & Investors — al circulante de golpe. Este tipo de eventos, con estos actores, en este contexto de precio, históricamente produce ventas agresivas.<br><br>
+      <strong>La ecuación es binaria:</strong> Si el IDE se lanza en Q2 2026 con el burn verificable y activo antes o justo después del unlock, cambia la narrativa estructural del token. Si el IDE llega tarde o el mercado no lo absorbe como catalizador, el unlock del 28 de abril puede empujar IO de vuelta a su ATL — o por debajo.<br><br>
+      <strong>¿Qué vigilar?</strong> La fecha exacta de lanzamiento del IDE. Si es antes del 28 de abril — el escenario se vuelve interesante. Si es después — el unlock llega sin red.
+    </div>
+  </div>
+
+  <!-- LISTA DE SEGUIMIENTO -->
+  <div class="section" style="margin-top:20px;">
+    <div class="section-header">
+      <div class="section-icon icon-cyan">👁</div>
+      <div class="section-title">Qué vigilar en los próximos 30 días</div>
+      <div class="section-tag">Lista de Monitoreo</div>
+    </div>
+    <div class="watch-item"><div class="watch-dot dot-red"></div><div class="watch-text"><strong>Fecha de lanzamiento del IDE (Q2 2026):</strong> Si io.net anuncia el live del IDE antes del 28 de abril, cambia completamente el escenario. Seguir X oficial de @ionet y el blog de io.net para anuncios.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-red"></div><div class="watch-text"><strong>Unlock del 28 de abril — on-chain tracking:</strong> Monitorear wallets de Team & Investors en Solana a partir del 25 de abril. Si los tokens van directamente a exchanges — señal de venta. Si permanecen en wallets — señal de retención.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-yellow"></div><div class="watch-text"><strong>Volumen de compute en IO Explorer:</strong> Si el volumen mensual de compute leases supera el del mes anterior, el IDE tiene más fee revenue para quemar. Seguir io.explorer para métricas de red en tiempo real.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-purple"></div><div class="watch-text"><strong>Primer burn verificable post-IDE:</strong> El primer evento de burn on-chain tras el lanzamiento del IDE será el catalizador más importante para la confianza del mercado. Dato a publicar en TokenFlow AI cuando ocurra.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Nivel $0.09 (ATL):</strong> Si el precio rompe por debajo del ATL histórico tras el unlock, señala capitulación. Si lo defiende con volumen, puede ser la base del próximo ciclo alcista — especialmente si el IDE está live.</div></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong style="color:#a855f7;">TokenFlow AI</strong> · Investigación de tokenómica AI y DePIN · Sin hype. Solo estructura.<br>
+  Fecha del análisis: 4 de abril de 2026 · Este análisis no constituye asesoramiento de inversión. DYOR.<br>
+  Fuentes: CoinGecko, CoinMarketCap, Messari, Tokenomist.ai, io.net/tokenomics, Nansen Research, MEXC News, datos on-chain
+</div>
+
+</body>
+</html>
