@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenFlow AI – Análisis Aethir (ATH) 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'JetBrains Mono', monospace; background: #0a0e1a; color: #e2e8f0; line-height: 1.7; font-size: 14px; }
+
+  .header { background: linear-gradient(135deg, #1a0a0a 0%, #2a0f0f 50%, #0a0e1a 100%); border-bottom: 1px solid #4a1a1a; padding: 44px 32px 36px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; background: radial-gradient(ellipse, rgba(249,115,22,0.07) 0%, transparent 70%); pointer-events: none; }
+  .brand { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #f97316; margin-bottom: 14px; font-weight: 600; }
+  .title { font-size: 38px; font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -1px; }
+  .title span { color: #f97316; }
+  .subtitle { font-size: 12px; color: #64748b; margin-bottom: 22px; letter-spacing: 1px; }
+  .verdict-badge { display: inline-block; padding: 8px 24px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid; font-family: 'JetBrains Mono', monospace; }
+  .badge-warning { background: #451a03; color: #fb923c; border-color: #9a3412; }
+  .badge-green { background: #052e16; color: #4ade80; border-color: #166534; }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 36px 20px; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 36px; }
+  .stat-card { background: #0d1525; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; text-align: center; transition: border-color 0.2s; }
+  .stat-card:hover { border-color: #f9731633; }
+  .stat-label { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .stat-value { font-size: 22px; font-weight: 800; color: #f8fafc; }
+  .stat-sub { font-size: 10px; color: #64748b; margin-top: 4px; }
+  .stat-orange { color: #f97316; }
+  .stat-green { color: #4ade80; }
+  .stat-yellow { color: #fbbf24; }
+  .stat-red { color: #f87171; }
+
+  .section { background: #0d1525; border: 1px solid #1e293b; border-radius: 8px; padding: 26px; margin-bottom: 18px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #1e293b; }
+  .section-icon { width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .icon-orange { background: #431407; }
+  .icon-red { background: #450a0a; }
+  .icon-green { background: #052e16; }
+  .icon-yellow { background: #422006; }
+  .icon-blue { background: #0c2a47; }
+  .icon-purple { background: #2e1065; }
+  .icon-cyan { background: #083344; }
+  .section-title { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+  .section-tag { font-size: 10px; color: #475569; margin-left: auto; letter-spacing: 1px; text-transform: uppercase; }
+
+  .alloc-table { width: 100%; border-collapse: collapse; }
+  .alloc-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .alloc-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; font-size: 13px; vertical-align: middle; }
+  .alloc-table tr:last-child td { border-bottom: none; }
+  .alloc-bar-wrap { background: #1e293b; border-radius: 2px; height: 5px; width: 90px; display: inline-block; vertical-align: middle; margin-left: 8px; }
+  .alloc-bar { height: 5px; border-radius: 2px; display: block; }
+
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+  .pill-green { background: #052e16; color: #4ade80; }
+  .pill-yellow { background: #422006; color: #fbbf24; }
+  .pill-red { background: #450a0a; color: #f87171; }
+  .pill-orange { background: #431407; color: #fb923c; }
+
+  .dat-box { background: #1a0f05; border: 1px solid #92400e; border-radius: 8px; padding: 22px; margin: 16px 0; }
+  .dat-title { font-size: 11px; color: #f97316; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px; font-weight: 700; }
+  .dat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .dat-item { background: #0f0a05; border: 1px solid #78350f; border-radius: 6px; padding: 14px; }
+  .dat-item-title { font-size: 11px; color: #f97316; font-weight: 700; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
+  .dat-item-text { font-size: 12px; color: #94a3b8; line-height: 1.6; }
+
+  .pressure-meter { margin: 14px 0; }
+  .meter-label { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+  .meter-bar-wrap { background: #1e293b; border-radius: 3px; height: 10px; overflow: hidden; }
+  .meter-bar { height: 10px; border-radius: 3px; }
+  .meter-green { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .meter-orange { background: linear-gradient(90deg, #ea580c, #fb923c); }
+  .meter-red { background: linear-gradient(90deg, #dc2626, #f87171); }
+  .meter-yellow { background: linear-gradient(90deg, #ca8a04, #fbbf24); }
+  .meter-footer { display: flex; justify-content: space-between; font-size: 10px; color: #475569; margin-top: 4px; }
+
+  .verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .verdict-card { border-radius: 6px; padding: 20px; }
+  .verdict-bull { background: #052e16; border: 1px solid #166534; }
+  .verdict-bear { background: #450a0a; border: 1px solid #7f1d1d; }
+  .verdict-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .verdict-bull .verdict-title { color: #4ade80; }
+  .verdict-bear .verdict-title { color: #f87171; }
+  .verdict-item { font-size: 12px; color: #cbd5e1; margin-bottom: 9px; padding-left: 18px; position: relative; line-height: 1.5; }
+  .verdict-item::before { content: '→'; position: absolute; left: 0; font-weight: 700; }
+  .verdict-bull .verdict-item::before { color: #4ade80; }
+  .verdict-bear .verdict-item::before { color: #f87171; }
+
+  .final-verdict { background: linear-gradient(135deg, #1a0f05, #0f172a); border: 1px solid #c2410c; border-radius: 8px; padding: 30px; margin-top: 8px; }
+  .final-title { font-size: 11px; color: #f97316; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 14px; font-weight: 700; }
+  .final-score { display: flex; align-items: center; gap: 22px; margin-bottom: 18px; }
+  .score-number { font-size: 68px; font-weight: 900; color: #fbbf24; line-height: 1; }
+  .score-label { font-size: 20px; font-weight: 700; color: #f1f5f9; }
+  .score-sub { font-size: 12px; color: #64748b; margin-top: 6px; }
+  .final-text { font-size: 13px; color: #cbd5e1; line-height: 1.9; }
+
+  .watch-item { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid #1e293b; font-size: 13px; }
+  .watch-item:last-child { border-bottom: none; }
+  .watch-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #22c55e; }
+  .dot-orange { background: #f97316; }
+  .watch-text { color: #cbd5e1; }
+  .watch-text strong { color: #f8fafc; }
+
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .comp-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .comp-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; vertical-align: middle; }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table tr.highlight-row { background: #1a0f05; }
+
+  .note-box { background: #0f0a05; border-left: 3px solid #f97316; border-radius: 0 6px 6px 0; padding: 14px 16px; font-size: 12px; color: #94a3b8; margin: 14px 0; line-height: 1.8; }
+  .note-box.warning { border-left-color: #f59e0b; background: #0d1105; }
+  .note-box.danger { border-left-color: #ef4444; background: #0d0808; }
+  .note-box.success { border-left-color: #22c55e; background: #050f05; }
+
+  .footer { text-align: center; padding: 28px; color: #334155; font-size: 11px; border-top: 1px solid #1e293b; margin-top: 36px; letter-spacing: 0.5px; line-height: 2; }
+
+  @media (max-width: 600px) {
+    .verdict-grid, .dat-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .score-number { font-size: 52px; }
+    .title { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">🟠 TokenFlow AI · Investigación de Tokenómica DePIN</div>
+  <div class="title">Aethir <span>ATH</span></div>
+  <div class="subtitle">Análisis completo de tokenómica y el modelo DAT · 10 de abril de 2026</div>
+  <div class="verdict-badge badge-warning">⚠ Revenue real líder del sector · Tokenómica con presión de unlocks estructural</div>
+</div>
+
+<div class="container">
+
+  <!-- ESTADÍSTICAS RÁPIDAS -->
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Precio (USD)</div><div class="stat-value stat-orange">$0.0068</div><div class="stat-sub">10 de abril, 2026</div></div>
+    <div class="stat-card"><div class="stat-label">Cap. de Mercado</div><div class="stat-value">$125M</div><div class="stat-sub">#227 CoinGecko</div></div>
+    <div class="stat-card"><div class="stat-label">FDV</div><div class="stat-value stat-yellow">$287M</div><div class="stat-sub">Mcap/FDV = 44%</div></div>
+    <div class="stat-card"><div class="stat-label">Desde ATH</div><div class="stat-value stat-red">-94%</div><div class="stat-sub">ATH: $0.1185 (jun. 2024)</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Circ.</div><div class="stat-value">18B</div><div class="stat-sub">44% del máximo</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Máx.</div><div class="stat-value">42B</div><div class="stat-sub">Vesting hasta 2028</div></div>
+    <div class="stat-card"><div class="stat-label">Revenue anual</div><div class="stat-value stat-green">$127M+</div><div class="stat-sub">ARR 2025 — líder DePIN</div></div>
+    <div class="stat-card"><div class="stat-label">Compute hours</div><div class="stat-value stat-green">1.8B+</div><div class="stat-sub">Acumuladas en red</div></div>
+  </div>
+
+  <!-- QUÉ ES AETHIR -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-orange">🖥</div>
+      <div class="section-title">¿Qué es Aethir? — GPU enterprise para AI y gaming</div>
+      <div class="section-tag">Mecanismo de Red</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">Aethir agrega GPUs enterprise de grado institucional — principalmente NVIDIA H100s — en una red descentralizada para servir cargas de trabajo de AI y cloud gaming. A diferencia de io.net (GPU consumer/datacenter mixto), Aethir se posiciona explícitamente en el segmento enterprise, con contratos de telecomunicaciones y clientes de AI de gran escala.</p>
+
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">GPU containers</div><div class="stat-value stat-orange">435K+</div><div class="stat-sub">94 países activos</div></div>
+      <div class="stat-card"><div class="stat-label">Revenue Q3 2025</div><div class="stat-value stat-green">$39M+</div><div class="stat-sub">Récord trimestral</div></div>
+      <div class="stat-card"><div class="stat-label">ARR estimado</div><div class="stat-value stat-green">$160M+</div><div class="stat-sub">Anualizado Q3 2025</div></div>
+      <div class="stat-card"><div class="stat-label">Axe Compute</div><div class="stat-value stat-yellow">NASDAQ</div><div class="stat-sub">Entidad listada en bolsa</div></div>
+    </div>
+
+    <div class="note-box success">
+      <strong>🔑 Lo que distingue a Aethir del resto:</strong> Es el único proyecto DePIN GPU con una entidad cotizada en NASDAQ — Axe Compute — construida enteramente sobre la red Aethir. El primer informe anual de Axe Compute (2025) confirma que 100% de sus despliegues de compute enterprise utilizan la red Aethir. Esto convierte los ingresos de Aethir en ingresos verificables por auditores financieros tradicionales, no solo datos on-chain.
+    </div>
+  </div>
+
+  <!-- SUPPLY -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">📊</div>
+      <div class="section-title">Estructura del suministro y distribución</div>
+      <div class="section-tag">Supply Analysis</div>
+    </div>
+
+    <table class="alloc-table">
+      <thead>
+        <tr><th>Categoría</th><th>Porcentaje</th><th>Tokens</th><th>Vesting</th><th>Riesgo</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Checkers & Compute Providers</strong></td>
+          <td>55% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:100%;background:#f97316;"></div></div></td>
+          <td>23.1B ATH</td>
+          <td><span class="status-pill pill-yellow">Lineal — continuo</span></td>
+          <td>Presión gradual — proveedor vende para cubrir costes</td>
+        </tr>
+        <tr>
+          <td><strong>Team</strong></td>
+          <td>12.5% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:23%;background:#ef4444;"></div></div></td>
+          <td>5.25B ATH</td>
+          <td><span class="status-pill pill-red">Cliff + vesting hasta 2028</span></td>
+          <td style="color:#f87171;">⚠ Insider allocation</td>
+        </tr>
+        <tr>
+          <td><strong>Investors</strong></td>
+          <td>11.5% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:21%;background:#ef4444;"></div></div></td>
+          <td>4.83B ATH</td>
+          <td><span class="status-pill pill-red">Cliff + vesting hasta 2028</span></td>
+          <td style="color:#f87171;">⚠ Riesgo de venta estructural</td>
+        </tr>
+        <tr>
+          <td><strong>DAO Treasury</strong></td>
+          <td>7.5% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:14%;background:#38bdf8;"></div></div></td>
+          <td>3.15B ATH</td>
+          <td><span class="status-pill pill-yellow">Gobernanza</span></td>
+          <td>Moderado — discrecional</td>
+        </tr>
+        <tr>
+          <td><strong>Ecosystem Development</strong></td>
+          <td>7.5% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:14%;background:#4ade80;"></div></div></td>
+          <td>3.15B ATH</td>
+          <td><span class="status-pill pill-green">Gradual</span></td>
+          <td style="color:#4ade80;">✅ Bajo riesgo</td>
+        </tr>
+        <tr>
+          <td><strong>Airdrop</strong></td>
+          <td>6% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:11%;background:#94a3b8;"></div></div></td>
+          <td>2.52B ATH</td>
+          <td><span class="status-pill pill-green">Distribuido</span></td>
+          <td>Ya en mercado</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box warning" style="margin-top:20px;">
+      <strong>⚠ El problema estructural:</strong> El 55% del supply (23B ATH) va a Checkers y Compute Providers — actores que necesitan cubrir costes operativos reales y tienen incentivo directo a vender las recompensas recibidas. Esto crea una presión vendedora continua y estructural, independientemente del precio. Con Mcap/FDV = 44%, además quedan ~24B ATH por desbloquear hasta 2028.
+    </div>
+  </div>
+
+  <!-- MODELO DAT -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-orange">🏦</div>
+      <div class="section-title">El modelo DAT — $344M Strategic Compute Reserve</div>
+      <div class="section-tag">Catalizador Institucional</div>
+    </div>
+
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">En septiembre de 2025, Aethir y Nasdaq-listed Predictive Oncology anunciaron el primer Digital Asset Treasury (DAT) del sector DePIN: un Strategic Compute Reserve de $344.4M anclado en tokens ATH. Es el mecanismo más innovador del sector para crear un flywheel de demanda sostenida de token.</p>
+
+    <div class="dat-box">
+      <div class="dat-title">🔄 Cómo funciona el flywheel del DAT</div>
+      <div class="dat-grid">
+        <div class="dat-item">
+          <div class="dat-item-title">1️⃣ Compra en mercado</div>
+          <div class="dat-item-text">El capital del DAT compra y stakea ATH en el mercado abierto — creando demanda directa de tokens y reduciendo el supply líquido circulante.</div>
+        </div>
+        <div class="dat-item">
+          <div class="dat-item-title">2️⃣ Activa GPUs</div>
+          <div class="dat-item-text">El ATH stakeado activa clusters de GPUs enterprise en la red Aethir, generando capacidad de compute disponible para clientes AI y gaming.</div>
+        </div>
+        <div class="dat-item">
+          <div class="dat-item-title">3️⃣ Revenue de clientes</div>
+          <div class="dat-item-text">Los clientes AI pagan por el compute activado, generando ingresos reales que se reinvierten en comprar más tokens ATH en el mercado.</div>
+        </div>
+        <div class="dat-item">
+          <div class="dat-item-title">4️⃣ Flywheel</div>
+          <div class="dat-item-text">Más ATH comprado → más GPUs activadas → más clientes → más revenue → más ATH comprado. Un loop de demanda sostenida anclado en ingresos reales.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note-box success">
+      <strong>✅ Por qué el DAT importa:</strong> Es la primera vez en el sector DePIN que una entidad institucional usa tokens como reserva estratégica de compute, no como activo especulativo. Los $344M no son promesa — son capital ya comprometido con el mecanismo de flywheel activo. Junto con Axe Compute en NASDAQ, Aethir está construyendo el puente entre DePIN y los mercados financieros tradicionales.
+    </div>
+  </div>
+
+  <!-- REVENUE -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">💰</div>
+      <div class="section-title">Revenue real — el líder indiscutible del sector DePIN</div>
+      <div class="section-tag">Fundamentales</div>
+    </div>
+
+    <div class="pressure-meter">
+      <div class="meter-label">Revenue anual Aethir vs. competidores DePIN GPU</div>
+      <div style="display:grid;gap:10px;margin-top:8px;">
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:4px;"><span style="color:#f97316;font-weight:700;">🟠 Aethir (ATH)</span><span style="color:#f97316;font-weight:700;">$127M+ ARR (2025)</span></div>
+          <div class="meter-bar-wrap" style="width:100%;"><div class="meter-bar meter-orange" style="width:100%;"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:4px;"><span>Akash (AKT)</span><span>$4.3M ARR</span></div>
+          <div class="meter-bar-wrap" style="width:100%;"><div class="meter-bar meter-yellow" style="width:3%;"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:4px;"><span>io.net (IO)</span><span>$20M+ acumulado</span></div>
+          <div class="meter-bar-wrap" style="width:100%;"><div class="meter-bar meter-yellow" style="width:8%;"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:4px;"><span>RENDER (RNDR)</span><span>Estimado $10–20M</span></div>
+          <div class="meter-bar-wrap" style="width:100%;"><div class="meter-bar meter-yellow" style="width:10%;"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note-box" style="margin-top:16px;">
+      <strong>📌 Revenue vs. Mcap — la paradoja de Aethir:</strong> Con $127M en ARR y un Mcap de $125M, Aethir cotiza a un múltiplo Price/Revenue de ~1x. Akash, con $4.3M en ARR, cotiza a un múltiplo mucho más alto. Esta anomalía refleja la presión de unlocks y la desconfianza en la sostenibilidad del revenue — no en su existencia.
+    </div>
+
+    <div class="pressure-meter">
+      <div class="meter-label">Compute hours entregadas — 1.8B+ acumuladas</div>
+      <div class="meter-bar-wrap" style="height:12px;border-radius:6px;"><div class="meter-bar meter-green" style="width:82%;height:12px;border-radius:6px;"></div></div>
+      <div class="meter-footer"><span>0</span><span style="color:#4ade80;font-weight:700;">1.8B+ horas — demanda enterprise verificada</span><span>5B</span></div>
+    </div>
+  </div>
+
+  <!-- COMPETIDORES -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">⚔</div>
+      <div class="section-title">Posicionamiento competitivo</div>
+      <div class="section-tag">Panorama DePIN GPU</div>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr><th>Proyecto</th><th>Revenue ARR</th><th>GPU Focus</th><th>Diferenciador vs ATH</th></tr>
+      </thead>
+      <tbody>
+        <tr class="highlight-row">
+          <td><strong style="color:#f97316;">🟠 Aethir (ATH)</strong></td>
+          <td style="color:#4ade80;">$127M+</td>
+          <td>Enterprise H100</td>
+          <td>— NASDAQ, DAT $344M, gaming+AI</td>
+        </tr>
+        <tr>
+          <td><strong>io.net (IO)</strong></td>
+          <td>$20M+ acum.</td>
+          <td>Consumer + DC</td>
+          <td>IDE burn Q2 2026 — más consumer</td>
+        </tr>
+        <tr>
+          <td><strong>Akash (AKT)</strong></td>
+          <td>$4.3M ARR</td>
+          <td>General cloud</td>
+          <td>Cosmos, más developer-friendly</td>
+        </tr>
+        <tr>
+          <td><strong>RENDER (RNDR)</strong></td>
+          <td>~$10–20M est.</td>
+          <td>Rendering + AI</td>
+          <td>Creative industry, BME — nicho diferente</td>
+        </tr>
+        <tr>
+          <td><strong>AWS / Azure</strong></td>
+          <td>$100B+</td>
+          <td>Todo</td>
+          <td>ATH es 40–90% más barato — pero centralizado</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box" style="margin-top:16px;">
+      <strong>Ventaja de Aethir:</strong> El mayor revenue del sector DePIN GPU por un margen enorme. La combinación de Axe Compute en NASDAQ + DAT de $344M crea un puente institucional que ningún competidor tiene. Su debilidad: el token no captura bien ese valor por la presión continua de compute providers que venden para cubrir costes operativos.
+    </div>
+  </div>
+
+  <!-- TÉCNICO -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📉</div>
+      <div class="section-title">Estructura técnica y contexto de precio</div>
+      <div class="section-tag">Estructura de Precio</div>
+    </div>
+
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Precio vs ATH</div><div class="stat-value stat-red">-94%</div><div class="stat-sub">ATH: $0.1185 (jun. 2024)</div></div>
+      <div class="stat-card"><div class="stat-label">Precio vs ATL</div><div class="stat-value stat-yellow">+40%</div><div class="stat-sub">ATL: $0.0049 (may. 2025)</div></div>
+      <div class="stat-card"><div class="stat-label">Price/Revenue</div><div class="stat-value stat-green">~1x</div><div class="stat-sub">Mcap $125M / ARR $127M</div></div>
+      <div class="stat-card"><div class="stat-label">RSI 7d</div><div class="stat-value stat-yellow">~21</div><div class="stat-sub">Zona de sobrevendido</div></div>
+    </div>
+
+    <div class="pressure-meter"><div class="meter-label">Tendencia de largo plazo (-94% desde ATH)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:93%;"></div></div><div class="meter-footer"><span>ATH</span><span style="color:#f87171;">🔴 Estructura bajista extrema</span><span>ATL</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Valoración fundamental (P/Revenue ~1x — históricamente barata)</div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:85%;"></div></div><div class="meter-footer"><span>Cara</span><span style="color:#4ade80;">✅ Muy barata vs. fundamentales</span><span>Barata</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Presión de supply (55% a compute providers con incentivo a vender)</div><div class="meter-bar-wrap"><div class="meter-bar meter-orange" style="width:80%;"></div></div><div class="meter-footer"><span>Baja</span><span style="color:#fb923c;">⚠ Alta — structurally persistent</span><span>Máxima</span></div></div>
+
+    <div class="note-box warning" style="margin-top:16px;">
+      RSI 21 en zona de sobrevendido extremo. Históricamente, en activos con fundamentales reales, este nivel precede rebotes técnicos. Pero sin un catalizador que reduzca la presión vendedora de los compute providers, los rebotes tienden a ser absorbidos. El DAT y Axe Compute son los catalizadores de demanda más importantes para romper ese ciclo.
+    </div>
+  </div>
+
+  <!-- ALCISTA VS BAJISTA -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">⚖</div>
+      <div class="section-title">Argumentos alcistas vs. bajistas</div>
+      <div class="section-tag">Veredicto TokenFlow</div>
+    </div>
+
+    <div class="verdict-grid">
+      <div class="verdict-card verdict-bull">
+        <div class="verdict-title">🟢 Argumentos alcistas</div>
+        <div class="verdict-item">$127M+ ARR — el mayor revenue del sector DePIN GPU</div>
+        <div class="verdict-item">Price/Revenue ~1x — valoración históricamente baja</div>
+        <div class="verdict-item">DAT $344M — flywheel de demanda de tokens institucional</div>
+        <div class="verdict-item">Axe Compute en NASDAQ — primer DePIN con entidad listada</div>
+        <div class="verdict-item">435K GPU containers en 94 países — infraestructura real</div>
+        <div class="verdict-item">1.8B+ compute hours — demanda enterprise verificada</div>
+        <div class="verdict-item">RSI 21 — zona de sobrevendido extremo técnico</div>
+        <div class="verdict-item">Contratos con telcos globales — revenue estable y recurrente</div>
+      </div>
+      <div class="verdict-card verdict-bear">
+        <div class="verdict-title">🔴 Argumentos bajistas</div>
+        <div class="verdict-item">-94% desde ATH — estructura bajista extrema de largo plazo</div>
+        <div class="verdict-item">55% del supply a compute providers — presión vendedora estructural permanente</div>
+        <div class="verdict-item">Mcap/FDV = 44% — ~24B ATH aún por desbloquear hasta 2028</div>
+        <div class="verdict-item">Token no captura bien el revenue — desconexión fundamental</div>
+        <div class="verdict-item">Unlock oct. 2025: 1.37B ATH en un cliff — historial agresivo</div>
+        <div class="verdict-item">Alta sensibilidad al sentimiento en Korea (Upbit) — volatilidad extrema</div>
+        <div class="verdict-item">Sin mecanismo de burn directo vinculado a revenue</div>
+        <div class="verdict-item">Competencia creciente de io.net con IDE burn mechanism</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VEREDICTO FINAL -->
+  <div class="final-verdict">
+    <div class="final-title">TokenFlow AI · Veredicto Final</div>
+    <div class="final-score">
+      <div class="score-number">6</div>
+      <div>
+        <div class="score-label">Fundamentales reales · Tokenómica desalineada</div>
+        <div class="score-sub">sobre 10 · El mejor revenue del sector — pero el token no lo captura aún</div>
+      </div>
+    </div>
+    <div class="final-text">
+      Aethir tiene la paradoja más llamativa del sector DePIN: el mejor revenue de todos los proyectos analizados por TokenFlow AI — $127M en ARR, $39M en un solo trimestre — y el token cotiza a 1x Price/Revenue, una valoración que en mercados tradicionales sería considerada extremadamente barata para una empresa de infraestructura con crecimiento.<br><br>
+      El problema no está en la red. Está en la tokenómica. El 55% del supply asignado a Checkers y Compute Providers crea una presión vendedora estructural que ningún nivel de revenue puede compensar completamente — estos actores tienen costes operativos reales que pagan en fiat, y venden tokens para cubrirlos. Es un mecanismo de dilución silenciosa que opera independientemente del precio.<br><br>
+      El DAT de $344M y Axe Compute en NASDAQ son los contrapesos más importantes — crean demanda institucional real de ATH. Si el flywheel funciona a escala, puede cambiar el equilibrio oferta/demanda estructuralmente. Pero aún es pronto para verificarlo en datos on-chain.<br><br>
+      <strong>¿Qué cambiaría el veredicto hacia arriba?</strong> Un mecanismo de burn directo vinculado a revenue — que el 20-30% de los ingresos de clientes AI destruya tokens — convertiría a Aethir en el proyecto DePIN con la tokenómica más sólida del sector. Sin eso, el revenue récord seguirá siendo una narrativa más que una realidad reflejada en precio.
+    </div>
+  </div>
+
+  <!-- LISTA DE SEGUIMIENTO -->
+  <div class="section" style="margin-top:20px;">
+    <div class="section-header">
+      <div class="section-icon icon-cyan">👁</div>
+      <div class="section-title">Qué vigilar en los próximos 30–90 días</div>
+      <div class="section-tag">Lista de Monitoreo</div>
+    </div>
+    <div class="watch-item"><div class="watch-dot dot-orange"></div><div class="watch-text"><strong>Revenue Q1 2026:</strong> Si supera los $39M de Q3 2025, confirma que la trayectoria de crecimiento sigue intacta. Un revenue >$40M trimestral podría cambiar la narrativa del mercado hacia el múltiplo P/Revenue.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-red"></div><div class="watch-text"><strong>Próximo unlock de Team/Investors (2026–2028):</strong> Monitorear en tokenomist.ai los eventos de cliff. Los unlocks de insiders han sido históricamente los más dañinos para ATH — el de oct. 2025 (1.37B ATH) fue el más agresivo.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-yellow"></div><div class="watch-text"><strong>Expansión del DAT más allá de $344M:</strong> Si Predictive Oncology o nuevas entidades anuncian un DAT adicional, el flywheel se acelera. Seguir anuncios oficiales de Aethir en X y blog.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Mecanismo de burn:</strong> Cualquier propuesta de gobernanza que vincule el revenue de clientes a la destrucción de tokens sería el catalizador tokenómico más importante de la historia de ATH. Seguir el DAO Treasury para propuestas.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-orange"></div><div class="watch-text"><strong>Informe anual de Axe Compute 2026:</strong> Como entidad NASDAQ, Axe Compute publica informes auditados. El informe de 2026 será la validación más creíble del revenue de Aethir disponible para inversores institucionales.</div></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong style="color:#f97316;">TokenFlow AI</strong> · Investigación de tokenómica AI y DePIN · Sin hype. Solo estructura.<br>
+  Fecha del análisis: 10 de abril de 2026 · Este análisis no constituye asesoramiento de inversión. DYOR.<br>
+  Fuentes: CoinGecko, CoinMarketCap, Tokenomist.ai, Messari, docs.aethir.com, Axe Compute Annual Report, datos on-chain
+</div>
+
+</body>
+</html>
