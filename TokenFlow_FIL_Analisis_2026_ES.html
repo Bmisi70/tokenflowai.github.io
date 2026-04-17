@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenFlow AI – Análisis Filecoin (FIL) 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'JetBrains Mono', monospace; background: #0a0e1a; color: #e2e8f0; line-height: 1.7; font-size: 14px; }
+
+  .header { background: linear-gradient(135deg, #0a0f1a 0%, #0f1a2e 50%, #0a0e1a 100%); border-bottom: 1px solid #1a3a5f; padding: 44px 32px 36px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; background: radial-gradient(ellipse, rgba(56,189,248,0.07) 0%, transparent 70%); pointer-events: none; }
+  .brand { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #38bdf8; margin-bottom: 14px; font-weight: 600; }
+  .title { font-size: 38px; font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -1px; }
+  .title span { color: #38bdf8; }
+  .subtitle { font-size: 12px; color: #64748b; margin-bottom: 22px; letter-spacing: 1px; }
+  .verdict-badge { display: inline-block; padding: 8px 24px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid; font-family: 'JetBrains Mono', monospace; }
+  .badge-warning { background: #451a03; color: #fb923c; border-color: #9a3412; }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 36px 20px; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 36px; }
+  .stat-card { background: #0d1525; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; text-align: center; transition: border-color 0.2s; }
+  .stat-card:hover { border-color: #38bdf833; }
+  .stat-label { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .stat-value { font-size: 22px; font-weight: 800; color: #f8fafc; }
+  .stat-sub { font-size: 10px; color: #64748b; margin-top: 4px; }
+  .stat-cyan { color: #38bdf8; }
+  .stat-green { color: #4ade80; }
+  .stat-yellow { color: #fbbf24; }
+  .stat-red { color: #f87171; }
+  .stat-orange { color: #fb923c; }
+
+  .section { background: #0d1525; border: 1px solid #1e293b; border-radius: 8px; padding: 26px; margin-bottom: 18px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #1e293b; }
+  .section-icon { width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .icon-cyan { background: #083344; }
+  .icon-orange { background: #431407; }
+  .icon-green { background: #052e16; }
+  .icon-yellow { background: #422006; }
+  .icon-blue { background: #0c2a47; }
+  .icon-purple { background: #2e1065; }
+  .icon-red { background: #450a0a; }
+  .section-title { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+  .section-tag { font-size: 10px; color: #475569; margin-left: auto; letter-spacing: 1px; text-transform: uppercase; }
+
+  .alloc-table { width: 100%; border-collapse: collapse; }
+  .alloc-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .alloc-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; font-size: 13px; vertical-align: middle; }
+  .alloc-table tr:last-child td { border-bottom: none; }
+  .alloc-bar-wrap { background: #1e293b; border-radius: 2px; height: 5px; width: 90px; display: inline-block; vertical-align: middle; margin-left: 8px; }
+  .alloc-bar { height: 5px; border-radius: 2px; display: block; }
+
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+  .pill-green { background: #052e16; color: #4ade80; }
+  .pill-yellow { background: #422006; color: #fbbf24; }
+  .pill-red { background: #450a0a; color: #f87171; }
+  .pill-cyan { background: #083344; color: #38bdf8; }
+  .pill-orange { background: #431407; color: #fb923c; }
+
+  .mint-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  .mint-card { border-radius: 6px; padding: 20px; text-align: center; }
+  .mint-simple { background: #1e293b; border: 1px solid #334155; }
+  .mint-baseline { background: #052e16; border: 1px solid #166534; }
+  .mint-number { font-size: 26px; font-weight: 800; margin-bottom: 6px; }
+  .mint-label { font-size: 10px; opacity: 0.7; text-transform: uppercase; letter-spacing: 2px; }
+  .mint-sub { font-size: 12px; margin-top: 8px; opacity: 0.8; }
+
+  .pressure-meter { margin: 14px 0; }
+  .meter-label { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+  .meter-bar-wrap { background: #1e293b; border-radius: 3px; height: 10px; overflow: hidden; }
+  .meter-bar { height: 10px; border-radius: 3px; }
+  .meter-green { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .meter-orange { background: linear-gradient(90deg, #ea580c, #fb923c); }
+  .meter-red { background: linear-gradient(90deg, #dc2626, #f87171); }
+  .meter-cyan { background: linear-gradient(90deg, #0891b2, #38bdf8); }
+  .meter-yellow { background: linear-gradient(90deg, #ca8a04, #fbbf24); }
+  .meter-footer { display: flex; justify-content: space-between; font-size: 10px; color: #475569; margin-top: 4px; }
+
+  .verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .verdict-card { border-radius: 6px; padding: 20px; }
+  .verdict-bull { background: #052e16; border: 1px solid #166534; }
+  .verdict-bear { background: #450a0a; border: 1px solid #7f1d1d; }
+  .verdict-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .verdict-bull .verdict-title { color: #4ade80; }
+  .verdict-bear .verdict-title { color: #f87171; }
+  .verdict-item { font-size: 12px; color: #cbd5e1; margin-bottom: 9px; padding-left: 18px; position: relative; line-height: 1.5; }
+  .verdict-item::before { content: '→'; position: absolute; left: 0; font-weight: 700; }
+  .verdict-bull .verdict-item::before { color: #4ade80; }
+  .verdict-bear .verdict-item::before { color: #f87171; }
+
+  .final-verdict { background: linear-gradient(135deg, #0c2a47, #0f172a); border: 1px solid #0284c7; border-radius: 8px; padding: 30px; margin-top: 8px; }
+  .final-title { font-size: 11px; color: #38bdf8; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 14px; font-weight: 700; }
+  .final-score { display: flex; align-items: center; gap: 22px; margin-bottom: 18px; }
+  .score-number { font-size: 68px; font-weight: 900; color: #fbbf24; line-height: 1; }
+  .score-label { font-size: 20px; font-weight: 700; color: #f1f5f9; }
+  .score-sub { font-size: 12px; color: #64748b; margin-top: 6px; }
+  .final-text { font-size: 13px; color: #cbd5e1; line-height: 1.9; }
+
+  .watch-item { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid #1e293b; font-size: 13px; }
+  .watch-item:last-child { border-bottom: none; }
+  .watch-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #22c55e; }
+  .dot-cyan { background: #38bdf8; }
+  .watch-text { color: #cbd5e1; }
+  .watch-text strong { color: #f8fafc; }
+
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .comp-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .comp-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; vertical-align: middle; }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table tr.highlight-row { background: #0c2a47; }
+
+  .note-box { background: #0a1220; border-left: 3px solid #38bdf8; border-radius: 0 6px 6px 0; padding: 14px 16px; font-size: 12px; color: #94a3b8; margin: 14px 0; line-height: 1.8; }
+  .note-box.warning { border-left-color: #f59e0b; background: #0d1105; }
+  .note-box.danger { border-left-color: #ef4444; background: #0d0808; }
+  .note-box.success { border-left-color: #22c55e; background: #050f05; }
+
+  .timeline { margin: 16px 0; }
+  .timeline-item { display: flex; gap: 16px; padding: 12px 0; border-bottom: 1px solid #1e293b; }
+  .timeline-item:last-child { border-bottom: none; }
+  .timeline-date { font-size: 10px; color: #38bdf8; font-weight: 700; min-width: 100px; padding-top: 2px; letter-spacing: 1px; }
+  .timeline-text { font-size: 12px; color: #cbd5e1; line-height: 1.6; }
+  .timeline-text strong { color: #f8fafc; }
+
+  .footer { text-align: center; padding: 28px; color: #334155; font-size: 11px; border-top: 1px solid #1e293b; margin-top: 36px; letter-spacing: 0.5px; line-height: 2; }
+
+  @media (max-width: 600px) {
+    .verdict-grid, .mint-compare { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .score-number { font-size: 52px; }
+    .title { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">🔵 TokenFlow AI · Investigación de Tokenómica DePIN</div>
+  <div class="title">Filecoin <span>FIL</span></div>
+  <div class="subtitle">Análisis completo de tokenómica y el reset de octubre 2026 · 17 de abril de 2026</div>
+  <div class="verdict-badge badge-warning">⚠ Infraestructura real · Tokenómica inflacionaria · Reset en camino</div>
+</div>
+
+<div class="container">
+
+  <!-- ESTADÍSTICAS RÁPIDAS -->
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Precio (USD)</div><div class="stat-value stat-cyan">$0.90</div><div class="stat-sub">17 de abril, 2026</div></div>
+    <div class="stat-card"><div class="stat-label">Cap. de Mercado</div><div class="stat-value">$670M</div><div class="stat-sub">#84 CoinGecko</div></div>
+    <div class="stat-card"><div class="stat-label">FDV</div><div class="stat-value stat-yellow">$1.7B</div><div class="stat-sub">Mcap/FDV = 40%</div></div>
+    <div class="stat-card"><div class="stat-label">Desde ATH</div><div class="stat-value stat-red">-99%</div><div class="stat-sub">ATH: $237 (abr. 2021)</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Circ.</div><div class="stat-value">~770M</div><div class="stat-sub">~40% del máximo</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Máx.</div><div class="stat-value">2,000M</div><div class="stat-sub">Cap fijo — largo plazo</div></div>
+    <div class="stat-card"><div class="stat-label">Almacenamiento</div><div class="stat-value stat-green">23+ EiB</div><div class="stat-sub">Capacidad de red</div></div>
+    <div class="stat-card"><div class="stat-label">Crecimiento 2025</div><div class="stat-value stat-green">+400%</div><div class="stat-sub">Storage capacity YoY</div></div>
+  </div>
+
+  <!-- QUÉ ES FILECOIN -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-cyan">💾</div>
+      <div class="section-title">¿Qué es Filecoin? — El DePIN del almacenamiento</div>
+      <div class="section-tag">Mecanismo de Red</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">Filecoin es la red DePIN de almacenamiento descentralizado más grande del mundo. Convierte el espacio libre en discos duros de todo el planeta en un mercado competitivo de almacenamiento de datos. Los clientes pagan en FIL para almacenar datos; los miners reciben FIL por proveer espacio fiable. El objetivo: sustituir Amazon S3, Google Cloud Storage y Dropbox con infraestructura descentralizada, verificable y censura-resistente.</p>
+
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Capacidad red</div><div class="stat-value stat-cyan">23+ EiB</div><div class="stat-sub">Exabytes — escala masiva</div></div>
+      <div class="stat-card"><div class="stat-label">Storage miners</div><div class="stat-value">2,688+</div><div class="stat-sub">Proveedores activos</div></div>
+      <div class="stat-card"><div class="stat-label">FVM contratos</div><div class="stat-value stat-green">5,000+</div><div class="stat-sub">Smart contracts activos</div></div>
+      <div class="stat-card"><div class="stat-label">Onchain Cloud</div><div class="stat-value stat-yellow">100+</div><div class="stat-sub">Equipos en mainnet</div></div>
+    </div>
+
+    <div class="note-box">
+      <strong>🔑 Por qué Filecoin es diferente al resto:</strong> Mientras RENDER, io.net y Aethir compiten en GPU compute, Filecoin ocupa un nicho completamente distinto: almacenamiento permanente y verificable de datos. Los modelos de AI necesitan almacenar petabytes de datos de entrenamiento. Las empresas necesitan backups descentralizados. Los archivos culturales necesitan preservación permanente. Filecoin es la capa de datos que hace posible todo eso — sin depender de Amazon o Google.
+    </div>
+  </div>
+
+  <!-- MECANISMO DE MINTING -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">⚡</div>
+      <div class="section-title">Mecanismo de emisión — Simple vs. Baseline Minting</div>
+      <div class="section-tag">Tokenómica Única</div>
+    </div>
+
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:16px;">Filecoin tiene el mecanismo de emisión más sofisticado del sector DePIN. En lugar de un calendario fijo, las emisiones dependen parcialmente del uso real de la red — a más almacenamiento útil, más tokens se liberan.</p>
+
+    <div class="mint-compare">
+      <div class="mint-card mint-simple">
+        <div class="mint-label" style="color:#94a3b8;">Simple Minting</div>
+        <div class="mint-number" style="color:#38bdf8;">330M FIL</div>
+        <div style="font-size:12px;color:#94a3b8;">16.5% del supply máx.</div>
+        <div class="mint-sub" style="color:#94a3b8;">Liberación con half-life de 6 años — similar a Bitcoin pero más suave. Independiente del uso real de la red.</div>
+      </div>
+      <div class="mint-card mint-baseline">
+        <div class="mint-label" style="color:#86efac;">Baseline Minting</div>
+        <div class="mint-number" style="color:#4ade80;">770M FIL</div>
+        <div style="font-size:12px;color:#86efac;">38.5% del supply máx.</div>
+        <div class="mint-sub" style="color:#86efac;">Solo se libera si la red crece. Target: 1 yottabyte en 20 años. Alinea incentivos con uso real — única en el sector.</div>
+      </div>
+    </div>
+
+    <div class="note-box success">
+      <strong>✅ Por qué el Baseline Minting es positivo:</strong> Si la red no crece, una parte significativa del supply nunca se emite. Esto crea un mecanismo deflacionario natural vinculado a utilidad real — más almacenamiento demandado = más tokens emitidos, pero también más demanda de FIL para pagar por ese almacenamiento. Es la tokenómica DePIN más alineada con uso real de toda la industria.
+    </div>
+  </div>
+
+  <!-- SUPPLY Y VESTING -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-orange">📊</div>
+      <div class="section-title">Estructura del suministro — y el reset de octubre 2026</div>
+      <div class="section-tag">Supply Analysis</div>
+    </div>
+
+    <table class="alloc-table">
+      <thead>
+        <tr><th>Categoría</th><th>% Supply</th><th>Tokens</th><th>Vesting</th><th>Riesgo</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Mining rewards (storage)</strong></td>
+          <td>55% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:100%;background:#38bdf8;"></div></div></td>
+          <td>1,100M FIL</td>
+          <td><span class="status-pill pill-cyan">75% lineal 180 días</span></td>
+          <td>Presión continua — miners venden para costes</td>
+        </tr>
+        <tr>
+          <td><strong>Protocol Labs</strong></td>
+          <td>10% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:18%;background:#f97316;"></div></div></td>
+          <td>200M FIL</td>
+          <td><span class="status-pill pill-orange">Lineal 6 años — ⚠ vence oct. 2026</span></td>
+          <td style="color:#fb923c;">⚠ Cliff de vesting próximo</td>
+        </tr>
+        <tr>
+          <td><strong>Filecoin Foundation</strong></td>
+          <td>5% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:9%;background:#f97316;"></div></div></td>
+          <td>100M FIL</td>
+          <td><span class="status-pill pill-orange">Lineal 6 años — vence oct. 2026</span></td>
+          <td style="color:#fb923c;">⚠ Misma fecha</td>
+        </tr>
+        <tr>
+          <td><strong>Investors (fundraising)</strong></td>
+          <td>7.5% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:14%;background:#ef4444;"></div></div></td>
+          <td>150M FIL</td>
+          <td><span class="status-pill pill-green">6–36 meses — ya completado</span></td>
+          <td style="color:#4ade80;">✅ Ya en mercado</td>
+        </tr>
+        <tr>
+          <td><strong>Mining Reserve</strong></td>
+          <td>15% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:27%;background:#4ade80;"></div></div></td>
+          <td>300M FIL</td>
+          <td><span class="status-pill pill-yellow">Reserva futura</span></td>
+          <td>Largo plazo — discrecional</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box warning" style="margin-top:20px;">
+      <strong>⚠ El evento clave: octubre 2026</strong> — El vesting de 6 años de Protocol Labs y la Filecoin Foundation completa su ciclo. Después de esa fecha, la presión vendedora estructural de estos grandes holders disminuye significativamente. Los analistas lo llaman el "tokenomics reset" de Filecoin: menos tokens entrando al mercado desde insiders, mayor sensibilidad del precio a la demanda real. Es el catalizador estructural más importante del año para FIL.
+    </div>
+  </div>
+
+  <!-- HITOS TÉCNICOS 2025-2026 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">🚀</div>
+      <div class="section-title">Upgrades clave — La red que nadie está mirando</div>
+      <div class="section-tag">Desarrollo de Red</div>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-date">ABR 2025</div>
+        <div class="timeline-text"><strong>Fast Finality (F3):</strong> Velocidad de transacciones 100x más rápida. Convierte a Filecoin en una red apta para aplicaciones en tiempo real — no solo almacenamiento frío.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">MAY 2025</div>
+        <div class="timeline-text"><strong>Proof of Data Possession (PDP):</strong> Habilita "hot storage" verificable — datos accesibles al instante con prueba criptográfica de que existen. Clave para AI inference pipelines.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">NOV 2025</div>
+        <div class="timeline-text"><strong>Filecoin Onchain Cloud (testnet):</strong> Plataforma programable de almacenamiento con pagos on-chain y redundancia dual. 100+ equipos en testnet antes del lanzamiento.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">DIC 2025</div>
+        <div class="timeline-text"><strong>FIP-100 fee burns:</strong> Las fees de red se queman en FIL, introduciendo presión deflacionaria directa vinculada al uso. Primer mecanismo de burn real en Filecoin.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2026</div>
+        <div class="timeline-text"><strong>Filecoin Onchain Cloud (mainnet):</strong> Lanzado con 478+ datasets, 81 wallets de pago conectadas y 49 TiB almacenados. FilCDN para retrieval ultrarrápido. USDFC stablecoin para pagos sin volatilidad de FIL.</div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <strong>📌 Filecoin lidera el desarrollo AI en DePIN:</strong> Santiment data muestra a Filecoin con el score más alto de actividad de desarrollo AI entre proyectos DePIN (348.03), por encima de Chainlink e ICP. Los equipos de AI están construyendo sobre Filecoin activamente — no solo explorándolo.
+    </div>
+  </div>
+
+  <!-- MÉTRICAS DE RED -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-cyan">⚡</div>
+      <div class="section-title">Métricas de red — La escala real</div>
+      <div class="section-tag">Datos On-Chain</div>
+    </div>
+
+    <div class="pressure-meter">
+      <div class="meter-label">Capacidad de almacenamiento (23+ EiB — escala planetaria)</div>
+      <div class="meter-bar-wrap" style="height:12px;border-radius:6px;"><div class="meter-bar meter-cyan" style="width:88%;height:12px;border-radius:6px;"></div></div>
+      <div class="meter-footer"><span>0</span><span style="color:#38bdf8;font-weight:700;">23+ EiB — equivale a ~23 millones de TB</span><span>100 EiB</span></div>
+    </div>
+
+    <div class="pressure-meter">
+      <div class="meter-label">Crecimiento de capacidad en 2025 (+400% YoY)</div>
+      <div class="meter-bar-wrap" style="height:12px;border-radius:6px;"><div class="meter-bar meter-green" style="width:80%;height:12px;border-radius:6px;"></div></div>
+      <div class="meter-footer"><span>0%</span><span style="color:#4ade80;font-weight:700;">+400% en 2025 — expansión masiva</span><span>500%</span></div>
+    </div>
+
+    <div class="pressure-meter">
+      <div class="meter-label">FIL bloqueado como colateral (161.9M FIL — 8.26% del supply)</div>
+      <div class="meter-bar-wrap" style="height:12px;border-radius:6px;"><div class="meter-bar meter-yellow" style="width:55%;height:12px;border-radius:6px;"></div></div>
+      <div class="meter-footer"><span>0</span><span style="color:#fbbf24;font-weight:700;">161.9M FIL bloqueados — reducen supply libre</span><span>300M</span></div>
+    </div>
+
+    <div class="note-box danger" style="margin-top:16px;">
+      <strong>⚠ El problema real de Filecoin:</strong> El 400% de crecimiento en capacidad es impresionante — pero gran parte fue impulsado por el programa Filecoin Plus, que subsidia almacenamiento permitiendo a los miners cobrar cero a los clientes. Cuando los subsidios disminuyan, ¿seguirá creciendo la red por demanda real? Esta es la pregunta sin respuesta definitiva. El pivot hacia Filecoin Onchain Cloud y clientes pagantes es la respuesta del equipo — pero aún es pronto para verificarlo.
+    </div>
+  </div>
+
+  <!-- COMPETIDORES -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">⚔</div>
+      <div class="section-title">Posicionamiento competitivo</div>
+      <div class="section-tag">DePIN Storage</div>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr><th>Proyecto</th><th>Capacidad</th><th>Enfoque</th><th>vs. Filecoin</th></tr>
+      </thead>
+      <tbody>
+        <tr class="highlight-row">
+          <td><strong style="color:#38bdf8;">🔵 Filecoin (FIL)</strong></td>
+          <td style="color:#4ade80;">23+ EiB</td>
+          <td>Storage general + AI data</td>
+          <td>— Líder absoluto por capacidad</td>
+        </tr>
+        <tr>
+          <td><strong>Arweave (AR)</strong></td>
+          <td>~200 TB</td>
+          <td>Almacenamiento permanente</td>
+          <td>Permanencia > escala — nicho diferente</td>
+        </tr>
+        <tr>
+          <td><strong>Storj (STORJ)</strong></td>
+          <td>~15 PB</td>
+          <td>S3-compatible storage</td>
+          <td>Mejor UX — menor escala</td>
+        </tr>
+        <tr>
+          <td><strong>Amazon S3</strong></td>
+          <td>Exabytes</td>
+          <td>Cloud centralizado</td>
+          <td>FIL es 60-80% más barato — pero centralizado</td>
+        </tr>
+        <tr>
+          <td><strong>GRASS / TAO</strong></td>
+          <td>—</td>
+          <td>Data scraping / AI models</td>
+          <td>Complementarios — necesitan almacenamiento</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box" style="margin-top:16px;">
+      <strong>Ventaja de Filecoin:</strong> Con 23+ EiB de capacidad, Filecoin supera a todos los competidores descentralizados por un margen enorme — Storj tiene 15 PB, menos del 0.1% de la capacidad de Filecoin. En escala, no hay competidor real en DePIN storage. Su desafío es convertir esa capacidad en demanda pagante real.
+    </div>
+  </div>
+
+  <!-- TÉCNICO -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📉</div>
+      <div class="section-title">Estructura técnica y contexto de precio</div>
+      <div class="section-tag">Estructura de Precio</div>
+    </div>
+
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Precio vs ATH</div><div class="stat-value stat-red">-99%</div><div class="stat-sub">ATH: $237 (abr. 2021)</div></div>
+      <div class="stat-card"><div class="stat-label">Precio vs ATL</div><div class="stat-value stat-yellow">+13%</div><div class="stat-sub">ATL: $0.79 (feb. 2026)</div></div>
+      <div class="stat-card"><div class="stat-label">SMA 200</div><div class="stat-value stat-red">$1.43</div><div class="stat-sub">Resistencia clave</div></div>
+      <div class="stat-card"><div class="stat-label">RSI 14</div><div class="stat-value stat-yellow">~47</div><div class="stat-sub">Zona neutral</div></div>
+    </div>
+
+    <div class="pressure-meter"><div class="meter-label">Tendencia de largo plazo (-99% desde ATH de 2021)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:98%;"></div></div><div class="meter-footer"><span>ATH</span><span style="color:#f87171;">🔴 Estructura bajista extrema</span><span>ATL</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Patrón técnico (falling wedge — señal potencialmente alcista)</div><div class="meter-bar-wrap"><div class="meter-bar meter-yellow" style="width:50%;"></div></div><div class="meter-footer"><span>Bajista</span><span style="color:#fbbf24;">⚠ Compresión — breakout pendiente sobre $1.10</span><span>Alcista</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Inflación anual de supply (~21% YoY)</div><div class="meter-bar-wrap"><div class="meter-bar meter-orange" style="width:75%;"></div></div><div class="meter-footer"><span>Baja</span><span style="color:#fb923c;">⚠ Alta — principal headwind estructural</span><span>Máxima</span></div></div>
+
+    <div class="note-box warning" style="margin-top:16px;">
+      La inflación anual del 21% es el mayor obstáculo técnico de FIL. Cada año, ~130-140M FIL nuevos entran al mercado. Sin demanda suficiente para absorberlos, el precio sufre presión vendedora estructural. El reset de octubre 2026 no elimina este problema — los mining rewards continúan — pero reduce significativamente la presión de Protocol Labs y Filecoin Foundation.
+    </div>
+  </div>
+
+  <!-- ALCISTA VS BAJISTA -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">⚖</div>
+      <div class="section-title">Argumentos alcistas vs. bajistas</div>
+      <div class="section-tag">Veredicto TokenFlow</div>
+    </div>
+
+    <div class="verdict-grid">
+      <div class="verdict-card verdict-bull">
+        <div class="verdict-title">🟢 Argumentos alcistas</div>
+        <div class="verdict-item">23+ EiB — mayor red de storage descentralizado por un margen enorme</div>
+        <div class="verdict-item">+400% crecimiento en capacidad 2025 — adopción masiva</div>
+        <div class="verdict-item">Reset oct. 2026 — fin de vesting de Protocol Labs y Filecoin Foundation</div>
+        <div class="verdict-item">FIP-100 burns — primera deflación real vinculada a uso</div>
+        <div class="verdict-item">Fast Finality (100x) + PDP — red apta para AI en tiempo real</div>
+        <div class="verdict-item">Filecoin Onchain Cloud mainnet — pivot a clientes pagantes</div>
+        <div class="verdict-item">Líder en desarrollo AI/DePIN — score 348 en Santiment</div>
+        <div class="verdict-item">Baseline Minting — emisiones vinculadas a uso real, no a calendario</div>
+      </div>
+      <div class="verdict-card verdict-bear">
+        <div class="verdict-title">🔴 Argumentos bajistas</div>
+        <div class="verdict-item">-99% desde ATH de 2021 — estructura bajista histórica extrema</div>
+        <div class="verdict-item">Inflación ~21% anual — ~130M FIL nuevos cada año presionan el precio</div>
+        <div class="verdict-item">Mcap/FDV = 40% — 1.2B FIL aún por emitir hasta 2050</div>
+        <div class="verdict-item">Filecoin Plus subsidia almacenamiento — demanda real incierta</div>
+        <div class="verdict-item">RSI neutro, SMA200 en $1.43 como resistencia fuerte</div>
+        <div class="verdict-item">Competencia creciente de soluciones centralizadas más baratas</div>
+        <div class="verdict-item">Onchain Cloud aún early stage — solo 49 TiB en mainnet</div>
+        <div class="verdict-item">Vesting extendido hasta 2050 — dilución estructural permanente</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VEREDICTO FINAL -->
+  <div class="final-verdict">
+    <div class="final-title">TokenFlow AI · Veredicto Final</div>
+    <div class="final-score">
+      <div class="score-number">5.5</div>
+      <div>
+        <div class="score-label">Infraestructura real · Reset pendiente</div>
+        <div class="score-sub">sobre 10 · La mayor red DePIN storage — con la tokenómica más inflacionaria</div>
+      </div>
+    </div>
+    <div class="final-text">
+      Filecoin es una paradoja. Tiene la infraestructura DePIN de almacenamiento más grande del mundo por un margen enorme — 23 exabytes frente a los 15 petabytes de su competidor más cercano. Sus upgrades técnicos de 2025-2026 son reales y significativos: Fast Finality, PDP para hot storage, Onchain Cloud, y los primeros fee burns de la historia del protocolo. El equipo está ejecutando.<br><br>
+      El problema es estructural: una inflación anual del ~21% con ~130M FIL nuevos entrando al mercado cada año crea una presión vendedora permanente que supera cualquier narrativa positiva a corto plazo. El programa Filecoin Plus, que subsidia almacenamiento permitiendo a miners cobrar cero, distorsiona las métricas de adopción — no sabemos cuánta demanda es real y cuánta es subsidiada.<br><br>
+      <strong>El catalizador de octubre 2026:</strong> Cuando vence el vesting de 6 años de Protocol Labs y la Filecoin Foundation, la presión institucional de venta se reduce drásticamente. Si coincide con crecimiento en clientes pagantes del Filecoin Onchain Cloud y con fee burns crecientes, podría ser el punto de inflexión que la tokenómica de FIL ha necesitado desde su lanzamiento.<br><br>
+      <strong>¿Qué vigilar?</strong> El ratio de almacenamiento pagante vs. subsidiado. Si el Onchain Cloud supera 1 PiB en clientes pagantes antes de octubre 2026, el reset tokenómico llega con demanda real respaldándolo. Ese escenario podría cambiar el veredicto a 7/10.
+    </div>
+  </div>
+
+  <!-- LISTA DE SEGUIMIENTO -->
+  <div class="section" style="margin-top:20px;">
+    <div class="section-header">
+      <div class="section-icon icon-cyan">👁</div>
+      <div class="section-title">Qué vigilar en los próximos 30–180 días</div>
+      <div class="section-tag">Lista de Monitoreo</div>
+    </div>
+    <div class="watch-item"><div class="watch-dot dot-cyan"></div><div class="watch-text"><strong>Octubre 2026 — Reset de vesting:</strong> La fecha más importante de la historia tokenómica reciente de FIL. Seguir el supply en circulación en filfox.info o filscan.io a partir de septiembre para detectar si Protocol Labs o Filecoin Foundation venden antes del vencimiento.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Filecoin Onchain Cloud — métricas de adopción:</strong> Actualmente 49 TiB y 81 wallets. Si supera 1 PiB antes de octubre 2026, confirma que el pivot a clientes pagantes está funcionando. Seguir en fil.tools o el dashboard oficial.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-yellow"></div><div class="watch-text"><strong>FIP-100 fee burns mensuales:</strong> Los primeros datos de burns on-chain. Si el burn rate supera 1M FIL/mes, empieza a compensar parcialmente la inflación del mining. Dato a verificar en filfox.info bajo "burned FIL".</div></div>
+    <div class="watch-item"><div class="watch-dot dot-red"></div><div class="watch-text"><strong>Nivel técnico $1.10:</strong> Resistencia del falling wedge. Un cierre sostenido por encima con volumen confirmaría el breakout técnico que los analistas llevan meses esperando. Sin ese nivel, la estructura sigue bajista.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-cyan"></div><div class="watch-text"><strong>Ratio almacenamiento pagante vs. subsidiado:</strong> El indicador más importante para la sostenibilidad de la red. Disponible en Messari State of Filecoin (trimestral). Si el % pagante supera el 30% del total, la narrativa cambia.</div></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong style="color:#38bdf8;">TokenFlow AI</strong> · Investigación de tokenómica AI y DePIN · Sin hype. Solo estructura.<br>
+  Fecha del análisis: 17 de abril de 2026 · Este análisis no constituye asesoramiento de inversión. DYOR.<br>
+  Fuentes: CoinGecko, CoinMarketCap, Messari, Tokenomist.ai, docs.filecoin.io, filfox.info, Santiment, datos on-chain
+</div>
+
+</body>
+</html>
