@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenFlow AI – Análisis Helium (HNT) 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'JetBrains Mono', monospace; background: #0a0e1a; color: #e2e8f0; line-height: 1.7; font-size: 14px; }
+
+  .header { background: linear-gradient(135deg, #0a1a14 0%, #0f2a1e 50%, #0a0e1a 100%); border-bottom: 1px solid #1a4a2e; padding: 44px 32px 36px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; background: radial-gradient(ellipse, rgba(34,197,94,0.07) 0%, transparent 70%); pointer-events: none; }
+  .brand { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #22c55e; margin-bottom: 14px; font-weight: 600; }
+  .title { font-size: 38px; font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -1px; }
+  .title span { color: #22c55e; }
+  .subtitle { font-size: 12px; color: #64748b; margin-bottom: 22px; letter-spacing: 1px; }
+  .verdict-badge { display: inline-block; padding: 8px 24px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid; font-family: 'JetBrains Mono', monospace; }
+  .badge-warning { background: #451a03; color: #fb923c; border-color: #9a3412; }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 36px 20px; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 36px; }
+  .stat-card { background: #0d1525; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; text-align: center; transition: border-color 0.2s; }
+  .stat-card:hover { border-color: #22c55e33; }
+  .stat-label { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .stat-value { font-size: 22px; font-weight: 800; color: #f8fafc; }
+  .stat-sub { font-size: 10px; color: #64748b; margin-top: 4px; }
+  .stat-green { color: #22c55e; }
+  .stat-yellow { color: #fbbf24; }
+  .stat-red { color: #f87171; }
+  .stat-orange { color: #fb923c; }
+
+  .section { background: #0d1525; border: 1px solid #1e293b; border-radius: 8px; padding: 26px; margin-bottom: 18px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #1e293b; }
+  .section-icon { width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .icon-green { background: #052e16; }
+  .icon-orange { background: #431407; }
+  .icon-red { background: #450a0a; }
+  .icon-yellow { background: #422006; }
+  .icon-blue { background: #0c2a47; }
+  .icon-purple { background: #2e1065; }
+  .icon-cyan { background: #083344; }
+  .section-title { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+  .section-tag { font-size: 10px; color: #475569; margin-left: auto; letter-spacing: 1px; text-transform: uppercase; }
+
+  .alloc-table { width: 100%; border-collapse: collapse; }
+  .alloc-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .alloc-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; font-size: 13px; vertical-align: middle; }
+  .alloc-table tr:last-child td { border-bottom: none; }
+  .alloc-bar-wrap { background: #1e293b; border-radius: 2px; height: 5px; width: 90px; display: inline-block; vertical-align: middle; margin-left: 8px; }
+  .alloc-bar { height: 5px; border-radius: 2px; display: block; }
+
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+  .pill-green { background: #052e16; color: #4ade80; }
+  .pill-yellow { background: #422006; color: #fbbf24; }
+  .pill-red { background: #450a0a; color: #f87171; }
+  .pill-cyan { background: #083344; color: #38bdf8; }
+
+  .bme-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  .bme-card { border-radius: 6px; padding: 20px; text-align: center; }
+  .bme-mint { background: #450a0a; border: 1px solid #7f1d1d; }
+  .bme-burn { background: #052e16; border: 1px solid #166534; }
+  .bme-number { font-size: 28px; font-weight: 800; margin-bottom: 6px; }
+
+  .halving-box { background: #0a1a14; border: 1px solid #166534; border-radius: 8px; padding: 20px; margin: 16px 0; text-align: center; }
+  .halving-title { font-size: 10px; color: #22c55e; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; font-weight: 700; }
+  .halving-row { display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .halving-item { text-align: center; }
+  .halving-num { font-size: 26px; font-weight: 800; }
+  .halving-label { font-size: 10px; color: #64748b; margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+  .halving-arrow { font-size: 22px; color: #22c55e; }
+
+  .pressure-meter { margin: 14px 0; }
+  .meter-label { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+  .meter-bar-wrap { background: #1e293b; border-radius: 3px; height: 10px; overflow: hidden; }
+  .meter-bar { height: 10px; border-radius: 3px; }
+  .meter-green { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .meter-orange { background: linear-gradient(90deg, #ea580c, #fb923c); }
+  .meter-red { background: linear-gradient(90deg, #dc2626, #f87171); }
+  .meter-yellow { background: linear-gradient(90deg, #ca8a04, #fbbf24); }
+  .meter-footer { display: flex; justify-content: space-between; font-size: 10px; color: #475569; margin-top: 4px; }
+
+  .partner-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin: 16px 0; }
+  .partner-card { background: #0d1525; border: 1px solid #1e293b; border-radius: 6px; padding: 14px; text-align: center; }
+  .partner-name { font-size: 13px; font-weight: 700; color: #f1f5f9; margin-bottom: 4px; }
+  .partner-desc { font-size: 11px; color: #64748b; }
+
+  .verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .verdict-card { border-radius: 6px; padding: 20px; }
+  .verdict-bull { background: #052e16; border: 1px solid #166534; }
+  .verdict-bear { background: #450a0a; border: 1px solid #7f1d1d; }
+  .verdict-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .verdict-bull .verdict-title { color: #4ade80; }
+  .verdict-bear .verdict-title { color: #f87171; }
+  .verdict-item { font-size: 12px; color: #cbd5e1; margin-bottom: 9px; padding-left: 18px; position: relative; line-height: 1.5; }
+  .verdict-item::before { content: '→'; position: absolute; left: 0; font-weight: 700; }
+  .verdict-bull .verdict-item::before { color: #4ade80; }
+  .verdict-bear .verdict-item::before { color: #f87171; }
+
+  .final-verdict { background: linear-gradient(135deg, #0a1a14, #0f172a); border: 1px solid #16a34a; border-radius: 8px; padding: 30px; margin-top: 8px; }
+  .final-title { font-size: 11px; color: #22c55e; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 14px; font-weight: 700; }
+  .final-score { display: flex; align-items: center; gap: 22px; margin-bottom: 18px; }
+  .score-number { font-size: 68px; font-weight: 900; color: #fbbf24; line-height: 1; }
+  .score-label { font-size: 20px; font-weight: 700; color: #f1f5f9; }
+  .score-sub { font-size: 12px; color: #64748b; margin-top: 6px; }
+  .final-text { font-size: 13px; color: #cbd5e1; line-height: 1.9; }
+
+  .watch-item { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid #1e293b; font-size: 13px; }
+  .watch-item:last-child { border-bottom: none; }
+  .watch-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #22c55e; }
+  .dot-cyan { background: #38bdf8; }
+  .watch-text { color: #cbd5e1; }
+  .watch-text strong { color: #f8fafc; }
+
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .comp-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .comp-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; vertical-align: middle; }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table tr.highlight-row { background: #0a1a14; }
+
+  .note-box { background: #060f0a; border-left: 3px solid #22c55e; border-radius: 0 6px 6px 0; padding: 14px 16px; font-size: 12px; color: #94a3b8; margin: 14px 0; line-height: 1.8; }
+  .note-box.warning { border-left-color: #f59e0b; background: #0d1105; }
+  .note-box.danger { border-left-color: #ef4444; background: #0d0808; }
+  .note-box.success { border-left-color: #22c55e; }
+
+  .footer { text-align: center; padding: 28px; color: #334155; font-size: 11px; border-top: 1px solid #1e293b; margin-top: 36px; letter-spacing: 0.5px; line-height: 2; }
+
+  @media (max-width: 600px) {
+    .verdict-grid, .bme-compare { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .score-number { font-size: 52px; }
+    .title { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">🟢 TokenFlow AI · Investigación de Tokenómica DePIN</div>
+  <div class="title">Helium <span>HNT</span></div>
+  <div class="subtitle">Análisis completo de tokenómica y el modelo deflacionario · 24 de abril de 2026</div>
+  <div class="verdict-badge badge-warning">⚠ Red real · Halving activo · Burn-and-Mint · Precio desconectado de fundamentales</div>
+</div>
+
+<div class="container">
+
+  <!-- ESTADÍSTICAS -->
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Precio (USD)</div><div class="stat-value stat-green">$1.04</div><div class="stat-sub">24 de abril, 2026</div></div>
+    <div class="stat-card"><div class="stat-label">Cap. de Mercado</div><div class="stat-value">$197M</div><div class="stat-sub">#136 CoinGecko</div></div>
+    <div class="stat-card"><div class="stat-label">FDV</div><div class="stat-value stat-yellow">$228M</div><div class="stat-sub">Mcap/FDV = 84%</div></div>
+    <div class="stat-card"><div class="stat-label">Desde ATH</div><div class="stat-value stat-red">-98%</div><div class="stat-sub">ATH: $48.80 (nov. 2021)</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Circ.</div><div class="stat-value">186M</div><div class="stat-sub">84% del máximo</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Máx.</div><div class="stat-value">223M</div><div class="stat-sub">Hard cap — deflationary</div></div>
+    <div class="stat-card"><div class="stat-label">Revenue ene. 2026</div><div class="stat-value stat-green">$24M</div><div class="stat-sub">WiFi carrier offload</div></div>
+    <div class="stat-card"><div class="stat-label">Usuarios diarios</div><div class="stat-value stat-green">2M+</div><div class="stat-sub">AT&T, T-Mobile, Telefónica</div></div>
+  </div>
+
+  <!-- QUÉ ES HELIUM -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">📡</div>
+      <div class="section-title">¿Qué es Helium? — La red inalámbrica de la gente</div>
+      <div class="section-tag">Mecanismo de Red</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">Helium es la red DePIN de conectividad inalámbrica más grande del mundo. Mientras que AT&T, Telefónica o T-Mobile gastan miles de millones en torres de telefonía, Helium construyó una red alternativa pagando a ciudadanos comunes por desplegar pequeños Hotspots en sus casas, oficinas y negocios. Cada vez que alguien usa la red, se quema HNT — creando presión deflacionaria directa vinculada al uso real.</p>
+
+    <div class="partner-grid">
+      <div class="partner-card">
+        <div class="partner-name" style="color:#22c55e;">AT&T</div>
+        <div class="partner-desc">Carrier offload en EE.UU. — traslada datos de zonas congestionadas a Helium automáticamente</div>
+      </div>
+      <div class="partner-card">
+        <div class="partner-name" style="color:#22c55e;">T-Mobile</div>
+        <div class="partner-desc">WiFi offload en estadios, aeropuertos y zonas urbanas de alta densidad</div>
+      </div>
+      <div class="partner-card">
+        <div class="partner-name" style="color:#22c55e;">Telefónica</div>
+        <div class="partner-desc">Partnership para expansión en LATAM — clave para audiencia TokenFlow AI</div>
+      </div>
+      <div class="partner-card">
+        <div class="partner-name" style="color:#fbbf24;">Grayscale</div>
+        <div class="partner-desc">Añadido al Q2 2026 watchlist — señal de interés institucional creciente</div>
+      </div>
+    </div>
+
+    <div class="stats-grid" style="margin-bottom:0;margin-top:16px;">
+      <div class="stat-card"><div class="stat-label">Hotspots activos</div><div class="stat-value stat-green">900K+</div><div class="stat-sub">Global, en crecimiento</div></div>
+      <div class="stat-card"><div class="stat-label">Cobertura</div><div class="stat-value">180+ países</div><div class="stat-sub">Mayor DePIN wireless</div></div>
+      <div class="stat-card"><div class="stat-label">Helium Mobile</div><div class="stat-value stat-yellow">600K+</div><div class="stat-sub">Suscriptores (dic. 2025)</div></div>
+      <div class="stat-card"><div class="stat-label">Data transferida</div><div class="stat-value stat-green">15.72 PB</div><div class="stat-sub">Solo en 2025</div></div>
+    </div>
+
+    <div class="note-box" style="margin-top:16px;">
+      <strong>🔑 Diferencia vs. el resto del sector DePIN:</strong> Helium no compite en GPU compute, storage ni AI training data — ocupa un nicho completamente distinto: conectividad inalámbrica descentralizada. Es la infraestructura de telecomunicaciones construida por la gente, no por corporaciones. Y tiene algo que ningún otro proyecto DePIN analizado por TokenFlow AI puede decir: <strong>AT&T ya lo usa hoy</strong>, pagando por el servicio en tiempo real.
+    </div>
+  </div>
+
+  <!-- TOKENÓMICA BME + HALVING -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">🔥</div>
+      <div class="section-title">Burn-and-Mint Equilibrium + Halving — La mecánica deflacionaria</div>
+      <div class="section-tag">Tokenómica Única</div>
+    </div>
+
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:16px;">Helium combina dos mecanismos de escasez: un halving bienal que reduce las emisiones, y un Burn-and-Mint Equilibrium donde cada uso de la red destruye HNT. A mayor uso, mayor burn. El objetivo es que el burn supere las emisiones — convirtiendo HNT en un activo deflacionario neto.</p>
+
+    <div class="halving-box">
+      <div class="halving-title">📅 Historial de halvings — Emisiones anuales de HNT</div>
+      <div class="halving-row">
+        <div class="halving-item"><div class="halving-num" style="color:#f87171;">60M</div><div class="halving-label">Lanzamiento 2019</div></div>
+        <div class="halving-arrow">→</div>
+        <div class="halving-item"><div class="halving-num" style="color:#fb923c;">30M</div><div class="halving-label">Halving 1 (ago. 2021)</div></div>
+        <div class="halving-arrow">→</div>
+        <div class="halving-item"><div class="halving-num" style="color:#fbbf24;">15M</div><div class="halving-label">Halving 2 (ago. 2023)</div></div>
+        <div class="halving-arrow">→</div>
+        <div class="halving-item"><div class="halving-num" style="color:#22c55e;">7.5M</div><div class="halving-label">Halving 3 (ago. 2025) ✅</div></div>
+        <div class="halving-arrow">→</div>
+        <div class="halving-item"><div class="halving-num" style="color:#38bdf8;">3.75M</div><div class="halving-label">Próximo (ago. 2027)</div></div>
+      </div>
+    </div>
+
+    <div class="bme-compare">
+      <div class="bme-card bme-mint">
+        <div style="font-size:10px;color:#fca5a5;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;">🔴 Emisiones actuales</div>
+        <div class="bme-number" style="color:#f87171;">7.5M HNT/año</div>
+        <div style="font-size:12px;color:#fca5a5;margin-top:8px;">Post-halving ago. 2025<br>~625K HNT/mes<br>~3.4% inflación anual</div>
+      </div>
+      <div class="bme-card bme-burn">
+        <div style="font-size:10px;color:#86efac;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;">🟢 Burn mecanismo</div>
+        <div class="bme-number" style="color:#4ade80;">100%</div>
+        <div style="font-size:12px;color:#86efac;margin-top:8px;">Revenue móvil → burn HNT<br>Datos → Data Credits → burn<br>$24M/mes en enero 2026</div>
+      </div>
+    </div>
+
+    <div class="note-box success">
+      <strong>✅ El mecanismo más limpio del sector DePIN:</strong> Helium tiene el BME más directo de todos los proyectos analizados por TokenFlow AI. Cuando AT&T descarga tráfico a Helium, paga en USD → que se convierte en HNT → que se quema para crear Data Credits. Más usuarios = más quema. 100% del revenue de Helium Mobile va a quemar HNT en mercado abierto. Es el modelo de "uso = deflación" más puro del sector.
+    </div>
+
+    <div class="note-box warning">
+      <strong>⚠ El problema:</strong> Con $24M de revenue mensual y ~$2.3M específicamente de Helium Mobile (el que va 100% a burn), el burn mensual estimado está por debajo de las ~625K nuevas emisiones. La red aún no ha cruzado el punto de deflación neta — pero la trayectoria apunta en esa dirección si el revenue sigue creciendo.
+    </div>
+  </div>
+
+  <!-- SUPPLY -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">📊</div>
+      <div class="section-title">Estructura del suministro</div>
+      <div class="section-tag">Supply Analysis</div>
+    </div>
+
+    <table class="alloc-table">
+      <thead>
+        <tr><th>Categoría</th><th>% Supply</th><th>Tokens</th><th>Vesting</th><th>Riesgo</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Hotspot rewards (PoC)</strong></td>
+          <td>65% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:100%;background:#22c55e;"></div></div></td>
+          <td>~145M HNT</td>
+          <td><span class="status-pill pill-green">Emisión continua — halving</span></td>
+          <td>Presión gradual — operadores venden parcialmente</td>
+        </tr>
+        <tr>
+          <td><strong>Circulante actual</strong></td>
+          <td>84% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:84%;background:#38bdf8;"></div></div></td>
+          <td>186M HNT</td>
+          <td><span class="status-pill pill-cyan">En mercado</span></td>
+          <td>Supply líquido activo</td>
+        </tr>
+        <tr>
+          <td><strong>Restante por emitir</strong></td>
+          <td>16% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:16%;background:#fbbf24;"></div></div></td>
+          <td>~37M HNT</td>
+          <td><span class="status-pill pill-yellow">Halving bienal — decreciente</span></td>
+          <td style="color:#4ade80;">✅ Dilución mínima — 7.5M/año</td>
+        </tr>
+        <tr>
+          <td><strong>VCs / Insiders</strong></td>
+          <td>~17% histórico <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:17%;background:#94a3b8;"></div></div></td>
+          <td>~38M HNT</td>
+          <td><span class="status-pill pill-green">Vesting completado</span></td>
+          <td style="color:#4ade80;">✅ Ya en mercado — sin presión nueva</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box" style="margin-top:16px;">
+      <strong>📌 Mcap/FDV = 84% — entre los mejores del sector:</strong> Con solo el 16% del supply restante por emitir y un halving bienal que reduce esa velocidad cada dos años, Helium tiene la estructura de dilución más controlada del sector DePIN wireless. Comparado con io.net (38%) o Filecoin (40%), HNT está estructuralmente más cerca de su supply máximo. El riesgo de vesting overhang clásico es mínimo.
+    </div>
+  </div>
+
+  <!-- RED Y MÉTRICAS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-cyan">⚡</div>
+      <div class="section-title">Actividad de red — El DePIN que nadie está mirando</div>
+      <div class="section-tag">Datos Reales</div>
+    </div>
+
+    <div class="pressure-meter">
+      <div class="meter-label">Usuarios diarios activos (2M+ en abr. 2026 — vs. 250K en ene. 2025)</div>
+      <div class="meter-bar-wrap" style="height:12px;border-radius:6px;"><div class="meter-bar meter-green" style="width:80%;height:12px;border-radius:6px;"></div></div>
+      <div class="meter-footer"><span>0</span><span style="color:#22c55e;font-weight:700;">2M+ usuarios diarios — +700% en 12 meses</span><span>5M+</span></div>
+    </div>
+
+    <div class="pressure-meter">
+      <div class="meter-label">Revenue mensual ($24M en enero 2026 — WiFi carrier offload)</div>
+      <div class="meter-bar-wrap" style="height:12px;border-radius:6px;"><div class="meter-bar meter-green" style="width:72%;height:12px;border-radius:6px;"></div></div>
+      <div class="meter-footer"><span>$0</span><span style="color:#22c55e;font-weight:700;">$24M/mes — crecimiento sostenido</span><span>$50M+</span></div>
+    </div>
+
+    <div class="pressure-meter">
+      <div class="meter-label">Hotspots activos globales (900K+ en 180+ países)</div>
+      <div class="meter-bar-wrap" style="height:12px;border-radius:6px;"><div class="meter-bar meter-yellow" style="width:60%;height:12px;border-radius:6px;"></div></div>
+      <div class="meter-footer"><span>0</span><span style="color:#fbbf24;font-weight:700;">900K+ hotspots — mayor DePIN wireless del mundo</span><span>2M+</span></div>
+    </div>
+
+    <div class="pressure-meter">
+      <div class="meter-label">Helium Mobile suscriptores (600K+ — 90% del revenue de la red)</div>
+      <div class="meter-bar-wrap" style="height:12px;border-radius:6px;"><div class="meter-bar meter-green" style="width:55%;height:12px;border-radius:6px;"></div></div>
+      <div class="meter-footer"><span>0</span><span style="color:#22c55e;font-weight:700;">600K+ suscriptores — crecimiento acelerado 2025</span><span>2M+</span></div>
+    </div>
+
+    <div class="note-box">
+      <strong>📌 Hito de marzo 2026 — Okeechobee Music Festival:</strong> 13 Hotspots permanentes desplegados procesaron más de 1,900 GB de datos durante 4 días, sirviendo a 6,200 suscriptores diarios únicos. Es el caso de uso más claro del sector DePIN wireless: infraestructura real, en un evento real, sirviendo a personas reales — sin ningún operador de telecomunicaciones centralizado en el proceso.
+    </div>
+
+    <div class="note-box warning">
+      <strong>⚠ La paradoja de HNT:</strong> "Usage = up. Token = zombie." Esta frase viral en X captura perfectamente el problema: 2M usuarios diarios, $24M en revenue, AT&T como cliente — y el token está -98% desde su ATH. El mercado no ha encontrado el mecanismo de transmisión entre revenue real y precio de token. El burn de Helium Mobile es el puente — pero aún no es suficientemente grande para cambiar el balance macro.
+    </div>
+  </div>
+
+  <!-- COMPETIDORES -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">⚔</div>
+      <div class="section-title">Posicionamiento competitivo</div>
+      <div class="section-tag">DePIN Wireless</div>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr><th>Proyecto</th><th>Enfoque</th><th>Revenue ARR</th><th>vs. HNT</th></tr>
+      </thead>
+      <tbody>
+        <tr class="highlight-row">
+          <td><strong style="color:#22c55e;">🟢 Helium (HNT)</strong></td>
+          <td>WiFi + 5G descentralizado</td>
+          <td style="color:#4ade80;">~$288M est.</td>
+          <td>— Único en wireless DePIN a escala</td>
+        </tr>
+        <tr>
+          <td><strong>XNET</strong></td>
+          <td>5G DePIN</td>
+          <td>Early stage</td>
+          <td>Competidor directo — menor escala</td>
+        </tr>
+        <tr>
+          <td><strong>Pollen Mobile</strong></td>
+          <td>5G descentralizado</td>
+          <td>Muy pequeño</td>
+          <td>Competidor — sin tracción comparable</td>
+        </tr>
+        <tr>
+          <td><strong>AT&T / Telefónica</strong></td>
+          <td>Telecom centralizado</td>
+          <td>$100B+</td>
+          <td>Clientes de Helium — no competidores</td>
+        </tr>
+        <tr>
+          <td><strong>Render / io.net / Aethir</strong></td>
+          <td>GPU compute</td>
+          <td>Varía</td>
+          <td>Complementarios — diferente capa DePIN</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box" style="margin-top:16px;">
+      <strong>Moat de Helium:</strong> Con 900K+ hotspots en 180 países y partnerships con AT&T y Telefónica, Helium tiene una ventaja competitiva estructural que es prácticamente imposible de replicar a corto plazo. Ningún competidor DePIN wireless tiene ni el 5% de su cobertura. El riesgo competitivo real no viene de otros proyectos crypto — viene de que las telcos construyan su propia solución similar internamente.
+    </div>
+  </div>
+
+  <!-- TÉCNICO -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📉</div>
+      <div class="section-title">Estructura técnica y contexto de precio</div>
+      <div class="section-tag">Estructura de Precio</div>
+    </div>
+
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Precio vs ATH</div><div class="stat-value stat-red">-98%</div><div class="stat-sub">ATH: $48.80 (nov. 2021)</div></div>
+      <div class="stat-card"><div class="stat-label">Resistencia clave</div><div class="stat-value">$1.71</div><div class="stat-sub">EMA 200 — zona crítica</div></div>
+      <div class="stat-card"><div class="stat-label">Soporte</div><div class="stat-value">$0.80</div><div class="stat-sub">ATL reciente feb. 2026</div></div>
+      <div class="stat-card"><div class="stat-label">P/Revenue</div><div class="stat-value stat-green">~0.68x</div><div class="stat-sub">Mcap $197M / ARR $288M</div></div>
+    </div>
+
+    <div class="pressure-meter"><div class="meter-label">Tendencia de largo plazo (-98% desde ATH 2021)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:97%;"></div></div><div class="meter-footer"><span>ATH</span><span style="color:#f87171;">🔴 Estructura bajista histórica</span><span>ATL</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Valoración P/Revenue (~0.68x — históricamente muy barata)</div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:90%;"></div></div><div class="meter-footer"><span>Cara</span><span style="color:#22c55e;font-weight:700;">✅ Muy barata — $197M Mcap vs $288M ARR</span><span>Barata</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Resistencia $1.71 — nivel crítico de recuperación</div><div class="meter-bar-wrap"><div class="meter-bar meter-orange" style="width:61%;"></div></div><div class="meter-footer"><span>$0</span><span style="color:#fb923c;">⚠ Precio actual $1.04 — 39% bajo resistencia</span><span>$1.71</span></div></div>
+
+    <div class="note-box warning" style="margin-top:16px;">
+      La métrica más llamativa de HNT: Price/Revenue de 0.68x. Cotiza <em>por debajo de su revenue anual estimado</em>. En mercados tradicionales, una empresa con $288M en revenue anual y crecimiento sostenido nunca cotizaría por debajo de su ARR. El mercado crypto aún no ha encontrado cómo valorar esto — o simplemente no cree en la sostenibilidad del revenue. La resistencia en $1.71 es el nivel que separa la "recuperación técnica" de la "continuación bajista".
+    </div>
+  </div>
+
+  <!-- ALCISTA VS BAJISTA -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">⚖</div>
+      <div class="section-title">Argumentos alcistas vs. bajistas</div>
+      <div class="section-tag">Veredicto TokenFlow</div>
+    </div>
+
+    <div class="verdict-grid">
+      <div class="verdict-card verdict-bull">
+        <div class="verdict-title">🟢 Argumentos alcistas</div>
+        <div class="verdict-item">Revenue real: $24M/mes — AT&T, T-Mobile y Telefónica pagan hoy</div>
+        <div class="verdict-item">P/Revenue ~0.68x — valoración histórica extremadamente baja</div>
+        <div class="verdict-item">Halving ago. 2025 — emisiones reducidas a 7.5M HNT/año</div>
+        <div class="verdict-item">100% Helium Mobile revenue → burn HNT en mercado abierto</div>
+        <div class="verdict-item">Mcap/FDV = 84% — solo 16% del supply restante, sin vesting overhang</div>
+        <div class="verdict-item">900K+ hotspots en 180 países — moat inalcanzable para competidores</div>
+        <div class="verdict-item">Grayscale Q2 2026 watchlist — visibilidad institucional creciente</div>
+        <div class="verdict-item">Telefónica en LATAM — directamente relevante para la audiencia DePIN española</div>
+      </div>
+      <div class="verdict-card verdict-bear">
+        <div class="verdict-title">🔴 Argumentos bajistas</div>
+        <div class="verdict-item">-98% desde ATH — la "paradoja del zombie": gran red, precio estancado</div>
+        <div class="verdict-item">Burn insuficiente aún — $2.3M/mes Helium Mobile vs. 625K HNT nuevos/mes</div>
+        <div class="verdict-item">Resistencia fuerte en $1.71 — EMA200, múltiples rechazos históricos</div>
+        <div class="verdict-item">Alta sensibilidad al sentimiento general del mercado crypto</div>
+        <div class="verdict-item">Operadores de hotspots venden HNT para cubrir costes de hardware</div>
+        <div class="verdict-item">Demanda institucional aún en fase de "watchlist" — no en fase de compra</div>
+        <div class="verdict-item">Competencia de telcos centralizadas con recursos ilimitados</div>
+        <div class="verdict-item">Falta de catalizador inmediato para cambiar el balance burn/mint</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VEREDICTO FINAL -->
+  <div class="final-verdict">
+    <div class="final-title">TokenFlow AI · Veredicto Final</div>
+    <div class="final-score">
+      <div class="score-number">6</div>
+      <div>
+        <div class="score-label">Red real · Tokenómica en transición</div>
+        <div class="score-sub">sobre 10 · La red DePIN más subutilizada por el mercado — por ahora</div>
+      </div>
+    </div>
+    <div class="final-text">
+      Helium es el proyecto más difícil de valorar de todos los analizados por TokenFlow AI. Sus fundamentales son genuinamente sólidos: $24M en revenue mensual, AT&T y Telefónica como clientes reales, 2 millones de usuarios diarios, 900K hotspots en 180 países, y un Mcap/FDV del 84% que elimina el riesgo de vesting overhang. El halving de agosto 2025 redujo las emisiones a 7.5M HNT/año — con el siguiente previsto para agosto 2027 a 3.75M.<br><br>
+      El mecanismo de burn es el más directo del sector: cada byte de datos transmitido quema HNT. El 100% del revenue de Helium Mobile va a comprar y quemar HNT en mercado abierto. Si el revenue crece de $24M/mes a $50M+/mes, el burn podría superar las emisiones — convirtiendo HNT en el primer token DePIN deflacionario neto con revenue real respaldándolo.<br><br>
+      El problema es que ese punto de inflexión aún no ha llegado. El burn mensual está por debajo de las nuevas emisiones. Los operadores de hotspots venden HNT para recuperar su inversión en hardware. Y el mercado lleva años ignorando los fundamentales de Helium, creando la paradoja del "zombie token".<br><br>
+      <strong>¿Qué cambiaría el veredicto?</strong> Dos catalizadores: primero, que el burn mensual supere las emisiones de forma sostenida — ese día HNT se convierte en deflacionario neto y el mercado lo reprecia. Segundo, que Grayscale pase de "watchlist" a filing de producto — ese evento podría destrabar la demanda institucional que los fundamentales ya merecen.
+    </div>
+  </div>
+
+  <!-- LISTA DE SEGUIMIENTO -->
+  <div class="section" style="margin-top:20px;">
+    <div class="section-header">
+      <div class="section-icon icon-cyan">👁</div>
+      <div class="section-title">Qué vigilar en los próximos 30–90 días</div>
+      <div class="section-tag">Lista de Monitoreo</div>
+    </div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Ratio burn vs. emisiones mensual:</strong> El indicador más importante. Seguir en explorer.helium.com el HNT quemado mensualmente vs. los 625K emitidos. Cuando el burn supere las emisiones de forma sostenida — punto de inflexión deflacionario.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-cyan"></div><div class="watch-text"><strong>Grayscale — de watchlist a filing:</strong> La inclusión en el Q2 2026 watchlist es el primer paso. Un filing de producto formal sería el catalizador de demanda institucional más importante de la historia de HNT. Seguir comunicados de Grayscale Research.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-yellow"></div><div class="watch-text"><strong>Revenue mensual de Helium Mobile:</strong> Si supera $5M/mes (actualmente ~$2.3M), el burn vinculado a ese revenue empieza a ser materialmente significativo frente a las emisiones. Seguir reportes trimestrales de Nova Labs.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-red"></div><div class="watch-text"><strong>Resistencia técnica $1.71:</strong> Un cierre semanal sostenido por encima de $1.71 (EMA200) confirmaría el cambio de tendencia técnica. Sin ese nivel, la estructura bajista de largo plazo permanece intacta independientemente de los fundamentales.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Expansión a Brasil con Mambo WiFi:</strong> Helium anunció expansión en Brasil con 40,000 hotspots WiFi existentes de Mambo WiFi. Si la adopción en LATAM se acelera, es directamente relevante para la audiencia de TokenFlow AI y puede ser catalizador narrativo regional.</div></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong style="color:#22c55e;">TokenFlow AI</strong> · Investigación de tokenómica AI y DePIN · Sin hype. Solo estructura.<br>
+  Fecha del análisis: 24 de abril de 2026 · Este análisis no constituye asesoramiento de inversión. DYOR.<br>
+  Fuentes: CoinGecko, CoinMarketCap, Messari, docs.helium.com, Blockworks, explorer.helium.com, datos on-chain
+</div>
+
+</body>
+</html>
