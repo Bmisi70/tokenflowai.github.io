@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenFlow AI – Análisis ASI Alliance (FET) 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'JetBrains Mono', monospace; background: #0a0e1a; color: #e2e8f0; line-height: 1.7; font-size: 14px; }
+
+  .header { background: linear-gradient(135deg, #0f0a1a 0%, #1a0f2e 50%, #0a0e1a 100%); border-bottom: 1px solid #3b1d8a; padding: 44px 32px 36px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; background: radial-gradient(ellipse, rgba(139,92,246,0.08) 0%, transparent 70%); pointer-events: none; }
+  .brand { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #8b5cf6; margin-bottom: 14px; font-weight: 600; }
+  .title { font-size: 38px; font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -1px; }
+  .title span { color: #8b5cf6; }
+  .subtitle { font-size: 12px; color: #64748b; margin-bottom: 22px; letter-spacing: 1px; }
+  .verdict-badge { display: inline-block; padding: 8px 24px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid; font-family: 'JetBrains Mono', monospace; }
+  .badge-warning { background: #451a03; color: #fb923c; border-color: #9a3412; }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 36px 20px; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 36px; }
+  .stat-card { background: #0d1525; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; text-align: center; transition: border-color 0.2s; }
+  .stat-card:hover { border-color: #8b5cf633; }
+  .stat-label { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .stat-value { font-size: 22px; font-weight: 800; color: #f8fafc; }
+  .stat-sub { font-size: 10px; color: #64748b; margin-top: 4px; }
+  .stat-purple { color: #8b5cf6; }
+  .stat-green { color: #4ade80; }
+  .stat-yellow { color: #fbbf24; }
+  .stat-red { color: #f87171; }
+
+  .section { background: #0d1525; border: 1px solid #1e293b; border-radius: 8px; padding: 26px; margin-bottom: 18px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #1e293b; }
+  .section-icon { width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .icon-purple { background: #2e1065; }
+  .icon-orange { background: #431407; }
+  .icon-red { background: #450a0a; }
+  .icon-yellow { background: #422006; }
+  .icon-blue { background: #0c2a47; }
+  .icon-green { background: #052e16; }
+  .icon-cyan { background: #083344; }
+  .section-title { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+  .section-tag { font-size: 10px; color: #475569; margin-left: auto; letter-spacing: 1px; text-transform: uppercase; }
+
+  .merger-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
+  .merger-card { background: #1a0f2e; border: 1px solid #4c1d95; border-radius: 6px; padding: 16px; text-align: center; }
+  .merger-token { font-size: 18px; font-weight: 800; margin-bottom: 4px; }
+  .merger-ratio { font-size: 11px; color: #8b5cf6; margin-bottom: 6px; letter-spacing: 1px; }
+  .merger-desc { font-size: 11px; color: #64748b; line-height: 1.5; }
+
+  .alloc-table { width: 100%; border-collapse: collapse; }
+  .alloc-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .alloc-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; font-size: 13px; vertical-align: middle; }
+  .alloc-table tr:last-child td { border-bottom: none; }
+  .alloc-bar-wrap { background: #1e293b; border-radius: 2px; height: 5px; width: 90px; display: inline-block; vertical-align: middle; margin-left: 8px; }
+  .alloc-bar { height: 5px; border-radius: 2px; display: block; }
+
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+  .pill-green { background: #052e16; color: #4ade80; }
+  .pill-yellow { background: #422006; color: #fbbf24; }
+  .pill-red { background: #450a0a; color: #f87171; }
+  .pill-purple { background: #2e1065; color: #a78bfa; }
+
+  .burn-box { background: #0a0518; border: 1px solid #4c1d95; border-radius: 8px; padding: 22px; margin: 16px 0; text-align: center; }
+  .burn-title { font-size: 11px; color: #8b5cf6; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; font-weight: 700; }
+  .burn-number { font-size: 40px; font-weight: 900; color: #4ade80; margin-bottom: 6px; }
+  .burn-label { font-size: 12px; color: #64748b; }
+
+  .drama-box { background: #1a0808; border: 1px solid #7f1d1d; border-radius: 8px; padding: 20px; margin: 16px 0; }
+  .drama-title { font-size: 11px; color: #f87171; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; font-weight: 700; }
+  .drama-timeline { display: flex; flex-direction: column; gap: 10px; }
+  .drama-item { display: flex; gap: 14px; font-size: 12px; color: #cbd5e1; }
+  .drama-date { font-size: 10px; color: #f87171; font-weight: 700; min-width: 90px; padding-top: 2px; letter-spacing: 1px; }
+
+  .pressure-meter { margin: 14px 0; }
+  .meter-label { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+  .meter-bar-wrap { background: #1e293b; border-radius: 3px; height: 10px; overflow: hidden; }
+  .meter-bar { height: 10px; border-radius: 3px; }
+  .meter-green { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .meter-orange { background: linear-gradient(90deg, #ea580c, #fb923c); }
+  .meter-red { background: linear-gradient(90deg, #dc2626, #f87171); }
+  .meter-purple { background: linear-gradient(90deg, #6d28d9, #8b5cf6); }
+  .meter-yellow { background: linear-gradient(90deg, #ca8a04, #fbbf24); }
+  .meter-footer { display: flex; justify-content: space-between; font-size: 10px; color: #475569; margin-top: 4px; }
+
+  .verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .verdict-card { border-radius: 6px; padding: 20px; }
+  .verdict-bull { background: #052e16; border: 1px solid #166534; }
+  .verdict-bear { background: #450a0a; border: 1px solid #7f1d1d; }
+  .verdict-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .verdict-bull .verdict-title { color: #4ade80; }
+  .verdict-bear .verdict-title { color: #f87171; }
+  .verdict-item { font-size: 12px; color: #cbd5e1; margin-bottom: 9px; padding-left: 18px; position: relative; line-height: 1.5; }
+  .verdict-item::before { content: '→'; position: absolute; left: 0; font-weight: 700; }
+  .verdict-bull .verdict-item::before { color: #4ade80; }
+  .verdict-bear .verdict-item::before { color: #f87171; }
+
+  .final-verdict { background: linear-gradient(135deg, #1a0f2e, #0f172a); border: 1px solid #6d28d9; border-radius: 8px; padding: 30px; margin-top: 8px; }
+  .final-title { font-size: 11px; color: #8b5cf6; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 14px; font-weight: 700; }
+  .final-score { display: flex; align-items: center; gap: 22px; margin-bottom: 18px; }
+  .score-number { font-size: 68px; font-weight: 900; color: #fbbf24; line-height: 1; }
+  .score-label { font-size: 20px; font-weight: 700; color: #f1f5f9; }
+  .score-sub { font-size: 12px; color: #64748b; margin-top: 6px; }
+  .final-text { font-size: 13px; color: #cbd5e1; line-height: 1.9; }
+
+  .watch-item { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid #1e293b; font-size: 13px; }
+  .watch-item:last-child { border-bottom: none; }
+  .watch-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #22c55e; }
+  .dot-purple { background: #8b5cf6; }
+  .watch-text { color: #cbd5e1; }
+  .watch-text strong { color: #f8fafc; }
+
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .comp-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .comp-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; vertical-align: middle; }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table tr.highlight-row { background: #1a0f2e; }
+
+  .note-box { background: #0f0a1a; border-left: 3px solid #8b5cf6; border-radius: 0 6px 6px 0; padding: 14px 16px; font-size: 12px; color: #94a3b8; margin: 14px 0; line-height: 1.8; }
+  .note-box.warning { border-left-color: #f59e0b; background: #0d1105; }
+  .note-box.danger { border-left-color: #ef4444; background: #0d0808; }
+  .note-box.success { border-left-color: #22c55e; background: #050f05; }
+
+  .footer { text-align: center; padding: 28px; color: #334155; font-size: 11px; border-top: 1px solid #1e293b; margin-top: 36px; letter-spacing: 0.5px; line-height: 2; }
+
+  @media (max-width: 600px) {
+    .verdict-grid, .merger-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .score-number { font-size: 52px; }
+    .title { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">🟣 TokenFlow AI · Investigación de Tokenómica AI</div>
+  <div class="title">ASI Alliance <span>FET</span></div>
+  <div class="subtitle">Análisis completo de tokenómica y el ecosistema post-fusión · 1 de mayo de 2026</div>
+  <div class="verdict-badge badge-warning">⚠ Mayor fusión AI del sector · Earn & Burn activo · Drama interno resuelto</div>
+</div>
+
+<div class="container">
+
+  <!-- ESTADÍSTICAS -->
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Precio (USD)</div><div class="stat-value stat-purple">$0.20</div><div class="stat-sub">1 de mayo, 2026</div></div>
+    <div class="stat-card"><div class="stat-label">Cap. de Mercado</div><div class="stat-value">$448M</div><div class="stat-sub">#87 CoinGecko</div></div>
+    <div class="stat-card"><div class="stat-label">FDV</div><div class="stat-value stat-yellow">$530M</div><div class="stat-sub">Mcap/FDV = 85%</div></div>
+    <div class="stat-card"><div class="stat-label">Desde ATH</div><div class="stat-value stat-red">-94%</div><div class="stat-sub">ATH: $3.47 (mar. 2024)</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Circ.</div><div class="stat-value">2.26B</div><div class="stat-sub">85% del máximo</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Máx.</div><div class="stat-value">2.71B</div><div class="stat-sub">Cap fijo post-fusión</div></div>
+    <div class="stat-card"><div class="stat-label">Inflación anual</div><div class="stat-value stat-green">-8.29%</div><div class="stat-sub">Deflacionario neto ✅</div></div>
+    <div class="stat-card"><div class="stat-label">Agentes registrados</div><div class="stat-value stat-purple">2.7M</div><div class="stat-sub">En Agentverse (2025)</div></div>
+  </div>
+
+  <!-- QUÉ ES ASI ALLIANCE -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">🤝</div>
+      <div class="section-title">¿Qué es ASI Alliance? — La mayor fusión AI del sector crypto</div>
+      <div class="section-tag">Historia y Arquitectura</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">En marzo de 2024, tres proyectos de AI descentralizada anunciaron la mayor fusión en la historia de los tokens AI: Fetch.ai (FET), SingularityNET (AGIX) y Ocean Protocol (OCEAN) unirían sus ecosistemas bajo un único token. El objetivo declarado: construir la mayor organización open-source independiente enfocada en AGI (Inteligencia Artificial General) como alternativa descentralizada a Google, OpenAI y Microsoft.</p>
+
+    <div class="merger-grid">
+      <div class="merger-card">
+        <div class="merger-token" style="color:#8b5cf6;">Fetch.ai</div>
+        <div class="merger-ratio">FET → 1:1 ASI</div>
+        <div class="merger-desc">Agentes autónomos AI, Agentverse platform, 2.7M agentes registrados. Core técnico del ecosistema.</div>
+      </div>
+      <div class="merger-card">
+        <div class="merger-token" style="color:#a78bfa;">SingularityNET</div>
+        <div class="merger-ratio">AGIX → 0.433:1 ASI</div>
+        <div class="merger-desc">Marketplace de servicios AI desde 2017. Ben Goertzel (el "padre de la AGI") como líder visionario.</div>
+      </div>
+      <div class="merger-card">
+        <div class="merger-token" style="color:#7c3aed;">CUDOS</div>
+        <div class="merger-ratio">Compute partner</div>
+        <div class="merger-desc">30 validadores de infraestructura. Compute descentralizado para el ecosistema ASI.</div>
+      </div>
+    </div>
+
+    <div class="note-box danger">
+      <strong>⚠ Ocean Protocol abandonó la alianza (octubre 2025):</strong> Ocean Protocol, que era la capa de datos del ecosistema, abandonó la alianza alegando fallos de gobernanza y desalineación estratégica. Fetch.ai presentó una demanda alegando que Ocean convirtió 661M OCEAN en 286M FET y vendió ~263M FET (más del 10% del circulante) sin previo aviso. El caso se resolvió en febrero 2026 con Ocean devolviendo 286M FET (~$120M) a la alianza. La demanda está cerrada — pero el daño reputacional persiste.
+    </div>
+
+    <div class="note-box">
+      <strong>📌 Estado actual (mayo 2026):</strong> La alianza continúa como Fetch.ai + SingularityNET + CUDOS. La migración de AGIX a FET está prácticamente completada. El rebranding definitivo de FET a ticker ASI está pendiente de fecha. ASI:Chain (la blockchain propia de la alianza) está en DevNet desde octubre 2025.
+    </div>
+  </div>
+
+  <!-- TOKENÓMICA POST-FUSIÓN -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">🔥</div>
+      <div class="section-title">Earn & Burn — El mecanismo deflacionario activo</div>
+      <div class="section-tag">Deflación Real</div>
+    </div>
+
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">En enero de 2026, la ASI Alliance lanzó el programa Earn & Burn: un mecanismo de $50M que dirige una parte de las fees del ecosistema a comprar y quemar FET del mercado abierto. Es el primer mecanismo deflacionario real de la historia del token.</p>
+
+    <div class="burn-box">
+      <div class="burn-title">📊 Estado del Earn & Burn — enero 2026</div>
+      <div class="burn-number">-8.29%</div>
+      <div class="burn-label">Inflación anual neta — FET es deflacionario desde 2026 ✅</div>
+      <div style="font-size:13px;color:#64748b;margin-top:12px;">Primer burn ejecutado: 5M FET (0.18% del supply) · Programa total: $50M comprometidos</div>
+    </div>
+
+    <div class="pressure-meter">
+      <div class="meter-label">Staking actual (~20% del circulante a 5.6% APY)</div>
+      <div class="meter-bar-wrap" style="height:12px;border-radius:6px;"><div class="meter-bar meter-purple" style="width:20%;height:12px;border-radius:6px;"></div></div>
+      <div class="meter-footer"><span>0%</span><span style="color:#8b5cf6;font-weight:700;">20% stakeado — margen de crecimiento alto</span><span>100%</span></div>
+    </div>
+
+    <div class="pressure-meter">
+      <div class="meter-label">Supply desbloqueado (85% del máximo ya circula)</div>
+      <div class="meter-bar-wrap" style="height:12px;border-radius:6px;"><div class="meter-bar meter-green" style="width:85%;height:12px;border-radius:6px;"></div></div>
+      <div class="meter-footer"><span>0%</span><span style="color:#4ade80;font-weight:700;">85% desbloqueado — vesting casi completado (ago. 2026)</span><span>100%</span></div>
+    </div>
+
+    <div class="note-box success">
+      <strong>✅ El dato más positivo del análisis:</strong> Con una inflación anual de -8.29%, FET es el único token del sector AI/DePIN analizado por TokenFlow AI que ya es deflacionario neto. RENDER tiene BME 10:1 inflacionario, Filecoin tiene 21% de inflación, io.net tiene supply en expansión — FET está quemando más de lo que emite. Si el Earn & Burn escala con el crecimiento del ecosistema, la deflación se acelera.
+    </div>
+
+    <div class="note-box warning">
+      <strong>⚠ Contexto importante:</strong> La deflación actual (-8.29%) viene principalmente de la resolución del caso Ocean Protocol (286M FET devueltos a la alianza y retirados del circulante), no solo del Earn & Burn. El burn operativo es aún pequeño (5M FET). La sostenibilidad de la deflación depende del crecimiento del ecosistema.
+    </div>
+  </div>
+
+  <!-- SUPPLY -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">📊</div>
+      <div class="section-title">Estructura del suministro post-fusión</div>
+      <div class="section-tag">Supply Analysis</div>
+    </div>
+
+    <table class="alloc-table">
+      <thead>
+        <tr><th>Categoría</th><th>% Supply</th><th>Tokens</th><th>Estado</th><th>Riesgo</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>FET original (Fetch.ai)</strong></td>
+          <td>~32% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:100%;background:#8b5cf6;"></div></div></td>
+          <td>~850M FET</td>
+          <td><span class="status-pill pill-green">1:1 migrado</span></td>
+          <td style="color:#4ade80;">✅ En mercado</td>
+        </tr>
+        <tr>
+          <td><strong>AGIX migrado (SingularityNET)</strong></td>
+          <td>~21% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:66%;background:#a78bfa;"></div></div></td>
+          <td>~558M FET</td>
+          <td><span class="status-pill pill-green">0.433:1 completado</span></td>
+          <td>Migración finalizada</td>
+        </tr>
+        <tr>
+          <td><strong>Founders + Foundation</strong></td>
+          <td>~20% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:63%;background:#f97316;"></div></div></td>
+          <td>~540M FET</td>
+          <td><span class="status-pill pill-yellow">Vesting → ago. 2026</span></td>
+          <td style="color:#fb923c;">⚠ Último cliff pendiente</td>
+        </tr>
+        <tr>
+          <td><strong>Mining rewards</strong></td>
+          <td>~15% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:47%;background:#4ade80;"></div></div></td>
+          <td>~400M FET</td>
+          <td><span class="status-pill pill-purple">Emisión continua</span></td>
+          <td>Gradual — staking incentivo</td>
+        </tr>
+        <tr>
+          <td><strong>FET devuelto por Ocean</strong></td>
+          <td>~10.6% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:33%;background:#22c55e;"></div></div></td>
+          <td>286M FET</td>
+          <td><span class="status-pill pill-green">Retirado del circulante</span></td>
+          <td style="color:#4ade80;">✅ Deflacionario</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box" style="margin-top:20px;">
+      <strong>🔑 Mcap/FDV = 85% — entre los mejores:</strong> Con el 85% del supply ya en circulación y vesting terminando en agosto 2026, FET tiene una de las estructuras de dilución más favorables del sector. Los ~320M tokens restantes se desbloquean gradualmente hasta agosto 2026 sin eventos cliff masivos. Después de esa fecha, la estructura de supply queda prácticamente estabilizada.
+    </div>
+  </div>
+
+  <!-- ECOSISTEMA Y MÉTRICAS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">🤖</div>
+      <div class="section-title">Ecosistema real — Agentes, compute y ASI:Chain</div>
+      <div class="section-tag">Métricas de Red</div>
+    </div>
+
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Agentes en Agentverse</div><div class="stat-value stat-purple">2.7M</div><div class="stat-sub">Registrados a fin 2025</div></div>
+      <div class="stat-card"><div class="stat-label">Mensajes inter-agentes</div><div class="stat-value">160M</div><div class="stat-sub">Acumulados en red</div></div>
+      <div class="stat-card"><div class="stat-label">ASI Cloud</div><div class="stat-value stat-green">-50%</div><div class="stat-sub">vs. AWS (dato no verif.)</div></div>
+      <div class="stat-card"><div class="stat-label">Staking APY</div><div class="stat-value stat-yellow">5.6%</div><div class="stat-sub">~20% del supply stakeado</div></div>
+    </div>
+
+    <div style="margin:16px 0;">
+      <div style="font-size:11px;color:#8b5cf6;text-transform:uppercase;letter-spacing:2px;margin-bottom:14px;font-weight:700;">🗓 Roadmap 2025–2027 — Estado actual</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;gap:16px;padding:10px 0;border-bottom:1px solid #1e293b;">
+          <div style="font-size:10px;color:#4ade80;font-weight:700;min-width:100px;padding-top:2px;">SEP 2025 ✅</div>
+          <div style="font-size:12px;color:#cbd5e1;"><strong>ASI Cloud lanzado</strong> — plataforma de compute descentralizado. Salida de beta en diciembre 2025. Reclama 50% más barato que AWS.</div>
+        </div>
+        <div style="display:flex;gap:16px;padding:10px 0;border-bottom:1px solid #1e293b;">
+          <div style="font-size:10px;color:#4ade80;font-weight:700;min-width:100px;padding-top:2px;">OCT 2025 ✅</div>
+          <div style="font-size:12px;color:#cbd5e1;"><strong>ASI:Chain DevNet</strong> — blockchain propia blockDAG para agentes AI de alta concurrencia. Lenguaje MeTTa + Atomspace knowledge graph.</div>
+        </div>
+        <div style="display:flex;gap:16px;padding:10px 0;border-bottom:1px solid #1e293b;">
+          <div style="font-size:10px;color:#4ade80;font-weight:700;min-width:100px;padding-top:2px;">FEB 2026 ✅</div>
+          <div style="font-size:12px;color:#cbd5e1;"><strong>ASI:Create Closed Alpha</strong> — plataforma no-code para construir, colaborar y desplegar agentes AI. TVL en servicios AI subió +35% en una semana tras el lanzamiento.</div>
+        </div>
+        <div style="display:flex;gap:16px;padding:10px 0;border-bottom:1px solid #1e293b;">
+          <div style="font-size:10px;color:#fbbf24;font-weight:700;min-width:100px;padding-top:2px;">2026 ⏳</div>
+          <div style="font-size:12px;color:#cbd5e1;"><strong>ASI:Chain TestNet</strong> — prueba pública de la L1 blockDAG. Mainnet objetivo: finales 2026 / principios 2027.</div>
+        </div>
+        <div style="display:flex;gap:16px;padding:10px 0;">
+          <div style="font-size:10px;color:#fbbf24;font-weight:700;min-width:100px;padding-top:2px;">2026 ⏳</div>
+          <div style="font-size:12px;color:#cbd5e1;"><strong>Rebranding FET → ASI</strong> — migración final del ticker en todos los exchanges. Sin fecha confirmada.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <strong>📌 Partnerships enterprise reales:</strong> Bosch (automatización industrial, Virtual EV Challenge 2025), Nillion Network (privacidad en agentes), Deutsche Telekom (exploración de agentes en telecomunicaciones). No son solo anuncios — hay deployments documentados. Los agentes de Fetch.ai gestionan posiciones DeFi en Uniswap de forma autónoma en producción.
+    </div>
+  </div>
+
+  <!-- DRAMA OCEAN -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">⚡</div>
+      <div class="section-title">El caso Ocean Protocol — Qué pasó realmente</div>
+      <div class="section-tag">Riesgo Governance</div>
+    </div>
+
+    <div class="drama-box">
+      <div class="drama-title">🔴 Timeline del conflicto Ocean — oct. 2025 / feb. 2026</div>
+      <div class="drama-timeline">
+        <div class="drama-item">
+          <div class="drama-date">OCT 2025</div>
+          <div>Ocean Protocol anuncia su salida de la alianza alegando "fallos de gobernanza y desalineación estratégica".</div>
+        </div>
+        <div class="drama-item">
+          <div class="drama-date">NOV 2025</div>
+          <div>Fetch.ai presenta demanda: alega que Ocean convirtió 661M OCEAN en 286M FET y vendió ~263M FET (10%+ del circulante) sin divulgación previa — impacto en precio significativo.</div>
+        </div>
+        <div class="drama-item">
+          <div class="drama-date">FEB 2026</div>
+          <div>Acuerdo extrajudicial: Ocean devuelve los 286M FET (~$120M) a la alianza. El caso está cerrado. Los tokens devueltos se retiran del circulante.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note-box warning">
+      <strong>⚠ Consecuencia estructural:</strong> Ocean Protocol era la capa de datos de la alianza — su "compute-to-data" capability (ejecutar modelos AI sobre datos sin revelarlos) era el componente más diferenciado. Con su salida, la alianza perdió su pieza de data sovereignty. Lo que queda: agentes (Fetch), marketplace AI (SingularityNET), validadores (CUDOS). Tres componentes que se superponen más de lo que se complementan.
+    </div>
+  </div>
+
+  <!-- COMPETIDORES -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">⚔</div>
+      <div class="section-title">Posicionamiento competitivo</div>
+      <div class="section-tag">AI Agents Sector</div>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr><th>Proyecto</th><th>Enfoque</th><th>Mcap</th><th>vs. FET</th></tr>
+      </thead>
+      <tbody>
+        <tr class="highlight-row">
+          <td><strong style="color:#8b5cf6;">🟣 ASI Alliance (FET)</strong></td>
+          <td>Agentes AI + marketplace + compute</td>
+          <td>$448M</td>
+          <td>— Mayor ecosistema AI fusionado</td>
+        </tr>
+        <tr>
+          <td><strong>TAO (Bittensor)</strong></td>
+          <td>Mercado de inteligencia AI</td>
+          <td>~$3.5B</td>
+          <td>8x mayor — fair launch, halvings</td>
+        </tr>
+        <tr>
+          <td><strong>NEAR Protocol</strong></td>
+          <td>L1 con AI integration</td>
+          <td>~$1.8B</td>
+          <td>Más L1 — menos AI puro</td>
+        </tr>
+        <tr>
+          <td><strong>Render (RNDR)</strong></td>
+          <td>GPU compute + AI inferencia</td>
+          <td>~$740M</td>
+          <td>Complementario — FET usa GPUs que RNDR provee</td>
+        </tr>
+        <tr>
+          <td><strong>OpenAI / Google</strong></td>
+          <td>AI centralizado</td>
+          <td>Billones</td>
+          <td>FET es la alternativa descentralizada y open-source</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box" style="margin-top:16px;">
+      <strong>Posición de FET:</strong> En el nicho de agentes AI autónomos descentralizados, FET no tiene competidor directo con su escala (2.7M agentes). Su debilidad vs. TAO: la tokenómica de TAO es más elegante (fair launch, halving), mientras FET lleva el peso de una fusión compleja y un conflicto governance reciente. Su ventaja: deployments enterprise reales con Bosch, Deutsche Telekom y casos DeFi en producción.
+    </div>
+  </div>
+
+  <!-- TÉCNICO -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📉</div>
+      <div class="section-title">Estructura técnica y contexto de precio</div>
+      <div class="section-tag">Estructura de Precio</div>
+    </div>
+
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Precio vs ATH</div><div class="stat-value stat-red">-94%</div><div class="stat-sub">ATH: $3.47 (mar. 2024)</div></div>
+      <div class="stat-card"><div class="stat-label">RSI 14</div><div class="stat-value stat-yellow">~42</div><div class="stat-sub">Zona neutral-bajista</div></div>
+      <div class="stat-card"><div class="stat-label">Soporte clave</div><div class="stat-value">$0.17</div><div class="stat-sub">ATL reciente</div></div>
+      <div class="stat-card"><div class="stat-label">Resistencia</div><div class="stat-value">$0.25–0.28</div><div class="stat-sub">Zona de confirmación</div></div>
+    </div>
+
+    <div class="pressure-meter"><div class="meter-label">Tendencia de largo plazo (-94% desde ATH)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:93%;"></div></div><div class="meter-footer"><span>ATH</span><span style="color:#f87171;">🔴 Estructura bajista extrema</span><span>ATL</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Inflación de supply (único token deflacionario: -8.29% anual)</div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:85%;"></div></div><div class="meter-footer"><span>Inflacionario</span><span style="color:#4ade80;font-weight:700;">✅ Deflacionario neto — el mejor del sector</span><span>Deflacionario</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Resistencia técnica $0.25–$0.28 (zona de confirmación alcista)</div><div class="meter-bar-wrap"><div class="meter-bar meter-orange" style="width:72%;"></div></div><div class="meter-footer"><span>$0</span><span style="color:#fb923c;">⚠ Precio actual $0.20 — 25–40% bajo resistencia</span><span>$0.28</span></div></div>
+
+    <div class="note-box warning" style="margin-top:16px;">
+      El patrón técnico muestra consolidación en zona de sobrevendido. Un cierre sostenido por encima de $0.25–$0.28 confirmaría el inicio de la recuperación. Por debajo de $0.17 (ATL) podría acelerar la capitulación. El catalizador técnico más importante es el lanzamiento del TestNet de ASI:Chain — suele generar un rally de anticipación antes del evento.
+    </div>
+  </div>
+
+  <!-- ALCISTA VS BAJISTA -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-cyan">⚖</div>
+      <div class="section-title">Argumentos alcistas vs. bajistas</div>
+      <div class="section-tag">Veredicto TokenFlow</div>
+    </div>
+
+    <div class="verdict-grid">
+      <div class="verdict-card verdict-bull">
+        <div class="verdict-title">🟢 Argumentos alcistas</div>
+        <div class="verdict-item">Único token deflacionario del sector: -8.29% inflación anual neta</div>
+        <div class="verdict-item">Earn & Burn $50M comprometido — deflación crece con el ecosistema</div>
+        <div class="verdict-item">2.7M agentes en Agentverse — mayor red de agentes AI descentralizados</div>
+        <div class="verdict-item">Mcap/FDV = 85% — vesting terminando ago. 2026, sin cliff masivos</div>
+        <div class="verdict-item">ASI:Chain Q4 2026 — blockchain propia blockDAG para billones de agentes</div>
+        <div class="verdict-item">Partnerships enterprise reales: Bosch, Deutsche Telekom</div>
+        <div class="verdict-item">Case Ocean resuelto — 286M FET retirados del circulante</div>
+        <div class="verdict-item">Ben Goertzel (SingularityNET) — el nombre más relevante en AGI open-source</div>
+      </div>
+      <div class="verdict-card verdict-bear">
+        <div class="verdict-title">🔴 Argumentos bajistas</div>
+        <div class="verdict-item">-94% desde ATH — estructura bajista extrema</div>
+        <div class="verdict-item">Pérdida de Ocean Protocol — capa de datos ya no forma parte del ecosistema</div>
+        <div class="verdict-item">Governance failure en 18 meses — miembro fundador se fue en conflicto</div>
+        <div class="verdict-item">ASI:Chain aún en DevNet — sin mainnet, sin utilidad real de la L1</div>
+        <div class="verdict-item">Primer burn (5M FET) pequeño — deflación depende de escala futura</div>
+        <div class="verdict-item">Tres ecosistemas que se superponen más que se complementan post-Ocean</div>
+        <div class="verdict-item">RSI neutral-bajista — sin catalizador inmediato</div>
+        <div class="verdict-item">TAO domina narrativa AI crypto con Mcap 8x mayor</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VEREDICTO FINAL -->
+  <div class="final-verdict">
+    <div class="final-title">TokenFlow AI · Veredicto Final</div>
+    <div class="final-score">
+      <div class="score-number">5.5</div>
+      <div>
+        <div class="score-label">Deflación real · Execution pendiente</div>
+        <div class="score-sub">sobre 10 · El único token AI deflacionario — pero la fusión no está completa</div>
+      </div>
+    </div>
+    <div class="final-text">
+      ASI Alliance tiene el dato tokenómico más positivo de todos los proyectos analizados por TokenFlow AI: es el único activo del sector con inflación negativa real (-8.29% anual). Mientras RENDER quema 10 veces menos de lo que minta, Filecoin emite 21% más cada año, y io.net aguarda su IDE — FET ya es deflacionario. El Earn & Burn de $50M, si escala con el crecimiento de ASI Cloud y Agentverse, puede acelerar esa deflación.<br><br>
+      Pero la fusión ha resultado más compleja de lo esperado. Perder a Ocean Protocol — el miembro que más se complementaba con los demás — debilita la tesis original de "tres capacidades distintas sumando algo mayor". Lo que queda es un ecosistema sólido de agentes AI autónomos (Fetch) + marketplace AI (SingularityNET) + validadores (CUDOS), con la lawsuit resuelta y la gobernanza bajo escrutinio.<br><br>
+      El gran catalizador pendiente es ASI:Chain. Si el TestNet de 2026 demuestra que una blockDAG puede coordinar billones de agentes AI en producción, la narrativa cambia completamente — FET se convierte en la infraestructura base de la economía de agentes autónomos. Si el lanzamiento se retrasa o no supera las expectativas técnicas, el token seguirá sufriendo en la sombra de TAO.<br><br>
+      <strong>¿Qué vigilar?</strong> La fecha del TestNet de ASI:Chain y las métricas de adopción de ASI Cloud. Si el revenue de ASI Cloud supera $5M/mes, el Earn & Burn empieza a ser materialmente deflacionario — y el mercado tendrá que reprecia ese dato.
+    </div>
+  </div>
+
+  <!-- LISTA DE SEGUIMIENTO -->
+  <div class="section" style="margin-top:20px;">
+    <div class="section-header">
+      <div class="section-icon icon-cyan">👁</div>
+      <div class="section-title">Qué vigilar en los próximos 30–90 días</div>
+      <div class="section-tag">Lista de Monitoreo</div>
+    </div>
+    <div class="watch-item"><div class="watch-dot dot-purple"></div><div class="watch-text"><strong>ASI:Chain TestNet — fecha de lanzamiento:</strong> El catalizador técnico más importante. Seguir anuncios en X oficial de @Fetch_ai y @ASI_Alliance. El DevNet lleva activo desde octubre 2025 — el TestNet es el siguiente hito.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Earn & Burn — volumen mensual de tokens quemados:</strong> Si el burn mensual supera 10M FET de forma sostenida, la deflación ya no depende del caso Ocean — es deflación operativa real. Verificable en explorer.fetch.ai.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-yellow"></div><div class="watch-text"><strong>Resistencia técnica $0.25–$0.28:</strong> Un cierre semanal sostenido por encima de esta zona confirma el cambio de tendencia. Sin ese nivel, la estructura bajista de largo plazo permanece intacta.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-red"></div><div class="watch-text"><strong>Vesting agosto 2026 — último cliff:</strong> Los ~320M FET restantes se desbloquean gradualmente hasta agosto 2026. Monitorear en tokenomist.ai si Founders o Foundation venden en mercado antes del vencimiento final.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-purple"></div><div class="watch-text"><strong>Rebranding FET → ASI ticker:</strong> Cuando se confirme la fecha del rebranding definitivo, históricamente genera un rally de anticipación. El anuncio formal es el evento de sentiment más predecible del roadmap actual.</div></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong style="color:#8b5cf6;">TokenFlow AI</strong> · Investigación de tokenómica AI y DePIN · Sin hype. Solo estructura.<br>
+  Fecha del análisis: 1 de mayo de 2026 · Este análisis no constituye asesoramiento de inversión. DYOR.<br>
+  Fuentes: CoinGecko, CoinMarketCap, Tokenomist.ai, superintelligence.io, coinstats.app, coincub.com, ownyourmind.ai, datos on-chain
+</div>
+
+</body>
+</html>
