@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenFlow AI – Análisis NEAR Protocol 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'JetBrains Mono', monospace; background: #0a0e1a; color: #e2e8f0; line-height: 1.7; font-size: 14px; }
+
+  .header { background: linear-gradient(135deg, #0a1520 0%, #0f2030 50%, #0a0e1a 100%); border-bottom: 1px solid #1a4a6a; padding: 44px 32px 36px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; background: radial-gradient(ellipse, rgba(14,165,233,0.07) 0%, transparent 70%); pointer-events: none; }
+  .brand { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #0ea5e9; margin-bottom: 14px; font-weight: 600; }
+  .title { font-size: 38px; font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -1px; }
+  .title span { color: #0ea5e9; }
+  .subtitle { font-size: 12px; color: #64748b; margin-bottom: 22px; letter-spacing: 1px; }
+  .verdict-badge { display: inline-block; padding: 8px 24px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid; font-family: 'JetBrains Mono', monospace; }
+  .badge-warning { background: #451a03; color: #fb923c; border-color: #9a3412; }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 36px 20px; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 36px; }
+  .stat-card { background: #0d1525; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; text-align: center; }
+  .stat-label { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .stat-value { font-size: 22px; font-weight: 800; color: #f8fafc; }
+  .stat-sub { font-size: 10px; color: #64748b; margin-top: 4px; }
+  .stat-sky { color: #0ea5e9; }
+  .stat-green { color: #4ade80; }
+  .stat-yellow { color: #fbbf24; }
+  .stat-red { color: #f87171; }
+
+  .section { background: #0d1525; border: 1px solid #1e293b; border-radius: 8px; padding: 26px; margin-bottom: 18px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #1e293b; }
+  .section-icon { width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .icon-sky { background: #0c2a3a; }
+  .icon-orange { background: #431407; }
+  .icon-red { background: #450a0a; }
+  .icon-yellow { background: #422006; }
+  .icon-blue { background: #0c2a47; }
+  .icon-green { background: #052e16; }
+  .icon-purple { background: #2e1065; }
+  .section-title { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+  .section-tag { font-size: 10px; color: #475569; margin-left: auto; letter-spacing: 1px; text-transform: uppercase; }
+
+  .alloc-table { width: 100%; border-collapse: collapse; }
+  .alloc-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .alloc-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; font-size: 13px; vertical-align: middle; }
+  .alloc-table tr:last-child td { border-bottom: none; }
+  .alloc-bar-wrap { background: #1e293b; border-radius: 2px; height: 5px; width: 90px; display: inline-block; vertical-align: middle; margin-left: 8px; }
+  .alloc-bar { height: 5px; border-radius: 2px; display: block; }
+
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+  .pill-green { background: #052e16; color: #4ade80; }
+  .pill-yellow { background: #422006; color: #fbbf24; }
+  .pill-red { background: #450a0a; color: #f87171; }
+  .pill-sky { background: #0c2a3a; color: #38bdf8; }
+
+  .threshold-box { background: #0a1a25; border: 1px solid #0369a1; border-radius: 8px; padding: 22px; margin: 16px 0; text-align: center; }
+  .threshold-title { font-size: 11px; color: #0ea5e9; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; font-weight: 700; }
+  .threshold-numbers { display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; }
+  .threshold-item { text-align: center; }
+  .threshold-num { font-size: 26px; font-weight: 800; }
+  .threshold-label { font-size: 10px; color: #64748b; margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+  .threshold-arrow { font-size: 24px; color: #0369a1; }
+
+  .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .tech-card { background: #0a1520; border: 1px solid #0369a1; border-radius: 6px; padding: 16px; }
+  .tech-card-title { font-size: 11px; color: #0ea5e9; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .tech-card-text { font-size: 12px; color: #94a3b8; line-height: 1.6; }
+
+  .pressure-meter { margin: 14px 0; }
+  .meter-label { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+  .meter-bar-wrap { background: #1e293b; border-radius: 3px; height: 10px; overflow: hidden; }
+  .meter-bar { height: 10px; border-radius: 3px; }
+  .meter-green { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .meter-orange { background: linear-gradient(90deg, #ea580c, #fb923c); }
+  .meter-red { background: linear-gradient(90deg, #dc2626, #f87171); }
+  .meter-sky { background: linear-gradient(90deg, #0369a1, #0ea5e9); }
+  .meter-yellow { background: linear-gradient(90deg, #ca8a04, #fbbf24); }
+  .meter-footer { display: flex; justify-content: space-between; font-size: 10px; color: #475569; margin-top: 4px; }
+
+  .verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .verdict-card { border-radius: 6px; padding: 20px; }
+  .verdict-bull { background: #052e16; border: 1px solid #166534; }
+  .verdict-bear { background: #450a0a; border: 1px solid #7f1d1d; }
+  .verdict-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .verdict-bull .verdict-title { color: #4ade80; }
+  .verdict-bear .verdict-title { color: #f87171; }
+  .verdict-item { font-size: 12px; color: #cbd5e1; margin-bottom: 9px; padding-left: 18px; position: relative; line-height: 1.5; }
+  .verdict-item::before { content: '→'; position: absolute; left: 0; font-weight: 700; }
+  .verdict-bull .verdict-item::before { color: #4ade80; }
+  .verdict-bear .verdict-item::before { color: #f87171; }
+
+  .final-verdict { background: linear-gradient(135deg, #0a1520, #0f172a); border: 1px solid #0369a1; border-radius: 8px; padding: 30px; margin-top: 8px; }
+  .final-title { font-size: 11px; color: #0ea5e9; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 14px; font-weight: 700; }
+  .final-score { display: flex; align-items: center; gap: 22px; margin-bottom: 18px; }
+  .score-number { font-size: 68px; font-weight: 900; color: #fbbf24; line-height: 1; }
+  .score-label { font-size: 20px; font-weight: 700; color: #f1f5f9; }
+  .score-sub { font-size: 12px; color: #64748b; margin-top: 6px; }
+  .final-text { font-size: 13px; color: #cbd5e1; line-height: 1.9; }
+
+  .watch-item { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid #1e293b; font-size: 13px; }
+  .watch-item:last-child { border-bottom: none; }
+  .watch-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #22c55e; }
+  .dot-sky { background: #0ea5e9; }
+  .watch-text { color: #cbd5e1; }
+  .watch-text strong { color: #f8fafc; }
+
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .comp-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .comp-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; vertical-align: middle; }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table tr.highlight-row { background: #0a1a25; }
+
+  .note-box { background: #060d14; border-left: 3px solid #0ea5e9; border-radius: 0 6px 6px 0; padding: 14px 16px; font-size: 12px; color: #94a3b8; margin: 14px 0; line-height: 1.8; }
+  .note-box.warning { border-left-color: #f59e0b; background: #0d1105; }
+  .note-box.danger { border-left-color: #ef4444; background: #0d0808; }
+  .note-box.success { border-left-color: #22c55e; background: #050f05; }
+
+  .incident-box { background: #1a0808; border: 1px solid #7f1d1d; border-radius: 6px; padding: 16px; margin-bottom: 12px; }
+  .incident-title { font-size: 11px; color: #f87171; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .incident-text { font-size: 12px; color: #cbd5e1; line-height: 1.6; }
+
+  .footer { text-align: center; padding: 28px; color: #334155; font-size: 11px; border-top: 1px solid #1e293b; margin-top: 36px; letter-spacing: 0.5px; line-height: 2; }
+
+  @media (max-width: 600px) {
+    .verdict-grid, .tech-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .score-number { font-size: 52px; }
+    .title { font-size: 28px; }
+    .threshold-numbers { flex-direction: column; gap: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">🔵 TokenFlow AI · Investigación de Tokenómica AI</div>
+  <div class="title">NEAR <span>Protocol</span></div>
+  <div class="subtitle">Análisis completo de tokenómica — La blockchain para IA · 8 de mayo de 2026</div>
+  <div class="verdict-badge badge-warning">⚠ L1 AI-native · Halving activo · Umbral deflacionario: $77M → $177M</div>
+</div>
+
+<div class="container">
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Precio (USD)</div><div class="stat-value stat-sky">$1.47</div><div class="stat-sub">8 de mayo, 2026</div></div>
+    <div class="stat-card"><div class="stat-label">Cap. de Mercado</div><div class="stat-value">$1.9B</div><div class="stat-sub">#39 CoinMarketCap</div></div>
+    <div class="stat-card"><div class="stat-label">Inflación anual</div><div class="stat-value stat-green">2.5%</div><div class="stat-sub">Halving oct. 2025 ✅</div></div>
+    <div class="stat-card"><div class="stat-label">Desde ATH</div><div class="stat-value stat-red">-93%</div><div class="stat-sub">ATH: $20.37 (ene. 2022)</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Circ.</div><div class="stat-value">1.29B</div><div class="stat-sub">100% desbloqueado</div></div>
+    <div class="stat-card"><div class="stat-label">TPS benchmark</div><div class="stat-value stat-sky">1M</div><div class="stat-sub">70 shards, dic. 2025 ✅</div></div>
+    <div class="stat-card"><div class="stat-label">Intents volume</div><div class="stat-value stat-green">$13B+</div><div class="stat-sub">Total — $1B+ mensual</div></div>
+    <div class="stat-card"><div class="stat-label">7 días</div><div class="stat-value stat-green">+13%</div><div class="stat-sub">Precio sobre SMA200 ✅</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-sky">🔗</div>
+      <div class="section-title">¿Qué es NEAR Protocol? — La capa de ejecución para la economía AI</div>
+      <div class="section-tag">Arquitectura</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:16px;">NEAR Protocol es un L1 de alto rendimiento repositionado como "la blockchain para IA" — donde agentes AI autónomos transaccionan y coordinan on-chain. Su co-fundador Illia Polosukhin co-escribió "Attention Is All You Need", el paper fundacional del Transformer que hace posible ChatGPT, GPT-4 y todos los LLMs modernos. Esta credencial no es narrativa — es la base técnica de la industria AI.</p>
+    <div class="tech-grid">
+      <div class="tech-card">
+        <div class="tech-card-title">Chain Abstraction</div>
+        <div class="tech-card-text">Una cuenta NEAR firma transacciones en 25+ blockchains via MPC + Chain Signatures. Agentes AI operan multi-chain sin wallets separadas. Único a escala en producción.</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-title">NEAR Intents</div>
+        <div class="tech-card-text">Cross-chain execution con $13B+ en volumen. Fee switch activo desde feb. 2026 — todas las fees compran NEAR en mercado abierto. El mecanismo deflacionario central.</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-title">IronClaw TEE</div>
+        <div class="tech-card-text">Agentes AI ejecutan tareas privadas en Trusted Execution Environments. Confidential Intents lanzado marzo 2026. User-owned AI — no cloud-owned.</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-title">Nightshade Sharding</div>
+        <div class="tech-card-text">1M TPS verificado con 70 shards (dic. 2025). Sub-cent fees. Post-quantum cryptography FIPS-204 en testnet Q2 2026. 100% uptime en 5 años.</div>
+      </div>
+    </div>
+    <div class="note-box">
+      <strong>🔑 Por qué NEAR cierra el ecosistema TokenFlow AI:</strong> RENDER provee GPU rendering. io.net provee compute. Aethir provee enterprise GPU. Filecoin provee storage. GRASS provee datos. Helium provee conectividad. NEAR es la capa de coordinación y ejecución donde todos esos recursos convergen. Es la infraestructura que necesita la economía de agentes AI autónomos.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">⚡</div>
+      <div class="section-title">Tokenómica post-halving — El umbral deflacionario</div>
+      <div class="section-tag">Mecanismo Clave</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:16px;">En octubre de 2025, los validadores aprobaron reducir la inflación del 5% al 2.5%. El 23 de febrero de 2026, el fee switch de NEAR Intents se activó — todas las comisiones de swaps cross-chain compran NEAR en mercado abierto. Estos dos eventos crean un umbral matemáticamente definido de deflación neta.</p>
+    <div class="threshold-box">
+      <div class="threshold-title">📊 El número que define la tokenómica de NEAR en 2026</div>
+      <div class="threshold-numbers">
+        <div class="threshold-item"><div class="threshold-num" style="color:#f87171;">$77M</div><div class="threshold-label">Volumen diario actual<br>(promedio 90d)</div></div>
+        <div class="threshold-arrow">→</div>
+        <div class="threshold-item"><div class="threshold-num" style="color:#fbbf24;">$177M</div><div class="threshold-label">Umbral deflacionario<br>diario objetivo</div></div>
+        <div class="threshold-arrow">→</div>
+        <div class="threshold-item"><div class="threshold-num" style="color:#4ade80;">Deflación</div><div class="threshold-label">NEAR deflacionario<br>neto al cruzarlo</div></div>
+      </div>
+      <div style="font-size:12px;color:#64748b;margin-top:12px;">NEAR necesita 2.3x su volumen actual. Los modelos base proyectan cruzar ese umbral en 2026.</div>
+    </div>
+    <div class="pressure-meter">
+      <div class="meter-label">Progreso hacia umbral deflacionario ($77M / $177M)</div>
+      <div class="meter-bar-wrap" style="height:12px;border-radius:6px;"><div class="meter-bar meter-yellow" style="width:43%;height:12px;border-radius:6px;"></div></div>
+      <div class="meter-footer"><span>$0</span><span style="color:#fbbf24;font-weight:700;">43% del camino — necesita 2.3x más volumen</span><span>$177M</span></div>
+    </div>
+    <div class="note-box success">
+      <strong>✅ Paralelo con Ethereum EIP-1559:</strong> La misma combinación de inflación reducida + fee conversion que transformó ETH en deflacionario. NEAR tiene $1.9B de Mcap vs los ~$300B de ETH cuando activó EIP-1559. La escala hace el umbral más alcanzable — el mecanismo es idéntico.
+    </div>
+    <div class="note-box warning">
+      <strong>⚠ Governance controversy:</strong> El validador Chorus One se opuso públicamente al halving, argumentando que overrideó la gobernanza comunitaria. Con el contexto del drama de Covenant AI en TAO, el mercado está hipervigilante ante señales de centralización governance en proyectos AI. NEAR no es inmune a ese escrutinio.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">📊</div>
+      <div class="section-title">Estructura del suministro</div>
+      <div class="section-tag">Supply Analysis</div>
+    </div>
+    <table class="alloc-table">
+      <thead><tr><th>Categoría</th><th>% Inicial</th><th>Tokens</th><th>Estado</th><th>Riesgo</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Venta pública + privada</strong></td><td>17.6% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:100%;background:#0ea5e9;"></div></div></td><td>176M NEAR</td><td><span class="status-pill pill-green">Desbloqueado</span></td><td style="color:#4ade80;">✅ En mercado</td></tr>
+        <tr><td><strong>Equipo + fundadores</strong></td><td>14% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:80%;background:#f97316;"></div></div></td><td>140M NEAR</td><td><span class="status-pill pill-green">Completado (60m)</span></td><td>Presión pasada</td></tr>
+        <tr><td><strong>Ecosystem + Foundation</strong></td><td>36% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:100%;background:#4ade80;"></div></div></td><td>360M NEAR</td><td><span class="status-pill pill-green">Desbloqueado gradual</span></td><td style="color:#fbbf24;">Moderado — discrecional</td></tr>
+        <tr><td><strong>Staking rewards</strong></td><td>Continuo <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:25%;background:#fbbf24;"></div></div></td><td>2.5%/año</td><td><span class="status-pill pill-yellow">Post-halving activo</span></td><td>Presión reducida — fee switch compensa</td></tr>
+      </tbody>
+    </table>
+    <div class="note-box" style="margin-top:16px;">
+      <strong>Supply 100% desbloqueado — sin vesting overhang:</strong> Todo el supply inicial de NEAR está en circulación. La única dilución futura es la inflación del 2.5%/año (~32M NEAR nuevos anuales). El fee switch compra tokens del mercado con cada swap de Intents. Si el volumen crece lo suficiente, la compra supera la emisión.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">⚠</div>
+      <div class="section-title">Dos incidentes de seguridad — Abril 2026</div>
+      <div class="section-tag">Riesgos 2026</div>
+    </div>
+    <div class="incident-box">
+      <div class="incident-title">🔴 Rhea Finance Exploit — Abril 2026</div>
+      <div class="incident-text">El DeFi hub más grande de NEAR sufrió un exploit de $18.4M via manipulación de oracle. El equipo recuperó parte y cubrió pérdidas de usuarios. Precio de NEAR cayó más del 4% superando al mercado ese día.</div>
+    </div>
+    <div class="incident-box">
+      <div class="incident-title">🔴 NEAR Intents / Litecoin Bug — 25 de abril de 2026</div>
+      <div class="incident-text">Zero-day bug en Litecoin MWEB causó reorg de 13 bloques. Exposición de NEAR Intents: $600K en transacciones inválidas. El equipo se comprometió a cubrir pérdidas. Impacto limitado pero expone el riesgo sistémico cross-chain.</div>
+    </div>
+    <div class="note-box danger">
+      <strong>⚠ Dos incidentes en 30 días:</strong> Para un L1 que se posiciona como infraestructura para agentes AI autónomos que gestionan activos reales, la robustez del ecosistema es tan crítica como la del protocolo base. Ningún fallo fue en el core de NEAR — pero el mercado no distingue entre capas cuando vende.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">⚔</div>
+      <div class="section-title">Posicionamiento competitivo</div>
+      <div class="section-tag">L1 AI Sector</div>
+    </div>
+    <table class="comp-table">
+      <thead><tr><th>Proyecto</th><th>Enfoque</th><th>Mcap</th><th>vs. NEAR</th></tr></thead>
+      <tbody>
+        <tr class="highlight-row"><td><strong style="color:#0ea5e9;">🔵 NEAR Protocol</strong></td><td>AI-native L1 + Chain Abstraction</td><td>$1.9B</td><td>— P/S 28x, 1M TPS, 25+ chains</td></tr>
+        <tr><td><strong>Solana (SOL)</strong></td><td>L1 alta velocidad</td><td>~$60B+</td><td>30x mayor — NEAR P/S 40% más barato</td></tr>
+        <tr><td><strong>TAO (Bittensor)</strong></td><td>Mercado de inteligencia AI</td><td>~$3.5B</td><td>Complementario — diferente capa AI</td></tr>
+        <tr><td><strong>ASI Alliance (FET)</strong></td><td>Agentes AI + marketplace</td><td>$448M</td><td>Competidor en AI agents — NEAR más L1</td></tr>
+        <tr><td><strong>ICP (Internet Computer)</strong></td><td>L1 AI + compute on-chain</td><td>~$2.5B</td><td>Competidor directo — diferente arquitectura</td></tr>
+      </tbody>
+    </table>
+    <div class="note-box" style="margin-top:16px;">
+      <strong>Ventaja real:</strong> Chain Abstraction en producción a escala es único. Ningún otro L1 permite gestionar assets en 25+ blockchains desde una cuenta hoy. Para agentes AI multi-chain, NEAR es la única opción operativa — no en roadmap.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📉</div>
+      <div class="section-title">Estructura técnica y contexto de precio</div>
+      <div class="section-tag">Estructura de Precio</div>
+    </div>
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Precio vs ATH</div><div class="stat-value stat-red">-93%</div><div class="stat-sub">ATH: $20.37 (ene. 2022)</div></div>
+      <div class="stat-card"><div class="stat-label">Precio vs ATL</div><div class="stat-value stat-yellow">+70%</div><div class="stat-sub">ATL: $0.86 (feb. 2026)</div></div>
+      <div class="stat-card"><div class="stat-label">RSI 14</div><div class="stat-value stat-yellow">~67</div><div class="stat-sub">Neutral-alcista</div></div>
+      <div class="stat-card"><div class="stat-label">SMA 200</div><div class="stat-value stat-green">$1.42</div><div class="stat-sub">Precio por encima ✅</div></div>
+    </div>
+    <div class="pressure-meter"><div class="meter-label">Tendencia de largo plazo (-93% desde ATH)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:92%;"></div></div><div class="meter-footer"><span>ATH</span><span style="color:#f87171;">🔴 Estructura bajista histórica</span><span>ATL</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Momentum (+70% desde ATL feb. 2026, precio sobre SMA200)</div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:75%;"></div></div><div class="meter-footer"><span>Neutro</span><span style="color:#4ade80;">✅ Momentum alcista de corto plazo</span><span>Alcista</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Grayscale + Bitwise ETF (catalizador institucional pendiente)</div><div class="meter-bar-wrap"><div class="meter-bar meter-sky" style="width:40%;"></div></div><div class="meter-footer"><span>No filing</span><span style="color:#0ea5e9;">⏳ Filings presentados — aprobación SEC pendiente</span><span>Aprobado</span></div></div>
+    <div class="note-box warning" style="margin-top:14px;">
+      RSI 67 y precio sobre SMA200 — estructura técnica positiva de corto plazo. Resistencia clave en $1.71. Un cierre semanal por encima abriría la zona $2.50–$3.00. La aprobación de algún ETF sería el catalizador capaz de superar esa resistencia.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">⚖</div>
+      <div class="section-title">Argumentos alcistas vs. bajistas</div>
+      <div class="section-tag">Veredicto TokenFlow</div>
+    </div>
+    <div class="verdict-grid">
+      <div class="verdict-card verdict-bull">
+        <div class="verdict-title">🟢 Argumentos alcistas</div>
+        <div class="verdict-item">Intents P/S ~28x — más barato que Solana (40x) y Ethereum (194x)</div>
+        <div class="verdict-item">Halving + fee switch — camino deflacionario matemáticamente definido</div>
+        <div class="verdict-item">Chain Abstraction en producción — 25+ blockchains, único a escala</div>
+        <div class="verdict-item">$13B+ en Intents volume, $1B+ mensual — demanda real creciente</div>
+        <div class="verdict-item">1M TPS benchmark verificado (dic. 2025) — escalabilidad probada</div>
+        <div class="verdict-item">Co-fundador co-inventó el Transformer — credencial AI única en crypto</div>
+        <div class="verdict-item">Grayscale + Bitwise ETF filings — on-ramp institucional potencial</div>
+        <div class="verdict-item">Supply 100% desbloqueado — sin vesting overhang clásico</div>
+      </div>
+      <div class="verdict-card verdict-bear">
+        <div class="verdict-title">🔴 Argumentos bajistas</div>
+        <div class="verdict-item">-93% desde ATH — estructura bajista histórica extrema</div>
+        <div class="verdict-item">Umbral deflacionario no alcanzado: $77M vs $177M diarios necesarios</div>
+        <div class="verdict-item">Governance controversy — halving contencioso, Chorus One opuesto</div>
+        <div class="verdict-item">2 incidentes de seguridad en abril 2026 — riesgo reputacional</div>
+        <div class="verdict-item">Inflación 2.5%/año = ~32M NEAR nuevos — presión vendedora continua</div>
+        <div class="verdict-item">ETF filings aún pendientes — no hay fecha de aprobación</div>
+        <div class="verdict-item">Competencia fuerte: ICP, Solana, potencialmente Ethereum L2s</div>
+        <div class="verdict-item">Revenue base sin Intents: solo $7.85M ARR — dependencia de Intents</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="final-verdict">
+    <div class="final-title">TokenFlow AI · Veredicto Final</div>
+    <div class="final-score">
+      <div class="score-number">6</div>
+      <div>
+        <div class="score-label">L1 técnicamente sólido · Deflación pendiente</div>
+        <div class="score-sub">sobre 10 · La arquitectura es real — el mercado aún no la ha valorado</div>
+      </div>
+    </div>
+    <div class="final-text">
+      NEAR Protocol tiene algo que ningún otro L1 puede reclamar con igual credibilidad: un co-fundador que co-inventó la arquitectura que hace posible la IA moderna. Illia Polosukhin co-escribió "Attention Is All You Need" — el paper del Transformer que es la base técnica de ChatGPT y todos los LLMs. Cuando NEAR se llama "la blockchain para IA", hay sustancia real detrás.<br><br>
+      La tokenómica post-halving crea un mecanismo deflacionario claro. La combinación de inflación reducida al 2.5% + fee switch de NEAR Intents es el mismo par de cambios que transformó ETH en deflacionario con EIP-1559. El umbral es $177M de volumen diario en Intents. El promedio actual es $77M. La distancia no es inalcanzable — y los $13B+ en volumen acumulado demuestran que la demanda existe y crece.<br><br>
+      Los riesgos son reales: dos incidentes de seguridad en el ecosistema en abril 2026, una governance controversy que recuerda demasiado al drama de TAO, y un umbral deflacionario que aún no se ha cruzado. El mercado no perdona estos ruidos de fondo cuando el precio ya está -93% desde su ATH.<br><br>
+      <strong>¿Qué cambiaría el veredicto?</strong> Tres catalizadores: cruzar el umbral deflacionario de $177M en Intents volume diario; aprobación de alguno de los ETFs de Grayscale o Bitwise; o un deployment masivo de agentes AI usando IronClaw TEE en producción verificable. Cualquiera de los tres re-escalaría la narrativa de NEAR de forma significativa.
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:20px;">
+    <div class="section-header">
+      <div class="section-icon icon-sky">👁</div>
+      <div class="section-title">Qué vigilar en los próximos 30–90 días</div>
+      <div class="section-tag">Lista de Monitoreo</div>
+    </div>
+    <div class="watch-item"><div class="watch-dot dot-sky"></div><div class="watch-text"><strong>Volumen diario de NEAR Intents:</strong> El indicador más importante. Seguir en nearblocks.io. Cuando el promedio de 7 días supere $177M de forma sostenida — NEAR entra en deflación neta. Es el evento tokenómico más predecible del roadmap.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>ETF SEC — Grayscale y Bitwise:</strong> Filings activos para NEAR. Cualquier comunicación oficial de la SEC moverá el precio significativamente. Seguir SEC EDGAR bajo búsqueda "NEAR Protocol".</div></div>
+    <div class="watch-item"><div class="watch-dot dot-red"></div><div class="watch-text"><strong>Seguridad del ecosistema:</strong> Dos incidentes en abril 2026. Si hay un tercer evento relevante antes del verano, la narrativa de NEAR como infraestructura segura para AI se daña structuralmente. Seguir CertiK para exploits y DeFiLlama para TVL.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-yellow"></div><div class="watch-text"><strong>Resistencia técnica $1.71:</strong> Cierre semanal sostenido por encima = cambio de tendencia técnica confirmado. Sin ese nivel, la estructura bajista de largo plazo permanece intacta.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-sky"></div><div class="watch-text"><strong>Post-quantum cryptography (FIPS-204) en testnet Q2 2026:</strong> Primer blockchain con criptografía post-cuántica. Si se anuncia el launch, es un catalizador de diferenciación técnica frente a todos los competidores — difícilmente replicable en el corto plazo.</div></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong style="color:#0ea5e9;">TokenFlow AI</strong> · Investigación de tokenómica AI y DePIN · Sin hype. Solo estructura.<br>
+  Fecha del análisis: 8 de mayo de 2026 · Este análisis no constituye asesoramiento de inversión. DYOR.<br>
+  Fuentes: CoinGecko, CoinMarketCap, SVRN Research, coincub.com, BanklessTimes, near.foundation, nearblocks.io, datos on-chain
+</div>
+
+</body>
+</html>
