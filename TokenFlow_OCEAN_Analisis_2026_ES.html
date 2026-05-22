@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenFlow AI – Análisis Ocean Protocol (OCEAN) 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'JetBrains Mono', monospace; background: #0a0e1a; color: #e2e8f0; line-height: 1.7; font-size: 14px; }
+
+  .header { background: linear-gradient(135deg, #0a1020 0%, #0c1828 50%, #0a0e1a 100%); border-bottom: 1px solid #1a3560; padding: 44px 32px 36px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; background: radial-gradient(ellipse, rgba(59,130,246,0.07) 0%, transparent 70%); pointer-events: none; }
+  .brand { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #3b82f6; margin-bottom: 14px; font-weight: 600; }
+  .title { font-size: 38px; font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -1px; }
+  .title span { color: #3b82f6; }
+  .subtitle { font-size: 12px; color: #64748b; margin-bottom: 22px; letter-spacing: 1px; }
+  .verdict-badge { display: inline-block; padding: 8px 24px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid; font-family: 'JetBrains Mono', monospace; }
+  .badge-danger { background: #450a0a; color: #f87171; border-color: #7f1d1d; }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 36px 20px; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 36px; }
+  .stat-card { background: #0d1525; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; text-align: center; }
+  .stat-label { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .stat-value { font-size: 22px; font-weight: 800; color: #f8fafc; }
+  .stat-sub { font-size: 10px; color: #64748b; margin-top: 4px; }
+  .stat-blue { color: #3b82f6; }
+  .stat-green { color: #4ade80; }
+  .stat-yellow { color: #fbbf24; }
+  .stat-red { color: #f87171; }
+  .stat-orange { color: #fb923c; }
+
+  .section { background: #0d1525; border: 1px solid #1e293b; border-radius: 8px; padding: 26px; margin-bottom: 18px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #1e293b; }
+  .section-icon { width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .icon-blue { background: #1e3a5f; }
+  .icon-orange { background: #431407; }
+  .icon-red { background: #450a0a; }
+  .icon-yellow { background: #422006; }
+  .icon-green { background: #052e16; }
+  .icon-purple { background: #2e1065; }
+  .icon-cyan { background: #083344; }
+  .section-title { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+  .section-tag { font-size: 10px; color: #475569; margin-left: auto; letter-spacing: 1px; text-transform: uppercase; }
+
+  .alloc-table { width: 100%; border-collapse: collapse; }
+  .alloc-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .alloc-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; font-size: 13px; vertical-align: middle; }
+  .alloc-table tr:last-child td { border-bottom: none; }
+  .alloc-bar-wrap { background: #1e293b; border-radius: 2px; height: 5px; width: 90px; display: inline-block; vertical-align: middle; margin-left: 8px; }
+  .alloc-bar { height: 5px; border-radius: 2px; display: block; }
+
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+  .pill-green { background: #052e16; color: #4ade80; }
+  .pill-yellow { background: #422006; color: #fbbf24; }
+  .pill-red { background: #450a0a; color: #f87171; }
+  .pill-blue { background: #1e3a5f; color: #93c5fd; }
+
+  .c2d-box { background: #0a1428; border: 1px solid #1d4ed8; border-radius: 8px; padding: 22px; margin: 16px 0; }
+  .c2d-title { font-size: 11px; color: #3b82f6; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; font-weight: 700; }
+  .c2d-flow { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; }
+  .c2d-step { background: #1e3a5f; border: 1px solid #2563eb; border-radius: 6px; padding: 12px 14px; text-align: center; }
+  .c2d-step-title { font-size: 12px; font-weight: 700; color: #93c5fd; }
+  .c2d-step-desc { font-size: 10px; color: #64748b; margin-top: 4px; }
+  .c2d-arrow { font-size: 18px; color: #1d4ed8; }
+
+  .drama-box { background: #1a0808; border: 1px solid #7f1d1d; border-radius: 8px; padding: 20px; margin: 16px 0; }
+  .drama-title { font-size: 11px; color: #f87171; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+  .drama-item { display: flex; gap: 14px; font-size: 12px; color: #cbd5e1; margin-bottom: 10px; }
+  .drama-date { font-size: 10px; color: #f87171; font-weight: 700; min-width: 90px; padding-top: 2px; letter-spacing: 1px; }
+
+  .pressure-meter { margin: 14px 0; }
+  .meter-label { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+  .meter-bar-wrap { background: #1e293b; border-radius: 3px; height: 10px; overflow: hidden; }
+  .meter-bar { height: 10px; border-radius: 3px; }
+  .meter-green { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .meter-orange { background: linear-gradient(90deg, #ea580c, #fb923c); }
+  .meter-red { background: linear-gradient(90deg, #dc2626, #f87171); }
+  .meter-blue { background: linear-gradient(90deg, #1d4ed8, #3b82f6); }
+  .meter-yellow { background: linear-gradient(90deg, #ca8a04, #fbbf24); }
+  .meter-footer { display: flex; justify-content: space-between; font-size: 10px; color: #475569; margin-top: 4px; }
+
+  .verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .verdict-card { border-radius: 6px; padding: 20px; }
+  .verdict-bull { background: #052e16; border: 1px solid #166534; }
+  .verdict-bear { background: #450a0a; border: 1px solid #7f1d1d; }
+  .verdict-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .verdict-bull .verdict-title { color: #4ade80; }
+  .verdict-bear .verdict-title { color: #f87171; }
+  .verdict-item { font-size: 12px; color: #cbd5e1; margin-bottom: 9px; padding-left: 18px; position: relative; line-height: 1.5; }
+  .verdict-item::before { content: '→'; position: absolute; left: 0; font-weight: 700; }
+  .verdict-bull .verdict-item::before { color: #4ade80; }
+  .verdict-bear .verdict-item::before { color: #f87171; }
+
+  .final-verdict { background: linear-gradient(135deg, #0a1020, #0f172a); border: 1px solid #1d4ed8; border-radius: 8px; padding: 30px; margin-top: 8px; }
+  .final-title { font-size: 11px; color: #3b82f6; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 14px; font-weight: 700; }
+  .final-score { display: flex; align-items: center; gap: 22px; margin-bottom: 18px; }
+  .score-number { font-size: 68px; font-weight: 900; color: #f87171; line-height: 1; }
+  .score-label { font-size: 20px; font-weight: 700; color: #f1f5f9; }
+  .score-sub { font-size: 12px; color: #64748b; margin-top: 6px; }
+  .final-text { font-size: 13px; color: #cbd5e1; line-height: 1.9; }
+
+  .watch-item { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid #1e293b; font-size: 13px; }
+  .watch-item:last-child { border-bottom: none; }
+  .watch-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #22c55e; }
+  .dot-blue { background: #3b82f6; }
+  .watch-text { color: #cbd5e1; }
+  .watch-text strong { color: #f8fafc; }
+
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .comp-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .comp-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; vertical-align: middle; }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table tr.highlight-row { background: #0a1428; }
+
+  .note-box { background: #06101e; border-left: 3px solid #3b82f6; border-radius: 0 6px 6px 0; padding: 14px 16px; font-size: 12px; color: #94a3b8; margin: 14px 0; line-height: 1.8; }
+  .note-box.warning { border-left-color: #f59e0b; background: #0d1105; }
+  .note-box.danger { border-left-color: #ef4444; background: #0d0808; }
+  .note-box.success { border-left-color: #22c55e; background: #050f05; }
+
+  .footer { text-align: center; padding: 28px; color: #334155; font-size: 11px; border-top: 1px solid #1e293b; margin-top: 36px; letter-spacing: 0.5px; line-height: 2; }
+
+  @media (max-width: 600px) {
+    .verdict-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .score-number { font-size: 52px; }
+    .title { font-size: 28px; }
+    .c2d-flow { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">🔵 TokenFlow AI · Investigación de Tokenómica AI</div>
+  <div class="title">Ocean <span>Protocol</span></div>
+  <div class="subtitle">Análisis completo — Tecnología única, tokenómica crítica · 22 de mayo de 2026</div>
+  <div class="verdict-badge badge-danger">🔴 Mcap/FDV = 14% · El peor del sector · Tecnología real sin mercado suficiente</div>
+</div>
+
+<div class="container">
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Precio (USD)</div><div class="stat-value stat-blue">$0.12</div><div class="stat-sub">22 de mayo, 2026</div></div>
+    <div class="stat-card"><div class="stat-label">Cap. de Mercado</div><div class="stat-value">~$25M</div><div class="stat-sub">#700+ CoinGecko</div></div>
+    <div class="stat-card"><div class="stat-label">FDV</div><div class="stat-value stat-red">~$177M</div><div class="stat-sub">Mcap/FDV = 14% ⚠️</div></div>
+    <div class="stat-card"><div class="stat-label">Desde ATH</div><div class="stat-value stat-red">-94%</div><div class="stat-sub">ATH: $1.94 (abr. 2021)</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Circ.</div><div class="stat-value">200M</div><div class="stat-sub">Solo 14% del máximo</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Máx.</div><div class="stat-value">1.41B</div><div class="stat-sub">1.2B aún por emitir</div></div>
+    <div class="stat-card"><div class="stat-label">Volumen 24h</div><div class="stat-value stat-red">~$85K</div><div class="stat-sub">Liquidez muy baja</div></div>
+    <div class="stat-card"><div class="stat-label">Post-ASI Alliance</div><div class="stat-value stat-yellow">Oct 2025</div><div class="stat-sub">Opera de forma independiente</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">🌊</div>
+      <div class="section-title">¿Qué es Ocean Protocol? — La capa de datos privados para AI</div>
+      <div class="section-tag">Tecnología Core</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">Ocean Protocol resuelve uno de los problemas más críticos de la economía AI: las empresas tienen datos valiosos que no pueden compartir por razones legales, competitivas o de privacidad. Un hospital no puede enviar historiales de pacientes a Google para entrenar modelos. Un banco no puede compartir transacciones fraudulentas con un competidor. Ocean Protocol permite que los modelos AI se entrenen sobre esos datos <em>sin verlos jamás</em> — usando Compute-to-Data.</p>
+
+    <div class="c2d-box">
+      <div class="c2d-title">🔒 Compute-to-Data — Cómo funciona el mecanismo único</div>
+      <div class="c2d-flow">
+        <div class="c2d-step">
+          <div class="c2d-step-title">🏥 Dueño del dato</div>
+          <div class="c2d-step-desc">Hospital, banco, empresa.<br>Datos nunca salen de sus servidores.</div>
+        </div>
+        <div class="c2d-arrow">→</div>
+        <div class="c2d-step">
+          <div class="c2d-step-title">🔑 Data NFT</div>
+          <div class="c2d-step-desc">Tokeniza el acceso.<br>Controla quién puede computar.</div>
+        </div>
+        <div class="c2d-arrow">→</div>
+        <div class="c2d-step">
+          <div class="c2d-step-title">🤖 Modelo AI</div>
+          <div class="c2d-step-desc">Va al dato (no al revés).<br>Entrena sin ver el dato raw.</div>
+        </div>
+        <div class="c2d-arrow">→</div>
+        <div class="c2d-step">
+          <div class="c2d-step-title">📊 Resultado</div>
+          <div class="c2d-step-desc">Solo sale el output del modelo.<br>Dato original intacto y privado.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note-box success">
+      <strong>✅ Por qué Compute-to-Data es genuinamente único:</strong> GRASS raspa datos públicos de internet. Filecoin almacena datos. Akash ejecuta compute genérico. Ocean hace algo que ninguno puede replicar: permite computar sobre datos privados, sensibles y regulados — sin revelarlos. Es la tecnología que necesita la AI para acceder a los datos más valiosos del mundo: historiales médicos, transacciones financieras, datos industriales. Nadie más en crypto lo hace a esta escala.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">💥</div>
+      <div class="section-title">El drama del ASI Alliance — Lo que realmente ocurrió</div>
+      <div class="section-tag">Crisis 2025–2026</div>
+    </div>
+
+    <div class="drama-box">
+      <div class="drama-title">🔴 Timeline — Salida de ASI Alliance y consecuencias</div>
+      <div class="drama-item"><div class="drama-date">MAR 2024</div><div>Ocean Protocol se une al ASI Alliance junto a Fetch.ai y SingularityNET. Objetivo: crear la mayor organización AI descentralizada. La ratio de conversión: 0.433 FET por OCEAN.</div></div>
+      <div class="drama-item"><div class="drama-date">OCT 9, 2025</div><div>Ocean Protocol Foundation anuncia su <strong>salida inmediata del ASI Alliance</strong>, citando "deseos de financiación independiente y control sobre su tokenómica". OCEAN se convierte de nuevo en token independiente.</div></div>
+      <div class="drama-item"><div class="drama-date">NOV 2025</div><div>Fetch.ai presenta una demanda. Alega que Ocean convirtió 661M OCEAN → 286M FET y vendió ~263M FET en exchanges sin previo aviso, causando una caída del precio de FET y ~$120M de impacto. Ocean niega las acusaciones.</div></div>
+      <div class="drama-item"><div class="drama-date">FEB 2026</div><div>Acuerdo extrajudicial: Ocean <strong>devuelve 286M FET</strong> al ASI Alliance. El caso está cerrado. El precio de OCEAN, sin embargo, nunca se recuperó.</div></div>
+    </div>
+
+    <div class="note-box danger">
+      <strong>⚠ Consecuencia tokenómica del drama:</strong> La salida del ASI Alliance y la disputa legal destruyeron la confianza del mercado en Ocean Protocol justo cuando el sector AI estaba en momentum alcista. El volumen diario cayó de ~$5M a menos de $100K. El token perdió relevancia en los rankings mientras TAO, FET, NEAR y otros capturaban el flujo de capital AI. La reputación se puede reparar — el tiempo perdido no.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-orange">📊</div>
+      <div class="section-title">Estructura del suministro — El peor Mcap/FDV del sector</div>
+      <div class="section-tag">Supply Analysis</div>
+    </div>
+
+    <table class="alloc-table">
+      <thead>
+        <tr><th>Categoría</th><th>% Supply</th><th>Tokens</th><th>Estado</th><th>Riesgo</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Circulante actual</strong></td>
+          <td>14% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:14%;background:#3b82f6;"></div></div></td>
+          <td>200M OCEAN</td>
+          <td><span class="status-pill pill-blue">En mercado</span></td>
+          <td>Supply líquido activo</td>
+        </tr>
+        <tr>
+          <td><strong>Data Farming rewards</strong></td>
+          <td>~51% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:100%;background:#ef4444;"></div></div></td>
+          <td>~720M OCEAN</td>
+          <td><span class="status-pill pill-red">Por emitir — continuo</span></td>
+          <td style="color:#f87171;">⚠ Mayor fuente de dilución</td>
+        </tr>
+        <tr>
+          <td><strong>Team + Foundation</strong></td>
+          <td>~22% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:43%;background:#f97316;"></div></div></td>
+          <td>~310M OCEAN</td>
+          <td><span class="status-pill pill-yellow">Vesting hasta 2030</span></td>
+          <td style="color:#fb923c;">⚠ Presión continua</td>
+        </tr>
+        <tr>
+          <td><strong>Ecosystem + Partners</strong></td>
+          <td>~13% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:25%;background:#fbbf24;"></div></div></td>
+          <td>~180M OCEAN</td>
+          <td><span class="status-pill pill-yellow">Gradual</span></td>
+          <td>Moderado — discrecional</td>
+        </tr>
+        <tr>
+          <td><strong>Buyback & Burn (Predictoor)</strong></td>
+          <td>Variable <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:5%;background:#4ade80;"></div></div></td>
+          <td>Pequeño por ahora</td>
+          <td><span class="status-pill pill-green">Activo — crecimiento lento</span></td>
+          <td style="color:#4ade80;">✅ Contrapeso deflacionario</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="pressure-meter" style="margin-top:20px;">
+      <div class="meter-label">Mcap/FDV — comparativa con otros tokens analizados por TokenFlow AI</div>
+      <div style="display:grid;gap:8px;margin-top:8px;">
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>RENDER (RNDR)</span><span>97%</span></div><div class="meter-bar-wrap" style="width:100%;"><div class="meter-bar meter-green" style="width:97%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>Helium (HNT)</span><span>84%</span></div><div class="meter-bar-wrap" style="width:100%;"><div class="meter-bar meter-green" style="width:84%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>TAO (Bittensor)</span><span>47%</span></div><div class="meter-bar-wrap" style="width:100%;"><div class="meter-bar meter-yellow" style="width:47%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>io.net (IO)</span><span>38%</span></div><div class="meter-bar-wrap" style="width:100%;"><div class="meter-bar meter-orange" style="width:38%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span style="color:#f87171;font-weight:700;">Ocean Protocol (OCEAN)</span><span style="color:#f87171;font-weight:700;">14% 🔴</span></div><div class="meter-bar-wrap" style="width:100%;"><div class="meter-bar meter-red" style="width:14%;"></div></div></div>
+      </div>
+    </div>
+
+    <div class="note-box danger">
+      <strong>🔴 El dato más preocupante del análisis:</strong> Con solo el 14% del supply en circulación, Ocean Protocol tiene el mayor "vesting overhang" de todos los proyectos analizados por TokenFlow AI. Si el precio se mantiene constante y simplemente se emiten los tokens restantes (1.2B OCEAN), el efecto dilutivo sería de 7x sobre el circulante actual. El Buyback & Burn de Predictoor es real pero completamente insuficiente para compensar esa escala de emisión.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">⚡</div>
+      <div class="section-title">Ecosistema post-ASI — La apuesta por independencia</div>
+      <div class="section-tag">Roadmap 2026</div>
+    </div>
+
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Ocean Nodes Phase 2</div><div class="stat-value stat-blue">GPU</div><div class="stat-sub">Compute-as-a-Service live</div></div>
+      <div class="stat-card"><div class="stat-label">Predictoor</div><div class="stat-value stat-yellow">Activo</div><div class="stat-sub">→ Buyback & Burn OCEAN</div></div>
+      <div class="stat-card"><div class="stat-label">Data NFTs</div><div class="stat-value stat-green">Live</div><div class="stat-sub">Marketplace operativo</div></div>
+      <div class="stat-card"><div class="stat-label">veOCEAN</div><div class="stat-value stat-blue">Staking</div><div class="stat-sub">Data Farming rewards</div></div>
+    </div>
+
+    <div class="note-box">
+      <strong>📌 Ocean Nodes Phase 2 — El upgrade más relevante:</strong> En late 2025, Ocean lanzó Ocean Nodes Phase 2, transformando los nodos simples en nodos de compute con soporte GPU. Esto convierte a Ocean en un competidor directo de Akash e io.net para workloads de AI — pero con una diferencia clave: en Ocean, el compute ocurre sobre datos que no salen del servidor del dueño. Es un modelo de "Compute-as-a-Service" con privacidad nativa. La pregunta es si el mercado valorará esa diferenciación antes de que la dilución del supply haga daño permanente.
+    </div>
+
+    <div class="note-box warning">
+      <strong>⚠ Buyback & Burn — El contrapeso insuficiente:</strong> Los profits de Predictoor (mercado de predicciones AI) se usan para comprar y quemar OCEAN en mercado abierto. La idea es correcta — es el mismo modelo que usan ASI Alliance (FET) y io.net. El problema: Predictoor genera ingresos muy pequeños en comparación con los ~1.2B OCEAN restantes por emitir. El burn rate actual no está cerca de compensar la dilución estructural.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">⚔</div>
+      <div class="section-title">Posicionamiento competitivo</div>
+      <div class="section-tag">Data AI Sector</div>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr><th>Proyecto</th><th>Enfoque</th><th>Mcap</th><th>vs. OCEAN</th></tr>
+      </thead>
+      <tbody>
+        <tr class="highlight-row">
+          <td><strong style="color:#3b82f6;">🔵 Ocean Protocol (OCEAN)</strong></td>
+          <td>Compute-to-Data privado</td>
+          <td>~$25M</td>
+          <td>— Único en privacidad de datos</td>
+        </tr>
+        <tr>
+          <td><strong>GRASS</strong></td>
+          <td>Web scraping → AI data</td>
+          <td>~$187M</td>
+          <td>Datos públicos vs. datos privados — complementarios</td>
+        </tr>
+        <tr>
+          <td><strong>Filecoin (FIL)</strong></td>
+          <td>Storage descentralizado</td>
+          <td>~$670M</td>
+          <td>FIL guarda datos — Ocean computa sobre ellos</td>
+        </tr>
+        <tr>
+          <td><strong>Akash (AKT)</strong></td>
+          <td>Compute general</td>
+          <td>~$232M</td>
+          <td>Compute sin privacidad — Ocean tiene C2D</td>
+        </tr>
+        <tr>
+          <td><strong>ASI Alliance (FET)</strong></td>
+          <td>AI agents + marketplace</td>
+          <td>~$448M</td>
+          <td>Ex-aliado — ahora competidor indirecto</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box" style="margin-top:16px;">
+      <strong>El nicho defensible de Ocean:</strong> Compute-to-Data con privacidad verificable no tiene competidor directo en crypto. En el mercado tradicional, compite con soluciones de "federated learning" de Google, Apple y Microsoft — que son propietarias y centralizadas. Si la regulación de datos (GDPR, HIPAA) se vuelve más estricta globalmente, el caso de uso de Ocean se vuelve obligatorio para industrias como salud y finanzas. Ese es el escenario alcista. El problema es que lleva años prometiéndolo y el mercado dejó de esperar.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📉</div>
+      <div class="section-title">Estructura técnica y liquidez</div>
+      <div class="section-tag">Estructura de Precio</div>
+    </div>
+
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Precio vs ATH</div><div class="stat-value stat-red">-94%</div><div class="stat-sub">ATH: $1.94 (abr. 2021)</div></div>
+      <div class="stat-card"><div class="stat-label">Volumen 24h</div><div class="stat-value stat-red">~$85K</div><div class="stat-sub">Liquidez críticamente baja</div></div>
+      <div class="stat-card"><div class="stat-label">RSI 14</div><div class="stat-value stat-yellow">~51</div><div class="stat-sub">Zona neutral</div></div>
+      <div class="stat-card"><div class="stat-label">Slippage</div><div class="stat-value stat-red">Alto</div><div class="stat-sub">Ordenes grandes mueven precio</div></div>
+    </div>
+
+    <div class="pressure-meter"><div class="meter-label">Tendencia de largo plazo (-94% desde ATH de 2021)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:93%;"></div></div><div class="meter-footer"><span>ATH</span><span style="color:#f87171;">🔴 Estructura bajista histórica extrema</span><span>ATL</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Liquidez de mercado ($85K volumen diario — críticamente bajo)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:8%;"></div></div><div class="meter-footer"><span>$0</span><span style="color:#f87171;">🔴 Ilíquido — riesgo de manipulación alta</span><span>$5M+</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Presión de dilución (1.2B tokens restantes vs 200M circulantes)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:86%;"></div></div><div class="meter-footer"><span>Baja</span><span style="color:#f87171;">🔴 Máxima — 7x dilución potencial</span><span>Máxima</span></div></div>
+
+    <div class="note-box danger" style="margin-top:14px;">
+      El volumen de $85K diario es una señal de alarma estructural. Con ese nivel de liquidez, una orden de venta de $50K puede mover el precio un 5–10%. El token es prácticamente inatendible por inversores institucionales. Para que Ocean Protocol sea rescatable como inversión, necesita primero recuperar liquidez — lo que requiere catalizadores narrativos fuertes y sostenidos que aún no han aparecido post-ASI Alliance.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">⚖</div>
+      <div class="section-title">Argumentos alcistas vs. bajistas</div>
+      <div class="section-tag">Veredicto TokenFlow</div>
+    </div>
+
+    <div class="verdict-grid">
+      <div class="verdict-card verdict-bull">
+        <div class="verdict-title">🟢 Argumentos alcistas</div>
+        <div class="verdict-item">Compute-to-Data — tecnología genuinamente única sin competidor directo en crypto</div>
+        <div class="verdict-item">Caso de uso real: salud, finanzas, industria — datos privados + AI</div>
+        <div class="verdict-item">Ocean Nodes Phase 2 — GPU compute con privacidad nativa</div>
+        <div class="verdict-item">Buyback & Burn activo (Predictoor) — deflación, aunque pequeña</div>
+        <div class="verdict-item">Data NFTs y marketplace operativo — infraestructura funcional</div>
+        <div class="verdict-item">Mcap $25M — asimetría extrema si el caso de uso escala</div>
+        <div class="verdict-item">Regulación de datos (GDPR/HIPAA) como tailwind natural</div>
+        <div class="verdict-item">Demanda legal resuelta — balance limpio post-febrero 2026</div>
+      </div>
+      <div class="verdict-card verdict-bear">
+        <div class="verdict-title">🔴 Argumentos bajistas</div>
+        <div class="verdict-item">Mcap/FDV = 14% — el peor de todos los tokens analizados por TokenFlow AI</div>
+        <div class="verdict-item">1.2B tokens por emitir = 7x dilución potencial del circulante</div>
+        <div class="verdict-item">Volumen 24h = $85K — ilíquido, inatendible por institucionales</div>
+        <div class="verdict-item">Drama ASI Alliance destruyó confianza y momentum en el momento clave</div>
+        <div class="verdict-item">-94% desde ATH — estructura bajista histórica extrema</div>
+        <div class="verdict-item">Buyback & Burn insuficiente para contrarrestar la dilución real</div>
+        <div class="verdict-item">El caso de uso lleva años prometido — adopción enterprise aún lenta</div>
+        <div class="verdict-item">Competidores con más capital y liquidez capturando la narrativa data AI</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="final-verdict">
+    <div class="final-title">TokenFlow AI · Veredicto Final</div>
+    <div class="final-score">
+      <div class="score-number">3.5</div>
+      <div>
+        <div class="score-label">Tecnología única · Tokenómica rota</div>
+        <div class="score-sub">sobre 10 · La mejor tecnología de datos del sector — el peor supply structure</div>
+      </div>
+    </div>
+    <div class="final-text">
+      Ocean Protocol es la paradoja más dolorosa de todos los proyectos analizados por TokenFlow AI. Tiene la tecnología más genuinamente única del sector — Compute-to-Data resuelve un problema real que ningún otro proyecto en crypto aborda: permitir que modelos AI entrenen sobre datos privados sin verlos jamás. El caso de uso en salud, finanzas e industria no es narrativa especulativa — es una necesidad regulatoria real en economías desarrolladas.<br><br>
+      Y sin embargo, la tokenómica es la peor del sector. Un Mcap/FDV del 14% significa que por cada $1 de valoración hoy, hay potencialmente $6 más de tokens por llegar al mercado. Con el Buyback & Burn de Predictoor en niveles mínimos, no hay mecanismo que compense esa dilución estructural. El drama del ASI Alliance destruyó la confianza del mercado justo cuando el sector AI estaba en momentum máximo — y el volumen diario de $85K confirma que los inversores se han ido a otros proyectos.<br><br>
+      El escenario alcista existe, pero es de alto riesgo y largo plazo: si la regulación de datos se endurece globalmente, si Ocean logra partnerships enterprise verificables en salud o finanzas, y si el Buyback & Burn escala significativamente — el Mcap de $25M frente a una tecnología de nicho sin competidor tiene asimetría real. Pero ese escenario requiere años de ejecución impecable, y el mercado ya no está dispuesto a esperar.<br><br>
+      <strong>Veredicto honesto:</strong> La tecnología merece un 8/10. La tokenómica merece un 1/10. El promedio es el que marca la realidad del holder.
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:20px;">
+    <div class="section-header">
+      <div class="section-icon icon-blue">👁</div>
+      <div class="section-title">Qué vigilar — Si decides seguir Ocean Protocol</div>
+      <div class="section-tag">Lista de Monitoreo</div>
+    </div>
+    <div class="watch-item"><div class="watch-dot dot-blue"></div><div class="watch-text"><strong>Volumen de trading diario:</strong> El indicador de salud más básico. Si el volumen supera $500K de forma sostenida, señala que el mercado está re-descubriendo Ocean. Por debajo de $100K, el token permanece en modo "zombie". Seguir en CoinGecko o CoinMarketCap.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Partnership enterprise verificable:</strong> El catalizador que más puede cambiar la narrativa. Un hospital, banco o empresa Fortune 500 usando Compute-to-Data en producción verificable sería el primer caso de uso real de escala. Seguir blog.oceanprotocol.com para anuncios.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-red"></div><div class="watch-text"><strong>Schedule de vesting — Team y Foundation:</strong> Los desbloqueos de Team y Foundation hasta 2030 son la mayor amenaza. Seguir en tokenomist.ai para la fecha y monto de los próximos unlocks. Cualquier cliff masivo con precio bajo = presión vendedora severa.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-yellow"></div><div class="watch-text"><strong>Predictoor revenue mensual:</strong> Si los ingresos de Predictoor y otros spin-offs superan $500K/mes, el Buyback & Burn empieza a ser materialmente relevante frente a las emisiones. Es el único mecanismo deflacionario activo del protocolo.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-blue"></div><div class="watch-text"><strong>Ocean Nodes Phase 2 — adopción:</strong> Si el número de GPU nodes activos supera 10,000 con workloads de AI reales, valida que el modelo Compute-as-a-Service con privacidad tiene demanda. Seguir en stats de la red oficial.</div></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong style="color:#3b82f6;">TokenFlow AI</strong> · Investigación de tokenómica AI y DePIN · Sin hype. Solo estructura.<br>
+  Fecha del análisis: 22 de mayo de 2026 · Este análisis no constituye asesoramiento de inversión. DYOR.<br>
+  Fuentes: CoinGecko, CoinMarketCap, Messari, Blockworks, coinmetro.com, simpleswap.io, aihaven.com, oceanprotocol.com, datos on-chain
+</div>
+
+</body>
+</html>
