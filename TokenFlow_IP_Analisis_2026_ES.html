@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenFlow AI – Análisis Story Protocol (IP) 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'JetBrains Mono', monospace; background: #0a0e1a; color: #e2e8f0; line-height: 1.7; font-size: 14px; }
+
+  .header { background: linear-gradient(135deg, #0a0e18 0%, #0e1420 50%, #0a0e1a 100%); border-bottom: 1px solid #2a3a5a; padding: 44px 32px 36px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; background: radial-gradient(ellipse, rgba(250,204,21,0.06) 0%, transparent 70%); pointer-events: none; }
+  .brand { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #facc15; margin-bottom: 14px; font-weight: 600; }
+  .title { font-size: 38px; font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -1px; }
+  .title span { color: #facc15; }
+  .subtitle { font-size: 12px; color: #64748b; margin-bottom: 22px; letter-spacing: 1px; }
+  .verdict-badge { display: inline-block; padding: 8px 24px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid; font-family: 'JetBrains Mono', monospace; }
+  .badge-warning { background: #451a03; color: #fb923c; border-color: #9a3412; }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 36px 20px; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 36px; }
+  .stat-card { background: #0d1525; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; text-align: center; }
+  .stat-label { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .stat-value { font-size: 22px; font-weight: 800; color: #f8fafc; }
+  .stat-sub { font-size: 10px; color: #64748b; margin-top: 4px; }
+  .stat-yellow { color: #facc15; }
+  .stat-green { color: #4ade80; }
+  .stat-red { color: #f87171; }
+  .stat-orange { color: #fb923c; }
+
+  .section { background: #0d1525; border: 1px solid #1e293b; border-radius: 8px; padding: 26px; margin-bottom: 18px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #1e293b; }
+  .section-icon { width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .icon-yellow { background: #422006; }
+  .icon-orange { background: #431407; }
+  .icon-red { background: #450a0a; }
+  .icon-green { background: #052e16; }
+  .icon-blue { background: #0c2a47; }
+  .icon-purple { background: #2e1065; }
+  .icon-cyan { background: #083344; }
+  .section-title { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+  .section-tag { font-size: 10px; color: #475569; margin-left: auto; letter-spacing: 1px; text-transform: uppercase; }
+
+  .alloc-table { width: 100%; border-collapse: collapse; }
+  .alloc-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .alloc-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; font-size: 13px; vertical-align: middle; }
+  .alloc-table tr:last-child td { border-bottom: none; }
+  .alloc-bar-wrap { background: #1e293b; border-radius: 2px; height: 5px; width: 90px; display: inline-block; vertical-align: middle; margin-left: 8px; }
+  .alloc-bar { height: 5px; border-radius: 2px; display: block; }
+
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+  .pill-green { background: #052e16; color: #4ade80; }
+  .pill-yellow { background: #422006; color: #fbbf24; }
+  .pill-red { background: #450a0a; color: #f87171; }
+  .pill-orange { background: #431407; color: #fb923c; }
+
+  .pressure-meter { margin: 14px 0; }
+  .meter-label { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+  .meter-bar-wrap { background: #1e293b; border-radius: 3px; height: 10px; overflow: hidden; }
+  .meter-bar { height: 10px; border-radius: 3px; }
+  .meter-green { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .meter-orange { background: linear-gradient(90deg, #ea580c, #fb923c); }
+  .meter-red { background: linear-gradient(90deg, #dc2626, #f87171); }
+  .meter-yellow { background: linear-gradient(90deg, #ca8a04, #fbbf24); }
+  .meter-footer { display: flex; justify-content: space-between; font-size: 10px; color: #475569; margin-top: 4px; }
+
+  .verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .verdict-card { border-radius: 6px; padding: 20px; }
+  .verdict-bull { background: #052e16; border: 1px solid #166534; }
+  .verdict-bear { background: #450a0a; border: 1px solid #7f1d1d; }
+  .verdict-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .verdict-bull .verdict-title { color: #4ade80; }
+  .verdict-bear .verdict-title { color: #f87171; }
+  .verdict-item { font-size: 12px; color: #cbd5e1; margin-bottom: 9px; padding-left: 18px; position: relative; line-height: 1.5; }
+  .verdict-item::before { content: '→'; position: absolute; left: 0; font-weight: 700; }
+  .verdict-bull .verdict-item::before { color: #4ade80; }
+  .verdict-bear .verdict-item::before { color: #f87171; }
+
+  .final-verdict { background: linear-gradient(135deg, #12100a, #0f172a); border: 1px solid #854d0e; border-radius: 8px; padding: 30px; margin-top: 8px; }
+  .final-title { font-size: 11px; color: #facc15; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 14px; font-weight: 700; }
+  .final-score { display: flex; align-items: center; gap: 22px; margin-bottom: 18px; }
+  .score-number { font-size: 68px; font-weight: 900; color: #fb923c; line-height: 1; }
+  .score-label { font-size: 20px; font-weight: 700; color: #f1f5f9; }
+  .score-sub { font-size: 12px; color: #64748b; margin-top: 6px; }
+  .final-text { font-size: 13px; color: #cbd5e1; line-height: 1.9; }
+
+  .watch-item { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid #1e293b; font-size: 13px; }
+  .watch-item:last-child { border-bottom: none; }
+  .watch-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #22c55e; }
+  .dot-orange { background: #f97316; }
+  .watch-text { color: #cbd5e1; }
+  .watch-text strong { color: #f8fafc; }
+
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .comp-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .comp-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; vertical-align: middle; }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table tr.highlight-row { background: #12100a; }
+
+  .note-box { background: #0f0e08; border-left: 3px solid #facc15; border-radius: 0 6px 6px 0; padding: 14px 16px; font-size: 12px; color: #94a3b8; margin: 14px 0; line-height: 1.8; }
+  .note-box.warning { border-left-color: #f59e0b; background: #0d1105; }
+  .note-box.danger { border-left-color: #ef4444; background: #0d0808; }
+  .note-box.success { border-left-color: #22c55e; background: #050f05; }
+
+  .footer { text-align: center; padding: 28px; color: #334155; font-size: 11px; border-top: 1px solid #1e293b; margin-top: 36px; letter-spacing: 0.5px; line-height: 2; }
+
+  @media (max-width: 600px) {
+    .verdict-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .score-number { font-size: 52px; }
+    .title { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">🟡 TokenFlow AI · Investigación de Tokenómica AI</div>
+  <div class="title">Story <span>Protocol</span></div>
+  <div class="subtitle">Análisis completo — La propiedad intelectual en la era de la IA · 5 de junio de 2026</div>
+  <div class="verdict-badge badge-warning">⚠ Narrativa única · Revenue on-chain mínimo · Vesting pesado hasta 2029</div>
+</div>
+
+<div class="container">
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Precio (USD)</div><div class="stat-value stat-yellow">$0.44</div><div class="stat-sub">5 de junio, 2026</div></div>
+    <div class="stat-card"><div class="stat-label">Cap. de Mercado</div><div class="stat-value">~$170M</div><div class="stat-sub">#200+ CoinGecko</div></div>
+    <div class="stat-card"><div class="stat-label">FDV</div><div class="stat-value stat-orange">~$450M</div><div class="stat-sub">Mcap/FDV = 38%</div></div>
+    <div class="stat-card"><div class="stat-label">Desde ATH</div><div class="stat-value stat-red">-97%</div><div class="stat-sub">ATH: $15.02 (feb. 2025)</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Circ.</div><div class="stat-value">~392M</div><div class="stat-sub">38% del máximo</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Máx.</div><div class="stat-value">1,028M</div><div class="stat-sub">Hard cap</div></div>
+    <div class="stat-card"><div class="stat-label">Backers</div><div class="stat-value stat-green">a16z</div><div class="stat-sub">$80M raise — tier 1</div></div>
+    <div class="stat-card"><div class="stat-label">On-chain fees 24h</div><div class="stat-value stat-red">~$0</div><div class="stat-sub">Revenue real: mínimo</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">⚖</div>
+      <div class="section-title">¿Qué es Story Protocol? — La propiedad intelectual programable</div>
+      <div class="section-tag">Propuesta de Valor</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">Story Protocol es una blockchain L1 construida específicamente para tokenizar la propiedad intelectual (IP). La premisa es poderosa: en la era de la IA, los modelos de lenguaje como ChatGPT, Claude y Gemini son entrenados con contenido creado por humanos — libros, artículos, imágenes, música, código — sin que los creadores reciban compensación. Story Protocol propone convertir toda IP en un activo on-chain programable con licencias, atribuciones y royalties automatizados mediante smart contracts.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0;">
+      <div style="background:#12100a;border:1px solid #854d0e;border-radius:6px;padding:16px;">
+        <div style="font-size:11px;color:#facc15;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">IP Assets (IPA)</div>
+        <div style="font-size:12px;color:#94a3b8;line-height:1.6;">Cualquier IP — texto, imagen, música, modelo AI — se registra como un activo on-chain con metadatos de uso, atribución y términos de licencia embebidos directamente en la blockchain.</div>
+      </div>
+      <div style="background:#12100a;border:1px solid #854d0e;border-radius:6px;padding:16px;">
+        <div style="font-size:11px;color:#facc15;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Proof of Creativity</div>
+        <div style="font-size:12px;color:#94a3b8;line-height:1.6;">Protocolo nativo de smart contracts para registrar, licenciar y monetizar IP. Soporta graph data structures para relaciones complejas de derivados — "esta canción sampler a esa, que derivó de aquella".</div>
+      </div>
+      <div style="background:#12100a;border:1px solid #854d0e;border-radius:6px;padding:16px;">
+        <div style="font-size:11px;color:#facc15;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Royalties automáticos</div>
+        <div style="font-size:12px;color:#94a3b8;line-height:1.6;">Cuando una obra derivada genera ingresos, los royalties fluyen automáticamente on-chain a todos los titulares de IP en la cadena de derivación. Sin intermediarios, sin contratos legales manuales.</div>
+      </div>
+      <div style="background:#12100a;border:1px solid #854d0e;border-radius:6px;padding:16px;">
+        <div style="font-size:11px;color:#facc15;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">EVM + Cosmos SDK</div>
+        <div style="font-size:12px;color:#94a3b8;line-height:1.6;">L1 100% compatible con EVM con optimizaciones de capa de ejecución para estructuras de datos complejas (IP graphs). Alta throughput y finalidad rápida para operaciones de IP a escala.</div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <strong>🔑 El caso de uso que nadie está resolviendo bien:</strong> El mercado global de propiedad intelectual vale ~$3 trillones anuales. La IA está consumiendo ese contenido sin compensar a los creadores. Story Protocol no necesita crear ese mercado — solo necesita capturar una fracción de él on-chain. Si el 1% de las licencias de IP del mundo fluyen a través de Story Protocol, el revenue sería de $30,000M. El problema es que "si" es el mayor "si" del análisis.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-orange">📊</div>
+      <div class="section-title">Estructura del suministro — Vesting hasta 2029</div>
+      <div class="section-tag">Supply Analysis</div>
+    </div>
+
+    <table class="alloc-table">
+      <thead>
+        <tr><th>Categoría</th><th>% Supply</th><th>Tokens</th><th>Vesting</th><th>Riesgo</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Ecosystem Fund</strong></td>
+          <td>38.4% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:100%;background:#facc15;"></div></div></td>
+          <td>~394M IP</td>
+          <td><span class="status-pill pill-yellow">Gradual — gobernanza</span></td>
+          <td>Moderado — discrecional</td>
+        </tr>
+        <tr>
+          <td><strong>Early Backers (VCs)</strong></td>
+          <td>21.6% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:56%;background:#ef4444;"></div></div></td>
+          <td>~222M IP</td>
+          <td><span class="status-pill pill-red">Linear 48m — vence ene. 2029</span></td>
+          <td style="color:#f87171;">⚠ Presión continua hasta 2029</td>
+        </tr>
+        <tr>
+          <td><strong>Core Contributors</strong></td>
+          <td>20% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:52%;background:#f97316;"></div></div></td>
+          <td>~205M IP</td>
+          <td><span class="status-pill pill-orange">Linear 48m — vence ene. 2029</span></td>
+          <td style="color:#fb923c;">⚠ Mismo calendario</td>
+        </tr>
+        <tr>
+          <td><strong>Circulante actual</strong></td>
+          <td>38% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:38%;background:#4ade80;"></div></div></td>
+          <td>~392M IP</td>
+          <td><span class="status-pill pill-green">En mercado</span></td>
+          <td>Supply líquido activo</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box warning" style="margin-top:16px;">
+      <strong>⚠ Actualización feb. 2026 — unlocks retrasados 6 meses:</strong> La Story Foundation retrasó algunos desbloqueos de Early Backers y Core Contributors por 6 meses adicionales. Señal positiva de gestión responsable, pero el vesting lineal de 48 meses desde enero 2025 sigue activo. Significa que hasta enero 2029 hay presión constante de ~8-10M IP nuevos por mes llegando al mercado.
+    </div>
+
+    <div class="pressure-meter">
+      <div class="meter-label">Presión de vesting — Early Backers + Core Contributors (41.6% del supply)</div>
+      <div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:80%;"></div></div>
+      <div class="meter-footer"><span>Baja</span><span style="color:#f87171;">🔴 Alta — liberación continua hasta enero 2029</span><span>Máxima</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">⚠</div>
+      <div class="section-title">Las señales de alarma — Lo que el mercado ya vio</div>
+      <div class="section-tag">Riesgos 2025–2026</div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div style="background:#1a0808;border:1px solid #7f1d1d;border-radius:6px;padding:14px;">
+        <div style="font-size:11px;color:#f87171;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">🔴 Co-fundador Jason Zhao — agosto 2025</div>
+        <div style="font-size:12px;color:#cbd5e1;">Jason Zhao, co-fundador y CTO, dejó el proyecto. En proyectos early-stage, la salida de un co-fundador es una señal que el mercado no ignora fácilmente.</div>
+      </div>
+      <div style="background:#1a0808;border:1px solid #7f1d1d;border-radius:6px;padding:14px;">
+        <div style="font-size:11px;color:#f87171;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">🔴 PIP Labs 10% staff reduction — marzo 2026</div>
+        <div style="font-size:12px;color:#cbd5e1;">El equipo de desarrollo PIP Labs redujo su plantilla un 10%. Aunque fue parte de recortes generales en el sector crypto, no ayuda al momentum de un proyecto que necesita escalar adopción.</div>
+      </div>
+      <div style="background:#1a0808;border:1px solid #7f1d1d;border-radius:6px;padding:14px;">
+        <div style="font-size:11px;color:#f87171;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">🔴 On-chain fees: ~$0 en períodos medidos</div>
+        <div style="font-size:12px;color:#cbd5e1;">Un informe documentó $2 en fees de 24 horas. Para un L1 que promete capturar el mercado global de IP, este dato es el mayor gap entre narrativa y realidad del proyecto.</div>
+      </div>
+      <div style="background:#1a0a0a;border:1px solid #9a341244;border-radius:6px;padding:14px;">
+        <div style="font-size:11px;color:#fb923c;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">⚠ KuCoin delisting de margin trading — abril 2026</div>
+        <div style="font-size:12px;color:#cbd5e1;">KuCoin eliminó IP de su plataforma de margin trading. Señal de liquidez reducida y menor interés especulativo en los mercados de derivados.</div>
+      </div>
+    </div>
+
+    <div class="note-box danger">
+      <strong>⚠ La paradoja del proyecto:</strong> Story Protocol tiene respaldo de a16z ($80M), tecnología interesante, y la narrativa perfecta para el momento AI. Y sin embargo: co-fundador saliente, reducción de equipo, fees on-chain prácticamente inexistentes, y -97% desde el ATH. El mercado ya ha votado. La pregunta es si la narrativa puede finalmente convertirse en adopción real.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">✅</div>
+      <div class="section-title">Lo que sí funciona — Credenciales reales</div>
+      <div class="section-tag">Fundamentales Positivos</div>
+    </div>
+
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Respaldo institucional</div><div class="stat-value stat-green">a16z</div><div class="stat-sub">$80M — tier 1 VC</div></div>
+      <div class="stat-card"><div class="stat-label">Validator NASDAQ</div><div class="stat-value stat-yellow">IP Strategy</div><div class="stat-sub">257K IP/mes, 99.98% uptime</div></div>
+      <div class="stat-card"><div class="stat-label">Partnership</div><div class="stat-value" style="font-size:14px;">Barunson</div><div class="stat-sub">nPLUG remixing platform</div></div>
+      <div class="stat-card"><div class="stat-label">Mercado objetivo</div><div class="stat-value stat-yellow">$3T</div><div class="stat-sub">IP global anual</div></div>
+    </div>
+
+    <div class="note-box success">
+      <strong>✅ IP Strategy Holdings — el validador NASDAQ:</strong> Una empresa cotizada en NASDAQ opera como validador de Story Protocol, ganando 257,000 IP tokens mensuales con márgenes brutos del 90%+. Es el mismo modelo que Axe Compute en Aethir — una entidad institucional generando ingresos reales sobre la infraestructura del protocolo. Si Story Protocol escala, más empresas seguirán este modelo.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">⚔</div>
+      <div class="section-title">Posicionamiento competitivo</div>
+      <div class="section-tag">Panorama IP + AI</div>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr><th>Proyecto</th><th>Enfoque</th><th>Mcap</th><th>vs. Story (IP)</th></tr>
+      </thead>
+      <tbody>
+        <tr class="highlight-row">
+          <td><strong style="color:#facc15;">🟡 Story Protocol (IP)</strong></td>
+          <td>IP tokenization L1</td>
+          <td>~$170M</td>
+          <td>— Único L1 específico para IP</td>
+        </tr>
+        <tr>
+          <td><strong>Ocean Protocol (OCEAN)</strong></td>
+          <td>Datos privados + compute</td>
+          <td>~$25M</td>
+          <td>Complementario — datos vs. derechos de uso</td>
+        </tr>
+        <tr>
+          <td><strong>GRASS</strong></td>
+          <td>Web scraping → AI data</td>
+          <td>~$187M</td>
+          <td>Datos sin derechos vs. IP con derechos</td>
+        </tr>
+        <tr>
+          <td><strong>Audius (AUDIO)</strong></td>
+          <td>Música descentralizada</td>
+          <td>~$100M</td>
+          <td>Nicho musical vs. IP general</td>
+        </tr>
+        <tr>
+          <td><strong>Regulación tradicional</strong></td>
+          <td>Copyright legal</td>
+          <td>Sistema $3T</td>
+          <td>Story quiere reemplazarlo parcialmente</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box" style="margin-top:16px;">
+      <strong>Ventaja real de Story:</strong> No hay otro L1 específicamente diseñado para IP programmable a esta escala y con este respaldo. El moat es narrativo y técnico — pero solo se convierte en ventaja competitiva real cuando los primeros casos de uso enterprise lleguen. Hasta entonces, es potencial sin tracción verificable.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📉</div>
+      <div class="section-title">Estructura técnica — El -97% que define el contexto</div>
+      <div class="section-tag">Estructura de Precio</div>
+    </div>
+
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Precio vs ATH</div><div class="stat-value stat-red">-97%</div><div class="stat-sub">ATH: $15.02 (feb. 2025)</div></div>
+      <div class="stat-card"><div class="stat-label">Mcap/FDV</div><div class="stat-value stat-orange">38%</div><div class="stat-sub">62% por desbloquear</div></div>
+      <div class="stat-card"><div class="stat-label">Soporte</div><div class="stat-value">$0.40</div><div class="stat-sub">ATL reciente</div></div>
+      <div class="stat-card"><div class="stat-label">Volumen 24h</div><div class="stat-value">~$30M</div><div class="stat-sub">Liquidez moderada</div></div>
+    </div>
+
+    <div class="pressure-meter"><div class="meter-label">Desde ATH (-97% — entre los más severos del sector AI)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:96%;"></div></div><div class="meter-footer"><span>ATH $15</span><span style="color:#f87171;">🔴 -97% — corrección histórica extrema</span><span>ATL</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Revenue on-chain real (fees prácticamente inexistentes)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:2%;"></div></div><div class="meter-footer"><span>$0</span><span style="color:#f87171;">🔴 Uso real mínimo — gap narrativa vs realidad</span><span>$1M+/día</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Mcap/FDV vs. sector (38% — mismo nivel que io.net)</div><div class="meter-bar-wrap"><div class="meter-bar meter-orange" style="width:38%;"></div></div><div class="meter-footer"><span>0%</span><span style="color:#fb923c;">⚠ 62% del supply aún por desbloquear hasta 2029</span><span>100%</span></div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">⚖</div>
+      <div class="section-title">Argumentos alcistas vs. bajistas</div>
+      <div class="section-tag">Veredicto TokenFlow</div>
+    </div>
+
+    <div class="verdict-grid">
+      <div class="verdict-card verdict-bull">
+        <div class="verdict-title">🟢 Argumentos alcistas</div>
+        <div class="verdict-item">Mercado objetivo de $3T — capturar el 0.1% ya justificaría el Mcap</div>
+        <div class="verdict-item">a16z backing $80M — el VC más relevante del sector crypto/AI</div>
+        <div class="verdict-item">Único L1 específico para IP programmable — no hay competidor directo</div>
+        <div class="verdict-item">IP Strategy Holdings en NASDAQ — validador institucional con márgenes 90%+</div>
+        <div class="verdict-item">Regulación AI (Copyright Office EE.UU.) como tailwind estructural</div>
+        <div class="verdict-item">Mcap $170M — asimetría alta si escala el uso</div>
+        <div class="verdict-item">Unlocks retrasados feb. 2026 — gestión responsable de supply</div>
+        <div class="verdict-item">Hard cap 1B — sin inflación perpetua</div>
+      </div>
+      <div class="verdict-card verdict-bear">
+        <div class="verdict-title">🔴 Argumentos bajistas</div>
+        <div class="verdict-item">On-chain fees ~$0 — gap enorme entre narrativa y uso real</div>
+        <div class="verdict-item">-97% desde ATH — corrección histórica extrema</div>
+        <div class="verdict-item">Co-fundador Jason Zhao salió agosto 2025</div>
+        <div class="verdict-item">PIP Labs 10% staff reduction marzo 2026</div>
+        <div class="verdict-item">62% supply por desbloquear — vesting hasta enero 2029</div>
+        <div class="verdict-item">KuCoin eliminó margin trading de IP — liquidez reducida</div>
+        <div class="verdict-item">Adopción enterprise lenta — casos de uso verificables mínimos</div>
+        <div class="verdict-item">Mcap/FDV = 38% — dilución estructural hasta 2029</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="final-verdict">
+    <div class="final-title">TokenFlow AI · Veredicto Final</div>
+    <div class="final-score">
+      <div class="score-number">4</div>
+      <div>
+        <div class="score-label">Narrativa real · Ejecución ausente</div>
+        <div class="score-sub">sobre 10 · El mercado de $3T existe — pero Story aún no lo está capturando</div>
+      </div>
+    </div>
+    <div class="final-text">
+      Story Protocol tiene la narrativa más legítima del sector AI que no hemos analizado antes. La premisa es correcta: los modelos de IA consumen contenido humano para entrenarse, y los creadores no reciben compensación. La propiedad intelectual programable on-chain es una solución real a un problema real. El respaldo de a16z con $80M y la existencia de IP Strategy Holdings como validador NASDAQ confirman que hay capital institucional serio detrás.<br><br>
+      El problema es que entre la narrativa y el revenue hay un abismo. Fees on-chain prácticamente inexistentes en un L1 que promete capturar el mercado global de IP es la señal más honesta que puede dar una red sobre su estado real de adopción. La salida del co-fundador y la reducción de equipo en 2025-2026 añaden incertidumbre sobre la ejecución.<br><br>
+      El vesting lineal de 48 meses para Early Backers y Core Contributors — que termina en enero 2029 — garantiza una presión vendedora continua de ~8-10M tokens mensuales durante los próximos tres años. Sin revenue real que justifique demanda de compra, esa presión empuja el precio estructuralmente hacia abajo.<br><br>
+      <strong>¿Qué cambiaría el veredicto?</strong> Un partnership enterprise verificable donde una empresa Fortune 500 o un estudio importante licencie su IP a modelos AI a través de Story Protocol — con fees on-chain medibles. Ese momento convertiría la narrativa en fundamental, y el Mcap de $170M frente a un mercado de $3T tendría asimetría real. Hasta entonces, es una apuesta especulativa sobre adopción futura, no un activo respaldado por uso presente.
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:20px;">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">👁</div>
+      <div class="section-title">Qué vigilar en los próximos 30–90 días</div>
+      <div class="section-tag">Lista de Monitoreo</div>
+    </div>
+    <div class="watch-item"><div class="watch-dot dot-yellow"></div><div class="watch-text"><strong>On-chain fees diarios:</strong> El indicador más directo de adopción real. Si las fees superan $10,000/día de forma sostenida, el gap narrativa-realidad empieza a cerrarse. Seguir en el explorador oficial de Story Network.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Partnership enterprise verificable:</strong> Un acuerdo con un estudio, editorial, label musical o empresa AI que use Story Protocol para licenciar contenido real. Este es el catalizador narrativo más importante posible. Sin él, el proyecto permanece en fase de promesa.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-red"></div><div class="watch-text"><strong>Vesting mensual — Early Backers y Core Contributors:</strong> Seguir en tokenomist.ai los desbloqueos mensuales exactos. Con el retraso de 6 meses de febrero 2026, algunos unlocks se concentran en períodos específicos. Identificar los meses de mayor presión vendedora.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-orange"></div><div class="watch-text"><strong>Nuevo liderazgo técnico:</strong> Tras la salida del co-fundador Jason Zhao, cualquier anuncio de CTO o liderazgo técnico de perfil alto es señal de estabilización del equipo. Lo contrario — más salidas — sería una señal de alerta severa.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-yellow"></div><div class="watch-text"><strong>Regulación copyright AI (Copyright Office EE.UU.):</strong> Si el gobierno estadounidense establece que los modelos AI deben compensar a los creadores cuyo contenido usaron para entrenamiento, Story Protocol pasa de solución opcional a solución necesaria. Seguir los reportes del U.S. Copyright Office sobre AI.</div></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong style="color:#facc15;">TokenFlow AI</strong> · Investigación de tokenómica AI y DePIN · Sin hype. Solo estructura.<br>
+  Fecha del análisis: 5 de junio de 2026 · Este análisis no constituye asesoramiento de inversión. DYOR.<br>
+  Fuentes: CoinGecko, CoinMarketCap, ventureburn.com, coinmarketcap.com/cmc-ai, cryptorank.io, CryptoRank, story.foundation, datos on-chain
+</div>
+
+</body>
+</html>
