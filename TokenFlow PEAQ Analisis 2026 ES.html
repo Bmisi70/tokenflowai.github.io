@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenFlow AI – Análisis Peaq Network (PEAQ) 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'JetBrains Mono', monospace; background: #0a0e1a; color: #e2e8f0; line-height: 1.7; font-size: 14px; }
+
+  .header { background: linear-gradient(135deg, #080e12 0%, #0c1a1e 50%, #0a0e1a 100%); border-bottom: 1px solid #1a3a3a; padding: 44px 32px 36px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; background: radial-gradient(ellipse, rgba(20,184,166,0.07) 0%, transparent 70%); pointer-events: none; }
+  .brand { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #14b8a6; margin-bottom: 14px; font-weight: 600; }
+  .title { font-size: 38px; font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -1px; }
+  .title span { color: #14b8a6; }
+  .subtitle { font-size: 12px; color: #64748b; margin-bottom: 22px; letter-spacing: 1px; }
+  .verdict-badge { display: inline-block; padding: 8px 24px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid; font-family: 'JetBrains Mono', monospace; }
+  .badge-warning { background: #451a03; color: #fb923c; border-color: #9a3412; }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 36px 20px; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 36px; }
+  .stat-card { background: #0d1525; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; text-align: center; }
+  .stat-label { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .stat-value { font-size: 22px; font-weight: 800; color: #f8fafc; }
+  .stat-sub { font-size: 10px; color: #64748b; margin-top: 4px; }
+  .stat-teal { color: #14b8a6; }
+  .stat-green { color: #4ade80; }
+  .stat-yellow { color: #fbbf24; }
+  .stat-red { color: #f87171; }
+  .stat-orange { color: #fb923c; }
+
+  .section { background: #0d1525; border: 1px solid #1e293b; border-radius: 8px; padding: 26px; margin-bottom: 18px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #1e293b; }
+  .section-icon { width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .icon-teal { background: #0f2a28; }
+  .icon-orange { background: #431407; }
+  .icon-red { background: #450a0a; }
+  .icon-yellow { background: #422006; }
+  .icon-blue { background: #0c2a47; }
+  .icon-green { background: #052e16; }
+  .icon-purple { background: #2e1065; }
+  .section-title { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+  .section-tag { font-size: 10px; color: #475569; margin-left: auto; letter-spacing: 1px; text-transform: uppercase; }
+
+  .use-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .use-card { background: #0a1a1a; border: 1px solid #134e4a; border-radius: 6px; padding: 14px; }
+  .use-card-title { font-size: 11px; color: #14b8a6; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .use-card-text { font-size: 12px; color: #94a3b8; line-height: 1.6; }
+
+  .alloc-table { width: 100%; border-collapse: collapse; }
+  .alloc-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .alloc-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; font-size: 13px; vertical-align: middle; }
+  .alloc-table tr:last-child td { border-bottom: none; }
+  .alloc-bar-wrap { background: #1e293b; border-radius: 2px; height: 5px; width: 90px; display: inline-block; vertical-align: middle; margin-left: 8px; }
+  .alloc-bar { height: 5px; border-radius: 2px; display: block; }
+
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+  .pill-green { background: #052e16; color: #4ade80; }
+  .pill-yellow { background: #422006; color: #fbbf24; }
+  .pill-red { background: #450a0a; color: #f87171; }
+  .pill-teal { background: #0f2a28; color: #14b8a6; }
+
+  .pressure-meter { margin: 14px 0; }
+  .meter-label { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+  .meter-bar-wrap { background: #1e293b; border-radius: 3px; height: 10px; overflow: hidden; }
+  .meter-bar { height: 10px; border-radius: 3px; }
+  .meter-green { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .meter-orange { background: linear-gradient(90deg, #ea580c, #fb923c); }
+  .meter-red { background: linear-gradient(90deg, #dc2626, #f87171); }
+  .meter-teal { background: linear-gradient(90deg, #0f766e, #14b8a6); }
+  .meter-yellow { background: linear-gradient(90deg, #ca8a04, #fbbf24); }
+  .meter-footer { display: flex; justify-content: space-between; font-size: 10px; color: #475569; margin-top: 4px; }
+
+  .verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .verdict-card { border-radius: 6px; padding: 20px; }
+  .verdict-bull { background: #052e16; border: 1px solid #166534; }
+  .verdict-bear { background: #450a0a; border: 1px solid #7f1d1d; }
+  .verdict-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .verdict-bull .verdict-title { color: #4ade80; }
+  .verdict-bear .verdict-title { color: #f87171; }
+  .verdict-item { font-size: 12px; color: #cbd5e1; margin-bottom: 9px; padding-left: 18px; position: relative; line-height: 1.5; }
+  .verdict-item::before { content: '→'; position: absolute; left: 0; font-weight: 700; }
+  .verdict-bull .verdict-item::before { color: #4ade80; }
+  .verdict-bear .verdict-item::before { color: #f87171; }
+
+  .final-verdict { background: linear-gradient(135deg, #080e12, #0f172a); border: 1px solid #0f766e; border-radius: 8px; padding: 30px; margin-top: 8px; }
+  .final-title { font-size: 11px; color: #14b8a6; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 14px; font-weight: 700; }
+  .final-score { display: flex; align-items: center; gap: 22px; margin-bottom: 18px; }
+  .score-number { font-size: 68px; font-weight: 900; color: #fbbf24; line-height: 1; }
+  .score-label { font-size: 20px; font-weight: 700; color: #f1f5f9; }
+  .score-sub { font-size: 12px; color: #64748b; margin-top: 6px; }
+  .final-text { font-size: 13px; color: #cbd5e1; line-height: 1.9; }
+
+  .watch-item { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid #1e293b; font-size: 13px; }
+  .watch-item:last-child { border-bottom: none; }
+  .watch-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #22c55e; }
+  .dot-teal { background: #14b8a6; }
+  .watch-text { color: #cbd5e1; }
+  .watch-text strong { color: #f8fafc; }
+
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .comp-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .comp-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; vertical-align: middle; }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table tr.highlight-row { background: #0a1a1a; }
+
+  .note-box { background: #060f0e; border-left: 3px solid #14b8a6; border-radius: 0 6px 6px 0; padding: 14px 16px; font-size: 12px; color: #94a3b8; margin: 14px 0; line-height: 1.8; }
+  .note-box.warning { border-left-color: #f59e0b; background: #0d1105; }
+  .note-box.danger { border-left-color: #ef4444; background: #0d0808; }
+  .note-box.success { border-left-color: #22c55e; background: #050f05; }
+
+  .footer { text-align: center; padding: 28px; color: #334155; font-size: 11px; border-top: 1px solid #1e293b; margin-top: 36px; letter-spacing: 0.5px; line-height: 2; }
+
+  @media (max-width: 600px) {
+    .verdict-grid, .use-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .score-number { font-size: 52px; }
+    .title { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">🟢 TokenFlow AI · Investigación de Tokenómica DePIN</div>
+  <div class="title">Peaq <span>Network</span></div>
+  <div class="subtitle">Análisis completo — La blockchain de la Economía de Máquinas · 13 de junio de 2026</div>
+  <div class="verdict-badge badge-warning">⚠ Narrativa robotics sólida · Revenue mínimo · Unlock jun. 12 · Largo plazo especulativo</div>
+</div>
+
+<div class="container">
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Precio (USD)</div><div class="stat-value stat-teal">$0.022</div><div class="stat-sub">13 de junio, 2026</div></div>
+    <div class="stat-card"><div class="stat-label">Cap. de Mercado</div><div class="stat-value">~$53M</div><div class="stat-sub">#500+ CoinGecko</div></div>
+    <div class="stat-card"><div class="stat-label">FDV</div><div class="stat-value stat-yellow">~$107M</div><div class="stat-sub">Mcap/FDV = ~50%</div></div>
+    <div class="stat-card"><div class="stat-label">Desde ATH</div><div class="stat-value stat-red">-97%</div><div class="stat-sub">ATH: $0.75 (ago. 2024)</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Circ.</div><div class="stat-value">2.22B</div><div class="stat-sub">50% del máximo</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Máx.</div><div class="stat-value">4.41B</div><div class="stat-sub">Desinflacionario 3.5%→1%</div></div>
+    <div class="stat-card"><div class="stat-label">PEAQ stakeado</div><div class="stat-value stat-green">~40%</div><div class="stat-sub">1.7B PEAQ bloqueado</div></div>
+    <div class="stat-card"><div class="stat-label">Revenue 24h</div><div class="stat-value stat-red">$37</div><div class="stat-sub">On-chain fees — mínimo</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-teal">🤖</div>
+      <div class="section-title">¿Qué es Peaq Network? — La blockchain de la Economía de Máquinas</div>
+      <div class="section-tag">Arquitectura Core</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">Peaq Network es el único L1 blockchain diseñado específicamente para la Economía de Máquinas — el modelo económico donde robots, vehículos autónomos, drones y dispositivos IoT actúan como agentes económicos independientes. Una entrega de robot de Serve Robotics puede recibir pago en USDT directamente on-chain. Un panel solar puede vender energía a su vecino sin intermediario. Un coche autónomo puede pagar su propio estacionamiento. Eso es la visión de Peaq.</p>
+
+    <div class="use-grid">
+      <div class="use-card">
+        <div class="use-card-title">🚗 Movilidad</div>
+        <div class="use-card-text">Vehículos autónomos con identidad on-chain, pagos de parking y peajes, coordinación V2V. Tesla, Figure y Unitree escalan producción en 2026.</div>
+      </div>
+      <div class="use-card">
+        <div class="use-card-title">⚡ Energía</div>
+        <div class="use-card-text">Paneles solares y baterías como RWAs que venden energía peer-to-peer. Sin grid centralizada como intermediaria. Primer robo-farm tokenizado en Hong Kong.</div>
+      </div>
+      <div class="use-card">
+        <div class="use-card-title">🤖 Robótica</div>
+        <div class="use-card-text">Serve Robotics demo (mayo 2026): robot navigó Seúl y recibió pago USDT on-chain via peaqOS. Initial Machine Offerings (IMOs) tokeniza robots como RWAs yield-bearing.</div>
+      </div>
+      <div class="use-card">
+        <div class="use-card-title">📡 Conectividad</div>
+        <div class="use-card-text">60+ DePINs en 22 industrias. Integración Mastercard y Bosch. MOU con Dubai VARA para sandbox regulatorio de la Machine Economy.</div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <strong>🔑 La propuesta única de Peaq:</strong> Mientras NEAR, Ethereum y Solana son blockchains de propósito general, Peaq es la única L1 con primitivas nativas para la economía de máquinas: Machine IDs (identidad verificable para dispositivos), Machine NFTs (dispositivos como activos tokenizados), peaqOS (sistema operativo para máquinas), y pagos M2M (machine-to-machine) con liquidación instantánea. Nadie más tiene este stack completo en producción.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">📊</div>
+      <div class="section-title">Tokenómica — Desinflacionario con unlock en curso</div>
+      <div class="section-tag">Supply Analysis</div>
+    </div>
+
+    <table class="alloc-table">
+      <thead>
+        <tr><th>Categoría</th><th>% Supply</th><th>Tokens</th><th>Estado</th><th>Riesgo</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Community + Ecosystem</strong></td>
+          <td>~35% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:100%;background:#14b8a6;"></div></div></td>
+          <td>~1.54B PEAQ</td>
+          <td><span class="status-pill pill-green">Gradual — staking rewards</span></td>
+          <td style="color:#4ade80;">✅ Incentivo red — bajo riesgo</td>
+        </tr>
+        <tr>
+          <td><strong>Investors (VCs)</strong></td>
+          <td>~22% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:63%;background:#ef4444;"></div></div></td>
+          <td>~970M PEAQ</td>
+          <td><span class="status-pill pill-red">Vesting activo — hasta 2027</span></td>
+          <td style="color:#f87171;">⚠ Principal presión vendedora</td>
+        </tr>
+        <tr>
+          <td><strong>Core Contributors</strong></td>
+          <td>~21% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:60%;background:#f97316;"></div></div></td>
+          <td>~926M PEAQ</td>
+          <td><span class="status-pill pill-yellow">Vesting activo — hasta 2027</span></td>
+          <td style="color:#fb923c;">⚠ Mismo calendario</td>
+        </tr>
+        <tr>
+          <td><strong>Stakeado actualmente</strong></td>
+          <td>~40% del circ. <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:40%;background:#4ade80;"></div></div></td>
+          <td>~1.7B PEAQ</td>
+          <td><span class="status-pill pill-green">Bloqueado en red</span></td>
+          <td style="color:#4ade80;">✅ Reduce supply líquido efectivo</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div style="background:#1a0808;border:1px solid #7f1d1d;border-radius:6px;padding:14px;margin-top:16px;">
+      <div style="font-size:11px;color:#f87171;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">🔴 Unlock 12 de junio 2026 — 84.84M PEAQ ($1.91M)</div>
+      <div style="font-size:12px;color:#cbd5e1;line-height:1.6;">Inversores: 58.88M PEAQ ($1.33M) + Core Contributors: 23.33M ($525K) + Network Security: 2.63M ($59K). Representa el 3.17% del supply total. Impacto moderado dado el precio bajo — pero señal de presión vendedora continua hasta 2027.</div>
+    </div>
+
+    <div class="note-box" style="margin-top:14px;">
+      <strong>📌 Modelo desinflacionario — el aspecto tokenómico positivo:</strong> A diferencia de la mayoría de proyectos DePIN con inflación fija, Peaq tiene un modelo desinflacionario: empieza en 3.5% anual, se reduce un 10% cada año hasta estabilizarse en 1%. Con el 40% del circulante ya stakeado (1.7B PEAQ), el supply líquido real es de ~1.3B PEAQ — lo que da al modelo más resiliencia de la que parece en papel.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-orange">⚡</div>
+      <div class="section-title">Hitos recientes — La red que está construyendo antes del boom</div>
+      <div class="section-tag">Ejecución 2025–2026</div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px;margin:16px 0;">
+      <div style="display:flex;gap:14px;padding:12px 0;border-bottom:1px solid #1e293b;">
+        <div style="font-size:10px;color:#14b8a6;font-weight:700;min-width:100px;padding-top:2px;">OCT 2025</div>
+        <div style="font-size:12px;color:#cbd5e1;"><strong>MOU con Dubai VARA:</strong> Acuerdo regulatorio para Machine Economy Free Zone en UAE. Primera regulación específica para on-chain robotics en el mundo. Sandbox regulatorio + guidelines para tokenización de máquinas.</div>
+      </div>
+      <div style="display:flex;gap:14px;padding:12px 0;border-bottom:1px solid #1e293b;">
+        <div style="font-size:10px;color:#14b8a6;font-weight:700;min-width:100px;padding-top:2px;">DIC 2025</div>
+        <div style="font-size:12px;color:#cbd5e1;"><strong>Primer robo-farm tokenizado (Hong Kong):</strong> Granja robótica donde cada robot es un Machine NFT que genera yield para sus holders. Primer caso de uso real de "Robotics-as-a-RWA" en producción.</div>
+      </div>
+      <div style="display:flex;gap:14px;padding:12px 0;border-bottom:1px solid #1e293b;">
+        <div style="font-size:10px;color:#14b8a6;font-weight:700;min-width:100px;padding-top:2px;">MAY 12, 2026</div>
+        <div style="font-size:12px;color:#cbd5e1;"><strong>Serve Robotics demo (Seúl):</strong> Robot de reparto navegó un entorno urbano simulado usando NAVER Maps y recibió pago en USDT on-chain via peaqOS + Tether WDK + Solana. Primera demostración de "pay-per-skill robotics" on-chain.</div>
+      </div>
+      <div style="display:flex;gap:14px;padding:12px 0;">
+        <div style="font-size:10px;color:#14b8a6;font-weight:700;min-width:100px;padding-top:2px;">MAY 14, 2026</div>
+        <div style="font-size:12px;color:#cbd5e1;"><strong>Initial Machine Offerings (IMOs) con CoinList:</strong> Los robots se tokenizan como activos yield-bearing. Los inversores pueden co-poseer una flota robótica y recibir pagos por sus servicios. Concepto nuevo: Robotics-as-a-RWA.</div>
+      </div>
+    </div>
+
+    <div class="note-box warning">
+      <strong>⚠ El gap entre visión y métricas actuales:</strong> $37 en fees diarias on-chain es el número más honesto del análisis. Con 60+ DePINs, demos impresionantes y partnerships con Mastercard y Bosch — la adopción real en transacciones económicas on-chain es aún mínima. La Serve Robotics demo fue en un entorno simulado, no en producción real. Esta brecha entre el potencial narrativo y el uso actual es el riesgo central de Peaq hoy.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">⚔</div>
+      <div class="section-title">Posicionamiento competitivo</div>
+      <div class="section-tag">Machine Economy Sector</div>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr><th>Proyecto</th><th>Enfoque</th><th>Mcap</th><th>vs. PEAQ</th></tr>
+      </thead>
+      <tbody>
+        <tr class="highlight-row">
+          <td><strong style="color:#14b8a6;">🟢 Peaq Network (PEAQ)</strong></td>
+          <td>Machine Economy L1</td>
+          <td>~$53M</td>
+          <td>— Único L1 nativo para máquinas</td>
+        </tr>
+        <tr>
+          <td><strong>IOTA</strong></td>
+          <td>IoT + Machine transactions</td>
+          <td>~$800M</td>
+          <td>15x mayor Mcap — más establecido pero menos DePIN</td>
+        </tr>
+        <tr>
+          <td><strong>Helium (HNT)</strong></td>
+          <td>DePIN wireless</td>
+          <td>~$197M</td>
+          <td>Conectividad para las máquinas — complementario</td>
+        </tr>
+        <tr>
+          <td><strong>NEAR Protocol</strong></td>
+          <td>L1 AI-native</td>
+          <td>$1.9B</td>
+          <td>Infraestructura donde Peaq puede construir</td>
+        </tr>
+        <tr>
+          <td><strong>VeChain (VET)</strong></td>
+          <td>Supply chain + IoT</td>
+          <td>~$3B</td>
+          <td>Enterprise IoT — menos machine economy pura</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box" style="margin-top:16px;">
+      <strong>Ventaja real de Peaq:</strong> La combinación de Machine IDs + Machine NFTs + peaqOS + IMOs es única en el sector. Nadie más ha tokenizado un robo-farm, lanzado IMOs para robots como RWAs yield-bearing, o conseguido un MOU con una autoridad regulatoria (VARA) para on-chain robotics. El timing es clave: humanoid robots de Tesla, Figure y 1X están escalando a decenas de miles de unidades en 2026-2027. Cuando escalen, necesitarán exactamente la infraestructura que Peaq está construyendo hoy.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📉</div>
+      <div class="section-title">Estructura técnica y contexto de precio</div>
+      <div class="section-tag">Estructura de Precio</div>
+    </div>
+
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Precio vs ATH</div><div class="stat-value stat-red">-97%</div><div class="stat-sub">ATH: $0.75 (ago. 2024)</div></div>
+      <div class="stat-card"><div class="stat-label">IEO price</div><div class="stat-value stat-orange">$0.079</div><div class="stat-sub">ROI actual: 0.28x</div></div>
+      <div class="stat-card"><div class="stat-label">Soporte</div><div class="stat-value">$0.018</div><div class="stat-sub">ATL reciente</div></div>
+      <div class="stat-card"><div class="stat-label">Volumen 24h</div><div class="stat-value">$4.4M</div><div class="stat-sub">Liquidez moderada</div></div>
+    </div>
+
+    <div class="pressure-meter"><div class="meter-label">Desde ATH (-97% — entre los más severos del sector DePIN)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:96%;"></div></div><div class="meter-footer"><span>ATH</span><span style="color:#f87171;">🔴 -97% — corrección extrema post-TGE</span><span>ATL</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Revenue on-chain ($37/día — gap crítico con narrativa)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:1%;"></div></div><div class="meter-footer"><span>$0</span><span style="color:#f87171;">🔴 Revenue prácticamente inexistente</span><span>$1M+/día</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Staking rate (40% del circulante bloqueado — positivo)</div><div class="meter-bar-wrap"><div class="meter-bar meter-teal" style="width:40%;"></div></div><div class="meter-footer"><span>0%</span><span style="color:#14b8a6;font-weight:700;">✅ 40% stakeado — reduce presión vendedora</span><span>100%</span></div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">⚖</div>
+      <div class="section-title">Argumentos alcistas vs. bajistas</div>
+      <div class="section-tag">Veredicto TokenFlow</div>
+    </div>
+
+    <div class="verdict-grid">
+      <div class="verdict-card verdict-bull">
+        <div class="verdict-title">🟢 Argumentos alcistas</div>
+        <div class="verdict-item">Único L1 con primitivas nativas para economía de máquinas</div>
+        <div class="verdict-item">IMOs — primera tokenización de robots como RWAs yield-bearing</div>
+        <div class="verdict-item">Dubai VARA MOU — primer sandbox regulatorio para on-chain robotics</div>
+        <div class="verdict-item">Mastercard + Bosch — validación enterprise real</div>
+        <div class="verdict-item">Humanoid robotics escalando (Tesla, Figure, 1X) — tailwind masivo 2026-2027</div>
+        <div class="verdict-item">Modelo desinflacionario 3.5%→1% — inflación decreciente</div>
+        <div class="verdict-item">40% stakeado — supply líquido muy reducido</div>
+        <div class="verdict-item">Mcap $53M — asimetría extrema si el caso de uso escala</div>
+      </div>
+      <div class="verdict-card verdict-bear">
+        <div class="verdict-title">🔴 Argumentos bajistas</div>
+        <div class="verdict-item">Revenue on-chain $37/día — el gap más grande entre narrativa y realidad</div>
+        <div class="verdict-item">-97% desde ATH — corrección histórica extrema</div>
+        <div class="verdict-item">Vesting inversores + contributors activo hasta 2027</div>
+        <div class="verdict-item">Demo Serve Robotics fue simulada — no producción real</div>
+        <div class="verdict-item">Adopción humanoid robots es 2027-2030 — timing muy largo</div>
+        <div class="verdict-item">ROI TGE: 0.28x — inversores IEO aún en pérdidas</div>
+        <div class="verdict-item">Mcap/FDV = 50% — 2.2B tokens más por emitir</div>
+        <div class="verdict-item">Alta especulación en narrativa vs. métricas verificables</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="final-verdict">
+    <div class="final-title">TokenFlow AI · Veredicto Final</div>
+    <div class="final-score">
+      <div class="score-number">5</div>
+      <div>
+        <div class="score-label">Infraestructura real · Demasiado pronto para el mercado</div>
+        <div class="score-sub">sobre 10 · La narrativa robótica llegará — PEAQ puede estar 2 años antes</div>
+      </div>
+    </div>
+    <div class="final-text">
+      Peaq Network tiene la narrativa más importante del próximo ciclo DePIN: cuando Tesla produzca un millón de humanoides anuales, cuando los robots entreguen paquetes en todas las ciudades, cuando los coches autónomos paguen sus propios peajes — toda esa economía necesitará infraestructura on-chain. Y Peaq es la única blockchain con primitivas nativas para eso hoy.<br><br>
+      El problema es el timing. La Serve Robotics demo fue en un entorno simulado. Los humanoides de Tesla y Figure están en rampa de producción, no en despliegue masivo. El revenue on-chain de $37 diarios es la señal más honesta posible: el mercado que Peaq quiere servir todavía no existe a escala. El gap entre la infraestructura construida y la demanda real es de 2-4 años mínimo.<br><br>
+      Lo que distingue a Peaq de un simple "narrative play" es la ejecución: Mastercard, Bosch, Dubai VARA, el primer robo-farm tokenizado, los IMOs con CoinList. Hay construcción real, no solo whitepapers. El modelo desinflacionario y el 40% stakeado son también señales de madurez tokenómica superior a muchos proyectos del sector.<br><br>
+      <strong>¿Para quién es Peaq?</strong> Para inversores con horizonte de 3-5 años que creen en la economía de máquinas. Para quienes buscan catalizar un portfolio DePIN con un proyecto que puede multiplicar si la narrativa robótica se acelera en 2027-2028. No para quienes buscan catalizadores en los próximos 6 meses — esos datos simplemente no están ahí todavía.
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:20px;">
+    <div class="section-header">
+      <div class="section-icon icon-teal">👁</div>
+      <div class="section-title">Qué vigilar en los próximos 90–180 días</div>
+      <div class="section-tag">Lista de Monitoreo</div>
+    </div>
+    <div class="watch-item"><div class="watch-dot dot-teal"></div><div class="watch-text"><strong>Revenue on-chain diario:</strong> El indicador más importante. Si las fees on-chain superan $10,000/día de forma sostenida, el gap narrativa-realidad empieza a cerrarse. Seguir en el explorador de Peaq Network.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Primer IMO completado en CoinList:</strong> Si el primer robot tokenizado como RWA yield-bearing supera $1M en participación, valida el modelo IMO. Es el catalizador de adopción más tangible en el roadmap actual.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-red"></div><div class="watch-text"><strong>Unlock calendario — inversores + contributors:</strong> Los desbloqueos continuarán mensualmente hasta 2027. Seguir en tokenomist.ai para identificar los meses de mayor presión. Cualquier unlock grande con precio bajo = riesgo de venta severa.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-yellow"></div><div class="watch-text"><strong>Serve Robotics — despliegue comercial real:</strong> Cuando la demo de Seúl pase de entorno simulado a operación comercial real con pagos on-chain verificables, es el primer caso de "pay-per-skill robotics" en producción. Ese evento cambia la narrativa de especulativa a fundamental.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-teal"></div><div class="watch-text"><strong>Escala humanoid robotics 2027:</strong> Tesla Optimus, Figure AI, 1X y Agility Robotics están rampeando producción. Si alguno adopta Peaq para coordinación M2M o pagos, el Mcap de $53M parecerá ridículo en retrospectiva. Seguir anuncios de partnerships en X oficial de @peaqnetwork.</div></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong style="color:#14b8a6;">TokenFlow AI</strong> · Investigación de tokenómica AI y DePIN · Sin hype. Solo estructura.<br>
+  Fecha del análisis: 13 de junio de 2026 · Este análisis no constituye asesoramiento de inversión. DYOR.<br>
+  Fuentes: CoinGecko, CoinMarketCap, Tokenomist, CMC AI, earnpark.com, bingx.com/learn, peaq.network, datos on-chain
+</div>
+
+</body>
+</html>
