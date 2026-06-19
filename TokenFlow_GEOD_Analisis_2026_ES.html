@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenFlow AI – Análisis GEODNET (GEOD) 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'JetBrains Mono', monospace; background: #0a0e1a; color: #e2e8f0; line-height: 1.7; font-size: 14px; }
+
+  .header { background: linear-gradient(135deg, #0a0e1a 0%, #0e1626 50%, #0a0e1a 100%); border-bottom: 1px solid #1e4060; padding: 44px 32px 36px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; background: radial-gradient(ellipse, rgba(45,212,191,0.07) 0%, transparent 70%); pointer-events: none; }
+  .brand { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #2dd4bf; margin-bottom: 14px; font-weight: 600; }
+  .title { font-size: 38px; font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -1px; }
+  .title span { color: #2dd4bf; }
+  .subtitle { font-size: 12px; color: #64748b; margin-bottom: 22px; letter-spacing: 1px; }
+  .verdict-badge { display: inline-block; padding: 8px 24px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid; font-family: 'JetBrains Mono', monospace; }
+  .badge-green { background: #052e16; color: #4ade80; border-color: #166534; }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 36px 20px; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 36px; }
+  .stat-card { background: #0d1525; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; text-align: center; }
+  .stat-label { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .stat-value { font-size: 22px; font-weight: 800; color: #f8fafc; }
+  .stat-sub { font-size: 10px; color: #64748b; margin-top: 4px; }
+  .stat-teal { color: #2dd4bf; }
+  .stat-green { color: #4ade80; }
+  .stat-yellow { color: #fbbf24; }
+  .stat-red { color: #f87171; }
+  .stat-orange { color: #fb923c; }
+
+  .section { background: #0d1525; border: 1px solid #1e293b; border-radius: 8px; padding: 26px; margin-bottom: 18px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #1e293b; }
+  .section-icon { width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .icon-teal { background: #0a2e2a; }
+  .icon-orange { background: #431407; }
+  .icon-red { background: #450a0a; }
+  .icon-yellow { background: #422006; }
+  .icon-blue { background: #0c2a47; }
+  .icon-green { background: #052e16; }
+  .icon-purple { background: #2e1065; }
+  .section-title { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+  .section-tag { font-size: 10px; color: #475569; margin-left: auto; letter-spacing: 1px; text-transform: uppercase; }
+
+  .use-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .use-card { background: #0a1e1c; border: 1px solid #134e4a; border-radius: 6px; padding: 14px; }
+  .use-card-title { font-size: 11px; color: #2dd4bf; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .use-card-text { font-size: 12px; color: #94a3b8; line-height: 1.6; }
+
+  .alloc-table { width: 100%; border-collapse: collapse; }
+  .alloc-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .alloc-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; font-size: 13px; vertical-align: middle; }
+  .alloc-table tr:last-child td { border-bottom: none; }
+  .alloc-bar-wrap { background: #1e293b; border-radius: 2px; height: 5px; width: 90px; display: inline-block; vertical-align: middle; margin-left: 8px; }
+  .alloc-bar { height: 5px; border-radius: 2px; display: block; }
+
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+  .pill-green { background: #052e16; color: #4ade80; }
+  .pill-yellow { background: #422006; color: #fbbf24; }
+  .pill-red { background: #450a0a; color: #f87171; }
+  .pill-teal { background: #0a2e2a; color: #2dd4bf; }
+
+  .burn-box { background: #061614; border: 1px solid #0f766e; border-radius: 8px; padding: 22px; margin: 16px 0; text-align: center; }
+  .burn-title { font-size: 11px; color: #2dd4bf; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; font-weight: 700; }
+  .burn-flow { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; }
+  .burn-item { text-align: center; }
+  .burn-num { font-size: 28px; font-weight: 800; }
+  .burn-label { font-size: 10px; color: #64748b; margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+  .burn-arrow { font-size: 20px; color: #0f766e; }
+
+  .pressure-meter { margin: 14px 0; }
+  .meter-label { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+  .meter-bar-wrap { background: #1e293b; border-radius: 3px; height: 10px; overflow: hidden; }
+  .meter-bar { height: 10px; border-radius: 3px; }
+  .meter-green { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .meter-orange { background: linear-gradient(90deg, #ea580c, #fb923c); }
+  .meter-red { background: linear-gradient(90deg, #dc2626, #f87171); }
+  .meter-teal { background: linear-gradient(90deg, #0d9488, #2dd4bf); }
+  .meter-yellow { background: linear-gradient(90deg, #ca8a04, #fbbf24); }
+  .meter-footer { display: flex; justify-content: space-between; font-size: 10px; color: #475569; margin-top: 4px; }
+
+  .verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .verdict-card { border-radius: 6px; padding: 20px; }
+  .verdict-bull { background: #052e16; border: 1px solid #166534; }
+  .verdict-bear { background: #450a0a; border: 1px solid #7f1d1d; }
+  .verdict-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .verdict-bull .verdict-title { color: #4ade80; }
+  .verdict-bear .verdict-title { color: #f87171; }
+  .verdict-item { font-size: 12px; color: #cbd5e1; margin-bottom: 9px; padding-left: 18px; position: relative; line-height: 1.5; }
+  .verdict-item::before { content: '→'; position: absolute; left: 0; font-weight: 700; }
+  .verdict-bull .verdict-item::before { color: #4ade80; }
+  .verdict-bear .verdict-item::before { color: #f87171; }
+
+  .final-verdict { background: linear-gradient(135deg, #061614, #0f172a); border: 1px solid #0d9488; border-radius: 8px; padding: 30px; margin-top: 8px; }
+  .final-title { font-size: 11px; color: #2dd4bf; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 14px; font-weight: 700; }
+  .final-score { display: flex; align-items: center; gap: 22px; margin-bottom: 18px; }
+  .score-number { font-size: 68px; font-weight: 900; color: #4ade80; line-height: 1; }
+  .score-label { font-size: 20px; font-weight: 700; color: #f1f5f9; }
+  .score-sub { font-size: 12px; color: #64748b; margin-top: 6px; }
+  .final-text { font-size: 13px; color: #cbd5e1; line-height: 1.9; }
+
+  .watch-item { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid #1e293b; font-size: 13px; }
+  .watch-item:last-child { border-bottom: none; }
+  .watch-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #22c55e; }
+  .dot-teal { background: #2dd4bf; }
+  .watch-text { color: #cbd5e1; }
+  .watch-text strong { color: #f8fafc; }
+
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .comp-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .comp-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; vertical-align: middle; }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table tr.highlight-row { background: #0a1e1c; }
+
+  .note-box { background: #06100e; border-left: 3px solid #2dd4bf; border-radius: 0 6px 6px 0; padding: 14px 16px; font-size: 12px; color: #94a3b8; margin: 14px 0; line-height: 1.8; }
+  .note-box.warning { border-left-color: #f59e0b; background: #0d1105; }
+  .note-box.danger { border-left-color: #ef4444; background: #0d0808; }
+  .note-box.success { border-left-color: #22c55e; background: #050f05; }
+
+  .footer { text-align: center; padding: 28px; color: #334155; font-size: 11px; border-top: 1px solid #1e293b; margin-top: 36px; letter-spacing: 0.5px; line-height: 2; }
+
+  @media (max-width: 600px) {
+    .verdict-grid, .use-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .score-number { font-size: 52px; }
+    .title { font-size: 28px; }
+    .burn-flow { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">🟢 TokenFlow AI · Investigación de Tokenómica DePIN</div>
+  <div class="title">GEODNET <span>GEOD</span></div>
+  <div class="subtitle">Análisis completo — El GPS descentralizado de centímetro · 19 de junio de 2026</div>
+  <div class="verdict-badge badge-green">✅ Revenue real creciente · 80% burn · Halving anual · El DePIN más infravalorado por fundamentales</div>
+</div>
+
+<div class="container">
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Precio (USD)</div><div class="stat-value stat-teal">$0.21</div><div class="stat-sub">19 de junio, 2026</div></div>
+    <div class="stat-card"><div class="stat-label">Cap. de Mercado</div><div class="stat-value">~$92M</div><div class="stat-sub">#266 CoinMarketCap</div></div>
+    <div class="stat-card"><div class="stat-label">FDV</div><div class="stat-value stat-yellow">~$206M</div><div class="stat-sub">Mcap/FDV = 45%</div></div>
+    <div class="stat-card"><div class="stat-label">Desde ATH</div><div class="stat-value stat-red">-89%</div><div class="stat-sub">ATH: $1.94 (mar. 2024)</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Circ.</div><div class="stat-value">448M</div><div class="stat-sub">45% del máximo</div></div>
+    <div class="stat-card"><div class="stat-label">ARR</div><div class="stat-value stat-green">$7M+</div><div class="stat-sub">+20 clientes/semana</div></div>
+    <div class="stat-card"><div class="stat-label">Burn semanal</div><div class="stat-value stat-teal">$170K+</div><div class="stat-sub">80% del revenue</div></div>
+    <div class="stat-card"><div class="stat-label">Backers</div><div class="stat-value stat-green">Pantera</div><div class="stat-sub">Institucional tier 1</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-teal">🛰</div>
+      <div class="section-title">¿Qué es GEODNET? — El GPS de precisión centimétrica descentralizado</div>
+      <div class="section-tag">Mecanismo de Red</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">El GPS de tu teléfono tiene una precisión de ~5 metros. Para un coche autónomo, un dron de reparto o un tractor de precisión, 5 metros es la diferencia entre funcionar y estrellarse. GEODNET resuelve esto con una red descentralizada de estaciones base RTK (Real-Time Kinematic) que corrigen las señales GNSS para lograr precisión de centímetros. Es la infraestructura de posicionamiento que la economía de máquinas necesita — y que hoy controlan unos pocos proveedores centralizados caros.</p>
+
+    <div class="use-grid">
+      <div class="use-card">
+        <div class="use-card-title">🚜 Agricultura de precisión</div>
+        <div class="use-card-text">Tractores autónomos que siembran con precisión de centímetros. Reduce desperdicio de semilla, fertilizante y combustible. Mercado masivo en LATAM.</div>
+      </div>
+      <div class="use-card">
+        <div class="use-card-title">🚗 Vehículos autónomos</div>
+        <div class="use-card-text">Sin posicionamiento de centímetros, no hay conducción autónoma segura. GEODNET provee la capa de corrección que Tesla, Waymo y otros necesitan.</div>
+      </div>
+      <div class="use-card">
+        <div class="use-card-title">🚁 Drones</div>
+        <div class="use-card-text">Entregas, inspección de infraestructura, mapeo. Todos requieren posicionamiento exacto. El mercado de drones crece exponencialmente en 2026.</div>
+      </div>
+      <div class="use-card">
+        <div class="use-card-title">🌋 Monitoreo geohazard</div>
+        <div class="use-card-text">Detección de terremotos, deslizamientos, subsidencia. Datos de clima espacial sobre el impacto de vientos solares en señales GNSS.</div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <strong>🔑 La conexión con Peaq y la economía de máquinas:</strong> En nuestro análisis de Peaq Network señalamos que los robots necesitan saber dónde están. GEODNET es exactamente esa capa: el posicionamiento de centímetros sin el cual la economía de máquinas no puede funcionar. Mientras Peaq construye la blockchain para máquinas, GEODNET construye el GPS para esas máquinas. Son piezas complementarias del mismo futuro.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-teal">🔥</div>
+      <div class="section-title">Tokenómica — 80% del revenue se quema. Cada semana.</div>
+      <div class="section-tag">El Flywheel Deflacionario</div>
+    </div>
+
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">Aquí está lo que diferencia a GEODNET de casi todos los proyectos analizados por TokenFlow AI: el 80% de los ingresos reales de la red se usa automáticamente para comprar y quemar GEOD del mercado abierto. No es una promesa futura — está ocurriendo cada semana, con datos verificables on-chain.</p>
+
+    <div class="burn-box">
+      <div class="burn-title">🔄 El flywheel económico de GEODNET</div>
+      <div class="burn-flow">
+        <div class="burn-item"><div class="burn-num" style="color:#2dd4bf;">$7M+</div><div class="burn-label">ARR de clientes<br>(drones, agro, autos)</div></div>
+        <div class="burn-arrow">→</div>
+        <div class="burn-item"><div class="burn-num" style="color:#4ade80;">80%</div><div class="burn-label">del revenue<br>→ buy & burn GEOD</div></div>
+        <div class="burn-arrow">→</div>
+        <div class="burn-item"><div class="burn-num" style="color:#fbbf24;">$170K+</div><div class="burn-label">quemados<br>por semana</div></div>
+        <div class="burn-arrow">→</div>
+        <div class="burn-item"><div class="burn-num" style="color:#2dd4bf;">↓ Supply</div><div class="burn-label">deflación vinculada<br>a uso real</div></div>
+      </div>
+    </div>
+
+    <div class="note-box success">
+      <strong>✅ El mejor modelo de captura de valor del sector DePIN:</strong> El 80% de buy & burn vinculado a revenue real es estructuralmente superior a casi todo lo que hemos analizado. Helium quema vía Data Credits pero su burn aún no supera la emisión. RENDER tiene BME 10:1 inflacionario. GEODNET, con $7M ARR creciendo 1.7x anual y +20 clientes nuevos por semana, tiene un flywheel donde más uso = más quema = menos supply. Es el caso de uso DePIN más limpio: demanda real → deflación real.
+    </div>
+
+    <div class="note-box">
+      <strong>📌 Halving anual cada 30 de junio:</strong> Como Bitcoin pero anual — las recompensas de minería se reducen un 50% cada 30 de junio. Combinado con el buy & burn del 80%, GEODNET tiene doble presión deflacionaria: menos emisión nueva + quema activa. El próximo halving es en 11 días (30 de junio de 2026).
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">📊</div>
+      <div class="section-title">Estructura del suministro</div>
+      <div class="section-tag">Supply Analysis</div>
+    </div>
+
+    <table class="alloc-table">
+      <thead>
+        <tr><th>Categoría</th><th>% Supply</th><th>Tokens</th><th>Estado</th><th>Riesgo</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Miner rewards (satélites)</strong></td>
+          <td>~55% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:100%;background:#2dd4bf;"></div></div></td>
+          <td>~544M GEOD</td>
+          <td><span class="status-pill pill-teal">Emisión — halving anual</span></td>
+          <td>Decreciente cada 30 jun. — burn contrarresta</td>
+        </tr>
+        <tr>
+          <td><strong>Circulante actual</strong></td>
+          <td>45% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:45%;background:#4ade80;"></div></div></td>
+          <td>448M GEOD</td>
+          <td><span class="status-pill pill-green">En mercado</span></td>
+          <td>Supply líquido activo</td>
+        </tr>
+        <tr>
+          <td><strong>Team + Early Backers</strong></td>
+          <td>~25% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:45%;background:#f97316;"></div></div></td>
+          <td>~247M GEOD</td>
+          <td><span class="status-pill pill-yellow">Vesting — parcial</span></td>
+          <td style="color:#fb923c;">Moderado — Pantera entre ellos</td>
+        </tr>
+        <tr>
+          <td><strong>Foundation + Ecosystem</strong></td>
+          <td>~20% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:36%;background:#fbbf24;"></div></div></td>
+          <td>~198M GEOD</td>
+          <td><span class="status-pill pill-yellow">Gradual</span></td>
+          <td>Desarrollo de red</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box" style="margin-top:16px;">
+      <strong>Mcap/FDV = 45% — compensado por el burn:</strong> A primera vista, el 45% de Mcap/FDV sugiere dilución pendiente. Pero GEODNET es un caso especial: el buy & burn del 80% del revenue retira tokens del mercado constantemente, y el halving anual reduce la emisión. Si el revenue sigue creciendo 1.7x anual, el burn puede superar la emisión neta — convirtiendo el modelo en deflacionario real antes de que la dilución haga daño.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">⚡</div>
+      <div class="section-title">Tracción real — Los números que el precio ignora</div>
+      <div class="section-tag">Fundamentales</div>
+    </div>
+
+    <div class="pressure-meter">
+      <div class="meter-label">Crecimiento de revenue (1.7x anual — ARR $7M+ dic. 2025)</div>
+      <div class="meter-bar-wrap" style="height:12px;border-radius:6px;"><div class="meter-bar meter-teal" style="width:70%;height:12px;border-radius:6px;"></div></div>
+      <div class="meter-footer"><span>$0</span><span style="color:#2dd4bf;font-weight:700;">$7M+ ARR — creciendo 1.7x anual</span><span>$20M+</span></div>
+    </div>
+
+    <div class="pressure-meter">
+      <div class="meter-label">Adquisición de clientes (+20 cuentas enterprise nuevas por semana)</div>
+      <div class="meter-bar-wrap" style="height:12px;border-radius:6px;"><div class="meter-bar meter-green" style="width:75%;height:12px;border-radius:6px;"></div></div>
+      <div class="meter-footer"><span>0</span><span style="color:#4ade80;font-weight:700;">+20/semana — adopción enterprise sostenida</span><span>+50/sem</span></div>
+    </div>
+
+    <div class="pressure-meter">
+      <div class="meter-label">Red de estaciones base (mayor red RTK descentralizada del mundo)</div>
+      <div class="meter-bar-wrap" style="height:12px;border-radius:6px;"><div class="meter-bar meter-teal" style="width:80%;height:12px;border-radius:6px;"></div></div>
+      <div class="meter-footer"><span>0</span><span style="color:#2dd4bf;font-weight:700;">Cobertura global — manufactura en EE.UU.</span><span>Total</span></div>
+    </div>
+
+    <div class="note-box">
+      <strong>📌 Hitos recientes que validan el modelo:</strong> Coinbase añadió GEOD a su roadmap (junio 2026). Manufactura propia en EE.UU. iniciada (abril 2026) — mitiga riesgos de supply chain y aranceles. Partnership con una de las mayores energéticas de India (dic. 2025). Backing de Pantera Capital. Messari validó el sector DePIN de $10B donde GEODNET creció 1.7x. Estos no son anuncios vacíos — son señales de adopción enterprise real.
+    </div>
+
+    <div class="note-box warning">
+      <strong>⚠ La paradoja "sell the news":</strong> Cuando Coinbase añadió GEOD a su roadmap el 16 de junio, el precio CAYÓ más del 10% — exactamente lo contrario de lo esperado. Esto refleja un patrón del sector DePIN 2025-2026: los fundamentales mejoran (revenue 1.7x) pero el precio sigue al sentimiento macro del mercado crypto, no a las métricas del proyecto. Es el mismo "zombie token" que vimos en Helium.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">⚔</div>
+      <div class="section-title">Posicionamiento competitivo</div>
+      <div class="section-tag">DePIN Positioning</div>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr><th>Proyecto</th><th>Enfoque</th><th>Mcap</th><th>vs. GEOD</th></tr>
+      </thead>
+      <tbody>
+        <tr class="highlight-row">
+          <td><strong style="color:#2dd4bf;">🟢 GEODNET (GEOD)</strong></td>
+          <td>GPS de precisión RTK</td>
+          <td>~$92M</td>
+          <td>— Único en posicionamiento centimétrico</td>
+        </tr>
+        <tr>
+          <td><strong>Trimble / Hexagon</strong></td>
+          <td>RTK centralizado</td>
+          <td>$10B+ (acciones)</td>
+          <td>GEODNET 90% más barato — modelo descentralizado</td>
+        </tr>
+        <tr>
+          <td><strong>Peaq Network</strong></td>
+          <td>Machine Economy L1</td>
+          <td>~$53M</td>
+          <td>Complementario — Peaq es la chain, GEOD el GPS</td>
+        </tr>
+        <tr>
+          <td><strong>Helium (HNT)</strong></td>
+          <td>DePIN wireless</td>
+          <td>~$197M</td>
+          <td>Conectividad vs. posicionamiento — complementarios</td>
+        </tr>
+        <tr>
+          <td><strong>Hivemapper (HONEY)</strong></td>
+          <td>Mapas descentralizados</td>
+          <td>~$50M</td>
+          <td>Mapas vs. posicionamiento de precisión — diferente capa</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box" style="margin-top:16px;">
+      <strong>Moat real de GEODNET:</strong> Construir una red RTK global requiere miles de estaciones base físicas distribuidas. Trimble y Hexagon lo hacen de forma centralizada y cobran precios premium. GEODNET lo hace con incentivos token, logrando cobertura global a una fracción del coste. Replicar esa red distribuida es estructuralmente difícil y lento. Es el mismo tipo de moat físico que Helium tiene en wireless — pero en un nicho (posicionamiento de precisión) con menos competencia crypto.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📉</div>
+      <div class="section-title">Estructura técnica y contexto de precio</div>
+      <div class="section-tag">Estructura de Precio</div>
+    </div>
+
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Precio vs ATH</div><div class="stat-value stat-red">-89%</div><div class="stat-sub">ATH: $1.94 (mar. 2024)</div></div>
+      <div class="stat-card"><div class="stat-label">Revenue growth</div><div class="stat-value stat-green">1.7x</div><div class="stat-sub">Anual — vs precio -41%</div></div>
+      <div class="stat-card"><div class="stat-label">Soporte</div><div class="stat-value">$0.15</div><div class="stat-sub">Zona reciente</div></div>
+      <div class="stat-card"><div class="stat-label">Volumen 24h</div><div class="stat-value">~$400K</div><div class="stat-sub">Liquidez moderada-baja</div></div>
+    </div>
+
+    <div class="pressure-meter"><div class="meter-label">Desde ATH (-89% — corrección severa pese a fundamentales crecientes)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:88%;"></div></div><div class="meter-footer"><span>ATH</span><span style="color:#f87171;">🔴 Estructura bajista — desconexión con fundamentales</span><span>ATL</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Fundamentales vs precio (revenue 1.7x ↑ mientras precio -41% ↓)</div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:85%;"></div></div><div class="meter-footer"><span>Débil</span><span style="color:#4ade80;font-weight:700;">✅ Fundamentales fuertes — divergencia con precio</span><span>Fuerte</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Sensibilidad macro (sigue al sentimiento BTC, no a métricas propias)</div><div class="meter-bar-wrap"><div class="meter-bar meter-orange" style="width:80%;"></div></div><div class="meter-footer"><span>Baja</span><span style="color:#fb923c;">⚠ Alta — "sell the news" en evento Coinbase</span><span>Máxima</span></div></div>
+
+    <div class="note-box warning" style="margin-top:14px;">
+      La divergencia es el dato central: el revenue creció 1.7x mientras el precio cayó 41% en el mismo período. Es la definición de "desconexión fundamental". El mercado DePIN 2025-2026 ha castigado incluso a proyectos con métricas mejorando, porque el sentimiento macro domina sobre los fundamentales en activos de baja capitalización. Para GEODNET, eso significa que el precio actual no refleja el crecimiento de la red — lo cual es riesgo (si continúa) u oportunidad (si revierte).
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">⚖</div>
+      <div class="section-title">Argumentos alcistas vs. bajistas</div>
+      <div class="section-tag">Veredicto TokenFlow</div>
+    </div>
+
+    <div class="verdict-grid">
+      <div class="verdict-card verdict-bull">
+        <div class="verdict-title">🟢 Argumentos alcistas</div>
+        <div class="verdict-item">80% del revenue → buy & burn — el mejor modelo deflacionario del sector</div>
+        <div class="verdict-item">$7M+ ARR creciendo 1.7x anual — revenue real verificable</div>
+        <div class="verdict-item">+20 clientes enterprise nuevos por semana — adopción sostenida</div>
+        <div class="verdict-item">Halving anual cada 30 jun. — doble presión deflacionaria</div>
+        <div class="verdict-item">Único en GPS de precisión centimétrica descentralizado</div>
+        <div class="verdict-item">Coinbase roadmap + Pantera Capital — validación institucional</div>
+        <div class="verdict-item">Manufactura propia en EE.UU. — supply chain segura</div>
+        <div class="verdict-item">Tailwind de economía de máquinas (drones, autos, agro)</div>
+      </div>
+      <div class="verdict-card verdict-bear">
+        <div class="verdict-title">🔴 Argumentos bajistas</div>
+        <div class="verdict-item">-89% desde ATH — estructura bajista de largo plazo</div>
+        <div class="verdict-item">Precio -41% mientras revenue +70% — desconexión persistente</div>
+        <div class="verdict-item">Alta sensibilidad macro — "sell the news" en evento Coinbase</div>
+        <div class="verdict-item">Mcap/FDV = 45% — dilución pendiente (mitigada por burn)</div>
+        <div class="verdict-item">Volumen 24h ~$400K — liquidez moderada-baja</div>
+        <div class="verdict-item">Mercado de precisión aún emergente — adopción masiva es 2027+</div>
+        <div class="verdict-item">Competencia de Trimble/Hexagon con décadas de relaciones enterprise</div>
+        <div class="verdict-item">Dependiente del crecimiento de drones/autos autónomos para escalar</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="final-verdict">
+    <div class="final-title">TokenFlow AI · Veredicto Final</div>
+    <div class="final-score">
+      <div class="score-number">7</div>
+      <div>
+        <div class="score-label">Fundamentales sólidos · Precio desconectado</div>
+        <div class="score-sub">sobre 10 · El DePIN con la mejor relación revenue/burn — castigado por el macro</div>
+      </div>
+    </div>
+    <div class="final-text">
+      GEODNET es uno de los casos más limpios de "fundamentales vs. precio" de todo el sector DePIN. Tiene lo que la mayoría de proyectos prometen pero no entregan: revenue real ($7M+ ARR) creciendo de forma sostenida (1.7x anual), un mecanismo deflacionario que funciona hoy (80% del revenue se quema, $170K+ semanales verificables), y un caso de uso que no es especulativo — los drones, coches autónomos y tractores de precisión necesitan posicionamiento de centímetros, y GEODNET lo provee mejor y más barato que las alternativas centralizadas.<br><br>
+      Lo que distingue a GEODNET de un análisis como Story Protocol o Peaq es que aquí los fundamentales ya existen. No es una apuesta sobre adopción futura — es una red con clientes pagantes, revenue creciente, y un flywheel deflacionario activo. El halving anual del 30 de junio añade una segunda capa de escasez estructural.<br><br>
+      El problema es el mismo que afecta a Helium: el precio no refleja los fundamentales. El revenue creció 1.7x mientras el token cayó 41%. El evento de Coinbase generó un "sell the news" del -10%. El mercado DePIN de baja capitalización sigue al sentimiento macro de Bitcoin, no a las métricas de los proyectos. Para GEODNET, eso es riesgo a corto plazo y potencial asimetría a medio plazo.<br><br>
+      <strong>¿Qué cambiaría el veredicto al alza?</strong> Si el burn semanal supera la emisión de nuevos tokens de forma sostenida — convirtiendo GEOD en deflacionario neto verificable. Y si la adopción de drones y vehículos autónomos se acelera en 2026-2027, el revenue de $7M podría multiplicarse, y el Mcap de $92M parecería irrisorio frente a una red que provee infraestructura crítica para la economía de máquinas.
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:20px;">
+    <div class="section-header">
+      <div class="section-icon icon-teal">👁</div>
+      <div class="section-title">Qué vigilar en los próximos 30–90 días</div>
+      <div class="section-tag">Lista de Monitoreo</div>
+    </div>
+    <div class="watch-item"><div class="watch-dot dot-teal"></div><div class="watch-text"><strong>Halving del 30 de junio 2026:</strong> En 11 días, las recompensas de minería se reducen 50%. Combinado con el burn del 80%, es el evento de escasez más importante del año. Vigilar si la emisión neta se vuelve negativa post-halving.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Burn semanal vs. emisión:</strong> El indicador clave. Seguir en el dashboard oficial de GEODNET el burn semanal ($170K+ actual) vs. los nuevos tokens emitidos. Cuando el burn supere la emisión de forma sostenida — GEOD es deflacionario neto.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-yellow"></div><div class="watch-text"><strong>Listing efectivo en Coinbase:</strong> El roadmap es solo el primer paso. Un listing spot confirmado en Coinbase añadiría liquidez y acceso institucional significativo. Seguir anuncios oficiales de Coinbase.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Crecimiento de ARR trimestral:</strong> Si el ARR supera $10M antes de fin de 2026, confirma que el modelo escala. El burn vinculado a ese revenue crecería proporcionalmente. Seguir reportes de GEODNET y Messari.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-teal"></div><div class="watch-text"><strong>Adopción en agricultura LATAM:</strong> El mercado de agricultura de precisión en Latinoamérica (Brasil, Argentina) es masivo y subatendido. Cualquier partnership agro regional sería un catalizador directamente relevante para la audiencia de TokenFlow AI.</div></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong style="color:#2dd4bf;">TokenFlow AI</strong> · Investigación de tokenómica AI y DePIN · Sin hype. Solo estructura.<br>
+  Fecha del análisis: 19 de junio de 2026 · Este análisis no constituye asesoramiento de inversión. DYOR.<br>
+  Fuentes: CoinGecko, CoinMarketCap, CoinDesk, Messari, DePINscan, Pantera Capital, geodnet.com, datos on-chain
+</div>
+
+</body>
+</html>
