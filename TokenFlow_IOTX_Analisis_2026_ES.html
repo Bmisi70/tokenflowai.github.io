@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenFlow AI – Análisis IoTeX (IOTX) 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'JetBrains Mono', monospace; background: #0a0e1a; color: #e2e8f0; line-height: 1.7; font-size: 14px; }
+
+  .header { background: linear-gradient(135deg, #0a0e1a 0%, #0a1e1e 50%, #0a0e1a 100%); border-bottom: 1px solid #1a4a4a; padding: 44px 32px 36px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; background: radial-gradient(ellipse, rgba(34,211,238,0.06) 0%, transparent 70%); pointer-events: none; }
+  .brand { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #22d3ee; margin-bottom: 14px; font-weight: 600; }
+  .title { font-size: 38px; font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -1px; }
+  .title span { color: #22d3ee; }
+  .subtitle { font-size: 12px; color: #64748b; margin-bottom: 22px; letter-spacing: 1px; }
+  .verdict-badge { display: inline-block; padding: 8px 24px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid; font-family: 'JetBrains Mono', monospace; }
+  .badge-warning { background: #451a03; color: #fb923c; border-color: #9a3412; }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 36px 20px; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 36px; }
+  .stat-card { background: #0d1525; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; text-align: center; }
+  .stat-label { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .stat-value { font-size: 22px; font-weight: 800; color: #f8fafc; }
+  .stat-sub { font-size: 10px; color: #64748b; margin-top: 4px; }
+  .stat-cyan { color: #22d3ee; }
+  .stat-green { color: #4ade80; }
+  .stat-yellow { color: #fbbf24; }
+  .stat-red { color: #f87171; }
+  .stat-orange { color: #fb923c; }
+
+  .section { background: #0d1525; border: 1px solid #1e293b; border-radius: 8px; padding: 26px; margin-bottom: 18px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #1e293b; }
+  .section-icon { width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .icon-cyan { background: #083344; }
+  .icon-orange { background: #431407; }
+  .icon-red { background: #450a0a; }
+  .icon-yellow { background: #422006; }
+  .icon-blue { background: #0c2a47; }
+  .icon-green { background: #052e16; }
+  .icon-purple { background: #2e1065; }
+  .section-title { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+  .section-tag { font-size: 10px; color: #475569; margin-left: auto; letter-spacing: 1px; text-transform: uppercase; }
+
+  .use-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .use-card { background: #0a1e1e; border: 1px solid #155e63; border-radius: 6px; padding: 14px; }
+  .use-card-title { font-size: 11px; color: #22d3ee; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .use-card-text { font-size: 12px; color: #94a3b8; line-height: 1.6; }
+
+  .alloc-table { width: 100%; border-collapse: collapse; }
+  .alloc-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .alloc-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; font-size: 13px; vertical-align: middle; }
+  .alloc-table tr:last-child td { border-bottom: none; }
+  .alloc-bar-wrap { background: #1e293b; border-radius: 2px; height: 5px; width: 90px; display: inline-block; vertical-align: middle; margin-left: 8px; }
+  .alloc-bar { height: 5px; border-radius: 2px; display: block; }
+
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+  .pill-green { background: #052e16; color: #4ade80; }
+  .pill-yellow { background: #422006; color: #fbbf24; }
+  .pill-red { background: #450a0a; color: #f87171; }
+  .pill-cyan { background: #083344; color: #22d3ee; }
+
+  .burn-box { background: #061818; border: 1px solid #155e63; border-radius: 8px; padding: 22px; margin: 16px 0; }
+  .burn-title { font-size: 11px; color: #22d3ee; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; font-weight: 700; }
+  .burn-flow { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; }
+  .burn-item { text-align: center; }
+  .burn-num { font-size: 24px; font-weight: 800; }
+  .burn-label { font-size: 10px; color: #64748b; margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+  .burn-arrow { font-size: 20px; color: #155e63; }
+
+  .pressure-meter { margin: 14px 0; }
+  .meter-label { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+  .meter-bar-wrap { background: #1e293b; border-radius: 3px; height: 10px; overflow: hidden; }
+  .meter-bar { height: 10px; border-radius: 3px; }
+  .meter-green { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .meter-orange { background: linear-gradient(90deg, #ea580c, #fb923c); }
+  .meter-red { background: linear-gradient(90deg, #dc2626, #f87171); }
+  .meter-cyan { background: linear-gradient(90deg, #0891b2, #22d3ee); }
+  .meter-yellow { background: linear-gradient(90deg, #ca8a04, #fbbf24); }
+  .meter-footer { display: flex; justify-content: space-between; font-size: 10px; color: #475569; margin-top: 4px; }
+
+  .verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .verdict-card { border-radius: 6px; padding: 20px; }
+  .verdict-bull { background: #052e16; border: 1px solid #166534; }
+  .verdict-bear { background: #450a0a; border: 1px solid #7f1d1d; }
+  .verdict-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .verdict-bull .verdict-title { color: #4ade80; }
+  .verdict-bear .verdict-title { color: #f87171; }
+  .verdict-item { font-size: 12px; color: #cbd5e1; margin-bottom: 9px; padding-left: 18px; position: relative; line-height: 1.5; }
+  .verdict-item::before { content: '→'; position: absolute; left: 0; font-weight: 700; }
+  .verdict-bull .verdict-item::before { color: #4ade80; }
+  .verdict-bear .verdict-item::before { color: #f87171; }
+
+  .final-verdict { background: linear-gradient(135deg, #0a1e1e, #0f172a); border: 1px solid #0e7490; border-radius: 8px; padding: 30px; margin-top: 8px; }
+  .final-title { font-size: 11px; color: #22d3ee; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 14px; font-weight: 700; }
+  .final-score { display: flex; align-items: center; gap: 22px; margin-bottom: 18px; }
+  .score-number { font-size: 68px; font-weight: 900; color: #fbbf24; line-height: 1; }
+  .score-label { font-size: 20px; font-weight: 700; color: #f1f5f9; }
+  .score-sub { font-size: 12px; color: #64748b; margin-top: 6px; }
+  .final-text { font-size: 13px; color: #cbd5e1; line-height: 1.9; }
+
+  .watch-item { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid #1e293b; font-size: 13px; }
+  .watch-item:last-child { border-bottom: none; }
+  .watch-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #22c55e; }
+  .dot-cyan { background: #22d3ee; }
+  .watch-text { color: #cbd5e1; }
+  .watch-text strong { color: #f8fafc; }
+
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .comp-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .comp-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; vertical-align: middle; }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table tr.highlight-row { background: #0a1e1e; }
+
+  .note-box { background: #06100f; border-left: 3px solid #22d3ee; border-radius: 0 6px 6px 0; padding: 14px 16px; font-size: 12px; color: #94a3b8; margin: 14px 0; line-height: 1.8; }
+  .note-box.warning { border-left-color: #f59e0b; background: #0d1105; }
+  .note-box.danger { border-left-color: #ef4444; background: #0d0808; }
+  .note-box.success { border-left-color: #22c55e; background: #050f05; }
+
+  .footer { text-align: center; padding: 28px; color: #334155; font-size: 11px; border-top: 1px solid #1e293b; margin-top: 36px; letter-spacing: 0.5px; line-height: 2; }
+
+  @media (max-width: 600px) {
+    .verdict-grid, .use-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .score-number { font-size: 52px; }
+    .title { font-size: 28px; }
+    .burn-flow { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">🟢 TokenFlow AI · Investigación de Tokenómica DePIN</div>
+  <div class="title">IoTeX <span>IOTX</span></div>
+  <div class="subtitle">Análisis completo — La interfaz de la IA con el mundo físico · 26 de junio de 2026</div>
+  <div class="verdict-badge badge-warning">⚠ Veterano DePIN · Mcap/FDV 94% · Hack reciente · Trio world model como catalizador</div>
+</div>
+
+<div class="container">
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Precio (USD)</div><div class="stat-value stat-cyan">$0.0037</div><div class="stat-sub">26 de junio, 2026</div></div>
+    <div class="stat-card"><div class="stat-label">Cap. de Mercado</div><div class="stat-value">~$35M</div><div class="stat-sub">#575 CoinGecko</div></div>
+    <div class="stat-card"><div class="stat-label">FDV</div><div class="stat-value stat-green">~$35M</div><div class="stat-sub">Mcap/FDV = 94% ✅</div></div>
+    <div class="stat-card"><div class="stat-label">Desde ATH</div><div class="stat-value stat-red">-98%</div><div class="stat-sub">ATH: $0.25 (nov. 2021)</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Circ.</div><div class="stat-value">9.44B</div><div class="stat-sub">94% del máximo</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Máx.</div><div class="stat-value">10B</div><div class="stat-sub">Burn-Drop reduce supply</div></div>
+    <div class="stat-card"><div class="stat-label">Dispositivos</div><div class="stat-value stat-cyan">40M+</div><div class="stat-sub">100+ proyectos activos</div></div>
+    <div class="stat-card"><div class="stat-label">ioIDs</div><div class="stat-value stat-green">~100K</div><div class="stat-sub">Identidades de máquina</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-cyan">🌐</div>
+      <div class="section-title">¿Qué es IoTeX? — La interfaz de la IA con el mundo físico</div>
+      <div class="section-tag">Arquitectura Core</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">IoTeX es un L1 blockchain que existe desde 2017 — uno de los veteranos del sector DePIN. Su tesis para 2026: "La IA aprendió a hablar primero. Ahora aprende a operar el mundo real." Mientras ChatGPT y Claude procesan texto, IoTeX provee a la IA datos verificados del mundo físico — de 40 millones de dispositivos, sensores y máquinas. Es la capa de datos confiables que permite a la IA ver, verificar y actuar sobre la realidad, no solo generar texto.</p>
+
+    <div class="use-grid">
+      <div class="use-card">
+        <div class="use-card-title">🤖 Trio — World Model</div>
+        <div class="use-card-text">Modelo de IA para operaciones físicas: almacenes, fábricas, retail, hospitales. Usa cámaras y sensores existentes. No genera un mundo — entiende y actúa sobre la realidad. El catalizador clave de 2026.</div>
+      </div>
+      <div class="use-card">
+        <div class="use-card-title">🆔 ioID</div>
+        <div class="use-card-text">Identidad descentralizada verificable para humanos y máquinas. ~100K ioIDs activos. Cada robot, sensor o dispositivo tiene una identidad criptográfica on-chain.</div>
+      </div>
+      <div class="use-card">
+        <div class="use-card-title">⚡ Quicksilver AI</div>
+        <div class="use-card-text">Primer framework de AI agents construido específicamente para DePINs. Permite a agentes AI descentralizados interactuar directamente con datos de máquinas verificados.</div>
+      </div>
+      <div class="use-card">
+        <div class="use-card-title">🔗 Roll-DPoS L1</div>
+        <div class="use-card-text">EVM-compatible, hasta 2,000 TPS, finalidad rápida. Nakamoto coefficient de 9 — casi 4x más descentralizado que Ethereum. Base técnica sólida.</div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <strong>🔑 El "Physical AI" — la conexión con la economía de máquinas:</strong> IoTeX completa una trilogía que hemos analizado en TokenFlow AI. Peaq es la blockchain para máquinas. GEODNET es el GPS de precisión para esas máquinas. IoTeX es la capa de datos verificados que la IA necesita para entender y actuar sobre el mundo físico. Con socios como Google, Samsung, IEEE, ARM y Nordic Semiconductor, IoTeX tiene credenciales enterprise que pocos DePINs pueden mostrar.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-cyan">🔥</div>
+      <div class="section-title">Burn-Drop — La tokenómica desinflacionaria vinculada a dispositivos</div>
+      <div class="section-tag">Mecanismo Único</div>
+    </div>
+
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">IoTeX tiene uno de los mecanismos tokenómicos más originales del sector: Burn-Drop. A medida que más dispositivos se registran en la red, el supply total de IOTX se reduce permanentemente. No depende de transacciones especulativas — depende de adopción física real.</p>
+
+    <div class="burn-box">
+      <div class="burn-title">⚙ Cómo funciona el Burn-Drop</div>
+      <div class="burn-flow">
+        <div class="burn-item"><div class="burn-num" style="color:#22d3ee;">1B IOTX</div><div class="burn-label">asignados a<br>Burn-Drop</div></div>
+        <div class="burn-arrow">→</div>
+        <div class="burn-item"><div class="burn-num" style="color:#f87171;">90%</div><div class="burn-label">quemado<br>(900M IOTX)</div></div>
+        <div class="burn-arrow">→</div>
+        <div class="burn-item"><div class="burn-num" style="color:#4ade80;">10%</div><div class="burn-label">drop a stakers<br>(100M IOTX)</div></div>
+        <div class="burn-arrow">→</div>
+        <div class="burn-item"><div class="burn-num" style="color:#fbbf24;">1M devices</div><div class="burn-label">meta de<br>onboarding</div></div>
+      </div>
+    </div>
+
+    <div class="note-box success">
+      <strong>✅ Mcap/FDV = 94% — entre los mejores del sector:</strong> Con el 94% del supply ya en circulación, IoTeX tiene una de las estructuras de supply más limpias de todos los proyectos analizados por TokenFlow AI — comparable a RENDER (97%) y Helium (84%). No hay vesting overhang significativo. La única dinámica de supply futura es deflacionaria: el Burn-Drop reduce el supply conforme crece la adopción de dispositivos "Powered by IoTeX".
+    </div>
+
+    <div class="note-box warning">
+      <strong>⚠ El reto del Burn-Drop:</strong> El mecanismo está diseñado para completarse cuando 1 millón de dispositivos "Powered by IoTeX" estén onboarded. El progreso ha sido lento — el burn-drop depende de un tipo específico de dispositivo certificado, no de los 40M de dispositivos genéricos de la red. Es deflacionario pero a un ritmo modesto.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">⚠</div>
+      <div class="section-title">El hack de febrero — La sombra sobre el proyecto</div>
+      <div class="section-tag">Riesgo 2026</div>
+    </div>
+
+    <div style="background:#1a0808;border:1px solid #7f1d1d;border-radius:6px;padding:18px;margin-bottom:14px;">
+      <div style="font-size:11px;color:#f87171;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">🔴 ioTube Bridge Exploit — 21 de febrero de 2026</div>
+      <div style="font-size:12px;color:#cbd5e1;line-height:1.7;">El puente cross-chain ioTube fue explotado por un compromiso de clave privada. Pérdida estimada: $4.4M. El atacante minteó 410M tokens CIOTX y drenó reservas, convirtiendo parte a Ether y luego a Bitcoin vía THORChain. El precio de IOTX cayó 23% a $0.0043. Upbit y Bithumb (exchanges surcoreanos) añadieron IOTX a sus watchlists de delisting.</div>
+    </div>
+
+    <div class="note-box success">
+      <strong>✅ La respuesta del equipo fue ejemplar:</strong> IoTeX Foundation se comprometió a la reimbursación completa de todos los usuarios afectados usando fondos del treasury. Blacklistearon las direcciones del atacante, distribuyeron un patch a los delegados, y trabajaron con law enforcement. La propuesta IIP-56 (marzo 2026) deprecó completamente CIOTX — eliminando el vector de ataque. La gestión de crisis fue de las mejores del sector.
+    </div>
+
+    <div class="note-box warning">
+      <strong>⚠ El daño reputacional persiste:</strong> Aunque la respuesta fue sólida, el hack erosionó la confianza y trajo escrutinio regulatorio en Corea — un mercado clave para IOTX. Recuperar la confianza de los exchanges es crítico. Este es el segundo proyecto analizado por TokenFlow AI (junto a NEAR) con incidentes de seguridad cross-chain en 2026 — un patrón preocupante del sector.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">⚡</div>
+      <div class="section-title">Tracción real — Métricas y partnerships</div>
+      <div class="section-tag">Fundamentales</div>
+    </div>
+
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">AI data requests</div><div class="stat-value stat-cyan">94K+</div><div class="stat-sub">Marzo 2026</div></div>
+      <div class="stat-card"><div class="stat-label">Partnerships</div><div class="stat-value" style="font-size:13px;padding-top:4px;">Vodafone</div><div class="stat-sub">Google, Samsung, Chainlink</div></div>
+      <div class="stat-card"><div class="stat-label">MiCA compliant</div><div class="stat-value stat-green">EU ✅</div><div class="stat-sub">Dic. 2025</div></div>
+      <div class="stat-card"><div class="stat-label">On-chain fees 24h</div><div class="stat-value stat-red">~$23</div><div class="stat-sub">Revenue mínimo</div></div>
+    </div>
+
+    <div class="pressure-meter">
+      <div class="meter-label">Quicksilver AI framework — crecimiento de uso (+43% jun. 2025)</div>
+      <div class="meter-bar-wrap" style="height:12px;border-radius:6px;"><div class="meter-bar meter-cyan" style="width:60%;height:12px;border-radius:6px;"></div></div>
+      <div class="meter-footer"><span>Bajo</span><span style="color:#22d3ee;font-weight:700;">+43% en uso de agentes AI — momentum técnico</span><span>Alto</span></div>
+    </div>
+
+    <div class="note-box">
+      <strong>📌 La paradoja del veterano:</strong> IoTeX tiene partnerships enterprise reales (Vodafone para torres móviles como nodos DePIN, U Power para infraestructura EV), MiCA compliance para el mercado europeo, y un equipo fundador de primer nivel (ex-Uber crypto R&D, ex-Facebook ML, ex-Bosch Research). Pero el revenue on-chain es de ~$23/día y el precio está -98% desde ATH. Es el mismo gap narrativa-realidad que vimos en Peaq y Story Protocol: tecnología y partnerships reales, pero monetización on-chain mínima.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">⚔</div>
+      <div class="section-title">Posicionamiento competitivo</div>
+      <div class="section-tag">Machine Economy + IoT</div>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr><th>Proyecto</th><th>Enfoque</th><th>Mcap</th><th>vs. IOTX</th></tr>
+      </thead>
+      <tbody>
+        <tr class="highlight-row">
+          <td><strong style="color:#22d3ee;">🟢 IoTeX (IOTX)</strong></td>
+          <td>Datos físicos para AI</td>
+          <td>~$35M</td>
+          <td>— Veterano, Trio world model, 40M devices</td>
+        </tr>
+        <tr>
+          <td><strong>Peaq Network</strong></td>
+          <td>Machine Economy L1</td>
+          <td>~$53M</td>
+          <td>Competidor directo — Peaq más reciente</td>
+        </tr>
+        <tr>
+          <td><strong>GEODNET</strong></td>
+          <td>GPS de precisión</td>
+          <td>~$92M</td>
+          <td>Complementario — posicionamiento vs. datos</td>
+        </tr>
+        <tr>
+          <td><strong>IOTA</strong></td>
+          <td>IoT + transacciones</td>
+          <td>~$800M</td>
+          <td>23x mayor — más establecido</td>
+        </tr>
+        <tr>
+          <td><strong>Helium (HNT)</strong></td>
+          <td>DePIN wireless</td>
+          <td>~$197M</td>
+          <td>Conectividad — complementario</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box" style="margin-top:16px;">
+      <strong>La ventaja y el reto de IoTeX:</strong> Como veterano desde 2017, IoTeX tiene la infraestructura más madura del sector "datos físicos para AI" — Roll-DPoS, ioID, Quicksilver, y ahora Trio. Su reto es que esa madurez no se ha traducido en captura de valor: el Mcap de $35M es uno de los más bajos del sector pese a 40M dispositivos y partnerships con Google y Samsung. Trio es la apuesta para cambiar eso — si el "world model" para operaciones físicas genera adopción enterprise real, el re-rating podría ser significativo.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📉</div>
+      <div class="section-title">Estructura técnica y contexto de precio</div>
+      <div class="section-tag">Estructura de Precio</div>
+    </div>
+
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Precio vs ATH</div><div class="stat-value stat-red">-98%</div><div class="stat-sub">ATH: $0.25 (nov. 2021)</div></div>
+      <div class="stat-card"><div class="stat-label">Soporte clave</div><div class="stat-value">$0.0035</div><div class="stat-sub">Zona crítica</div></div>
+      <div class="stat-card"><div class="stat-label">Resistencia</div><div class="stat-value">$0.015</div><div class="stat-sub">Breakout = trend change</div></div>
+      <div class="stat-card"><div class="stat-label">Volumen 24h</div><div class="stat-value">~$3M</div><div class="stat-sub">Liquidez moderada-baja</div></div>
+    </div>
+
+    <div class="pressure-meter"><div class="meter-label">Tendencia de largo plazo (-98% desde ATH de 2021)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:97%;"></div></div><div class="meter-footer"><span>ATH</span><span style="color:#f87171;">🔴 Downtrend persistente desde 2021</span><span>ATL</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Mcap/FDV (94% — sin presión de dilución, positivo)</div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:94%;"></div></div><div class="meter-footer"><span>0%</span><span style="color:#4ade80;font-weight:700;">✅ 94% circulando — sin vesting overhang</span><span>100%</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Revenue on-chain ($23/día — gap narrativa-realidad)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:2%;"></div></div><div class="meter-footer"><span>$0</span><span style="color:#f87171;">🔴 Monetización on-chain mínima</span><span>$100K+</span></div></div>
+
+    <div class="note-box warning" style="margin-top:14px;">
+      El precio lleva en downtrend desde 2021, con una línea de tendencia bajista desde los máximos de $0.089. Un breakout sobre $0.015 señalaría un cambio de tendencia hacia $0.028. Por debajo de $0.0035 (soporte crítico) el riesgo es retestear mínimos. El catalizador técnico más importante es el lanzamiento comercial de Trio — si genera adopción medible, podría romper el downtrend de 4 años.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">⚖</div>
+      <div class="section-title">Argumentos alcistas vs. bajistas</div>
+      <div class="section-tag">Veredicto TokenFlow</div>
+    </div>
+
+    <div class="verdict-grid">
+      <div class="verdict-card verdict-bull">
+        <div class="verdict-title">🟢 Argumentos alcistas</div>
+        <div class="verdict-item">Mcap/FDV = 94% — sin vesting overhang, supply limpio</div>
+        <div class="verdict-item">Trio world model — apuesta única en "Physical AI"</div>
+        <div class="verdict-item">40M+ dispositivos, partnerships Google, Samsung, Vodafone</div>
+        <div class="verdict-item">Burn-Drop — tokenómica desinflacionaria vinculada a dispositivos</div>
+        <div class="verdict-item">MiCA compliant — acceso al mercado institucional europeo</div>
+        <div class="verdict-item">Veterano desde 2017 — infraestructura madura (Roll-DPoS, ioID)</div>
+        <div class="verdict-item">Nakamoto coefficient 9 — 4x más descentralizado que Ethereum</div>
+        <div class="verdict-item">Mcap $35M — asimetría alta si Trio escala</div>
+      </div>
+      <div class="verdict-card verdict-bear">
+        <div class="verdict-title">🔴 Argumentos bajistas</div>
+        <div class="verdict-item">Hack de $4.4M en feb. 2026 — daño reputacional y regulatorio</div>
+        <div class="verdict-item">-98% desde ATH — downtrend persistente desde 2021</div>
+        <div class="verdict-item">Revenue on-chain ~$23/día — monetización casi inexistente</div>
+        <div class="verdict-item">Watchlists de delisting en exchanges surcoreanos</div>
+        <div class="verdict-item">Burn-Drop avanza lento — lejos de 1M dispositivos certificados</div>
+        <div class="verdict-item">Volumen 24h ~$3M — liquidez moderada-baja</div>
+        <div class="verdict-item">Trio aún no lanzado comercialmente — promesa sin métricas</div>
+        <div class="verdict-item">8 años de existencia sin captura de valor proporcional</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="final-verdict">
+    <div class="final-title">TokenFlow AI · Veredicto Final</div>
+    <div class="final-score">
+      <div class="score-number">5</div>
+      <div>
+        <div class="score-label">Infraestructura madura · Captura de valor ausente</div>
+        <div class="score-sub">sobre 10 · 8 años construyendo — Trio es la última apuesta para monetizar</div>
+      </div>
+    </div>
+    <div class="final-text">
+      IoTeX es el proyecto más maduro técnicamente de los "DePIN para datos físicos" que hemos analizado. Lleva desde 2017 construyendo infraestructura real: un L1 EVM-compatible con Roll-DPoS, identidad de máquinas con ioID, el framework Quicksilver AI, y ahora Trio — un "world model" para operaciones físicas. Los partnerships con Google, Samsung, Vodafone y la compliance MiCA no son anuncios vacíos; son credenciales enterprise que pocos DePINs pueden mostrar. El Mcap/FDV del 94% elimina el riesgo de dilución que pesa sobre proyectos como io.net o Story Protocol.<br><br>
+      Pero hay dos problemas serios. El primero es el hack de $4.4M en febrero — aunque la respuesta del equipo fue ejemplar (reimbursación completa, deprecación de CIOTX), el daño reputacional y el escrutinio regulatorio en Corea persisten. El segundo, más estructural: después de 8 años, IoTeX no ha logrado capturar valor proporcional a su infraestructura. El revenue on-chain de $23 diarios y el Mcap de $35M frente a 40M dispositivos es el gap narrativa-realidad más persistente del sector.<br><br>
+      Trio es la apuesta que podría cambiar todo. Si el "world model" para operaciones físicas — almacenes, fábricas, retail, hospitales usando cámaras y sensores existentes — genera adopción enterprise real con revenue medible, IoTeX pasaría de "infraestructura subutilizada" a "interfaz de la IA con el mundo físico". Ese es el escenario alcista, y no es trivial dado el momento de Physical AI en 2026.<br><br>
+      <strong>¿Qué cambiaría el veredicto?</strong> El lanzamiento comercial de Trio con clientes enterprise pagantes verificables. Si Trio genera revenue on-chain real y el Burn-Drop se acelera con adopción de dispositivos, el Mcap de $35M parecería irrisorio. Pero después de 8 años de promesas, el mercado necesita ver ejecución monetizable — no solo otra narrativa.
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:20px;">
+    <div class="section-header">
+      <div class="section-icon icon-cyan">👁</div>
+      <div class="section-title">Qué vigilar en los próximos 30–90 días</div>
+      <div class="section-tag">Lista de Monitoreo</div>
+    </div>
+    <div class="watch-item"><div class="watch-dot dot-cyan"></div><div class="watch-text"><strong>Lanzamiento comercial de Trio:</strong> El catalizador más importante. Si Trio pasa de "perception shipping" a clientes enterprise pagantes con revenue medible, cambia toda la tesis. Seguir anuncios de MachineFi Lab y el equipo core de IoTeX.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>On-chain transactions diarias:</strong> El indicador de utilidad real. Un alza sostenida sobre 5M/día (vs. 3.1M actual) señalaría que la actividad real supera la volatilidad de exchanges. Seguir en el explorador de IoTeX.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-red"></div><div class="watch-text"><strong>Estado en exchanges surcoreanos:</strong> Si Upbit y Bithumb retiran IOTX de sus watchlists de delisting, señala recuperación de confianza tras el hack. Lo contrario — un delisting efectivo — sería un golpe severo a la liquidez.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-yellow"></div><div class="watch-text"><strong>Crecimiento de ioIDs:</strong> Actualmente ~100K identidades de máquina. Si supera 250K de forma sostenida, valida que la adopción de dispositivos crece — y acelera el Burn-Drop deflacionario. Seguir en el dashboard de IoTeX Hub.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-cyan"></div><div class="watch-text"><strong>Breakout técnico sobre $0.015:</strong> Un cierre semanal sostenido por encima rompería el downtrend de 4 años desde 2021. Sin ese nivel, la estructura bajista de largo plazo permanece intacta independientemente de los fundamentales.</div></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong style="color:#22d3ee;">TokenFlow AI</strong> · Investigación de tokenómica AI y DePIN · Sin hype. Solo estructura.<br>
+  Fecha del análisis: 26 de junio de 2026 · Este análisis no constituye asesoramiento de inversión. DYOR.<br>
+  Fuentes: CoinGecko, CoinMarketCap, Messari, CoinLore, Tiger Research, messari.io, iotex.io, datos on-chain
+</div>
+
+</body>
+</html>
