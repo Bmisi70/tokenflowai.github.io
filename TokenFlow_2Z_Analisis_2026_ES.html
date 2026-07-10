@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenFlow AI – Análisis DoubleZero (2Z) 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'JetBrains Mono', monospace; background: #0a0e1a; color: #e2e8f0; line-height: 1.7; font-size: 14px; }
+
+  .header { background: linear-gradient(135deg, #0a0e1a 0%, #101a2e 50%, #0a0e1a 100%); border-bottom: 1px solid #2563eb; padding: 44px 32px 36px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; background: radial-gradient(ellipse, rgba(59,130,246,0.09) 0%, transparent 70%); pointer-events: none; }
+  .brand { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #3b82f6; margin-bottom: 14px; font-weight: 600; }
+  .title { font-size: 38px; font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -1px; }
+  .title span { color: #3b82f6; }
+  .subtitle { font-size: 12px; color: #64748b; margin-bottom: 22px; letter-spacing: 1px; }
+  .verdict-badge { display: inline-block; padding: 8px 24px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid; font-family: 'JetBrains Mono', monospace; }
+  .badge-warning { background: #451a03; color: #fb923c; border-color: #9a3412; }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 36px 20px; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 36px; }
+  .stat-card { background: #0d1525; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; text-align: center; }
+  .stat-label { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .stat-value { font-size: 22px; font-weight: 800; color: #f8fafc; }
+  .stat-sub { font-size: 10px; color: #64748b; margin-top: 4px; }
+  .stat-blue { color: #3b82f6; }
+  .stat-green { color: #4ade80; }
+  .stat-yellow { color: #fbbf24; }
+  .stat-red { color: #f87171; }
+  .stat-orange { color: #fb923c; }
+
+  .section { background: #0d1525; border: 1px solid #1e293b; border-radius: 8px; padding: 26px; margin-bottom: 18px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #1e293b; }
+  .section-icon { width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .icon-blue { background: #1e3a5f; }
+  .icon-orange { background: #431407; }
+  .icon-red { background: #450a0a; }
+  .icon-yellow { background: #422006; }
+  .icon-green { background: #052e16; }
+  .icon-purple { background: #2e1065; }
+  .icon-cyan { background: #083344; }
+  .section-title { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+  .section-tag { font-size: 10px; color: #475569; margin-left: auto; letter-spacing: 1px; text-transform: uppercase; }
+
+  .concept-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .concept-card { background: #0c1830; border: 1px solid #1e40af; border-radius: 6px; padding: 16px; }
+  .concept-card-title { font-size: 11px; color: #3b82f6; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .concept-card-text { font-size: 12px; color: #94a3b8; line-height: 1.6; }
+
+  .alloc-table { width: 100%; border-collapse: collapse; }
+  .alloc-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .alloc-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; font-size: 13px; vertical-align: middle; }
+  .alloc-table tr:last-child td { border-bottom: none; }
+  .alloc-bar-wrap { background: #1e293b; border-radius: 2px; height: 5px; width: 90px; display: inline-block; vertical-align: middle; margin-left: 8px; }
+  .alloc-bar { height: 5px; border-radius: 2px; display: block; }
+
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+  .pill-green { background: #052e16; color: #4ade80; }
+  .pill-yellow { background: #422006; color: #fbbf24; }
+  .pill-red { background: #450a0a; color: #f87171; }
+  .pill-blue { background: #1e3a5f; color: #93c5fd; }
+
+  .pressure-meter { margin: 14px 0; }
+  .meter-label { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+  .meter-bar-wrap { background: #1e293b; border-radius: 3px; height: 10px; overflow: hidden; }
+  .meter-bar { height: 10px; border-radius: 3px; }
+  .meter-green { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .meter-orange { background: linear-gradient(90deg, #ea580c, #fb923c); }
+  .meter-red { background: linear-gradient(90deg, #dc2626, #f87171); }
+  .meter-blue { background: linear-gradient(90deg, #2563eb, #3b82f6); }
+  .meter-yellow { background: linear-gradient(90deg, #ca8a04, #fbbf24); }
+  .meter-footer { display: flex; justify-content: space-between; font-size: 10px; color: #475569; margin-top: 4px; }
+
+  .verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .verdict-card { border-radius: 6px; padding: 20px; }
+  .verdict-bull { background: #052e16; border: 1px solid #166534; }
+  .verdict-bear { background: #450a0a; border: 1px solid #7f1d1d; }
+  .verdict-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .verdict-bull .verdict-title { color: #4ade80; }
+  .verdict-bear .verdict-title { color: #f87171; }
+  .verdict-item { font-size: 12px; color: #cbd5e1; margin-bottom: 9px; padding-left: 18px; position: relative; line-height: 1.5; }
+  .verdict-item::before { content: '→'; position: absolute; left: 0; font-weight: 700; }
+  .verdict-bull .verdict-item::before { color: #4ade80; }
+  .verdict-bear .verdict-item::before { color: #f87171; }
+
+  .final-verdict { background: linear-gradient(135deg, #101a2e, #0f172a); border: 1px solid #2563eb; border-radius: 8px; padding: 30px; margin-top: 8px; }
+  .final-title { font-size: 11px; color: #3b82f6; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 14px; font-weight: 700; }
+  .final-score { display: flex; align-items: center; gap: 22px; margin-bottom: 18px; }
+  .score-number { font-size: 68px; font-weight: 900; color: #fbbf24; line-height: 1; }
+  .score-label { font-size: 20px; font-weight: 700; color: #f1f5f9; }
+  .score-sub { font-size: 12px; color: #64748b; margin-top: 6px; }
+  .final-text { font-size: 13px; color: #cbd5e1; line-height: 1.9; }
+
+  .watch-item { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid #1e293b; font-size: 13px; }
+  .watch-item:last-child { border-bottom: none; }
+  .watch-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #22c55e; }
+  .dot-blue { background: #3b82f6; }
+  .watch-text { color: #cbd5e1; }
+  .watch-text strong { color: #f8fafc; }
+
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .comp-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .comp-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; vertical-align: middle; }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table tr.highlight-row { background: #0c1830; }
+
+  .note-box { background: #080f1c; border-left: 3px solid #3b82f6; border-radius: 0 6px 6px 0; padding: 14px 16px; font-size: 12px; color: #94a3b8; margin: 14px 0; line-height: 1.8; }
+  .note-box.warning { border-left-color: #f59e0b; background: #0d1105; }
+  .note-box.danger { border-left-color: #ef4444; background: #0d0808; }
+  .note-box.success { border-left-color: #22c55e; background: #050f05; }
+
+  .footer { text-align: center; padding: 28px; color: #334155; font-size: 11px; border-top: 1px solid #1e293b; margin-top: 36px; letter-spacing: 0.5px; line-height: 2; }
+
+  @media (max-width: 600px) {
+    .verdict-grid, .concept-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .score-number { font-size: 52px; }
+    .title { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">🔵 TokenFlow AI · Investigación de Tokenómica DePIN</div>
+  <div class="title">Double<span>Zero</span> · 2Z</div>
+  <div class="subtitle">Análisis completo — El backbone de fibra óptica para blockchains · 10 de julio de 2026</div>
+  <div class="verdict-badge badge-warning">⚠ Infraestructura única · SEC no-action letter · Supply overhang del 65%</div>
+</div>
+
+<div class="container">
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Precio (USD)</div><div class="stat-value stat-blue">$0.069</div><div class="stat-sub">10 de julio, 2026</div></div>
+    <div class="stat-card"><div class="stat-label">Cap. de Mercado</div><div class="stat-value">~$240M</div><div class="stat-sub">#117 CoinMarketCap</div></div>
+    <div class="stat-card"><div class="stat-label">FDV</div><div class="stat-value stat-red">~$690M</div><div class="stat-sub">Mcap/FDV = 35% ⚠️</div></div>
+    <div class="stat-card"><div class="stat-label">Desde ATH</div><div class="stat-value stat-red">-91%</div><div class="stat-sub">ATH: $0.75 (oct. 2025)</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Circ.</div><div class="stat-value">3.47B</div><div class="stat-sub">Solo 35% del máximo</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Máx.</div><div class="stat-value">10B</div><div class="stat-sub">65% bloqueado 4 años</div></div>
+    <div class="stat-card"><div class="stat-label">SEC status</div><div class="stat-value stat-green">No-action</div><div class="stat-sub">Sept. 2025 — raro</div></div>
+    <div class="stat-card"><div class="stat-label">Solana stake</div><div class="stat-value stat-blue">Mayoría</div><div class="stat-sub">Ya en producción</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">🌐</div>
+      <div class="section-title">¿Qué es DoubleZero? — La fibra óptica privada para blockchains</div>
+      <div class="section-tag">Infraestructura Core</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">En Wall Street, los traders de alta frecuencia pagan millones por fibra óptica privada que les da ventajas de milisegundos. DoubleZero trae exactamente esa infraestructura al mundo blockchain — pero descentralizada. Es una red global de enlaces de fibra óptica contribuidos independientemente, diseñada para que validadores y blockchains puedan comunicarse sin los cuellos de botella del internet público. El resultado: menor latencia, menos jitter, y mayor rendimiento para L1s y L2s.</p>
+
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="concept-card-title">Arquitectura de dos anillos</div>
+        <div class="concept-card-text">Enlaces de fibra contribuidos + hardware de filtrado en el edge. Crea canales de comunicación de latencia ultra-baja, dedicados exclusivamente a tráfico blockchain — separados del internet público congestionado.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">DoubleZero Edge</div>
+        <div class="concept-card-text">Lanzado abril 2026: distribuye datos raw de Solana (shreds) en tiempo real a traders institucionales sobre fibra dedicada con multicast. Reduce latencia decenas de milisegundos en alta volatilidad.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Equipo de élite</div>
+        <div class="concept-card-text">Liderazgo con experiencia en Solana Foundation, NASDAQ y operadores globales de fibra. Es un equipo que entiende tanto networking de alto rendimiento como protocolos crypto — combinación rara.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Ya en producción</div>
+        <div class="concept-card-text">DoubleZero ya soporta una porción significativa del stake de Solana. No es un testnet especulativo — es infraestructura funcionando, con validadores reales dependiendo de ella hoy.</div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <strong>🔑 Por qué esto importa para la economía AI/DePIN:</strong> A medida que las blockchains procesan más aplicaciones de baja latencia — trading on-chain, producción de bloques, oráculos en tiempo real, restaking — el internet público se convierte en el cuello de botella. DoubleZero es la capa de red física que permite a estos sistemas acercarse a su rendimiento máximo. Es infraestructura invisible pero crítica: como el DePIN de posicionamiento (GEODNET) o de máquinas (Peaq), captura valor de una necesidad física real.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">⚖</div>
+      <div class="section-title">El SEC no-action letter — La victoria regulatoria rara</div>
+      <div class="section-tag">Hito Regulatorio</div>
+    </div>
+
+    <div class="note-box success">
+      <strong>✅ Septiembre 2025 — Precedente regulatorio histórico:</strong> La División de Corporation Finance de la SEC otorgó a DoubleZero un raro "no-action letter", confirmando que las transferencias programáticas del token 2Z no son transacciones de valores (securities). Esto es extraordinario — muy pocos proyectos crypto han obtenido esta claridad de la SEC. Reduce dramáticamente el riesgo regulatorio para entidades estadounidenses que quieran usar o contribuir a la red.
+    </div>
+
+    <p style="font-size:13px;color:#94a3b8;margin:16px 0;">Este hito tiene consecuencias concretas. Facilitó los listings en Binance y Coinbase. Contribuyó a que DoubleZero fuera añadido a la watchlist "Assets Under Consideration" de Grayscale en Q1 2026, en la categoría "Utilities and Services". Y lo más importante: baja la barrera para que proveedores de telecomunicaciones e infraestructura regulados contribuyan ancho de banda a la red — el tipo de participantes institucionales que DoubleZero necesita para escalar.</p>
+
+    <div class="note-box">
+      <strong>📌 El contraste con Story Protocol y otros:</strong> Mientras muchos proyectos analizados por TokenFlow AI enfrentan incertidumbre regulatoria, DoubleZero tiene el estatus regulatorio más claro de todos. En un sector donde la SEC es históricamente el mayor riesgo, esta claridad es un activo estructural que el mercado aún no ha valorado completamente — el precio está -91% desde ATH pese a este logro.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📊</div>
+      <div class="section-title">Estructura del suministro — El problema central</div>
+      <div class="section-tag">Supply Analysis</div>
+    </div>
+
+    <table class="alloc-table">
+      <thead>
+        <tr><th>Categoría</th><th>% Supply</th><th>Estado</th><th>Riesgo</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>DoubleZero Foundation</strong></td>
+          <td>29% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:100%;background:#f97316;"></div></div></td>
+          <td><span class="status-pill pill-yellow">Standard Lockup 4 años</span></td>
+          <td style="color:#fb923c;">⚠ Mayor asignación</td>
+        </tr>
+        <tr>
+          <td><strong>Jump Crypto</strong></td>
+          <td>28% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:96%;background:#ef4444;"></div></div></td>
+          <td><span class="status-pill pill-red">Lockup — luego líquido</span></td>
+          <td style="color:#f87171;">⚠ Concentración VC alta</td>
+        </tr>
+        <tr>
+          <td><strong>Circulante actual</strong></td>
+          <td>35% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:35%;background:#3b82f6;"></div></div></td>
+          <td><span class="status-pill pill-blue">En mercado</span></td>
+          <td>Supply líquido activo</td>
+        </tr>
+        <tr>
+          <td><strong>Team + Investors</strong></td>
+          <td>~8% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:28%;background:#fbbf24;"></div></div></td>
+          <td><span class="status-pill pill-yellow">Vesting 4 años</span></td>
+          <td style="color:#fbbf24;">Presión gradual</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="pressure-meter" style="margin-top:20px;">
+      <div class="meter-label">Mcap/FDV = 35% — comparativa con tokens analizados por TokenFlow AI</div>
+      <div style="display:grid;gap:8px;margin-top:8px;">
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>IoTeX (IOTX)</span><span>94%</span></div><div class="meter-bar-wrap" style="width:100%;"><div class="meter-bar meter-green" style="width:94%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>Akash (AKT)</span><span>75%</span></div><div class="meter-bar-wrap" style="width:100%;"><div class="meter-bar meter-green" style="width:75%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>Story Protocol (IP)</span><span>38%</span></div><div class="meter-bar-wrap" style="width:100%;"><div class="meter-bar meter-orange" style="width:38%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span style="color:#f87171;font-weight:700;">DoubleZero (2Z)</span><span style="color:#f87171;font-weight:700;">35% ⚠</span></div><div class="meter-bar-wrap" style="width:100%;"><div class="meter-bar meter-red" style="width:35%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>Ocean Protocol (OCEAN)</span><span>14%</span></div><div class="meter-bar-wrap" style="width:100%;"><div class="meter-bar meter-red" style="width:14%;"></div></div></div>
+      </div>
+    </div>
+
+    <div class="note-box danger">
+      <strong>🔴 El headwind estructural:</strong> Con solo el 35% del supply en circulación y el 65% bloqueado con desbloqueos graduales durante 4 años, DoubleZero tiene un supply overhang significativo. Las asignaciones a Jump Crypto (28%) y Foundation (29%) son enormes. Aunque el protocolo mintea nuevos tokens por inflación para recompensar contribuidores — con el objetivo de que los burns superen la emisión a largo plazo — la presión de dilución de los próximos 4 años es el mayor riesgo del token. El precio -91% desde ATH ya refleja parte de esta preocupación.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">🔥</div>
+      <div class="section-title">Tokenómica — Inflación con objetivo deflacionario</div>
+      <div class="section-tag">Mecanismo</div>
+    </div>
+
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:16px;">El modelo de 2Z es un equilibrio delicado. Los usuarios pagan en 2Z por conectividad de alta velocidad. Los contribuidores de fibra reciben 2Z según el rendimiento y uso de sus enlaces. El protocolo mintea nuevos tokens por inflación para recompensar contribuidores — pero el diseño apunta a que, a largo plazo, los burns por uso superen la emisión.</p>
+
+    <div class="pressure-meter">
+      <div class="meter-label">La carrera clave: demanda por uso (fees) vs. emisión + desbloqueos</div>
+      <div class="meter-bar-wrap" style="height:12px;border-radius:6px;"><div class="meter-bar meter-yellow" style="width:40%;height:12px;border-radius:6px;"></div></div>
+      <div class="meter-footer"><span>Inflacionario</span><span style="color:#fbbf24;font-weight:700;">⚠ Aún inflacionario — objetivo deflacionario lejano</span><span>Deflacionario</span></div>
+    </div>
+
+    <div class="note-box warning">
+      <strong>⚠ DoubleZero Edge — el nuevo canal de revenue:</strong> El lanzamiento de DoubleZero Edge (abril 2026) creó un modelo de ingresos concreto: los validadores ganan fees por suministrar datos, y los traders pagan suscripciones en USDC por acceso de baja latencia a datos de Solana. Este es exactamente el tipo de demanda utility real que puede acelerar los burns. Si el volumen de trading institucional crece, el modelo se acerca a su objetivo deflacionario. Pero introduce un modelo de acceso por niveles que genera preguntas sobre equidad de mercado.
+    </div>
+
+    <div class="note-box">
+      <strong>📌 DZDP Phase II (marzo 2026):</strong> El DoubleZero Delegation Program incentiva a los holders a stakear 2Z con validadores, reduciendo el supply líquido inmediatamente tradeable. Esto da soporte de precio a corto plazo — pero las recompensas de staking añaden a la inflación futura. Es un parche de liquidez, no una solución al overhang estructural.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">⚔</div>
+      <div class="section-title">Posicionamiento competitivo</div>
+      <div class="section-tag">Networking DePIN</div>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr><th>Proyecto</th><th>Enfoque</th><th>Mcap</th><th>vs. 2Z</th></tr>
+      </thead>
+      <tbody>
+        <tr class="highlight-row">
+          <td><strong style="color:#3b82f6;">🔵 DoubleZero (2Z)</strong></td>
+          <td>Fibra backbone para blockchains</td>
+          <td>~$240M</td>
+          <td>— Único en networking de baja latencia</td>
+        </tr>
+        <tr>
+          <td><strong>Helium (HNT)</strong></td>
+          <td>Wireless descentralizado</td>
+          <td>~$197M</td>
+          <td>Wireless consumer vs. fibra institucional</td>
+        </tr>
+        <tr>
+          <td><strong>Internet tradicional</strong></td>
+          <td>Backbone público</td>
+          <td>—</td>
+          <td>2Z es dedicado, sin congestión</td>
+        </tr>
+        <tr>
+          <td><strong>Cloudflare / AWS Direct</strong></td>
+          <td>Networking centralizado</td>
+          <td>Miles de M</td>
+          <td>2Z descentralizado + crypto-nativo</td>
+        </tr>
+        <tr>
+          <td><strong>Wall Street fiber (Wall St)</strong></td>
+          <td>Fibra HFT privada</td>
+          <td>—</td>
+          <td>2Z democratiza esa ventaja</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box" style="margin-top:16px;">
+      <strong>Posición única de DoubleZero:</strong> No hay otro proyecto crypto haciendo networking de fibra dedicada para blockchains a esta escala y con este nivel de producción. Su competidor real no es otro token — es el internet público congestionado. Para blockchains de alto rendimiento como Solana (y futuras integraciones multi-chain), DoubleZero resuelve un problema que ningún token compite por resolver. El moat es la red física de fibra contribuida, difícil de replicar.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📉</div>
+      <div class="section-title">Estructura técnica y contexto de precio</div>
+      <div class="section-tag">Estructura de Precio</div>
+    </div>
+
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Precio vs ATH</div><div class="stat-value stat-red">-91%</div><div class="stat-sub">ATH: $0.75 (oct. 2025)</div></div>
+      <div class="stat-card"><div class="stat-label">30 días</div><div class="stat-value stat-red">-34%</div><div class="stat-sub">Corrección activa</div></div>
+      <div class="stat-card"><div class="stat-label">Edad del token</div><div class="stat-value stat-yellow">~9 mes</div><div class="stat-sub">Price discovery aún</div></div>
+      <div class="stat-card"><div class="stat-label">Volumen 24h</div><div class="stat-value">~$5M</div><div class="stat-sub">Liquidez moderada</div></div>
+    </div>
+
+    <div class="pressure-meter"><div class="meter-label">Desde ATH (-91% en ~9 meses — price discovery post-TGE)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:90%;"></div></div><div class="meter-footer"><span>ATH</span><span style="color:#f87171;">🔴 Corrección severa — token joven en descubrimiento</span><span>ATL</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Claridad regulatoria (SEC no-action letter — el mejor del sector)</div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:95%;"></div></div><div class="meter-footer"><span>Riesgo</span><span style="color:#4ade80;font-weight:700;">✅ SEC no-action — activo estructural raro</span><span>Claro</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Supply overhang (65% bloqueado, unlocks 4 años)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:65%;"></div></div><div class="meter-footer"><span>Bajo</span><span style="color:#f87171;">🔴 Alto — dilución estructural pendiente</span><span>Máximo</span></div></div>
+
+    <div class="note-box warning" style="margin-top:14px;">
+      DoubleZero es un token joven (~9 meses) aún en price discovery. El -91% desde ATH refleja tanto la corrección natural post-TGE como el peso del supply overhang. La claridad regulatoria y la infraestructura en producción son fundamentales sólidos, pero el mercado prima la dilución pendiente a corto plazo. Es un caso de "buenos fundamentales, mala estructura de supply" — similar a Story Protocol, pero con la ventaja regulatoria que a IP le falta.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">⚖</div>
+      <div class="section-title">Argumentos alcistas vs. bajistas</div>
+      <div class="section-tag">Veredicto TokenFlow</div>
+    </div>
+
+    <div class="verdict-grid">
+      <div class="verdict-card verdict-bull">
+        <div class="verdict-title">🟢 Argumentos alcistas</div>
+        <div class="verdict-item">SEC no-action letter — la claridad regulatoria más rara del sector</div>
+        <div class="verdict-item">Infraestructura en producción — ya soporta stake mayoritario de Solana</div>
+        <div class="verdict-item">Equipo de élite: Solana Foundation, NASDAQ, operadores de fibra</div>
+        <div class="verdict-item">DoubleZero Edge — revenue institucional real en USDC</div>
+        <div class="verdict-item">Grayscale watchlist + listings Binance/Coinbase</div>
+        <div class="verdict-item">Moat físico: red de fibra contribuida difícil de replicar</div>
+        <div class="verdict-item">Expansión multi-chain — TAM crece más allá de Solana</div>
+        <div class="verdict-item">Sin competidor crypto directo en networking de baja latencia</div>
+      </div>
+      <div class="verdict-card verdict-bear">
+        <div class="verdict-title">🔴 Argumentos bajistas</div>
+        <div class="verdict-item">Mcap/FDV = 35% — 65% del supply bloqueado, unlocks 4 años</div>
+        <div class="verdict-item">Jump Crypto 28% + Foundation 29% — concentración enorme</div>
+        <div class="verdict-item">-91% desde ATH — corrección severa post-TGE</div>
+        <div class="verdict-item">Aún inflacionario — objetivo deflacionario lejano</div>
+        <div class="verdict-item">Dependencia fuerte de Solana — riesgo de concentración</div>
+        <div class="verdict-item">DoubleZero Edge — modelo por niveles genera dudas de equidad</div>
+        <div class="verdict-item">Token joven (~9 meses) — sin historial de resiliencia</div>
+        <div class="verdict-item">Staking reduce liquidez pero añade a inflación futura</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="final-verdict">
+    <div class="final-title">TokenFlow AI · Veredicto Final</div>
+    <div class="final-score">
+      <div class="score-number">5.5</div>
+      <div>
+        <div class="score-label">Infraestructura sólida · Supply overhang pesado</div>
+        <div class="score-sub">sobre 10 · La claridad regulatoria más rara del sector — lastrada por la dilución</div>
+      </div>
+    </div>
+    <div class="final-text">
+      DoubleZero es uno de los proyectos de infraestructura más sólidos técnicamente que hemos analizado. Resuelve un problema real y no especulativo: el internet público es el cuello de botella de las blockchains de alto rendimiento, y DoubleZero construye la fibra dedicada que lo elimina. Ya está en producción soportando una porción mayoritaria del stake de Solana — no es una promesa, es infraestructura funcionando. El equipo, con backgrounds en Solana Foundation, NASDAQ y operadores de fibra global, tiene exactamente la combinación de expertise necesaria.<br><br>
+      Su mayor activo es el más subvalorado por el mercado: el SEC no-action letter de septiembre 2025. En un sector donde la incertidumbre regulatoria es históricamente el mayor riesgo, DoubleZero obtuvo la claridad que casi ningún proyecto tiene. Eso baja la barrera para participación institucional — telecoms y proveedores de infraestructura regulados pueden contribuir sin miedo regulatorio. Es un activo estructural que debería valer más de lo que el precio actual refleja.<br><br>
+      Pero la tokenómica es el lastre. Con solo el 35% del supply en circulación y el 65% bloqueado con desbloqueos durante 4 años — más asignaciones enormes a Jump Crypto (28%) y Foundation (29%) — el supply overhang es severo. El protocolo aún es inflacionario, y aunque el objetivo es que los burns superen la emisión, ese punto está lejos. El precio -91% desde ATH refleja que el mercado prima esta dilución sobre los fundamentales sólidos.<br><br>
+      <strong>¿Qué cambiaría el veredicto?</strong> Dos catalizadores: primero, que el revenue de DoubleZero Edge (fees institucionales en USDC) crezca lo suficiente para acercar el modelo a deflacionario neto. Segundo, la expansión multi-chain exitosa más allá de Solana — que ampliaría el TAM y la demanda de 2Z. Si ambos ocurren mientras el mercado digiere los unlocks, DoubleZero podría re-ratear a 6.5-7/10. Es una apuesta de infraestructura a medio plazo, no un catalizador inmediato.
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:20px;">
+    <div class="section-header">
+      <div class="section-icon icon-blue">👁</div>
+      <div class="section-title">Qué vigilar en los próximos 30–90 días</div>
+      <div class="section-tag">Lista de Monitoreo</div>
+    </div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Revenue de DoubleZero Edge:</strong> El indicador utility más importante. Si las suscripciones institucionales en USDC crecen de forma sostenida, valida el modelo de revenue y acelera los burns. Seguir anuncios oficiales y métricas de la red DoubleZero.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-red"></div><div class="watch-text"><strong>Calendario de unlocks — Jump Crypto y Foundation:</strong> El mayor riesgo. Seguir en tokenomist.ai las fechas exactas de desbloqueo del 65% bloqueado. Cualquier unlock grande con precio bajo genera presión vendedora severa. Es el factor #1 a vigilar.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-blue"></div><div class="watch-text"><strong>Expansión multi-chain:</strong> DoubleZero apunta a ir más allá de Solana. Si anuncia integración con Ethereum, L2s u otras chains de alto rendimiento, el TAM se expande significativamente. Es el catalizador narrativo de mayor impacto potencial.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-yellow"></div><div class="watch-text"><strong>Ratio burn vs. emisión:</strong> El protocolo aún es inflacionario. Vigilar si los burns por uso se acercan a la emisión de nuevos tokens. Cuando se cruce ese umbral, 2Z pasa a deflacionario neto — el punto de inflexión tokenómico.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Decisión de Grayscale:</strong> 2Z está en la watchlist "Assets Under Consideration". Si Grayscale avanza hacia un producto de inversión con 2Z, sería un catalizador institucional significativo — reforzado por el SEC no-action letter existente. Seguir anuncios de Grayscale.</div></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong style="color:#3b82f6;">TokenFlow AI</strong> · Investigación de tokenómica AI y DePIN · Sin hype. Solo estructura.<br>
+  Fecha del análisis: 10 de julio de 2026 · Este análisis no constituye asesoramiento de inversión. DYOR.<br>
+  Fuentes: CoinGecko, CoinMarketCap, CoinDesk, The Block, SEC, Grayscale, ICO Drops, doublezero.xyz, datos on-chain
+</div>
+
+</body>
+</html>
