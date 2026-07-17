@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenFlow AI – Análisis Nosana (NOS) 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'JetBrains Mono', monospace; background: #0a0e1a; color: #e2e8f0; line-height: 1.7; font-size: 14px; }
+
+  .header { background: linear-gradient(135deg, #0a0e1a 0%, #1a1420 50%, #0a0e1a 100%); border-bottom: 1px solid #6a3a5a; padding: 44px 32px 36px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; background: radial-gradient(ellipse, rgba(236,72,153,0.07) 0%, transparent 70%); pointer-events: none; }
+  .brand { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #ec4899; margin-bottom: 14px; font-weight: 600; }
+  .title { font-size: 38px; font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -1px; }
+  .title span { color: #ec4899; }
+  .subtitle { font-size: 12px; color: #64748b; margin-bottom: 22px; letter-spacing: 1px; }
+  .verdict-badge { display: inline-block; padding: 8px 24px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid; font-family: 'JetBrains Mono', monospace; }
+  .badge-warning { background: #451a03; color: #fb923c; border-color: #9a3412; }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 36px 20px; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 36px; }
+  .stat-card { background: #0d1525; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; text-align: center; }
+  .stat-label { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .stat-value { font-size: 22px; font-weight: 800; color: #f8fafc; }
+  .stat-sub { font-size: 10px; color: #64748b; margin-top: 4px; }
+  .stat-pink { color: #ec4899; }
+  .stat-green { color: #4ade80; }
+  .stat-yellow { color: #fbbf24; }
+  .stat-red { color: #f87171; }
+  .stat-orange { color: #fb923c; }
+
+  .section { background: #0d1525; border: 1px solid #1e293b; border-radius: 8px; padding: 26px; margin-bottom: 18px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #1e293b; }
+  .section-icon { width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .icon-pink { background: #500724; }
+  .icon-orange { background: #431407; }
+  .icon-red { background: #450a0a; }
+  .icon-yellow { background: #422006; }
+  .icon-blue { background: #0c2a47; }
+  .icon-green { background: #052e16; }
+  .icon-purple { background: #2e1065; }
+  .section-title { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+  .section-tag { font-size: 10px; color: #475569; margin-left: auto; letter-spacing: 1px; text-transform: uppercase; }
+
+  .concept-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .concept-card { background: #1a0e18; border: 1px solid #831843; border-radius: 6px; padding: 16px; }
+  .concept-card-title { font-size: 11px; color: #ec4899; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .concept-card-text { font-size: 12px; color: #94a3b8; line-height: 1.6; }
+
+  .alloc-table { width: 100%; border-collapse: collapse; }
+  .alloc-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .alloc-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; font-size: 13px; vertical-align: middle; }
+  .alloc-table tr:last-child td { border-bottom: none; }
+  .alloc-bar-wrap { background: #1e293b; border-radius: 2px; height: 5px; width: 90px; display: inline-block; vertical-align: middle; margin-left: 8px; }
+  .alloc-bar { height: 5px; border-radius: 2px; display: block; }
+
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+  .pill-green { background: #052e16; color: #4ade80; }
+  .pill-yellow { background: #422006; color: #fbbf24; }
+  .pill-red { background: #450a0a; color: #f87171; }
+  .pill-pink { background: #500724; color: #f9a8d4; }
+
+  .pressure-meter { margin: 14px 0; }
+  .meter-label { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+  .meter-bar-wrap { background: #1e293b; border-radius: 3px; height: 10px; overflow: hidden; }
+  .meter-bar { height: 10px; border-radius: 3px; }
+  .meter-green { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .meter-orange { background: linear-gradient(90deg, #ea580c, #fb923c); }
+  .meter-red { background: linear-gradient(90deg, #dc2626, #f87171); }
+  .meter-pink { background: linear-gradient(90deg, #be185d, #ec4899); }
+  .meter-yellow { background: linear-gradient(90deg, #ca8a04, #fbbf24); }
+  .meter-footer { display: flex; justify-content: space-between; font-size: 10px; color: #475569; margin-top: 4px; }
+
+  .verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .verdict-card { border-radius: 6px; padding: 20px; }
+  .verdict-bull { background: #052e16; border: 1px solid #166534; }
+  .verdict-bear { background: #450a0a; border: 1px solid #7f1d1d; }
+  .verdict-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .verdict-bull .verdict-title { color: #4ade80; }
+  .verdict-bear .verdict-title { color: #f87171; }
+  .verdict-item { font-size: 12px; color: #cbd5e1; margin-bottom: 9px; padding-left: 18px; position: relative; line-height: 1.5; }
+  .verdict-item::before { content: '→'; position: absolute; left: 0; font-weight: 700; }
+  .verdict-bull .verdict-item::before { color: #4ade80; }
+  .verdict-bear .verdict-item::before { color: #f87171; }
+
+  .final-verdict { background: linear-gradient(135deg, #1a0e18, #0f172a); border: 1px solid #be185d; border-radius: 8px; padding: 30px; margin-top: 8px; }
+  .final-title { font-size: 11px; color: #ec4899; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 14px; font-weight: 700; }
+  .final-score { display: flex; align-items: center; gap: 22px; margin-bottom: 18px; }
+  .score-number { font-size: 68px; font-weight: 900; color: #fbbf24; line-height: 1; }
+  .score-label { font-size: 20px; font-weight: 700; color: #f1f5f9; }
+  .score-sub { font-size: 12px; color: #64748b; margin-top: 6px; }
+  .final-text { font-size: 13px; color: #cbd5e1; line-height: 1.9; }
+
+  .watch-item { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid #1e293b; font-size: 13px; }
+  .watch-item:last-child { border-bottom: none; }
+  .watch-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #22c55e; }
+  .dot-pink { background: #ec4899; }
+  .watch-text { color: #cbd5e1; }
+  .watch-text strong { color: #f8fafc; }
+
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .comp-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .comp-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; vertical-align: middle; }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table tr.highlight-row { background: #1a0e18; }
+
+  .note-box { background: #14070f; border-left: 3px solid #ec4899; border-radius: 0 6px 6px 0; padding: 14px 16px; font-size: 12px; color: #94a3b8; margin: 14px 0; line-height: 1.8; }
+  .note-box.warning { border-left-color: #f59e0b; background: #0d1105; }
+  .note-box.danger { border-left-color: #ef4444; background: #0d0808; }
+  .note-box.success { border-left-color: #22c55e; background: #050f05; }
+
+  .footer { text-align: center; padding: 28px; color: #334155; font-size: 11px; border-top: 1px solid #1e293b; margin-top: 36px; letter-spacing: 0.5px; line-height: 2; }
+
+  @media (max-width: 600px) {
+    .verdict-grid, .concept-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .score-number { font-size: 52px; }
+    .title { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">🟣 TokenFlow AI · Investigación de Tokenómica DePIN</div>
+  <div class="title">Nosana <span>NOS</span></div>
+  <div class="subtitle">Análisis completo — GPU de inferencia AI sobre Solana · 17 de julio de 2026</div>
+  <div class="verdict-badge badge-warning">⚠ Supply 100% limpio · Nicho de inferencia · -96% ATH · Concentración de ballenas</div>
+</div>
+
+<div class="container">
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Precio (USD)</div><div class="stat-value stat-pink">$0.26</div><div class="stat-sub">17 de julio, 2026</div></div>
+    <div class="stat-card"><div class="stat-label">Cap. de Mercado</div><div class="stat-value">~$26M</div><div class="stat-sub">#653 CoinGecko</div></div>
+    <div class="stat-card"><div class="stat-label">FDV</div><div class="stat-value stat-green">~$26M</div><div class="stat-sub">Mcap/FDV = 100% ✅</div></div>
+    <div class="stat-card"><div class="stat-label">Desde ATH</div><div class="stat-value stat-red">-96%</div><div class="stat-sub">ATH: $7.83 (mar. 2024)</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Circ.</div><div class="stat-value">100M</div><div class="stat-sub">100% del máximo ✅</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Máx.</div><div class="stat-value">100M</div><div class="stat-sub">Sin vesting pendiente</div></div>
+    <div class="stat-card"><div class="stat-label">Blockchain</div><div class="stat-value stat-pink">Solana</div><div class="stat-sub">PoH + PoS, baja latencia</div></div>
+    <div class="stat-card"><div class="stat-label">Ballenas</div><div class="stat-value stat-red">41.8%</div><div class="stat-sub">Concentración del supply</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-pink">🎮</div>
+      <div class="section-title">¿Qué es Nosana? — El mercado de GPUs ociosas para inferencia AI</div>
+      <div class="section-tag">Arquitectura Core</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">Nosana es un mercado descentralizado de compute construido sobre Solana, especializado en un nicho concreto: la inferencia de IA. Su misión — "hacer el hardware GPU accesible para todos" — se materializa en una red peer-to-peer donde cualquiera con GPUs ociosas (desde una RTX 4090 casera hasta hardware de datacenter) puede rentarlas a desarrolladores AI que necesitan ejecutar modelos. El desarrollador paga menos que en AWS; el dueño del hardware monetiza capacidad que de otro modo estaría inactiva.</p>
+
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="concept-card-title">Enfoque: Inferencia, no training</div>
+        <div class="concept-card-text">A diferencia de io.net o Aethir que apuntan a training masivo, Nosana se especializa en inferencia — ejecutar modelos ya entrenados. Es un nicho con menor barrera técnica: tolera latencia y hardware distribuido consumer-grade.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Construido sobre Solana</div>
+        <div class="concept-card-text">Aprovecha la alta velocidad y bajas fees de Solana (PoH + PoS) para gestionar pagos de jobs e incentivos de red. Transacciones rápidas y baratas — crucial para micro-pagos de compute.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Whirlpool — multi-GPU</div>
+        <div class="concept-card-text">Expansión H1 2026 para soportar no solo NVIDIA, sino también AMD, Intel y Apple Silicon. El objetivo: convertirse en "el mayor grid de compute del mundo" ampliando el hardware elegible.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">ElizaOS + AI agents</div>
+        <div class="concept-card-text">Los Builders' Challenges de Nosana se centran en desplegar agentes AI con el framework ElizaOS sobre su red. Vincula directamente el compute descentralizado con la narrativa de agentes AI.</div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <strong>🔑 El posicionamiento de nicho:</strong> Mientras los grandes DePIN de compute (Akash, io.net, Aethir) compiten por training de modelos grandes con GPUs enterprise, Nosana eligió el nicho de inferencia con hardware consumer. Es una apuesta inteligente: la inferencia es donde estará el volumen real cuando millones de aplicaciones AI necesiten ejecutar modelos. Pero también es el segmento más competitivo y con menores márgenes.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">📊</div>
+      <div class="section-title">Tokenómica — El supply más limpio del sector</div>
+      <div class="section-tag">Supply Analysis</div>
+    </div>
+
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:16px;">Aquí está el aspecto más destacable de Nosana: con 100 millones de NOS como supply máximo y el 100% ya en circulación, no hay absolutamente ningún vesting overhang. Ni VCs esperando desbloquear, ni team con cliffs pendientes, ni emisiones futuras que diluyan. Es la estructura de supply más limpia de todos los proyectos analizados por TokenFlow AI.</p>
+
+    <table class="alloc-table">
+      <thead>
+        <tr><th>Métrica</th><th>Valor</th><th>Estado</th><th>Comparación TokenFlow</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Mcap/FDV</strong></td>
+          <td>100% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:100%;background:#4ade80;"></div></div></td>
+          <td><span class="status-pill pill-green">Sin dilución futura</span></td>
+          <td style="color:#4ade80;">✅ Mejor que RENDER (97%)</td>
+        </tr>
+        <tr>
+          <td><strong>Supply circulante</strong></td>
+          <td>100M / 100M</td>
+          <td><span class="status-pill pill-green">Totalmente desbloqueado</span></td>
+          <td style="color:#4ade80;">✅ Nada pendiente</td>
+        </tr>
+        <tr>
+          <td><strong>Concentración ballenas</strong></td>
+          <td>41.8% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:42%;background:#ef4444;"></div></div></td>
+          <td><span class="status-pill pill-red">Riesgo de volatilidad</span></td>
+          <td style="color:#f87171;">⚠ Asimetría de poder</td>
+        </tr>
+        <tr>
+          <td><strong>Utilidad del token</strong></td>
+          <td>Pago + Staking + Gov</td>
+          <td><span class="status-pill pill-pink">Triple utilidad</span></td>
+          <td>Pagos de jobs, colateral de nodos</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box success">
+      <strong>✅ La ventaja del supply limpio:</strong> En un sector donde analizamos proyectos con Mcap/FDV del 14% (Ocean), 35% (DoubleZero) o 38% (Story), Nosana destaca con el 100%. Esto significa que el precio refleja el valor real de mercado sin el descuento por dilución futura que castiga a tantos DePIN. Lo que ves es lo que hay — no hay unlocks escondidos esperando para presionar el precio.
+    </div>
+
+    <div class="note-box danger">
+      <strong>🔴 Pero la concentración de ballenas es el contrapeso:</strong> El 41.8% del supply controlado por grandes holders crea una asimetría de volatilidad severa. Con solo $26M de Mcap y volumen diario de ~$160K, una sola ballena vendiendo puede mover el precio dramáticamente. Es el riesgo estructural que compensa la ventaja del supply limpio: pocos actores tienen el poder de dictar el precio.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-pink">⚡</div>
+      <div class="section-title">Tracción y ecosistema — Del compute a los agentes AI</div>
+      <div class="section-tag">Desarrollo Real</div>
+    </div>
+
+    <div style="margin:16px 0;">
+      <div style="font-size:11px;color:#ec4899;text-transform:uppercase;letter-spacing:2px;margin-bottom:14px;font-weight:700;">🗓 Roadmap 2026 — Del compute grid a la adopción comercial</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;gap:16px;padding:10px 0;border-bottom:1px solid #1e293b;">
+          <div style="font-size:10px;color:#4ade80;font-weight:700;min-width:100px;padding-top:2px;">ENE 2025 ✅</div>
+          <div style="font-size:12px;color:#cbd5e1;"><strong>Mainnet launch:</strong> Los usuarios pueden rentar capacidad GPU y ganar NOS. El hito fundacional que activó la utilidad real del token.</div>
+        </div>
+        <div style="display:flex;gap:16px;padding:10px 0;border-bottom:1px solid #1e293b;">
+          <div style="font-size:10px;color:#4ade80;font-weight:700;min-width:100px;padding-top:2px;">DIC 2025 ✅</div>
+          <div style="font-size:12px;color:#cbd5e1;"><strong>Grants Program:</strong> Financiación de $5K–$50K en NOS o créditos de compute para proyectos de AI descentralizada. Vincula demanda de token a workloads AI reales.</div>
+        </div>
+        <div style="display:flex;gap:16px;padding:10px 0;border-bottom:1px solid #1e293b;">
+          <div style="font-size:10px;color:#ec4899;font-weight:700;min-width:100px;padding-top:2px;">H1 2026 ✅</div>
+          <div style="font-size:12px;color:#cbd5e1;"><strong>Whirlpool Expansion:</strong> Soporte para AMD, Intel y Apple Silicon — amplía masivamente el hardware elegible más allá de NVIDIA.</div>
+        </div>
+        <div style="display:flex;gap:16px;padding:10px 0;">
+          <div style="font-size:10px;color:#fbbf24;font-weight:700;min-width:100px;padding-top:2px;">H2 2026 ⏳</div>
+          <div style="font-size:12px;color:#cbd5e1;"><strong>Sombrero Business Features:</strong> Rampas fiat, billing y herramientas de equipo para clientes enterprise. El paso de "cripto-nativo" a "utilizable por empresas".</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note-box warning">
+      <strong>⚠ El reto de la ejecución:</strong> Los Builders' Challenges y el Grants Program son iniciativas de business development y marketing — no hitos técnicos con impacto directo en precio. Como señala el propio análisis del sector, su impacto en el token es indirecto y depende de la calidad y adopción de los proyectos que generen. La pregunta clave: ¿los agentes AI construidos con ElizaOS sobre Nosana generan volumen de compute real y recurrente, o son experimentos puntuales?
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">⚔</div>
+      <div class="section-title">Posicionamiento competitivo</div>
+      <div class="section-tag">GPU Compute DePIN</div>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr><th>Proyecto</th><th>Enfoque</th><th>Mcap</th><th>vs. NOS</th></tr>
+      </thead>
+      <tbody>
+        <tr class="highlight-row">
+          <td><strong style="color:#ec4899;">🟣 Nosana (NOS)</strong></td>
+          <td>Inferencia AI, hardware consumer</td>
+          <td>~$26M</td>
+          <td>— Supply 100% limpio, nicho inferencia</td>
+        </tr>
+        <tr>
+          <td><strong>Aethir (ATH)</strong></td>
+          <td>Enterprise GPU H100</td>
+          <td>~$300M+</td>
+          <td>11x mayor — enterprise vs. consumer</td>
+        </tr>
+        <tr>
+          <td><strong>io.net (IO)</strong></td>
+          <td>GPU aggregation</td>
+          <td>~$200M</td>
+          <td>Training + inferencia — mayor escala</td>
+        </tr>
+        <tr>
+          <td><strong>Akash (AKT)</strong></td>
+          <td>Compute general + BME</td>
+          <td>~$232M</td>
+          <td>Compute general — Nosana más nicho</td>
+        </tr>
+        <tr>
+          <td><strong>Render (RNDR)</strong></td>
+          <td>Rendering + AI</td>
+          <td>~$740M</td>
+          <td>28x mayor — nicho rendering/AI</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box" style="margin-top:16px;">
+      <strong>La posición de Nosana:</strong> Es el más pequeño de los DePIN de compute que hemos analizado (~$26M Mcap), lo que significa tanto mayor riesgo como mayor asimetría potencial. Su diferenciación — inferencia sobre hardware consumer con Solana — es real pero también es el segmento más commoditizado. Su ventaja competitiva no es tecnológica sino tokenómica: el supply 100% limpio en un Mcap tan bajo. Si la demanda de inferencia AI se materializa y Nosana captura aunque sea una fracción, la asimetría desde $26M es considerable. El riesgo: competir en el segmento más disputado del sector con el menor capital.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📉</div>
+      <div class="section-title">Estructura técnica y contexto de precio</div>
+      <div class="section-tag">Estructura de Precio</div>
+    </div>
+
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Precio vs ATH</div><div class="stat-value stat-red">-96%</div><div class="stat-sub">ATH: $7.83 (mar. 2024)</div></div>
+      <div class="stat-card"><div class="stat-label">Desde ATL</div><div class="stat-value stat-green">+2,412%</div><div class="stat-sub">ATL: $0.0105</div></div>
+      <div class="stat-card"><div class="stat-label">7 días</div><div class="stat-value stat-red">-16%</div><div class="stat-sub">Corrección activa</div></div>
+      <div class="stat-card"><div class="stat-label">Volumen 24h</div><div class="stat-value stat-red">~$160K</div><div class="stat-sub">Liquidez muy baja</div></div>
+    </div>
+
+    <div class="pressure-meter"><div class="meter-label">Desde ATH (-96% — corrección severa desde marzo 2024)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:96%;"></div></div><div class="meter-footer"><span>ATH</span><span style="color:#f87171;">🔴 Estructura bajista histórica</span><span>ATL</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Estructura de supply (100% circulante, sin dilución — el mejor aspecto)</div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:100%;"></div></div><div class="meter-footer"><span>Diluido</span><span style="color:#4ade80;font-weight:700;">✅ 100% limpio — sin overhang</span><span>Limpio</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Liquidez de mercado (~$160K volumen 24h — críticamente baja)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:6%;"></div></div><div class="meter-footer"><span>$0</span><span style="color:#f87171;">🔴 Ilíquido — alta sensibilidad a ballenas</span><span>$5M+</span></div></div>
+
+    <div class="note-box warning" style="margin-top:14px;">
+      El volumen diario de ~$160K es la señal de alarma más importante. Con esa liquidez y el 41.8% del supply en manos de ballenas, NOS es extremadamente vulnerable a movimientos bruscos. Una sola orden grande puede mover el precio 10%+. El token subió +2,412% desde su ATL — lo que demuestra que puede tener movimientos violentos al alza cuando la narrativa AI/DePIN se calienta (como el +55% semanal de marzo 2026). Pero esa misma iliquidez funciona en ambas direcciones.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">⚖</div>
+      <div class="section-title">Argumentos alcistas vs. bajistas</div>
+      <div class="section-tag">Veredicto TokenFlow</div>
+    </div>
+
+    <div class="verdict-grid">
+      <div class="verdict-card verdict-bull">
+        <div class="verdict-title">🟢 Argumentos alcistas</div>
+        <div class="verdict-item">Mcap/FDV = 100% — el supply más limpio de todo el sector analizado</div>
+        <div class="verdict-item">Sin vesting overhang — nada de dilución futura</div>
+        <div class="verdict-item">Nicho de inferencia AI — donde estará el volumen real futuro</div>
+        <div class="verdict-item">Whirlpool — soporte multi-GPU (AMD, Intel, Apple Silicon)</div>
+        <div class="verdict-item">Sobre Solana — transacciones rápidas y baratas para micro-pagos</div>
+        <div class="verdict-item">Mcap $26M — asimetría alta si captura demanda de inferencia</div>
+        <div class="verdict-item">+2,412% desde ATL — capacidad de movimientos violentos al alza</div>
+        <div class="verdict-item">Integración ElizaOS — vinculado a narrativa de agentes AI</div>
+      </div>
+      <div class="verdict-card verdict-bear">
+        <div class="verdict-title">🔴 Argumentos bajistas</div>
+        <div class="verdict-item">Ballenas controlan 41.8% — asimetría de volatilidad severa</div>
+        <div class="verdict-item">-96% desde ATH — estructura bajista histórica</div>
+        <div class="verdict-item">Volumen 24h ~$160K — liquidez críticamente baja</div>
+        <div class="verdict-item">Segmento más competitivo: Akash, io.net, Aethir con más capital</div>
+        <div class="verdict-item">Inferencia consumer — el nicho más commoditizado y de menor margen</div>
+        <div class="verdict-item">Grants y challenges son marketing, no hitos técnicos verificables</div>
+        <div class="verdict-item">Revenue on-chain no divulgado — utilización real sin verificar</div>
+        <div class="verdict-item">Dependencia de que la demanda de inferencia se materialice</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="final-verdict">
+    <div class="final-title">TokenFlow AI · Veredicto Final</div>
+    <div class="final-score">
+      <div class="score-number">5</div>
+      <div>
+        <div class="score-label">Supply impecable · Ejecución y liquidez por probar</div>
+        <div class="score-sub">sobre 10 · La tokenómica más limpia del sector — en el nicho más disputado</div>
+      </div>
+    </div>
+    <div class="final-text">
+      Nosana presenta una paradoja interesante para el análisis de TokenFlow AI. Por un lado, tiene la estructura de supply más limpia de todos los proyectos que hemos analizado: 100 millones de NOS, 100% en circulación, cero vesting overhang, cero dilución futura. En un sector donde tantos proyectos cargan con desbloqueos pendientes que presionan el precio durante años (Ocean 14%, DoubleZero 35%, Story 38%), Nosana ofrece transparencia total — lo que ves es lo que hay.<br><br>
+      Su enfoque de nicho también es inteligente: inferencia AI sobre hardware consumer, aprovechando Solana para micro-pagos rápidos. La inferencia es donde estará el volumen masivo cuando millones de aplicaciones AI necesiten ejecutar modelos, no solo entrenarlos. Y la expansión Whirlpool (multi-GPU) más la integración con ElizaOS conectan Nosana con las narrativas más calientes del sector.<br><br>
+      Pero hay dos problemas serios que impiden una puntuación más alta. Primero, la concentración de ballenas del 41.8% combinada con un volumen diario de apenas $160K crea una asimetría de volatilidad peligrosa — pocos actores pueden dictar el precio, y la iliquidez amplifica cada movimiento. Segundo, Nosana compite en el segmento más disputado del sector (compute GPU) con el menor capital ($26M Mcap) frente a gigantes como Akash, io.net y Aethir. Su diferenciación es real pero el nicho de inferencia consumer es también el más commoditizado.<br><br>
+      <strong>¿Qué cambiaría el veredicto?</strong> Datos verificables de utilización de red — jobs de compute reales y recurrentes, no solo challenges de marketing. Si Nosana demuestra que su grid procesa inferencia AI a volumen creciente con revenue on-chain medible, la combinación de supply limpio + Mcap bajo + demanda real sería una asimetría genuina que justificaría 6.5-7/10. Hasta entonces, es una apuesta de alta volatilidad sobre un nicho prometedor pero no probado a escala.
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:20px;">
+    <div class="section-header">
+      <div class="section-icon icon-pink">👁</div>
+      <div class="section-title">Qué vigilar en los próximos 30–90 días</div>
+      <div class="section-tag">Lista de Monitoreo</div>
+    </div>
+    <div class="watch-item"><div class="watch-dot dot-pink"></div><div class="watch-text"><strong>Utilización real de la red — jobs de compute:</strong> El indicador más importante. Si Nosana publica métricas de jobs de inferencia procesados creciendo de forma sostenida, valida que hay demanda real más allá de los challenges. Seguir dashboard oficial de Nosana y métricas on-chain en Solana.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Sombrero Business Features (H2 2026):</strong> El lanzamiento de rampas fiat, billing y herramientas enterprise es el catalizador que podría llevar a Nosana de cripto-nativo a utilizable por empresas reales. Si genera clientes enterprise verificables, cambia la tesis comercial.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-red"></div><div class="watch-text"><strong>Movimientos de ballenas:</strong> Con 41.8% concentrado y baja liquidez, vigilar transferencias grandes de las wallets top en exploradores de Solana. Cualquier movimiento significativo de una ballena precede a volatilidad severa — en ambas direcciones.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-yellow"></div><div class="watch-text"><strong>Volumen de trading diario:</strong> Actualmente ~$160K — críticamente bajo. Si el volumen sube sostenidamente por encima de $1M, señala interés renovado y menor vulnerabilidad a manipulación. Por debajo, el token permanece en zona ilíquida de alto riesgo.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-pink"></div><div class="watch-text"><strong>Proyectos ElizaOS desplegados en Nosana:</strong> Si los agentes AI construidos en los Builders' Challenges se convierten en despliegues permanentes que consumen compute real, valida el vínculo con la narrativa de agentes. Seguir los resultados post-challenge, no solo los anuncios.</div></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong style="color:#ec4899;">TokenFlow AI</strong> · Investigación de tokenómica AI y DePIN · Sin hype. Solo estructura.<br>
+  Fecha del análisis: 17 de julio de 2026 · Este análisis no constituye asesoramiento de inversión. DYOR.<br>
+  Fuentes: CoinGecko, CoinMarketCap, CoinDesk, CryptoRank, TokenInsight, LunarCrush, nosana.io, datos on-chain de Solana
+</div>
+
+</body>
+</html>
