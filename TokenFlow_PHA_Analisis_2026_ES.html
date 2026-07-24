@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenFlow AI – Análisis Phala Network (PHA) 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'JetBrains Mono', monospace; background: #0a0e1a; color: #e2e8f0; line-height: 1.7; font-size: 14px; }
+
+  .header { background: linear-gradient(135deg, #0a0e1a 0%, #0a1a16 50%, #0a0e1a 100%); border-bottom: 1px solid #14b8a6; padding: 44px 32px 36px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; background: radial-gradient(ellipse, rgba(20,184,166,0.08) 0%, transparent 70%); pointer-events: none; }
+  .brand { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #14b8a6; margin-bottom: 14px; font-weight: 600; }
+  .title { font-size: 38px; font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -1px; }
+  .title span { color: #14b8a6; }
+  .subtitle { font-size: 12px; color: #64748b; margin-bottom: 22px; letter-spacing: 1px; }
+  .verdict-badge { display: inline-block; padding: 8px 24px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid; font-family: 'JetBrains Mono', monospace; }
+  .badge-warning { background: #451a03; color: #fb923c; border-color: #9a3412; }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 36px 20px; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 36px; }
+  .stat-card { background: #0d1525; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; text-align: center; }
+  .stat-label { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .stat-value { font-size: 22px; font-weight: 800; color: #f8fafc; }
+  .stat-sub { font-size: 10px; color: #64748b; margin-top: 4px; }
+  .stat-teal { color: #14b8a6; }
+  .stat-green { color: #4ade80; }
+  .stat-yellow { color: #fbbf24; }
+  .stat-red { color: #f87171; }
+  .stat-orange { color: #fb923c; }
+
+  .section { background: #0d1525; border: 1px solid #1e293b; border-radius: 8px; padding: 26px; margin-bottom: 18px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #1e293b; }
+  .section-icon { width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .icon-teal { background: #042f2e; }
+  .icon-orange { background: #431407; }
+  .icon-red { background: #450a0a; }
+  .icon-yellow { background: #422006; }
+  .icon-blue { background: #0c2a47; }
+  .icon-green { background: #052e16; }
+  .icon-purple { background: #2e1065; }
+  .section-title { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+  .section-tag { font-size: 10px; color: #475569; margin-left: auto; letter-spacing: 1px; text-transform: uppercase; }
+
+  .concept-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .concept-card { background: #071c1a; border: 1px solid #0f766e; border-radius: 6px; padding: 16px; }
+  .concept-card-title { font-size: 11px; color: #14b8a6; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .concept-card-text { font-size: 12px; color: #94a3b8; line-height: 1.6; }
+
+  .alloc-table { width: 100%; border-collapse: collapse; }
+  .alloc-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .alloc-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; font-size: 13px; vertical-align: middle; }
+  .alloc-table tr:last-child td { border-bottom: none; }
+  .alloc-bar-wrap { background: #1e293b; border-radius: 2px; height: 5px; width: 90px; display: inline-block; vertical-align: middle; margin-left: 8px; }
+  .alloc-bar { height: 5px; border-radius: 2px; display: block; }
+
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+  .pill-green { background: #052e16; color: #4ade80; }
+  .pill-yellow { background: #422006; color: #fbbf24; }
+  .pill-red { background: #450a0a; color: #f87171; }
+  .pill-teal { background: #042f2e; color: #5eead4; }
+
+  .pressure-meter { margin: 14px 0; }
+  .meter-label { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+  .meter-bar-wrap { background: #1e293b; border-radius: 3px; height: 10px; overflow: hidden; }
+  .meter-bar { height: 10px; border-radius: 3px; }
+  .meter-green { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .meter-orange { background: linear-gradient(90deg, #ea580c, #fb923c); }
+  .meter-red { background: linear-gradient(90deg, #dc2626, #f87171); }
+  .meter-teal { background: linear-gradient(90deg, #0d9488, #14b8a6); }
+  .meter-yellow { background: linear-gradient(90deg, #ca8a04, #fbbf24); }
+  .meter-footer { display: flex; justify-content: space-between; font-size: 10px; color: #475569; margin-top: 4px; }
+
+  .verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .verdict-card { border-radius: 6px; padding: 20px; }
+  .verdict-bull { background: #052e16; border: 1px solid #166534; }
+  .verdict-bear { background: #450a0a; border: 1px solid #7f1d1d; }
+  .verdict-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .verdict-bull .verdict-title { color: #4ade80; }
+  .verdict-bear .verdict-title { color: #f87171; }
+  .verdict-item { font-size: 12px; color: #cbd5e1; margin-bottom: 9px; padding-left: 18px; position: relative; line-height: 1.5; }
+  .verdict-item::before { content: '→'; position: absolute; left: 0; font-weight: 700; }
+  .verdict-bull .verdict-item::before { color: #4ade80; }
+  .verdict-bear .verdict-item::before { color: #f87171; }
+
+  .final-verdict { background: linear-gradient(135deg, #071c1a, #0f172a); border: 1px solid #0f766e; border-radius: 8px; padding: 30px; margin-top: 8px; }
+  .final-title { font-size: 11px; color: #14b8a6; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 14px; font-weight: 700; }
+  .final-score { display: flex; align-items: center; gap: 22px; margin-bottom: 18px; }
+  .score-number { font-size: 68px; font-weight: 900; color: #fbbf24; line-height: 1; }
+  .score-label { font-size: 20px; font-weight: 700; color: #f1f5f9; }
+  .score-sub { font-size: 12px; color: #64748b; margin-top: 6px; }
+  .final-text { font-size: 13px; color: #cbd5e1; line-height: 1.9; }
+
+  .watch-item { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid #1e293b; font-size: 13px; }
+  .watch-item:last-child { border-bottom: none; }
+  .watch-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #22c55e; }
+  .dot-teal { background: #14b8a6; }
+  .watch-text { color: #cbd5e1; }
+  .watch-text strong { color: #f8fafc; }
+
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .comp-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .comp-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; vertical-align: middle; }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table tr.highlight-row { background: #071c1a; }
+
+  .note-box { background: #06120f; border-left: 3px solid #14b8a6; border-radius: 0 6px 6px 0; padding: 14px 16px; font-size: 12px; color: #94a3b8; margin: 14px 0; line-height: 1.8; }
+  .note-box.warning { border-left-color: #f59e0b; background: #0d1105; }
+  .note-box.danger { border-left-color: #ef4444; background: #0d0808; }
+  .note-box.success { border-left-color: #22c55e; background: #050f05; }
+
+  .footer { text-align: center; padding: 28px; color: #334155; font-size: 11px; border-top: 1px solid #1e293b; margin-top: 36px; letter-spacing: 0.5px; line-height: 2; }
+
+  @media (max-width: 600px) {
+    .verdict-grid, .concept-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .score-number { font-size: 52px; }
+    .title { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">🟢 TokenFlow AI · Investigación de Tokenómica AI</div>
+  <div class="title">Phala <span>PHA</span></div>
+  <div class="subtitle">Análisis completo — Compute confidencial para IA con datos sensibles · 24 de julio de 2026</div>
+  <div class="verdict-badge badge-warning">⚠ Tecnología TEE real · Pivote a Ethereum L2 · Precio cerca del mínimo histórico</div>
+</div>
+
+<div class="container">
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Precio (USD)</div><div class="stat-value stat-teal">~$0.024</div><div class="stat-sub">24 de julio, 2026</div></div>
+    <div class="stat-card"><div class="stat-label">Cap. de Mercado</div><div class="stat-value">~$20M</div><div class="stat-sub">#721–780 rango</div></div>
+    <div class="stat-card"><div class="stat-label">FDV</div><div class="stat-value stat-yellow">~$24M</div><div class="stat-sub">Mcap/FDV = 84%</div></div>
+    <div class="stat-card"><div class="stat-label">Desde ATH</div><div class="stat-value stat-red">-98%</div><div class="stat-sub">ATH: $1.42</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Circ.</div><div class="stat-value">840M</div><div class="stat-sub">84% del máximo</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Máx.</div><div class="stat-value">1B PHA</div><div class="stat-sub">Tope fijo</div></div>
+    <div class="stat-card"><div class="stat-label">Tokens LLM procesados</div><div class="stat-value stat-teal">3.73B</div><div class="stat-sub">En GPU TEE</div></div>
+    <div class="stat-card"><div class="stat-label">Sobre ATL</div><div class="stat-value stat-red">~+13%</div><div class="stat-sub">ATL: $0.0212</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-teal">🔒</div>
+      <div class="section-title">¿Qué es Phala? — La IA que puede tocar datos sensibles</div>
+      <div class="section-tag">Arquitectura Core</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">Existe un problema que ningún proveedor de cloud ha resuelto del todo: un hospital no puede enviar datos de pacientes a un modelo de IA en la nube sin violar regulaciones. Un banco no puede procesar transacciones sensibles en infraestructura que no controla. La promesa de privacidad de los grandes proveedores es contractual, no criptográfica — "confía en nosotros".</p>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">Phala ataca ese problema con hardware. Ejecuta los modelos dentro de Trusted Execution Environments (TEE) — enclaves sellados a nivel de chip donde ni el operador del hardware puede ver los datos. La diferencia clave frente al cloud tradicional: Phala genera evidencia verificable de cada workload, con atestación dual de Intel y NVIDIA. No promete privacidad; la demuestra criptográficamente.</p>
+
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="concept-card-title">TEE — Intel TDX + NVIDIA H100</div>
+        <div class="concept-card-text">Phala Cloud despliega IA confidencial sobre Intel TDX y GPU TEE de NVIDIA H100. El hardware garantiza que ni el operador del nodo accede a los datos o al modelo en ejecución.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Trust Center — atestación verificable</div>
+        <div class="concept-card-text">Genera evidencia comprobable para cada workload, con atestación dual de Intel y NVIDIA. Es la diferencia entre "confía en nosotros" y "verifícalo tú mismo".</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Pivote a Ethereum L2</div>
+        <div class="concept-card-text">Migración completada en noviembre 2025 desde el parachain de Polkadot. Conversión 1:1 a ERC-20, con staking y gobernanza preservados. Menor coste operativo y acceso a la liquidez de Ethereum.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Proveedor verificado en OpenRouter</div>
+        <div class="concept-card-text">Los desarrolladores acceden a IA confidencial cambiando solo el endpoint de API. Baja la barrera de entrada drásticamente — no hace falta ser experto en criptografía.</div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <strong>🔑 Por qué el TEE importa ahora:</strong> El pivote de Phala se alineó con el roadmap de hardware de Intel, que pasó de los antiguos procesadores SGX a los TDX y a soluciones basadas en GPU capaces de ejecutar cargas de IA modernas. Es una decisión técnica que sigue al fabricante, no al mercado cripto. En un sector lleno de narrativas, Phala construyó sobre la hoja de ruta del silicio.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">⚡</div>
+      <div class="section-title">Tracción real — Lo que sí está funcionando</div>
+      <div class="section-tag">Métricas y Ecosistema</div>
+    </div>
+
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Tokens LLM en GPU TEE</div><div class="stat-value stat-teal">3.73B</div><div class="stat-sub">Uso verificable</div></div>
+      <div class="stat-card"><div class="stat-label">Apps en NEAR</div><div class="stat-value stat-green">11</div><div class="stat-sub">Desplegadas y verificadas</div></div>
+      <div class="stat-card"><div class="stat-label">Atestación</div><div class="stat-value" style="font-size:13px;padding-top:4px;">Intel+NVIDIA</div><div class="stat-sub">Dual, verificable</div></div>
+      <div class="stat-card"><div class="stat-label">Fundado en</div><div class="stat-value">2019</div><div class="stat-sub">7 años construyendo</div></div>
+    </div>
+
+    <p style="font-size:13px;color:#94a3b8;margin:16px 0;">El ecosistema de partnerships de Phala no son logos vacíos. Succinct Labs integró pruebas ZK con la atestación de Phala. Se unió al Verifiable Compute Consortium junto a Sentient. Newton aportó agentes de finanzas autónomas. NEAR Protocol desplegó 11 aplicaciones verificadas. El listado abarca plataformas de IA, sistemas de conocimiento cero y frameworks de agentes — el tipo de integraciones que solo ocurren cuando la tecnología funciona.</p>
+
+    <div class="note-box success">
+      <strong>✅ El sector la usa como capa de seguridad:</strong> Flashbots emplea TEE para MEV-boost descentralizado en Ethereum. Uniswap lo utiliza para construir una L2 nativa de DeFi. Proyectos como Lit Protocol (MPC), Zama (FHE) y Scroll (ZKP) recurren al TEE para reforzar su seguridad y privacidad. Phala opera una de las mayores redes TEE del sector — es infraestructura que otros protocolos consumen, no un producto de consumo final.
+    </div>
+
+    <div class="note-box warning">
+      <strong>⚠ Pero hubo un incidente de seguridad:</strong> El 1 de junio de 2026 se identificó y parcheó una vulnerabilidad en la API de Cloud que permitía modificaciones no autorizadas de máquinas virtuales. La respuesta fue rápida, pero en un proyecto cuya propuesta de valor entera es la seguridad verificable, cualquier fallo de este tipo pesa más que en un protocolo ordinario. La credibilidad es el producto.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">📊</div>
+      <div class="section-title">Estructura del suministro y tokenómica</div>
+      <div class="section-tag">Supply Analysis</div>
+    </div>
+
+    <table class="alloc-table">
+      <thead>
+        <tr><th>Métrica</th><th>Valor</th><th>Estado</th><th>Lectura TokenFlow</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Mcap/FDV</strong></td>
+          <td>~84% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:84%;background:#4ade80;"></div></div></td>
+          <td><span class="status-pill pill-green">Dilución limitada</span></td>
+          <td style="color:#4ade80;">✅ Mejor que 2Z (35%) o IP (38%)</td>
+        </tr>
+        <tr>
+          <td><strong>Supply circulante</strong></td>
+          <td>840M / 1B</td>
+          <td><span class="status-pill pill-yellow">~16% pendiente</span></td>
+          <td>Presión gradual, no cliff</td>
+        </tr>
+        <tr>
+          <td><strong>Utilidad del token</strong></td>
+          <td>Pago + Staking + Gov</td>
+          <td><span class="status-pill pill-teal">Triple utilidad</span></td>
+          <td>Paga recursos de compute confiable</td>
+        </tr>
+        <tr>
+          <td><strong>Capital levantado</strong></td>
+          <td>~$1.43M total</td>
+          <td><span class="status-pill pill-green">Sin overhang VC</span></td>
+          <td style="color:#4ade80;">✅ Sin gigantes esperando salir</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box success" style="margin-top:16px;">
+      <strong>✅ La brecha entre Mcap y FDV es estrecha:</strong> Comparado con muchos tokens más recientes, PHA presenta un overhang de dilución mucho menor que los proyectos con float bajo y calendarios de desbloqueo enormes. Es la misma ventaja estructural que destacamos en IoTeX (94%) y Nosana (100%) — el precio refleja el valor real, sin un muro de unlocks esperando.
+    </div>
+
+    <div class="note-box warning">
+      <strong>⚠ Pero la utilidad del token no está claramente ligada al crecimiento del producto:</strong> Este es el punto crítico. Phala Cloud vende compute confidencial — pero el vínculo entre ese revenue comercial y la demanda de PHA no está tan articulado como en modelos como el BME de Akash o el buy&amp;burn de GEODNET. El token se usa para pagar recursos, staking y gobernanza, pero sin un mecanismo de captura de valor agresivo, el crecimiento del negocio no se traduce automáticamente en presión compradora sobre PHA.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">⚔</div>
+      <div class="section-title">Posicionamiento competitivo</div>
+      <div class="section-tag">Compute Confidencial</div>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr><th>Proyecto</th><th>Enfoque</th><th>Mcap</th><th>vs. PHA</th></tr>
+      </thead>
+      <tbody>
+        <tr class="highlight-row">
+          <td><strong style="color:#14b8a6;">🟢 Phala (PHA)</strong></td>
+          <td>Compute confidencial TEE</td>
+          <td>~$20M</td>
+          <td>— Mayor red TEE, atestación Intel+NVIDIA</td>
+        </tr>
+        <tr>
+          <td><strong>Nosana (NOS)</strong></td>
+          <td>Inferencia AI en Solana</td>
+          <td>~$26M</td>
+          <td>Similar tamaño — Phala añade privacidad</td>
+        </tr>
+        <tr>
+          <td><strong>Akash (AKT)</strong></td>
+          <td>Compute general + BME</td>
+          <td>~$232M</td>
+          <td>11x mayor — sin capa de privacidad hardware</td>
+        </tr>
+        <tr>
+          <td><strong>io.net (IO)</strong></td>
+          <td>Agregación GPU</td>
+          <td>~$200M</td>
+          <td>Escala vs. confidencialidad</td>
+        </tr>
+        <tr>
+          <td><strong>Cloud tradicional</strong></td>
+          <td>AWS Nitro, Azure CC</td>
+          <td>Miles de M</td>
+          <td>Compiten en TEE — pero centralizados</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box" style="margin-top:16px;">
+      <strong>El nicho de Phala:</strong> No compite por volumen bruto de GPU como Akash o io.net. Compite en el segmento donde la privacidad es un requisito regulatorio, no una preferencia: salud, finanzas, datos personales. Ese mercado es más pequeño pero de mayor margen, y las alternativas centralizadas (AWS Nitro Enclaves, Azure Confidential Computing) no ofrecen atestación verificable en abierto. Su riesgo competitivo real no es otro token — es que los hiperescaladores mejoren su propia oferta de TEE y capturen el segmento enterprise antes de que Phala escale.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📉</div>
+      <div class="section-title">Estructura técnica y contexto de precio</div>
+      <div class="section-tag">Estructura de Precio</div>
+    </div>
+
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Precio vs ATH</div><div class="stat-value stat-red">-98%</div><div class="stat-sub">ATH: $1.42</div></div>
+      <div class="stat-card"><div class="stat-label">Distancia al ATL</div><div class="stat-value stat-red">~+13%</div><div class="stat-sub">ATL: $0.0212</div></div>
+      <div class="stat-card"><div class="stat-label">Volumen 24h</div><div class="stat-value stat-yellow">~$8.7M</div><div class="stat-sub">Alto vs. Mcap</div></div>
+      <div class="stat-card"><div class="stat-label">Ratio Vol/Mcap</div><div class="stat-value stat-red">Muy alto</div><div class="stat-sub">Rotación especulativa</div></div>
+    </div>
+
+    <div class="pressure-meter"><div class="meter-label">Desde ATH (-98% — estructura bajista prolongada)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:97%;"></div></div><div class="meter-footer"><span>ATH</span><span style="color:#f87171;">🔴 Cotiza pegado a su mínimo histórico</span><span>ATL</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Mcap/FDV (~84% — sin muro de unlocks)</div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:84%;"></div></div><div class="meter-footer"><span>0%</span><span style="color:#4ade80;font-weight:700;">✅ Overhang de dilución limitado</span><span>100%</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Rotación (Vol/Mcap extremadamente alto — trading especulativo)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:85%;"></div></div><div class="meter-footer"><span>Estable</span><span style="color:#f87171;">🔴 Riesgo de reversiones bruscas</span><span>Especulativo</span></div></div>
+
+    <div class="note-box warning" style="margin-top:14px;">
+      El dato más incómodo: PHA cotiza aproximadamente un 13% por encima de su mínimo histórico absoluto, con un volumen diario que supera con creces lo habitual para un Mcap de $20M. Esa rotación extrema indica trading especulativo, no acumulación de convicción. En mayo de 2026 se advirtió públicamente sobre el riesgo de perseguir subidas con un ratio Vol/Mcap tan elevado — el mismo patrón sigue vigente. Es una estructura que puede producir movimientos violentos en ambas direcciones.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">⚖</div>
+      <div class="section-title">Argumentos alcistas vs. bajistas</div>
+      <div class="section-tag">Veredicto TokenFlow</div>
+    </div>
+
+    <div class="verdict-grid">
+      <div class="verdict-card verdict-bull">
+        <div class="verdict-title">🟢 Argumentos alcistas</div>
+        <div class="verdict-item">Tecnología TEE real y en producción — 3.73B tokens LLM procesados</div>
+        <div class="verdict-item">Atestación dual Intel + NVIDIA — verificable, no contractual</div>
+        <div class="verdict-item">Alineado con el roadmap de hardware de Intel (TDX, GPU TEE)</div>
+        <div class="verdict-item">Mcap/FDV ~84% — overhang de dilución limitado</div>
+        <div class="verdict-item">Capital levantado mínimo (~$1.43M) — sin VCs gigantes esperando</div>
+        <div class="verdict-item">Ecosistema real: NEAR (11 apps), Succinct, Sentient, OpenRouter</div>
+        <div class="verdict-item">7 años construyendo — infraestructura madura, no un lanzamiento</div>
+        <div class="verdict-item">Mcap $20M — asimetría alta si la privacidad regulada escala</div>
+      </div>
+      <div class="verdict-card verdict-bear">
+        <div class="verdict-title">🔴 Argumentos bajistas</div>
+        <div class="verdict-item">-98% desde ATH — cotiza pegado a su mínimo histórico</div>
+        <div class="verdict-item">Vínculo débil entre revenue de Phala Cloud y demanda de PHA</div>
+        <div class="verdict-item">Ratio Vol/Mcap extremo — rotación especulativa, no convicción</div>
+        <div class="verdict-item">Vulnerabilidad en Cloud API (junio 2026) en un producto de seguridad</div>
+        <div class="verdict-item">Dos migraciones de cadena en su historia — fricción acumulada</div>
+        <div class="verdict-item">Hiperescaladores (AWS Nitro, Azure CC) compiten en el mismo nicho</div>
+        <div class="verdict-item">Revenue comercial no divulgado públicamente</div>
+        <div class="verdict-item">Mcap $20M — riesgo de irrelevancia si no capta adopción enterprise</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="final-verdict">
+    <div class="final-title">TokenFlow AI · Veredicto Final</div>
+    <div class="final-score">
+      <div class="score-number">5</div>
+      <div>
+        <div class="score-label">Tecnología seria · Captura de valor sin resolver</div>
+        <div class="score-sub">sobre 10 · El problema que resuelve es real; el vínculo con el token, no tanto</div>
+      </div>
+    </div>
+    <div class="final-text">
+      Phala resuelve un problema que sí existe y que el cloud tradicional no ha resuelto de forma verificable: ejecutar IA sobre datos que no pueden salir del control de su dueño. La respuesta es a nivel de hardware — enclaves TEE con atestación dual de Intel y NVIDIA, donde la privacidad se demuestra criptográficamente en lugar de prometerse contractualmente. Los 3.730 millones de tokens LLM procesados en su GPU TEE no son una métrica de marketing: son uso verificable.<br><br>
+      El ecosistema respalda la tesis técnica. Que Succinct integre pruebas ZK con su atestación, que NEAR despliegue 11 aplicaciones verificadas, que Flashbots y Uniswap recurran a TEE para MEV y DeFi — eso solo ocurre cuando la infraestructura funciona. Y el pivote a Ethereum L2 en noviembre de 2025 fue una decisión racional, alineada con el roadmap de silicio de Intel más que con la moda del momento. La estructura de supply también acompaña: ~84% de Mcap/FDV y apenas $1.43M levantados históricamente significan que no hay un muro de unlocks ni fondos gigantes esperando la salida.<br><br>
+      El problema está en otro sitio, y es el que define el veredicto: la conexión entre el crecimiento de Phala Cloud y la demanda de PHA es débil. El token sirve para pagar compute, hacer staking y gobernar, pero no existe un mecanismo agresivo de captura de valor como el Burn-Mint Equilibrium de Akash o el buy&amp;burn del 80% de ingresos de GEODNET. Un negocio puede crecer mientras el token permanece plano — y el precio pegado al mínimo histórico, con una rotación especulativa extrema, sugiere que el mercado ya llegó a esa conclusión. La vulnerabilidad parcheada en junio en la API de Cloud tampoco ayuda cuando tu producto entero es la confianza verificable.<br><br>
+      <strong>¿Qué cambiaría el veredicto?</strong> Dos cosas concretas. Primero, métricas públicas de revenue de Phala Cloud con clientes enterprise recurrentes — el segmento salud y finanzas es donde la privacidad no es opcional. Segundo, y más importante, un modelo de settlement basado en uso que ligue directamente el consumo de compute a la demanda del token. Si ambas llegan, un Mcap de $20M para la mayor red TEE del sector parecería un error de precio. Sin ellas, PHA seguirá siendo buena tecnología con una tokenómica que no la acompaña.
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:20px;">
+    <div class="section-header">
+      <div class="section-icon icon-teal">👁</div>
+      <div class="section-title">Qué vigilar en los próximos 30–90 días</div>
+      <div class="section-tag">Lista de Monitoreo</div>
+    </div>
+    <div class="watch-item"><div class="watch-dot dot-teal"></div><div class="watch-text"><strong>Tokens LLM diarios procesados en Phala Cloud:</strong> La métrica que valida demanda real más allá del trading especulativo. Si el crecimiento se acelera de forma sostenida, confirma product-market fit. Es el indicador #1 a seguir en el dashboard oficial de Phala.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Modelo de settlement basado en uso:</strong> El roadmap post-migración menciona modelos de liquidación por uso sobre Ethereum L2. Si se implementa y liga el consumo de compute a la demanda de PHA, resuelve la debilidad central de la tesis. Sería el catalizador tokenómico decisivo.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-yellow"></div><div class="watch-text"><strong>Clientes enterprise en salud y finanzas:</strong> El nicho donde la privacidad es requisito regulatorio, no preferencia. Cualquier anuncio de cliente pagante verificable en estos sectores cambiaría la percepción del proyecto de "infraestructura para cripto" a "proveedor cloud regulado".</div></div>
+    <div class="watch-item"><div class="watch-dot dot-red"></div><div class="watch-text"><strong>Nuevos incidentes de seguridad:</strong> Tras la vulnerabilidad de la Cloud API en junio, cualquier fallo adicional dañaría desproporcionadamente la credibilidad — la seguridad verificable es literalmente el producto. Seguir los anuncios de parches y auditorías del repositorio.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-red"></div><div class="watch-text"><strong>Ratio Vol/Mcap y soporte del ATL:</strong> Con el precio a ~13% de su mínimo histórico y rotación especulativa extrema, la zona de $0.021 es el nivel estructural crítico. Una pérdida sostenida de ese soporte abriría territorio de descubrimiento de precio a la baja.</div></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong style="color:#14b8a6;">TokenFlow AI</strong> · Investigación de tokenómica AI y DePIN · Sin hype. Solo estructura.<br>
+  Fecha del análisis: 24 de julio de 2026 · Este análisis no constituye asesoramiento de inversión. DYOR.<br>
+  Fuentes: CoinGecko, CoinMarketCap, Bybit, MEXC, Chain Broker, CoinEx Academy, docs.phala.com, datos on-chain
+</div>
+
+</body>
+</html>
