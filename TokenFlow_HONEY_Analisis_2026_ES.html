@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenFlow AI – Análisis Hivemapper (HONEY) 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'JetBrains Mono', monospace; background: #0a0e1a; color: #e2e8f0; line-height: 1.7; font-size: 14px; }
+
+  .header { background: linear-gradient(135deg, #0a0e1a 0%, #1f1a08 50%, #0a0e1a 100%); border-bottom: 1px solid #d4a017; padding: 44px 32px 36px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; background: radial-gradient(ellipse, rgba(212,160,23,0.09) 0%, transparent 70%); pointer-events: none; }
+  .brand { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #d4a017; margin-bottom: 14px; font-weight: 600; }
+  .title { font-size: 38px; font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -1px; }
+  .title span { color: #d4a017; }
+  .subtitle { font-size: 12px; color: #64748b; margin-bottom: 22px; letter-spacing: 1px; }
+  .verdict-badge { display: inline-block; padding: 8px 24px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid; font-family: 'JetBrains Mono', monospace; }
+  .badge-warning { background: #451a03; color: #fb923c; border-color: #9a3412; }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 36px 20px; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 36px; }
+  .stat-card { background: #0d1525; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; text-align: center; }
+  .stat-label { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .stat-value { font-size: 22px; font-weight: 800; color: #f8fafc; }
+  .stat-sub { font-size: 10px; color: #64748b; margin-top: 4px; }
+  .stat-gold { color: #d4a017; }
+  .stat-green { color: #4ade80; }
+  .stat-yellow { color: #fbbf24; }
+  .stat-red { color: #f87171; }
+  .stat-orange { color: #fb923c; }
+
+  .section { background: #0d1525; border: 1px solid #1e293b; border-radius: 8px; padding: 26px; margin-bottom: 18px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #1e293b; }
+  .section-icon { width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .icon-gold { background: #422006; }
+  .icon-orange { background: #431407; }
+  .icon-red { background: #450a0a; }
+  .icon-yellow { background: #422006; }
+  .icon-blue { background: #0c2a47; }
+  .icon-green { background: #052e16; }
+  .icon-purple { background: #2e1065; }
+  .section-title { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+  .section-tag { font-size: 10px; color: #475569; margin-left: auto; letter-spacing: 1px; text-transform: uppercase; }
+
+  .concept-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .concept-card { background: #1c1608; border: 1px solid #92700e; border-radius: 6px; padding: 16px; }
+  .concept-card-title { font-size: 11px; color: #d4a017; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .concept-card-text { font-size: 12px; color: #94a3b8; line-height: 1.6; }
+
+  .alloc-table { width: 100%; border-collapse: collapse; }
+  .alloc-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .alloc-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; font-size: 13px; vertical-align: middle; }
+  .alloc-table tr:last-child td { border-bottom: none; }
+  .alloc-bar-wrap { background: #1e293b; border-radius: 2px; height: 5px; width: 90px; display: inline-block; vertical-align: middle; margin-left: 8px; }
+  .alloc-bar { height: 5px; border-radius: 2px; display: block; }
+
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+  .pill-green { background: #052e16; color: #4ade80; }
+  .pill-yellow { background: #422006; color: #fbbf24; }
+  .pill-red { background: #450a0a; color: #f87171; }
+  .pill-gold { background: #422006; color: #fcd34d; }
+
+  .pressure-meter { margin: 14px 0; }
+  .meter-label { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+  .meter-bar-wrap { background: #1e293b; border-radius: 3px; height: 10px; overflow: hidden; }
+  .meter-bar { height: 10px; border-radius: 3px; }
+  .meter-green { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .meter-orange { background: linear-gradient(90deg, #ea580c, #fb923c); }
+  .meter-red { background: linear-gradient(90deg, #dc2626, #f87171); }
+  .meter-gold { background: linear-gradient(90deg, #b8860b, #d4a017); }
+  .meter-yellow { background: linear-gradient(90deg, #ca8a04, #fbbf24); }
+  .meter-footer { display: flex; justify-content: space-between; font-size: 10px; color: #475569; margin-top: 4px; }
+
+  .verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .verdict-card { border-radius: 6px; padding: 20px; }
+  .verdict-bull { background: #052e16; border: 1px solid #166534; }
+  .verdict-bear { background: #450a0a; border: 1px solid #7f1d1d; }
+  .verdict-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .verdict-bull .verdict-title { color: #4ade80; }
+  .verdict-bear .verdict-title { color: #f87171; }
+  .verdict-item { font-size: 12px; color: #cbd5e1; margin-bottom: 9px; padding-left: 18px; position: relative; line-height: 1.5; }
+  .verdict-item::before { content: '→'; position: absolute; left: 0; font-weight: 700; }
+  .verdict-bull .verdict-item::before { color: #4ade80; }
+  .verdict-bear .verdict-item::before { color: #f87171; }
+
+  .final-verdict { background: linear-gradient(135deg, #1c1608, #0f172a); border: 1px solid #b8860b; border-radius: 8px; padding: 30px; margin-top: 8px; }
+  .final-title { font-size: 11px; color: #d4a017; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 14px; font-weight: 700; }
+  .final-score { display: flex; align-items: center; gap: 22px; margin-bottom: 18px; }
+  .score-number { font-size: 68px; font-weight: 900; color: #fbbf24; line-height: 1; }
+  .score-label { font-size: 20px; font-weight: 700; color: #f1f5f9; }
+  .score-sub { font-size: 12px; color: #64748b; margin-top: 6px; }
+  .final-text { font-size: 13px; color: #cbd5e1; line-height: 1.9; }
+
+  .watch-item { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid #1e293b; font-size: 13px; }
+  .watch-item:last-child { border-bottom: none; }
+  .watch-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #22c55e; }
+  .dot-gold { background: #d4a017; }
+  .watch-text { color: #cbd5e1; }
+  .watch-text strong { color: #f8fafc; }
+
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .comp-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .comp-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; vertical-align: middle; }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table tr.highlight-row { background: #1c1608; }
+
+  .note-box { background: #14100a; border-left: 3px solid #d4a017; border-radius: 0 6px 6px 0; padding: 14px 16px; font-size: 12px; color: #94a3b8; margin: 14px 0; line-height: 1.8; }
+  .note-box.warning { border-left-color: #f59e0b; background: #0d1105; }
+  .note-box.danger { border-left-color: #ef4444; background: #0d0808; }
+  .note-box.success { border-left-color: #22c55e; background: #050f05; }
+
+  .footer { text-align: center; padding: 28px; color: #334155; font-size: 11px; border-top: 1px solid #1e293b; margin-top: 36px; letter-spacing: 0.5px; line-height: 2; }
+
+  @media (max-width: 600px) {
+    .verdict-grid, .concept-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .score-number { font-size: 52px; }
+    .title { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">🟡 TokenFlow AI · Investigación de Tokenómica DePIN</div>
+  <div class="title">Hivemapper <span>HONEY</span></div>
+  <div class="subtitle">Análisis completo — El Google Street View descentralizado para la era de los robotaxis · 7 de agosto de 2026</div>
+  <div class="verdict-badge badge-warning">⚠ Cliente Volkswagen · Respaldo Pantera · -91% anual por dilución de supply</div>
+</div>
+
+<div class="container">
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Precio (USD)</div><div class="stat-value stat-gold">~$0.00068</div><div class="stat-sub">7 de agosto, 2026</div></div>
+    <div class="stat-card"><div class="stat-label">Cap. de Mercado</div><div class="stat-value">~$4.3M</div><div class="stat-sub">#1200+ CoinMarketCap</div></div>
+    <div class="stat-card"><div class="stat-label">Desde ATH</div><div class="stat-value stat-red">-99.9%</div><div class="stat-sub">ATH: $0.96 (feb. 2023)</div></div>
+    <div class="stat-card"><div class="stat-label">Caída anual</div><div class="stat-value stat-red">-91%</div><div class="stat-sub">Por dilución de supply</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Circ.</div><div class="stat-value">~6.1B</div><div class="stat-sub">61% del máximo</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Máx.</div><div class="stat-value">10B</div><div class="stat-sub">HONEY</div></div>
+    <div class="stat-card"><div class="stat-label">Modelo</div><div class="stat-value stat-gold">Drive-to-Earn</div><div class="stat-sub">Dashcams + AI</div></div>
+    <div class="stat-card"><div class="stat-label">Blockchain</div><div class="stat-value stat-gold">Solana</div><div class="stat-sub">PoH + PoS</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-gold">🗺️</div>
+      <div class="section-title">¿Qué es Hivemapper? — El mapa del mundo hecho por conductores</div>
+      <div class="section-tag">Arquitectura Core</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">Google Maps mantiene su mapa con vehículos Street View propios — un método tan caro que la calle promedio solo se re-mapea cada varios años. Hivemapper ataca ese problema con un modelo radicalmente distinto: dashcams con IA instaladas en coches de conductores normales, que mapean pasivamente las calles mientras conducen. A cambio, ganan HONEY (modelo "Drive-to-Earn"). El resultado es un mapa colaborativo que puede actualizarse casi en tiempo real, a una fracción del coste de una flota centralizada. Es, en esencia, el Google Street View descentralizado.</p>
+
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="concept-card-title">Drive-to-Earn</div>
+        <div class="concept-card-text">Los conductores instalan una dashcam Bee (cámara 4K + dispositivo de minería blockchain) y ganan HONEY por recolectar imágenes de calles. Aprovecha gente que ya conduce todo el día — repartidores, taxistas, comerciales.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Burn-and-Mint (BME)</div>
+        <div class="concept-card-text">Los desarrolladores deben quemar HONEY para acceder a los datos del mapa vía Map Image API o Map Data Credits. Esto crea demanda fundamental continua: más consumo de mapas = más quema de HONEY.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">El caso Volkswagen</div>
+        <div class="concept-card-text">La división ADMT de Volkswagen seleccionó a Hivemapper (jul. 2025) para datos de mapeo en tiempo real de sus robotaxis, con planes de escalar a "miles" de vehículos hacia finales de 2026. Validación enterprise del modelo DePIN.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">La era de los robotaxis</div>
+        <div class="concept-card-text">Los vehículos autónomos necesitan mapas frescos y precisos constantemente. Un mapa desactualizado es un riesgo de seguridad. Hivemapper apuesta a ser la capa de datos viales frescos que la conducción autónoma exige.</div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <strong>🔑 GEODNET vs. Hivemapper — dos capas geoespaciales complementarias:</strong> En TokenFlow AI analizamos GEODNET (7/10), y conviene distinguirlos porque son primos, no competidores. GEODNET provee <em>corrección GPS de precisión centimétrica</em> (RTK) — responde a "¿dónde estoy exactamente?" para drones, agricultura y robots. Hivemapper provee <em>el mapa visual a nivel de calle</em> — responde a "¿cómo es esta carretera?". Un coche autónomo idealmente necesita ambos: el posicionamiento exacto de GEODNET y el mapa fresco de Hivemapper. Son capas distintas del mismo stack de la economía de máquinas.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📉</div>
+      <div class="section-title">El problema central — La dilución que devora el precio</div>
+      <div class="section-tag">La Paradoja</div>
+    </div>
+
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:16px;">Aquí está la contradicción que "Sin hype. Solo estructura." existe para diseccionar. Hivemapper tiene tracción real — cliente Volkswagen, respaldo de Pantera Capital, un producto que funciona. Y sin embargo, HONEY cayó ~91% en un año y cotiza a -99.9% de su máximo histórico. ¿Por qué?</p>
+
+    <div class="concept-grid">
+      <div class="concept-card" style="border-color:#166534;background:#051206;">
+        <div class="concept-card-title" style="color:#4ade80;">✅ Lo que funciona</div>
+        <div class="concept-card-text">Volkswagen ADMT como cliente. $32M de Pantera (oct. 2025). Dashcam subsidiada a $19/mes (antes $600 upfront). Modelo BME con demanda real. Mapa que se actualiza casi en tiempo real. Nicho claro en la era de robotaxis.</div>
+      </div>
+      <div class="concept-card" style="border-color:#7f1d1d;background:#120505;">
+        <div class="concept-card-title" style="color:#f87171;">🔴 Lo que el mercado castiga</div>
+        <div class="concept-card-text">Supply circulante creció 5,500M+ tokens en un año. Emisión de rewards a contribuidores supera la quema por consumo. Resultado: -91% anual. La inflación de HONEY domina sobre la demanda de datos actual.</div>
+      </div>
+    </div>
+
+    <div class="note-box danger">
+      <strong>🔴 El desequilibrio Burn-and-Mint:</strong> El modelo BME de Hivemapper es teóricamente elegante — los desarrolladores queman HONEY por datos, creando demanda. El problema es que, hoy, la emisión de nuevos HONEY para recompensar a los conductores supera con creces la quema por consumo de mapas. Mientras la red crece en el lado de la oferta (más conductores, más cobertura), la demanda empresarial de datos aún no genera suficiente quema para compensar. El desequilibrio se traduce directamente en presión de precio: es el mismo problema estructural que vimos en Helium, pero aquí la fase de subsidio de la oferta es aún más agresiva.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">📊</div>
+      <div class="section-title">Estructura del suministro y desbloqueos</div>
+      <div class="section-tag">Supply Analysis</div>
+    </div>
+
+    <table class="alloc-table">
+      <thead>
+        <tr><th>Métrica</th><th>Valor</th><th>Estado</th><th>Lectura TokenFlow</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Supply circulante</strong></td>
+          <td>~6.1B / 10B <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:61%;background:#fbbf24;"></div></div></td>
+          <td><span class="status-pill pill-yellow">~61% del máximo</span></td>
+          <td>~3.9B pendientes de emisión</td>
+        </tr>
+        <tr>
+          <td><strong>Crecimiento anual supply</strong></td>
+          <td>+5.5B tokens</td>
+          <td><span class="status-pill pill-red">Inflación agresiva</span></td>
+          <td style="color:#f87171;">⚠ Causa directa del -91%</td>
+        </tr>
+        <tr>
+          <td><strong>Unlocks recurrentes</strong></td>
+          <td>~34.7M/mes aprox.</td>
+          <td><span class="status-pill pill-yellow">Contributor Rewards</span></td>
+          <td>Presión de venta constante</td>
+        </tr>
+        <tr>
+          <td><strong>Utilidad del token</strong></td>
+          <td>Burn (datos) + Reward</td>
+          <td><span class="status-pill pill-gold">BME</span></td>
+          <td>Demanda ligada a consumo de mapas</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box warning" style="margin-top:16px;">
+      <strong>⚠ El "supply crunch" invertido:</strong> Irónicamente, la ronda de $32M de Pantera se destinó en parte a resolver un "supply crunch" del lado del hardware — no había suficientes dashcams desplegadas para cubrir la demanda de mapas. Bajar el coste de la dashcam a $19/mes busca acelerar el despliegue. Pero esto tiene un efecto secundario tokenómico: más conductores = más emisión de HONEY como recompensa = más presión inflacionaria a corto plazo. La apuesta es que la demanda empresarial (Volkswagen y otros) crezca lo bastante rápido como para que la quema alcance a la emisión.
+    </div>
+
+    <div class="pressure-meter" style="margin-top:16px;">
+      <div class="meter-label">La carrera decisiva: quema por consumo de datos vs. emisión de rewards</div>
+      <div class="meter-bar-wrap" style="height:12px;border-radius:6px;"><div class="meter-bar meter-red" style="width:28%;height:12px;border-radius:6px;"></div></div>
+      <div class="meter-footer"><span>Inflacionario</span><span style="color:#f87171;font-weight:700;">🔴 Hoy la emisión domina — HONEY inflaciona</span><span>Deflacionario</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">⚔</div>
+      <div class="section-title">Posicionamiento competitivo</div>
+      <div class="section-tag">Mapeo Geoespacial DePIN</div>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr><th>Proyecto</th><th>Enfoque</th><th>Mcap</th><th>vs. HONEY</th></tr>
+      </thead>
+      <tbody>
+        <tr class="highlight-row">
+          <td><strong style="color:#d4a017;">🟡 Hivemapper (HONEY)</strong></td>
+          <td>Mapa visual de calles</td>
+          <td>~$4.3M</td>
+          <td>— Street View descentralizado, cliente VW</td>
+        </tr>
+        <tr>
+          <td><strong>GEODNET (GEOD)</strong></td>
+          <td>Corrección GPS centimétrica</td>
+          <td>~$92M</td>
+          <td>Complementario — posición vs. imagen</td>
+        </tr>
+        <tr>
+          <td><strong>Google Maps</strong></td>
+          <td>Mapeo centralizado</td>
+          <td>—</td>
+          <td>Re-mapea cada años — Hivemapper casi real-time</td>
+        </tr>
+        <tr>
+          <td><strong>Mapbox / TomTom</strong></td>
+          <td>Mapas enterprise</td>
+          <td>Privadas</td>
+          <td>Centralizados — Hivemapper crowdsourced</td>
+        </tr>
+        <tr>
+          <td><strong>Nivel de coche autónomo</strong></td>
+          <td>HD maps propietarios</td>
+          <td>—</td>
+          <td>Hivemapper = capa abierta y fresca</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box" style="margin-top:16px;">
+      <strong>La posición de Hivemapper:</strong> Su competidor real no es otro token cripto — es Google Maps y los proveedores de HD maps propietarios. Su ventaja es la frescura y el coste: un ejército de dashcams puede actualizar un mapa mucho más rápido y barato que una flota centralizada. Su desafío es doble: convencer a clientes enterprise de que confíen en datos crowdsourced para aplicaciones críticas de seguridad (conducción autónoma), y equilibrar su tokenómica para que el crecimiento de la red no destruya el valor del token. El caso Volkswagen es la prueba de concepto; la pregunta es si escala a revenue sostenido.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📉</div>
+      <div class="section-title">Estructura técnica y contexto de precio</div>
+      <div class="section-tag">Estructura de Precio</div>
+    </div>
+
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Precio vs ATH</div><div class="stat-value stat-red">-99.9%</div><div class="stat-sub">ATH: $0.96 (feb. 2023)</div></div>
+      <div class="stat-card"><div class="stat-label">7 días</div><div class="stat-value stat-red">-20%</div><div class="stat-sub">Corrección activa</div></div>
+      <div class="stat-card"><div class="stat-label">Volumen 24h</div><div class="stat-value stat-red">~$150K</div><div class="stat-sub">Liquidez muy baja</div></div>
+      <div class="stat-card"><div class="stat-label">Ranking</div><div class="stat-value">#1200+</div><div class="stat-sub">Microcap</div></div>
+    </div>
+
+    <div class="pressure-meter"><div class="meter-label">Desde ATH (-99.9% — uno de los peores drawdowns del sector)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:99%;"></div></div><div class="meter-footer"><span>ATH</span><span style="color:#f87171;">🔴 Microcap tras dilución extrema</span><span>ATL</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Tracción fundamental (Volkswagen, Pantera, producto real)</div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:68%;"></div></div><div class="meter-footer"><span>Débil</span><span style="color:#4ade80;font-weight:700;">✅ Cliente enterprise y respaldo VC sólidos</span><span>Fuerte</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Presión de supply (emisión de rewards + unlocks mensuales)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:82%;"></div></div><div class="meter-footer"><span>Baja</span><span style="color:#f87171;">🔴 Alta — la inflación domina el precio</span><span>Alta</span></div></div>
+
+    <div class="note-box danger" style="margin-top:14px;">
+      <strong>⚠ Advertencia de contrato (Rugcheck):</strong> Según Rugcheck.xyz, el creador del contrato puede realizar cambios como modificar metadatos, deshabilitar ventas, cambiar comisiones o mintear tokens sin restricción. Es una señal de precaución técnica que todo holder debe conocer. No implica intención maliciosa, pero significa que el contrato no es completamente inmutable — un factor de riesgo adicional en un microcap ya volátil.
+    </div>
+
+    <div class="note-box warning" style="margin-top:14px;">
+      Con un Mcap de ~$4.3M y volumen diario de ~$150K, HONEY es un microcap extremadamente ilíquido. A -99.9% del ATH, el precio refleja años de dilución que ha superado a la demanda. Cualquier movimiento de un holder grande puede mover el precio drásticamente. La asimetría teórica es enorme si la demanda enterprise despega, pero el riesgo de dilución continua es igualmente real.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">⚖</div>
+      <div class="section-title">Argumentos alcistas vs. bajistas</div>
+      <div class="section-tag">Veredicto TokenFlow</div>
+    </div>
+
+    <div class="verdict-grid">
+      <div class="verdict-card verdict-bull">
+        <div class="verdict-title">🟢 Argumentos alcistas</div>
+        <div class="verdict-item">Cliente Volkswagen ADMT — validación enterprise para robotaxis</div>
+        <div class="verdict-item">Respaldo de Pantera Capital ($32M, oct. 2025)</div>
+        <div class="verdict-item">Modelo BME — quema de HONEY ligada a consumo real de datos</div>
+        <div class="verdict-item">Dashcam a $19/mes — baja la barrera de entrada de conductores</div>
+        <div class="verdict-item">Nicho claro: mapas frescos para la era de conducción autónoma</div>
+        <div class="verdict-item">Complementario a GEODNET — stack geoespacial de la economía de máquinas</div>
+        <div class="verdict-item">Mcap ~$4.3M — asimetría extrema si el revenue enterprise despega</div>
+        <div class="verdict-item">Ventaja de coste y frescura frente a Google Maps</div>
+      </div>
+      <div class="verdict-card verdict-bear">
+        <div class="verdict-title">🔴 Argumentos bajistas</div>
+        <div class="verdict-item">-91% anual — la dilución de supply devora el precio</div>
+        <div class="verdict-item">Emisión de rewards supera la quema por consumo hoy</div>
+        <div class="verdict-item">-99.9% desde ATH — microcap tras destrucción de valor</div>
+        <div class="verdict-item">Volumen ~$150K — liquidez crítica, alta volatilidad</div>
+        <div class="verdict-item">Volkswagen aún no se traduce en quema medible de HONEY</div>
+        <div class="verdict-item">~3.9B tokens pendientes de emisión — presión futura</div>
+        <div class="verdict-item">Contrato modificable (Rugcheck) — riesgo técnico</div>
+        <div class="verdict-item">Datos crowdsourced para uso crítico — barrera de confianza enterprise</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="final-verdict">
+    <div class="final-title">TokenFlow AI · Veredicto Final</div>
+    <div class="final-score">
+      <div class="score-number">4.5</div>
+      <div>
+        <div class="score-label">Producto real y cliente de peso · Tokenómica que destruye valor</div>
+        <div class="score-sub">sobre 10 · La demanda existe; la emisión la ahoga</div>
+      </div>
+    </div>
+    <div class="final-text">
+      Hivemapper resuelve un problema real y tiene algo que muchos DePIN solo prometen: un cliente enterprise de primer nivel. Que la división de conducción autónoma de Volkswagen elija sus datos de mapeo para robotaxis no es un anuncio vacío — es validación de que el modelo de dashcams crowdsourced produce datos utilizables para aplicaciones críticas. El respaldo de Pantera Capital, la bajada del coste de la dashcam a $19/mes, y el posicionamiento en la era de los robotaxis completan una tesis narrativa sólida. Y como capa complementaria a GEODNET, encaja limpiamente en el stack geoespacial de la economía de máquinas que venimos mapeando en TokenFlow AI.<br><br>
+      Pero la tokenómica es, ahora mismo, el enemigo del token. HONEY cayó ~91% en un año por una razón estructural clara: la emisión de nuevos tokens para recompensar a los conductores supera con creces la quema por consumo de datos. El modelo Burn-and-Mint es elegante en teoría, pero solo funciona cuando la demanda empresarial de mapas quema suficiente HONEY para compensar la inflación de rewards. Hoy no lo hace. El resultado es un token a -99.9% de su máximo, un microcap de $4.3M con liquidez crítica, y ~3.9B tokens aún pendientes de emisión. La advertencia de contrato modificable de Rugcheck añade un riesgo técnico que no se puede ignorar.<br><br>
+      Esta es la tensión que define el veredicto. Si evaluáramos solo el producto y el cliente, Hivemapper merecería un 6. Si evaluáramos solo la captura de valor del token en su estado actual, un 3.5. Es el mismo patrón que Helium — negocio real, token estrangulado por su propio modelo de incentivos de oferta — y por eso aterriza en un 4.5. La diferencia con proyectos de supply limpio como Nosana o IoTeX no podría ser más marcada: aquí el problema no es la falta de demanda futura, sino que la estructura de emisión actual destruye valor más rápido de lo que la demanda lo crea.<br><br>
+      <strong>¿Qué cambiaría el veredicto?</strong> Una sola cosa, medible: evidencia de que la quema de HONEY por consumo de datos (Volkswagen escalando a "miles" de robotaxis, más clientes como Lyft o Mapbox) supera sosteniblemente la emisión de rewards. Si la demanda enterprise convierte el BME de inflacionario a deflacionario neto, el microcap de $4.3M parecería un error de precio y la asimetría al alza sería violenta. Hasta que los datos on-chain lo confirmen, es un producto excelente con una tokenómica que, por ahora, trabaja en su contra.
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:20px;">
+    <div class="section-header">
+      <div class="section-icon icon-gold">👁</div>
+      <div class="section-title">Qué vigilar en los próximos 30–90 días</div>
+      <div class="section-tag">Lista de Monitoreo</div>
+    </div>
+    <div class="watch-item"><div class="watch-dot dot-gold"></div><div class="watch-text"><strong>Quema de HONEY por consumo de datos:</strong> La métrica que define toda la tesis. Si la quema por Map Data Credits crece hasta acercarse o superar la emisión de rewards, el BME gira a deflacionario y cambia todo. Es el indicador #1 — seguir los datos on-chain de burn vs. mint en el explorador de Solana.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Escalado del contrato Volkswagen:</strong> El plan es pasar de piloto a "miles" de robotaxis hacia finales de 2026. Cualquier confirmación de despliegue a escala — y de pagos/quema asociados — sería la validación de revenue que el precio necesita. Seguir anuncios de VW ADMT y Hivemapper Foundation.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-red"></div><div class="watch-text"><strong>Ritmo de emisión y unlocks mensuales:</strong> Con ~3.9B tokens pendientes, vigilar si el ritmo de emisión de Contributor Rewards se acelera o modera. Cada unlock añade presión de venta en un microcap ya ilíquido. Seguir el calendario de unlocks en CoinGecko/tokenomist.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Nuevos clientes enterprise:</strong> Más allá de Volkswagen, cualquier acuerdo con Lyft, Mapbox u otros consumidores de datos de mapas diversificaría la demanda y aceleraría la quema. La concentración en un solo cliente es un riesgo; la diversificación sería alcista.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-yellow"></div><div class="watch-text"><strong>Cobertura del mapa y despliegue de dashcams:</strong> El programa de incentivos de cobertura busca mapear carreteras prioritarias. Si la cobertura global crece de forma medible con la dashcam subsidiada, mejora la propuesta de valor del producto — aunque a corto plazo aumente la emisión. Seguir el mapa de cobertura oficial.</div></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong style="color:#d4a017;">TokenFlow AI</strong> · Investigación de tokenómica AI y DePIN · Sin hype. Solo estructura.<br>
+  Fecha del análisis: 7 de agosto de 2026 · Este análisis no constituye asesoramiento de inversión. DYOR.<br>
+  Fuentes: CoinGecko, CoinMarketCap, Coinbase, Kraken, Crypto.com, Rugcheck, docs.hivemapper.com, datos on-chain de Solana
+</div>
+
+</body>
+</html>
