@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenFlow AI – Análisis Chainlink (LINK) 2026</title>
+<script data-goatcounter="https://tokenflowai.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'JetBrains Mono', monospace; background: #0a0e1a; color: #e2e8f0; line-height: 1.7; font-size: 14px; }
+
+  .header { background: linear-gradient(135deg, #0a0e1a 0%, #0a1226 50%, #0a0e1a 100%); border-bottom: 1px solid #2a5ada; padding: 44px 32px 36px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; background: radial-gradient(ellipse, rgba(42,90,218,0.10) 0%, transparent 70%); pointer-events: none; }
+  .brand { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #3b6ef0; margin-bottom: 14px; font-weight: 600; }
+  .title { font-size: 38px; font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -1px; }
+  .title span { color: #3b6ef0; }
+  .subtitle { font-size: 12px; color: #64748b; margin-bottom: 22px; letter-spacing: 1px; }
+  .verdict-badge { display: inline-block; padding: 8px 24px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid; font-family: 'JetBrains Mono', monospace; }
+  .badge-warning { background: #451a03; color: #fb923c; border-color: #9a3412; }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 36px 20px; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 36px; }
+  .stat-card { background: #0d1525; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; text-align: center; }
+  .stat-label { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .stat-value { font-size: 22px; font-weight: 800; color: #f8fafc; }
+  .stat-sub { font-size: 10px; color: #64748b; margin-top: 4px; }
+  .stat-blue { color: #3b6ef0; }
+  .stat-green { color: #4ade80; }
+  .stat-yellow { color: #fbbf24; }
+  .stat-red { color: #f87171; }
+  .stat-orange { color: #fb923c; }
+
+  .section { background: #0d1525; border: 1px solid #1e293b; border-radius: 8px; padding: 26px; margin-bottom: 18px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #1e293b; }
+  .section-icon { width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .icon-blue { background: #10245a; }
+  .icon-orange { background: #431407; }
+  .icon-red { background: #450a0a; }
+  .icon-yellow { background: #422006; }
+  .icon-green { background: #052e16; }
+  .icon-purple { background: #2e1065; }
+  .icon-cyan { background: #083344; }
+  .section-title { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+  .section-tag { font-size: 10px; color: #475569; margin-left: auto; letter-spacing: 1px; text-transform: uppercase; }
+
+  .concept-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .concept-card { background: #0b1836; border: 1px solid #1e40af; border-radius: 6px; padding: 16px; }
+  .concept-card-title { font-size: 11px; color: #3b6ef0; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .concept-card-text { font-size: 12px; color: #94a3b8; line-height: 1.6; }
+
+  .alloc-table { width: 100%; border-collapse: collapse; }
+  .alloc-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .alloc-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; font-size: 13px; vertical-align: middle; }
+  .alloc-table tr:last-child td { border-bottom: none; }
+  .alloc-bar-wrap { background: #1e293b; border-radius: 2px; height: 5px; width: 90px; display: inline-block; vertical-align: middle; margin-left: 8px; }
+  .alloc-bar { height: 5px; border-radius: 2px; display: block; }
+
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+  .pill-green { background: #052e16; color: #4ade80; }
+  .pill-yellow { background: #422006; color: #fbbf24; }
+  .pill-red { background: #450a0a; color: #f87171; }
+  .pill-blue { background: #10245a; color: #93b4fd; }
+
+  .pressure-meter { margin: 14px 0; }
+  .meter-label { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+  .meter-bar-wrap { background: #1e293b; border-radius: 3px; height: 10px; overflow: hidden; }
+  .meter-bar { height: 10px; border-radius: 3px; }
+  .meter-green { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .meter-orange { background: linear-gradient(90deg, #ea580c, #fb923c); }
+  .meter-red { background: linear-gradient(90deg, #dc2626, #f87171); }
+  .meter-blue { background: linear-gradient(90deg, #1d4ed8, #3b6ef0); }
+  .meter-yellow { background: linear-gradient(90deg, #ca8a04, #fbbf24); }
+  .meter-footer { display: flex; justify-content: space-between; font-size: 10px; color: #475569; margin-top: 4px; }
+
+  .verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .verdict-card { border-radius: 6px; padding: 20px; }
+  .verdict-bull { background: #052e16; border: 1px solid #166534; }
+  .verdict-bear { background: #450a0a; border: 1px solid #7f1d1d; }
+  .verdict-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .verdict-bull .verdict-title { color: #4ade80; }
+  .verdict-bear .verdict-title { color: #f87171; }
+  .verdict-item { font-size: 12px; color: #cbd5e1; margin-bottom: 9px; padding-left: 18px; position: relative; line-height: 1.5; }
+  .verdict-item::before { content: '→'; position: absolute; left: 0; font-weight: 700; }
+  .verdict-bull .verdict-item::before { color: #4ade80; }
+  .verdict-bear .verdict-item::before { color: #f87171; }
+
+  .final-verdict { background: linear-gradient(135deg, #0b1836, #0f172a); border: 1px solid #1d4ed8; border-radius: 8px; padding: 30px; margin-top: 8px; }
+  .final-title { font-size: 11px; color: #3b6ef0; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 14px; font-weight: 700; }
+  .final-score { display: flex; align-items: center; gap: 22px; margin-bottom: 18px; }
+  .score-number { font-size: 68px; font-weight: 900; color: #fbbf24; line-height: 1; }
+  .score-label { font-size: 20px; font-weight: 700; color: #f1f5f9; }
+  .score-sub { font-size: 12px; color: #64748b; margin-top: 6px; }
+  .final-text { font-size: 13px; color: #cbd5e1; line-height: 1.9; }
+
+  .watch-item { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid #1e293b; font-size: 13px; }
+  .watch-item:last-child { border-bottom: none; }
+  .watch-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #22c55e; }
+  .dot-blue { background: #3b6ef0; }
+  .watch-text { color: #cbd5e1; }
+  .watch-text strong { color: #f8fafc; }
+
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .comp-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .comp-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; vertical-align: middle; }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table tr.highlight-row { background: #0b1836; }
+
+  .note-box { background: #08101f; border-left: 3px solid #3b6ef0; border-radius: 0 6px 6px 0; padding: 14px 16px; font-size: 12px; color: #94a3b8; margin: 14px 0; line-height: 1.8; }
+  .note-box.warning { border-left-color: #f59e0b; background: #0d1105; }
+  .note-box.danger { border-left-color: #ef4444; background: #0d0808; }
+  .note-box.success { border-left-color: #22c55e; background: #050f05; }
+
+  .footer { text-align: center; padding: 28px; color: #334155; font-size: 11px; border-top: 1px solid #1e293b; margin-top: 36px; letter-spacing: 0.5px; line-height: 2; }
+
+  @media (max-width: 600px) {
+    .verdict-grid, .concept-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .score-number { font-size: 52px; }
+    .title { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">🔵 TokenFlow AI · Investigación de Tokenómica AI</div>
+  <div class="title">Chainlink <span>LINK</span></div>
+  <div class="subtitle">Análisis completo — La capa de verdad para la IA que mueve dinero real · 14 de agosto de 2026</div>
+  <div class="verdict-badge badge-warning">⚠ Dominio absoluto en oráculos · $33B asegurados · El token captura poco de ese valor</div>
+</div>
+
+<div class="container">
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Precio (USD)</div><div class="stat-value stat-blue">~$8.80</div><div class="stat-sub">14 de agosto, 2026</div></div>
+    <div class="stat-card"><div class="stat-label">Cap. de Mercado</div><div class="stat-value">~$6.6B</div><div class="stat-sub">#15–18 ranking</div></div>
+    <div class="stat-card"><div class="stat-label">FDV</div><div class="stat-value stat-yellow">~$8.8B</div><div class="stat-sub">Mcap/FDV = 75%</div></div>
+    <div class="stat-card"><div class="stat-label">Desde ATH</div><div class="stat-value stat-red">-83%</div><div class="stat-sub">ATH: $52.70 (may. 2021)</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Circ.</div><div class="stat-value">748M</div><div class="stat-sub">75% del máximo</div></div>
+    <div class="stat-card"><div class="stat-label">Valor Asegurado (TVS)</div><div class="stat-value stat-blue">$33.1B</div><div class="stat-sub">505 protocolos</div></div>
+    <div class="stat-card"><div class="stat-label">Revenue protocolo</div><div class="stat-value stat-red">~$4.6M</div><div class="stat-sub">vs. $27.3T habilitados</div></div>
+    <div class="stat-card"><div class="stat-label">Emisión anual</div><div class="stat-value stat-red">~7%</div><div class="stat-sub">Dilución de supply</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">🔗</div>
+      <div class="section-title">¿Qué es Chainlink? — La capa de verdad de las blockchains</div>
+      <div class="section-tag">Arquitectura Core</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">Los smart contracts tienen un límite fundamental: no pueden ver el mundo exterior. Un contrato en Ethereum no sabe el precio del oro, el resultado de un partido, ni si una transferencia bancaria se completó. Chainlink resuelve exactamente eso: es la red de oráculos descentralizada que alimenta a las blockchains con datos verificados del mundo real. Sin oráculos, no hay DeFi, no hay stablecoins, no hay activos tokenizados. Y en la era de los agentes de IA, esa función se vuelve crítica: cualquier agente autónomo que ejecute transacciones necesita datos de precio verdaderos para actuar. Chainlink es la capa de verdad sobre la que se construye esa confianza.</p>
+
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="concept-card-title">Data Feeds &amp; Streams</div>
+        <div class="concept-card-text">Los oráculos originales: precios verificados para DeFi. Alimentan a Aave, y ahora a acciones tokenizadas (Ondo) y fondos. Cada integración añade uso pagado. La base del dominio de Chainlink.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">CCIP — mensajería cross-chain</div>
+        <div class="concept-card-text">El protocolo de interoperabilidad que mueve valor y datos entre blockchains. ~$18B de volumen mensual. Tras el breach de LayerZero, Kelp DAO migró $4B a Chainlink — la seguridad como ventaja competitiva.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">CRE — Chainlink Runtime Environment</div>
+        <div class="concept-card-text">La capa de settlement y compute para instituciones. El DTCC lo integrará en su Collateral AppChain para pricing y liquidación en tiempo real (producción Q4 2026). TradFi entrando on-chain.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">La capa para agentes de IA</div>
+        <div class="concept-card-text">Feeds de oráculo en tiempo real, verificación de modelos, y settlement de datos agénticos cross-chain. A medida que los agentes de IA transaccionan de forma autónoma, necesitan la capa de datos y liquidación neutral de Chainlink.</div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <strong>🔑 El dominio es abrumador — y ese es el punto de partida:</strong> Según DefiLlama, Chainlink asegura ~$33.1B en Total Value Secured across 505 protocolos. Sus competidores más cercanos — Chronicle ($7.5B), RedStone ($3.6B), Pyth ($3.1B) — están muy por detrás. Mainstream: Swift, JPMorgan, Mastercard, UBS y Euroclear han trabajado con Chainlink. Es infraestructura de mercado de capitales, no un experimento. La pregunta que define este análisis no es si Chainlink es dominante — lo es — sino si ese dominio se traduce en valor para el token LINK.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📉</div>
+      <div class="section-title">La divergencia central — Dominio de red, token rezagado</div>
+      <div class="section-tag">La Paradoja</div>
+    </div>
+
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:16px;">Este es el corazón del análisis, y el tipo de contradicción que "Sin hype. Solo estructura." existe para diseccionar. Chainlink domina su categoría por casi cualquier métrica de adopción. Y sin embargo, LINK cotiza -83% desde su máximo de 2021. La misma tensión que vimos en The Graph, pero en el proyecto de infraestructura más importante del sector.</p>
+
+    <div class="concept-grid">
+      <div class="concept-card" style="border-color:#166534;background:#051206;">
+        <div class="concept-card-title" style="color:#4ade80;">✅ Lo que dicen los fundamentales</div>
+        <div class="concept-card-text">$33.1B TVS en 505 protocolos. $18B/mes en CCIP. Bitwise LINK ETF (CLNK) en NYSE Arca desde enero 2026. DTCC, Swift, JPMorgan, UBS, Mastercard. Acciones tokenizadas de Ondo con feeds de Chainlink. Dominio absoluto de categoría.</div>
+      </div>
+      <div class="concept-card" style="border-color:#7f1d1d;background:#120505;">
+        <div class="concept-card-title" style="color:#f87171;">🔴 Lo que dice el mercado</div>
+        <div class="concept-card-text">-83% desde ATH. Solo ~$4.6M de revenue de protocolo frente a $27.3T de valor de transacciones habilitado. ~7% de dilución anual de supply. Staking incompleto. Fee capture: la debilidad honesta del proyecto.</div>
+      </div>
+    </div>
+
+    <div class="note-box danger">
+      <strong>🔴 El "value-capture gap" — la brecha más importante:</strong> Chainlink habilita un valor de transacciones estimado en $27.3 billones (trillions), asegura $33.1B, y sin embargo el revenue que llega al protocolo es de apenas ~$4.6M. La diferencia entre "valor asegurado" y "valor capturado por el token" es abismal. LINK se usa para pagar a los oráculos y para staking, pero históricamente gran parte del pago a node operators ha salido de emisión de tokens (dilución ~7% anual), no de fees de usuarios. El resultado: la red puede crecer enormemente mientras el token no captura proporcionalmente ese crecimiento. Es exactamente el mismo patrón estructural de The Graph, elevado a la escala del líder del sector.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">🔥</div>
+      <div class="section-title">Tokenómica — Dilución hoy, captura mañana (quizás)</div>
+      <div class="section-tag">Supply Analysis</div>
+    </div>
+
+    <table class="alloc-table">
+      <thead>
+        <tr><th>Mecanismo</th><th>Detalle</th><th>Efecto</th><th>Lectura TokenFlow</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Supply circulante</strong></td>
+          <td>748M / 1B <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:75%;background:#fbbf24;"></div></div></td>
+          <td><span class="status-pill pill-yellow">75% del máximo</span></td>
+          <td>~252M pendientes de emisión</td>
+        </tr>
+        <tr>
+          <td><strong>Emisión anual</strong></td>
+          <td>~7% para node operators</td>
+          <td><span class="status-pill pill-red">Inflacionario</span></td>
+          <td style="color:#f87171;">⚠ Presión de dilución constante</td>
+        </tr>
+        <tr>
+          <td><strong>Revenue de protocolo</strong></td>
+          <td>~$4.6M (oráculos + CCIP)</td>
+          <td><span class="status-pill pill-red">Muy bajo vs. TVS</span></td>
+          <td style="color:#f87171;">No compensa la emisión aún</td>
+        </tr>
+        <tr>
+          <td><strong>Staking</strong></td>
+          <td>v0.2 — incompleto</td>
+          <td><span class="status-pill pill-yellow">En desarrollo</span></td>
+          <td>Economía de staking sin madurar</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box warning" style="margin-top:16px;">
+      <strong>⚠ El eslabón perdido — Chainlink Economics 2.0:</strong> La tesis alcista del token depende de que la economía de staking madure hasta el punto en que las fees reales de usuarios (no la emisión) paguen a los node operators, y que el staking capture una parte creciente de ese revenue. El "Payment Abstraction" busca dirigir fees de múltiples fuentes hacia LINK. Pero mientras el revenue de protocolo siga en ~$4.6M frente a una emisión del 7% sobre un supply de 748M, la matemática favorece la dilución. La captura de valor es una promesa de futuro, no una realidad presente.
+    </div>
+
+    <div class="pressure-meter" style="margin-top:16px;">
+      <div class="meter-label">La carrera decisiva: revenue de fees reales vs. emisión ~7% anual</div>
+      <div class="meter-bar-wrap" style="height:12px;border-radius:6px;"><div class="meter-bar meter-red" style="width:30%;height:12px;border-radius:6px;"></div></div>
+      <div class="meter-footer"><span>Dilución</span><span style="color:#f87171;font-weight:700;">🔴 Hoy la emisión domina sobre la captura de fees</span><span>Captura</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">⚔</div>
+      <div class="section-title">Posicionamiento competitivo</div>
+      <div class="section-tag">Oráculos + Interoperabilidad</div>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr><th>Proyecto</th><th>TVS / Enfoque</th><th>Mcap</th><th>vs. LINK</th></tr>
+      </thead>
+      <tbody>
+        <tr class="highlight-row">
+          <td><strong style="color:#3b6ef0;">🔵 Chainlink (LINK)</strong></td>
+          <td>$33.1B TVS · oráculos + CCIP</td>
+          <td>~$6.6B</td>
+          <td>— Dominio absoluto, 505 protocolos</td>
+        </tr>
+        <tr>
+          <td><strong>Chronicle</strong></td>
+          <td>$7.5B TVS · oráculos</td>
+          <td>Menor</td>
+          <td>4.4x menos TVS — competidor lejano</td>
+        </tr>
+        <tr>
+          <td><strong>Pyth Network</strong></td>
+          <td>$3.1B TVS · precios real-time</td>
+          <td>~$1B</td>
+          <td>Nicho de baja latencia — Graph más amplio</td>
+        </tr>
+        <tr>
+          <td><strong>RedStone</strong></td>
+          <td>$3.6B TVS · oráculos modulares</td>
+          <td>Menor</td>
+          <td>Emergente — Chainlink domina la categoría</td>
+        </tr>
+        <tr>
+          <td><strong>The Graph (GRT)</strong></td>
+          <td>Indexación de datos</td>
+          <td>~$161M</td>
+          <td>Capa complementaria — lectura vs. oráculo</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box" style="margin-top:16px;">
+      <strong>La posición de Chainlink en el stack de datos de la IA:</strong> En TokenFlow AI hemos mapeado las capas de datos para agentes de IA. The Graph (GRT) es la capa de <em>lectura/indexación</em> — cómo los agentes consultan datos on-chain históricos. Chainlink es la capa de <em>verdad/oráculo y settlement</em> — cómo los agentes obtienen datos verificados del mundo real y liquidan valor cross-chain. Son complementarias, no competidoras. Chainlink es, con diferencia, la más dominante y con mayor validación institucional de las dos. Su moat — la red de node operators, las integraciones con 505 protocolos, las alianzas con Swift y DTCC — es posiblemente el más profundo de todo el sector infraestructura.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">🏛️</div>
+      <div class="section-title">Catalizadores institucionales — El caso alcista real</div>
+      <div class="section-tag">Adopción TradFi</div>
+    </div>
+
+    <div style="margin:8px 0;">
+      <div style="display:flex;gap:16px;padding:10px 0;border-bottom:1px solid #1e293b;">
+        <div style="font-size:10px;color:#4ade80;font-weight:700;min-width:90px;padding-top:2px;">ENE 2026 ✅</div>
+        <div style="font-size:12px;color:#cbd5e1;"><strong>Bitwise LINK ETF (CLNK)</strong> listado en NYSE Arca. Hace LINK accesible a cuentas de retiro (401k, IRA) — un cambio estructural en el tipo de capital que puede acceder al activo.</div>
+      </div>
+      <div style="display:flex;gap:16px;padding:10px 0;border-bottom:1px solid #1e293b;">
+        <div style="font-size:10px;color:#4ade80;font-weight:700;min-width:90px;padding-top:2px;">MAY 2026 ✅</div>
+        <div style="font-size:12px;color:#cbd5e1;"><strong>DTCC</strong> lanzó un sistema de colateral basado en blockchain con integración Chainlink para gestión automatizada 24/7. Kelp DAO migró $4B tras el breach de LayerZero.</div>
+      </div>
+      <div style="display:flex;gap:16px;padding:10px 0;border-bottom:1px solid #1e293b;">
+        <div style="font-size:10px;color:#4ade80;font-weight:700;min-width:90px;padding-top:2px;">JUN 2026 ✅</div>
+        <div style="font-size:12px;color:#cbd5e1;"><strong>Consorcios bancarios EU/Corea</strong> — Chainlink se unió para desarrollar settlement FX en tiempo real con stablecoins reguladas de euro y won.</div>
+      </div>
+      <div style="display:flex;gap:16px;padding:10px 0;">
+        <div style="font-size:10px;color:#fbbf24;font-weight:700;min-width:90px;padding-top:2px;">Q4 2026 ⏳</div>
+        <div style="font-size:12px;color:#cbd5e1;"><strong>DTCC CRE en producción</strong> — el Chainlink Runtime Environment en la Collateral AppChain del DTCC para pricing y settlement en tiempo real. TradFi on-chain a escala.</div>
+      </div>
+    </div>
+
+    <div class="note-box success">
+      <strong>✅ Por qué esto importa:</strong> Estas no son integraciones especulativas — son las instituciones que liquidan el sistema financiero global (DTCC, Swift) construyendo sobre Chainlink. Si la tokenización de activos del mundo real (RWA) despega como se proyecta, Chainlink es la infraestructura por defecto. La pregunta del token sigue en pie — ¿capturará LINK ese valor? — pero la posición estratégica es incomparable en el sector.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📊</div>
+      <div class="section-title">Estructura técnica y contexto de precio</div>
+      <div class="section-tag">Estructura de Precio</div>
+    </div>
+
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Precio vs ATH</div><div class="stat-value stat-red">-83%</div><div class="stat-sub">ATH: $52.70 (may. 2021)</div></div>
+      <div class="stat-card"><div class="stat-label">7 días</div><div class="stat-value stat-green">+7.9%</div><div class="stat-sub">Rebote reciente</div></div>
+      <div class="stat-card"><div class="stat-label">Rango consolidación</div><div class="stat-value">$8–$9</div><div class="stat-sub">Soporte clave ~$7</div></div>
+      <div class="stat-card"><div class="stat-label">Volumen 24h</div><div class="stat-value">~$200M</div><div class="stat-sub">Liquidez alta</div></div>
+    </div>
+
+    <div class="pressure-meter"><div class="meter-label">Desde ATH (-83% — consolidación larga desde 2021)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:83%;"></div></div><div class="meter-footer"><span>ATH</span><span style="color:#f87171;">🔴 Consolidando en $8–$9, lejos del pico</span><span>ATL</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Dominio de red (TVS, integraciones, institucional — sólido)</div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:92%;"></div></div><div class="meter-footer"><span>Débil</span><span style="color:#4ade80;font-weight:700;">✅ Líder absoluto de categoría</span><span>Fuerte</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Captura de valor del token (fees vs. emisión — la debilidad)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:25%;"></div></div><div class="meter-footer"><span>Baja</span><span style="color:#f87171;">🔴 El value-capture gap define el precio</span><span>Alta</span></div></div>
+
+    <div class="note-box warning" style="margin-top:14px;">
+      LINK consolida en el rango $8–$9 con soporte estructural cerca de $7. El rebote reciente (+7.9% en 7 días) refleja el flujo de catalizadores institucionales, pero el precio sigue -83% del ATH. La liquidez es alta (~$200M/día) y el ETF añade una fuente de demanda estructural nueva. La tensión técnica es clara: fundamentales de red que mejoran trimestre a trimestre frente a una estructura de token que aún diluye más de lo que captura. El desenlace de esa tensión — vía Chainlink Economics 2.0 — es lo que definirá si LINK rompe al alza o sigue consolidando.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">⚖</div>
+      <div class="section-title">Argumentos alcistas vs. bajistas</div>
+      <div class="section-tag">Veredicto TokenFlow</div>
+    </div>
+
+    <div class="verdict-grid">
+      <div class="verdict-card verdict-bull">
+        <div class="verdict-title">🟢 Argumentos alcistas</div>
+        <div class="verdict-item">Dominio absoluto: $33.1B TVS en 505 protocolos, 4x el siguiente</div>
+        <div class="verdict-item">CCIP ~$18B/mes — estándar de interoperabilidad cross-chain</div>
+        <div class="verdict-item">Bitwise LINK ETF (CLNK) — capital de cuentas de retiro accesible</div>
+        <div class="verdict-item">DTCC, Swift, JPMorgan, UBS, Mastercard — validación TradFi total</div>
+        <div class="verdict-item">La capa de verdad y settlement para agentes de IA autónomos</div>
+        <div class="verdict-item">RWA tokenizados: Chainlink es la infraestructura por defecto</div>
+        <div class="verdict-item">Moat más profundo del sector — red de node operators e integraciones</div>
+        <div class="verdict-item">Chainlink Economics 2.0 — potencial giro en captura de valor</div>
+      </div>
+      <div class="verdict-card verdict-bear">
+        <div class="verdict-title">🔴 Argumentos bajistas</div>
+        <div class="verdict-item">Value-capture gap: $4.6M revenue vs. $27.3T habilitados</div>
+        <div class="verdict-item">Emisión ~7% anual — dilución supera la captura de fees hoy</div>
+        <div class="verdict-item">-83% desde ATH — consolidación de años sin ruptura</div>
+        <div class="verdict-item">Staking v0.2 incompleto — economía sin madurar</div>
+        <div class="verdict-item">Adopción institucional puede no traducirse en demanda de LINK</div>
+        <div class="verdict-item">~252M tokens pendientes de emisión — presión futura</div>
+        <div class="verdict-item">Fee capture ligada a promesas de roadmap, no a realidad actual</div>
+        <div class="verdict-item">Mcap $6.6B ya grande — menos asimetría que un microcap</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="final-verdict">
+    <div class="final-title">TokenFlow AI · Veredicto Final</div>
+    <div class="final-score">
+      <div class="score-number">6</div>
+      <div>
+        <div class="score-label">Infraestructura irremplazable · Token que aún no captura su dominio</div>
+        <div class="score-sub">sobre 10 · El moat más profundo del sector, con la brecha de captura de valor por resolver</div>
+      </div>
+    </div>
+    <div class="final-text">
+      Chainlink es, sin discusión posible, una de las piezas de infraestructura más importantes de todo el ecosistema cripto. Es la capa de verdad sobre la que funciona DeFi, las stablecoins y los activos tokenizados: asegura $33.1B en 505 protocolos, cuadruplicando a su competidor más cercano. Su protocolo de interoperabilidad CCIP mueve ~$18B al mes. Y su lista de socios — DTCC, Swift, JPMorgan, UBS, Mastercard — no tiene parangón en el sector. En la era de los agentes de IA, esa función se vuelve aún más crítica: cualquier agente que mueva dinero real necesita datos de precio verdaderos y settlement neutral, y Chainlink es la capa por defecto para ambos. El moat es, probablemente, el más profundo de toda la infraestructura cripto.<br><br>
+      Y sin embargo, LINK cotiza -83% desde su máximo de 2021. La razón es la misma que diseccionamos en The Graph, pero elevada a la escala del líder del sector: el value-capture gap. Chainlink habilita $27.3 billones en valor de transacciones y asegura $33.1B, pero el revenue que llega al protocolo es de apenas ~$4.6M. Peor aún, gran parte del pago a los node operators ha salido históricamente de emisión de tokens — una dilución de ~7% anual — en lugar de fees reales de usuarios. La matemática es incómoda: la red crece espectacularmente mientras el token diluye más de lo que captura. El dominio de red no es el problema; la traducción de ese dominio en valor para LINK, sí.<br><br>
+      Aquí está la tensión que define el 6. Si evaluáramos solo la importancia y el moat de la infraestructura, Chainlink merecería un 8. Si evaluáramos solo la captura de valor del token en su estado actual, un 4.5. La diferencia con The Graph — que aterrizó en 5 — es doble: la validación institucional de Chainlink es de otra magnitud (DTCC y Swift no son integraciones menores), y los catalizadores de captura de valor (Economics 2.0, Payment Abstraction, el ETF que añade demanda estructural) son más concretos y avanzados. Eso justifica medio punto más. Pero sigue siendo, en esencia, infraestructura excelente con un token que todavía no refleja su dominio.<br><br>
+      <strong>¿Qué cambiaría el veredicto?</strong> Una cosa concreta y medible: evidencia de que Chainlink Economics 2.0 hace que las fees reales de usuarios — no la emisión — paguen a los node operators, y que el staking capture una parte creciente de ese revenue. Si el revenue de protocolo escala de $4.6M hacia cifras que compensen y superen la dilución del 7%, mientras la adopción RWA e institucional sigue creciendo, LINK pasaría de "infraestructura infravalorada" a "captura de valor real" y el re-rating sería significativo. Con la tokenización de RWA proyectada en billones, el catalizador existe. Hasta que los números de captura lo confirmen, es el proyecto de infraestructura más dominante del sector — con un token que aún cobra por debajo de su valor.
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:20px;">
+    <div class="section-header">
+      <div class="section-icon icon-blue">👁</div>
+      <div class="section-title">Qué vigilar en los próximos 30–90 días</div>
+      <div class="section-tag">Lista de Monitoreo</div>
+    </div>
+    <div class="watch-item"><div class="watch-dot dot-blue"></div><div class="watch-text"><strong>Revenue de protocolo vs. emisión:</strong> La métrica que define toda la tesis. Si el revenue de oráculos + CCIP escala hacia cifras que compensen la dilución del ~7%, el token empieza a capturar su dominio. Es el indicador #1 — seguir los reportes on-chain de fees de Chainlink y los dashboards de revenue.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>DTCC CRE en producción (Q4 2026):</strong> El catalizador institucional más concreto. Si el Chainlink Runtime Environment entra en producción en la Collateral AppChain del DTCC con volumen real, valida el pivote hacia settlement TradFi a escala. Seguir anuncios del DTCC y Chainlink Labs.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-yellow"></div><div class="watch-text"><strong>Chainlink Economics 2.0 y staking:</strong> El eslabón perdido de la captura de valor. Cualquier avance que dirija fees reales hacia LINK staking (Payment Abstraction) o que madure la economía de staking cambiaría la matemática de dilución. Seguir el roadmap oficial.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Flujos del ETF Bitwise (CLNK):</strong> El ETF añade una fuente de demanda estructural nueva (cuentas de retiro). Vigilar los flujos netos — entradas sostenidas señalarían acumulación institucional independiente del precio spot. Seguir los reportes de holdings del ETF.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-blue"></div><div class="watch-text"><strong>Adopción RWA y acciones tokenizadas:</strong> Chainlink es la infraestructura por defecto para activos del mundo real tokenizados. Cada nuevo emisor (tras Ondo) que use sus feeds amplía el uso pagado. Si la tokenización RWA se acelera, la demanda de oráculos crece directamente. Seguir integraciones nuevas.</div></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong style="color:#3b6ef0;">TokenFlow AI</strong> · Investigación de tokenómica AI y DePIN · Sin hype. Solo estructura.<br>
+  Fecha del análisis: 14 de agosto de 2026 · Este análisis no constituye asesoramiento de inversión. DYOR.<br>
+  Fuentes: CoinGecko, CoinMarketCap, CoinDesk, Coinbase, DefiLlama, CoinStats, Crypto.com, chain.link, datos on-chain
+</div>
+
+</body>
+</html>
