@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenFlow AI – Análisis Chutes (SN64) 2026</title>
+<script data-goatcounter="https://tokenflowai.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'JetBrains Mono', monospace; background: #0a0e1a; color: #e2e8f0; line-height: 1.7; font-size: 14px; }
+
+  .header { background: linear-gradient(135deg, #0a0e1a 0%, #08201c 50%, #0a0e1a 100%); border-bottom: 1px solid #10b981; padding: 44px 32px 36px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; background: radial-gradient(ellipse, rgba(16,185,129,0.09) 0%, transparent 70%); pointer-events: none; }
+  .brand { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #10b981; margin-bottom: 14px; font-weight: 600; }
+  .title { font-size: 38px; font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -1px; }
+  .title span { color: #10b981; }
+  .subtitle { font-size: 12px; color: #64748b; margin-bottom: 22px; letter-spacing: 1px; }
+  .verdict-badge { display: inline-block; padding: 8px 24px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid; font-family: 'JetBrains Mono', monospace; }
+  .badge-warning { background: #451a03; color: #fb923c; border-color: #9a3412; }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 36px 20px; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 36px; }
+  .stat-card { background: #0d1525; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; text-align: center; }
+  .stat-label { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .stat-value { font-size: 22px; font-weight: 800; color: #f8fafc; }
+  .stat-sub { font-size: 10px; color: #64748b; margin-top: 4px; }
+  .stat-emerald { color: #10b981; }
+  .stat-green { color: #4ade80; }
+  .stat-yellow { color: #fbbf24; }
+  .stat-red { color: #f87171; }
+  .stat-orange { color: #fb923c; }
+
+  .section { background: #0d1525; border: 1px solid #1e293b; border-radius: 8px; padding: 26px; margin-bottom: 18px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #1e293b; }
+  .section-icon { width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .icon-emerald { background: #05261d; }
+  .icon-orange { background: #431407; }
+  .icon-red { background: #450a0a; }
+  .icon-yellow { background: #422006; }
+  .icon-blue { background: #0c2a47; }
+  .icon-green { background: #052e16; }
+  .icon-purple { background: #2e1065; }
+  .section-title { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+  .section-tag { font-size: 10px; color: #475569; margin-left: auto; letter-spacing: 1px; text-transform: uppercase; }
+
+  .concept-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .concept-card { background: #071e18; border: 1px solid #047857; border-radius: 6px; padding: 16px; }
+  .concept-card-title { font-size: 11px; color: #10b981; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .concept-card-text { font-size: 12px; color: #94a3b8; line-height: 1.6; }
+
+  .alloc-table { width: 100%; border-collapse: collapse; }
+  .alloc-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .alloc-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; font-size: 13px; vertical-align: middle; }
+  .alloc-table tr:last-child td { border-bottom: none; }
+  .alloc-bar-wrap { background: #1e293b; border-radius: 2px; height: 5px; width: 90px; display: inline-block; vertical-align: middle; margin-left: 8px; }
+  .alloc-bar { height: 5px; border-radius: 2px; display: block; }
+
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+  .pill-green { background: #052e16; color: #4ade80; }
+  .pill-yellow { background: #422006; color: #fbbf24; }
+  .pill-red { background: #450a0a; color: #f87171; }
+  .pill-emerald { background: #05261d; color: #6ee7b7; }
+
+  .pressure-meter { margin: 14px 0; }
+  .meter-label { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+  .meter-bar-wrap { background: #1e293b; border-radius: 3px; height: 10px; overflow: hidden; }
+  .meter-bar { height: 10px; border-radius: 3px; }
+  .meter-green { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .meter-orange { background: linear-gradient(90deg, #ea580c, #fb923c); }
+  .meter-red { background: linear-gradient(90deg, #dc2626, #f87171); }
+  .meter-emerald { background: linear-gradient(90deg, #059669, #10b981); }
+  .meter-yellow { background: linear-gradient(90deg, #ca8a04, #fbbf24); }
+  .meter-footer { display: flex; justify-content: space-between; font-size: 10px; color: #475569; margin-top: 4px; }
+
+  .verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .verdict-card { border-radius: 6px; padding: 20px; }
+  .verdict-bull { background: #052e16; border: 1px solid #166534; }
+  .verdict-bear { background: #450a0a; border: 1px solid #7f1d1d; }
+  .verdict-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .verdict-bull .verdict-title { color: #4ade80; }
+  .verdict-bear .verdict-title { color: #f87171; }
+  .verdict-item { font-size: 12px; color: #cbd5e1; margin-bottom: 9px; padding-left: 18px; position: relative; line-height: 1.5; }
+  .verdict-item::before { content: '→'; position: absolute; left: 0; font-weight: 700; }
+  .verdict-bull .verdict-item::before { color: #4ade80; }
+  .verdict-bear .verdict-item::before { color: #f87171; }
+
+  .final-verdict { background: linear-gradient(135deg, #071e18, #0f172a); border: 1px solid #047857; border-radius: 8px; padding: 30px; margin-top: 8px; }
+  .final-title { font-size: 11px; color: #10b981; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 14px; font-weight: 700; }
+  .final-score { display: flex; align-items: center; gap: 22px; margin-bottom: 18px; }
+  .score-number { font-size: 68px; font-weight: 900; color: #fbbf24; line-height: 1; }
+  .score-label { font-size: 20px; font-weight: 700; color: #f1f5f9; }
+  .score-sub { font-size: 12px; color: #64748b; margin-top: 6px; }
+  .final-text { font-size: 13px; color: #cbd5e1; line-height: 1.9; }
+
+  .watch-item { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid #1e293b; font-size: 13px; }
+  .watch-item:last-child { border-bottom: none; }
+  .watch-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #22c55e; }
+  .dot-emerald { background: #10b981; }
+  .watch-text { color: #cbd5e1; }
+  .watch-text strong { color: #f8fafc; }
+
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .comp-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .comp-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; vertical-align: middle; }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table tr.highlight-row { background: #071e18; }
+
+  .note-box { background: #06120e; border-left: 3px solid #10b981; border-radius: 0 6px 6px 0; padding: 14px 16px; font-size: 12px; color: #94a3b8; margin: 14px 0; line-height: 1.8; }
+  .note-box.warning { border-left-color: #f59e0b; background: #0d1105; }
+  .note-box.danger { border-left-color: #ef4444; background: #0d0808; }
+  .note-box.success { border-left-color: #22c55e; background: #050f05; }
+
+  .footer { text-align: center; padding: 28px; color: #334155; font-size: 11px; border-top: 1px solid #1e293b; margin-top: 36px; letter-spacing: 0.5px; line-height: 2; }
+
+  @media (max-width: 600px) {
+    .verdict-grid, .concept-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .score-number { font-size: 52px; }
+    .title { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">🟢 TokenFlow AI · Investigación de Tokenómica AI</div>
+  <div class="title">Chutes <span>SN64</span></div>
+  <div class="subtitle">Análisis completo — El subnet #1 de Bittensor y el problema de su precio · 21 de agosto de 2026</div>
+  <div class="verdict-badge badge-warning">⚠ Ingresos reales · Precio varía 2.5x por fuente · 1 equipo controla el 23% de emisiones</div>
+</div>
+
+<div class="container">
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Precio (USD)</div><div class="stat-value stat-emerald">~$15–38</div><div class="stat-sub">⚠ Varía 2.5x por fuente</div></div>
+    <div class="stat-card"><div class="stat-label">Cap. de Mercado</div><div class="stat-value">~$70–120M</div><div class="stat-sub">Según el agregador</div></div>
+    <div class="stat-card"><div class="stat-label">Referencia CoinGecko</div><div class="stat-value stat-emerald">~$80M</div><div class="stat-sub">#295, método documentado</div></div>
+    <div class="stat-card"><div class="stat-label">Desde ATH</div><div class="stat-value stat-red">-86%</div><div class="stat-sub">ATH: $104.42</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Circ.</div><div class="stat-value">~5.4M</div><div class="stat-sub">de 21M (Alpha token)</div></div>
+    <div class="stat-card"><div class="stat-label">Usuarios</div><div class="stat-value stat-emerald">400K+</div><div class="stat-sub">Reportados por Rayon Labs</div></div>
+    <div class="stat-card"><div class="stat-label">Emisiones Rayon Labs</div><div class="stat-value stat-red">23.7%</div><div class="stat-sub">3 subnets, 1 equipo</div></div>
+    <div class="stat-card"><div class="stat-label">Subnet</div><div class="stat-value stat-emerald">#64</div><div class="stat-sub">dTAO · Bittensor</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-emerald">⚡</div>
+      <div class="section-title">¿Qué es Chutes? — El "Vercel" del cómputo descentralizado</div>
+      <div class="section-tag">Arquitectura Core</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">Chutes es el Subnet 64 de Bittensor, y el más valioso de todo el ecosistema. Su función es concreta y útil: una plataforma de inferencia de IA serverless, donde los desarrolladores despliegan y ejecutan modelos de IA de código abierto sin gestionar servidores. Es, en esencia, el "Vercel" o el "Cloudflare" del cómputo descentralizado — subes tu modelo, y la red de miners de Chutes lo ejecuta, cobrando por uso. Reportado como ~85% más barato que proveedores cloud tradicionales como AWS. Es el subnet que todos citan cuando dicen que Bittensor tiene ingresos de clientes que pagan.</p>
+
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="concept-card-title">dTAO y el Alpha token</div>
+        <div class="concept-card-text">Bajo Dynamic TAO, cada subnet tiene su propio token (Alpha) y su pool de liquidez TAO/Alpha. El mercado — no los validadores — decide qué subnets reciben más emisiones de TAO. SN64 es el Alpha de Chutes.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Modelo de ingresos real</div>
+        <div class="concept-card-text">Los desarrolladores pagan $3–20/mes por acceso, o usan la API por uso. Rayon Labs reporta $1M+ en revenue de auto-staking. Es de los pocos subnets con ingresos de clientes verificables, no solo emisiones.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Verificación vía OpenRouter</div>
+        <div class="concept-card-text">La integración con OpenRouter da verificación independiente: Chutes aparece como proveedor con 18 modelos y datos de throughput visibles — miles de millones de tokens procesados al día. No es solo self-reporting.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Primer subnet en $100M</div>
+        <div class="concept-card-text">Chutes fue el primer subnet de Bittensor en cruzar los $100M de market cap (finales de 2025), validando el modelo dTAO. TEEs (Trusted Execution Environments) planeados para queries privadas.</div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <strong>🔑 Por qué Chutes importa en el ecosistema Bittensor:</strong> En nuestro análisis de TAO (7/10) señalamos que la captura de revenue de Bittensor estaba sin probar — un subnet recibía $52M en emisiones pero generaba solo $2.4M en revenue externo. Chutes es el contraargumento: el subnet que demuestra que se puede construir un producto real con clientes pagantes sobre Bittensor. Es la prueba de concepto de que la tesis dTAO — que el uso real, no la especulación, dirija las emisiones — puede funcionar. Por eso es el subnet #1.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">⚠</div>
+      <div class="section-title">El problema del precio — Cuando ni el precio hay consenso</div>
+      <div class="section-tag">La Paradoja de Liquidez</div>
+    </div>
+
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:16px;">Aquí está la observación que "Sin hype. Solo estructura." existe para hacer, y que pocos análisis mencionan: el precio de Chutes varía hasta 2.5x según la fuente que consultes. No es un error de redondeo — es una brecha estructural.</p>
+
+    <table class="alloc-table" style="margin-bottom:16px;">
+      <thead>
+        <tr><th>Fuente</th><th>Precio SN64</th><th>Market Cap</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>CoinMarketCap</td><td>~$15.15</td><td style="color:#64748b;">no disponible</td></tr>
+        <tr><td>Blockworks</td><td>~$17.82</td><td>~$70M</td></tr>
+        <tr><td>LBank</td><td>~$19.27</td><td>~$97M</td></tr>
+        <tr><td><strong style="color:#10b981;">CoinGecko (referencia)</strong></td><td><strong>~$15–24</strong></td><td><strong>~$80M</strong></td></tr>
+        <tr><td>Yahoo Finance</td><td>~$23.47</td><td>—</td></tr>
+        <tr><td>Bitget</td><td>~$33.54</td><td>—</td></tr>
+        <tr><td>Crypto.com</td><td>~$36.88</td><td>—</td></tr>
+        <tr><td>MEXC</td><td>~$37.66</td><td>~$122M</td></tr>
+      </tbody>
+    </table>
+
+    <div class="note-box danger">
+      <strong>🔴 Por qué pasa esto — y qué significa:</strong> Los tokens de subnet de Bittensor no se cotizan primariamente en dólares, sino en TAO, a través del pool AMM de dTAO. El Alpha de Chutes vale ~0.074 TAO. Convertir eso a dólares depende del precio de TAO (que se movió de $332 a ~$197 en meses) y de qué pool y qué momento use cada agregador. Con liquidez fina y volumen diario de ~$0.5–2M, los precios divergen brutalmente. <strong>La lección de TokenFlow AI:</strong> antes de comprar cualquier token de subnet, mira mínimo 3 fuentes. Un solo precio de un solo agregador puede estar 2.5x desviado del siguiente. Esta opacidad de precio es, en sí misma, un factor de riesgo — y una señal de la inmadurez del mercado de subnets.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">🎯</div>
+      <div class="section-title">El riesgo de centralización — Un equipo, tres subnets, 23% de emisiones</div>
+      <div class="section-tag">Riesgo Estructural</div>
+    </div>
+
+    <div style="background:#1a0808;border:1px solid #7f1d1d;border-radius:8px;padding:20px;margin-bottom:14px;">
+      <div style="font-size:11px;color:#f87171;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">🔴 Rayon Labs — el operador dominante</div>
+      <div style="font-size:12px;color:#cbd5e1;line-height:1.7;">Un solo equipo, Rayon Labs, opera tres subnets: Chutes (SN64), Gradients (SN56) y Nineteen (SN19). Combinados, capturan el <strong>23.71% de todas las emisiones de TAO</strong>. Casi una cuarta parte del output de toda la red fluye a un único operador.</div>
+    </div>
+
+    <div class="note-box danger">
+      <strong>🔴 Por qué esto contradice la tesis de Bittensor:</strong> La premisa entera de Bittensor es la competencia darwiniana entre equipos independientes — muchos actores compitiendo por producir la mejor IA. Cuando un solo operador captura casi un cuarto de las emisiones a través de tres subnets, esa premisa se debilita. No es una acusación de mala fe: Rayon Labs construye productos que la gente usa. Pero desde la perspectiva de tokenómica estructural, la concentración de emisiones en un equipo es exactamente el tipo de riesgo que un inversor debe nombrar. Si Rayon Labs tropieza — técnica, regulatoria o financieramente — el impacto se propaga a una porción desproporcionada de la red.
+    </div>
+
+    <div class="note-box warning">
+      <strong>⚠ El contexto del historial:</strong> Chutes ha enfrentado escrutinio por prácticas de calidad de servicio y por cómo se reportan las métricas de uso. Aunque la integración con OpenRouter da verificación independiente del throughput, buena parte de las cifras de usuarios y revenue (400,000 usuarios, $1M+ auto-staking) son auto-reportadas por Rayon Labs. La transparencia mejora, pero el inversor debe distinguir entre lo verificado (throughput en OpenRouter) y lo reportado (usuarios, revenue).
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">🔥</div>
+      <div class="section-title">Tokenómica del Alpha token — El flywheel dTAO</div>
+      <div class="section-tag">Supply Analysis</div>
+    </div>
+
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:16px;">El Alpha token de Chutes sigue la mecánica de dTAO: emisión continua hacia un máximo de 21M (como Bitcoin, heredado del diseño de Bittensor), con ~5.4M en circulación. El "flywheel" es la tesis alcista: más uso de Chutes → más demanda del Alpha token → más emisiones de TAO dirigidas al subnet → más recursos para miners → mejor servicio.</p>
+
+    <div class="pressure-meter">
+      <div class="meter-label">El flywheel dTAO: uso real → demanda de Alpha → emisiones TAO al subnet</div>
+      <div class="meter-bar-wrap" style="height:12px;border-radius:6px;"><div class="meter-bar meter-emerald" style="width:62%;height:12px;border-radius:6px;"></div></div>
+      <div class="meter-footer"><span>Especulativo</span><span style="color:#10b981;font-weight:700;">✅ Uso real alimenta el flywheel — pero depende de mantener el liderazgo</span><span>Sostenible</span></div>
+    </div>
+
+    <div class="note-box success">
+      <strong>✅ La ventaja real:</strong> A diferencia de tantos tokens que analizamos con el problema inverso (buena tecnología, cero captura de valor), Chutes tiene un mecanismo donde el uso <em>sí</em> alimenta directamente la demanda del token vía el AMM de dTAO. Cuando alguien stakea TAO en Chutes, compra Alpha token, creando presión compradora real ligada al uso. Es uno de los pocos casos del sector donde el flywheel uso→token funciona por diseño.
+    </div>
+
+    <div class="note-box warning">
+      <strong>⚠ El reverso del flywheel:</strong> El mismo mecanismo funciona a la inversa. Si Chutes pierde su posición de liderazgo — porque otro subnet ofrece mejor inferencia, o porque el escrutinio sobre Rayon Labs se intensifica — las emisiones de TAO se redirigen a otros subnets, el Alpha token pierde demanda, y el flywheel gira hacia abajo. En dTAO, el liderazgo no está garantizado: se revalida cada día en el mercado. La liquidez fina amplifica ambas direcciones.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">⚔</div>
+      <div class="section-title">Posicionamiento competitivo</div>
+      <div class="section-tag">Inferencia AI Descentralizada</div>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr><th>Proyecto</th><th>Enfoque</th><th>Mcap</th><th>vs. Chutes</th></tr>
+      </thead>
+      <tbody>
+        <tr class="highlight-row">
+          <td><strong style="color:#10b981;">🟢 Chutes (SN64)</strong></td>
+          <td>Inferencia serverless en Bittensor</td>
+          <td>~$80M</td>
+          <td>— Subnet #1, revenue real, dentro de dTAO</td>
+        </tr>
+        <tr>
+          <td><strong>Nosana (NOS)</strong></td>
+          <td>Inferencia AI en Solana</td>
+          <td>~$26M</td>
+          <td>Competidor directo — Nosana supply limpio</td>
+        </tr>
+        <tr>
+          <td><strong>Akash (AKT)</strong></td>
+          <td>Compute general + BME</td>
+          <td>~$230M</td>
+          <td>Mayor — AkashML compite en inferencia</td>
+        </tr>
+        <tr>
+          <td><strong>io.net (IO)</strong></td>
+          <td>Agregación GPU</td>
+          <td>~$200M</td>
+          <td>Escala mayor — Chutes es serverless puro</td>
+        </tr>
+        <tr>
+          <td><strong>Otros subnets Bittensor</strong></td>
+          <td>Targon, Nineteen, etc.</td>
+          <td>Menores</td>
+          <td>Compiten por emisiones dentro de dTAO</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box" style="margin-top:16px;">
+      <strong>La posición de Chutes:</strong> Compite en dos frentes simultáneos. Externamente, contra plataformas de inferencia como Nosana, AkashML e io.net — donde su ventaja es el respaldo de emisiones de Bittensor que subsidia el compute. Internamente, contra otros subnets de Bittensor por la porción de emisiones de TAO — donde su ventaja es ser el #1 con revenue verificable. Su moat es real pero no permanente: en dTAO, el liderazgo se revalida a diario. La ironía es que su mayor fortaleza (respaldo de Rayon Labs, que opera 3 subnets eficientes) es también su mayor riesgo (concentración en un equipo).
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📉</div>
+      <div class="section-title">Estructura de precio y contexto</div>
+      <div class="section-tag">Estructura de Precio</div>
+    </div>
+
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Desde ATH</div><div class="stat-value stat-red">-86%</div><div class="stat-sub">ATH: $104.42</div></div>
+      <div class="stat-card"><div class="stat-label">Sobre ATL</div><div class="stat-value stat-green">Variable</div><div class="stat-sub">ATL: ~$10.90</div></div>
+      <div class="stat-card"><div class="stat-label">Volumen 24h</div><div class="stat-value stat-red">~$0.5–2M</div><div class="stat-sub">Liquidez fina</div></div>
+      <div class="stat-card"><div class="stat-label">Edad del token</div><div class="stat-value stat-yellow">~10 mes</div><div class="stat-sub">dTAO desde fin 2025</div></div>
+    </div>
+
+    <div class="pressure-meter"><div class="meter-label">Desde ATH (-86% — corrección severa desde el pico dTAO)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:86%;"></div></div><div class="meter-footer"><span>ATH</span><span style="color:#f87171;">🔴 Token joven en descubrimiento de precio</span><span>ATL</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Fundamentales de producto (revenue real, 400K usuarios, OpenRouter)</div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:72%;"></div></div><div class="meter-footer"><span>Débil</span><span style="color:#4ade80;font-weight:700;">✅ Subnet #1 con uso verificable</span><span>Fuerte</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Opacidad de precio + concentración (los riesgos estructurales)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:70%;"></div></div><div class="meter-footer"><span>Bajo</span><span style="color:#f87171;">🔴 Alto — precio 2.5x variable, 23% en un equipo</span><span>Crítico</span></div></div>
+
+    <div class="note-box warning" style="margin-top:14px;">
+      Chutes es un token joven (~10 meses desde el lanzamiento de Alpha tokens tradables en dTAO), a -86% de su ATH, en pleno descubrimiento de precio. La combinación de liquidez fina y precio 2.5x variable por fuente lo hace extremadamente volátil y difícil de valorar con precisión. A diferencia de un token con precio en dólares consolidado, aquí incluso la valoración base es un rango, no un número. Cualquier posición debe asumir esa incertidumbre estructural como punto de partida.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">⚖</div>
+      <div class="section-title">Argumentos alcistas vs. bajistas</div>
+      <div class="section-tag">Veredicto TokenFlow</div>
+    </div>
+
+    <div class="verdict-grid">
+      <div class="verdict-card verdict-bull">
+        <div class="verdict-title">🟢 Argumentos alcistas</div>
+        <div class="verdict-item">Subnet #1 de Bittensor — el líder verificable del ecosistema</div>
+        <div class="verdict-item">Revenue real: clientes pagantes, no solo emisiones</div>
+        <div class="verdict-item">Verificación independiente vía OpenRouter (throughput visible)</div>
+        <div class="verdict-item">Flywheel dTAO — el uso alimenta la demanda del token por diseño</div>
+        <div class="verdict-item">Inferencia ~85% más barata que AWS — propuesta de valor clara</div>
+        <div class="verdict-item">Primer subnet en cruzar $100M — validó el modelo dTAO</div>
+        <div class="verdict-item">TEEs planeados — queries privadas para uso enterprise</div>
+        <div class="verdict-item">Respaldo de Rayon Labs, equipo técnicamente competente</div>
+      </div>
+      <div class="verdict-card verdict-bear">
+        <div class="verdict-title">🔴 Argumentos bajistas</div>
+        <div class="verdict-item">Precio varía 2.5x por fuente — valoración base incierta</div>
+        <div class="verdict-item">Rayon Labs controla 23.7% de emisiones (3 subnets) — centralización</div>
+        <div class="verdict-item">-86% desde ATH — token joven, alta volatilidad</div>
+        <div class="verdict-item">Liquidez fina ($0.5–2M/día) — amplifica movimientos</div>
+        <div class="verdict-item">Métricas de usuarios y revenue en parte auto-reportadas</div>
+        <div class="verdict-item">Liderazgo revalidado a diario en dTAO — no garantizado</div>
+        <div class="verdict-item">Escrutinio previo sobre calidad de servicio y reporting</div>
+        <div class="verdict-item">Flywheel funciona a la inversa si pierde posición</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="final-verdict">
+    <div class="final-title">TokenFlow AI · Veredicto Final</div>
+    <div class="final-score">
+      <div class="score-number">5</div>
+      <div>
+        <div class="score-label">Revenue real del subnet líder · Opacidad y concentración pesan</div>
+        <div class="score-sub">sobre 10 · La prueba de que Bittensor puede generar ingresos — con riesgos que no se pueden ignorar</div>
+      </div>
+    </div>
+    <div class="final-text">
+      Chutes es, en el buen sentido, uno de los proyectos más interesantes que hemos analizado, porque resuelve el problema que le señalamos a Bittensor en su momento: la captura de revenue sin probar. Chutes es el subnet #1 del ecosistema precisamente porque construyó un producto real — inferencia de IA serverless, ~85% más barata que AWS — con clientes que pagan y throughput verificable de forma independiente vía OpenRouter. El flywheel de dTAO, donde el uso alimenta directamente la demanda del Alpha token, es uno de los pocos mecanismos del sector donde la conexión uso→valor del token funciona por diseño, no por promesa. Si buscáramos la prueba de concepto de que Bittensor puede generar ingresos reales, Chutes es esa prueba.<br><br>
+      Pero "Sin hype. Solo estructura." obliga a nombrar dos problemas que impiden una nota más alta. El primero es único entre todos los tokens que hemos analizado: el precio de Chutes varía hasta 2.5x según la fuente ($15 en CoinMarketCap, $37 en MEXC). No es un detalle técnico — significa que ni siquiera la valoración base tiene consenso, consecuencia de la cotización en TAO vía pools AMM de liquidez fina. Antes de valorar el producto, hay que aceptar que su precio es un rango, no un número. El segundo es la concentración: Rayon Labs opera tres subnets y captura el 23.7% de todas las emisiones de TAO. En una red cuya tesis entera es la competencia descentralizada entre equipos independientes, que un cuarto del output fluya a un solo operador es una contradicción estructural que el inversor debe pesar.<br><br>
+      Por eso el 5. Si evaluáramos solo el producto y el flywheel, Chutes merecería un 6.5 — es genuinamente el mejor caso de revenue de Bittensor. Pero la opacidad de precio y la concentración de emisiones son riesgos estructurales serios, no matices. Es un perfil distinto al de Nosana (5/10, supply limpio pero producto por probar): Chutes tiene el producto probado que a Nosana le falta, pero carga con una opacidad de precio y una concentración que Nosana no tiene. Dos caminos al mismo número, por razones opuestas.<br><br>
+      <strong>¿Qué cambiaría el veredicto?</strong> Tres cosas medibles: consolidación del precio entre fuentes (mayor liquidez que cierre la brecha del 2.5x), métricas de uso auditadas por terceros más allá del throughput de OpenRouter, y evidencia de que el ecosistema Bittensor descentraliza las emisiones más allá de Rayon Labs. Si el uso real sigue creciendo mientras esos riesgos estructurales se reducen, Chutes tiene el mejor flywheel del sector de inferencia. Hasta entonces, es el subnet líder de Bittensor con revenue real — envuelto en una capa de opacidad que exige cautela.
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:20px;">
+    <div class="section-header">
+      <div class="section-icon icon-emerald">👁</div>
+      <div class="section-title">Qué vigilar en los próximos 30–90 días</div>
+      <div class="section-tag">Lista de Monitoreo</div>
+    </div>
+    <div class="watch-item"><div class="watch-dot dot-emerald"></div><div class="watch-text"><strong>Throughput verificable en OpenRouter:</strong> La métrica más fiable porque es independiente. Si los tokens/día procesados por Chutes en OpenRouter crecen de forma sostenida, valida que el uso real aumenta más allá del self-reporting. Es el indicador #1 de salud del producto.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-red"></div><div class="watch-text"><strong>Concentración de emisiones de Rayon Labs:</strong> Vigilar si el 23.7% combinado de Chutes + Gradients + Nineteen sube o baja. Un aumento profundiza el riesgo de centralización; una dilución (más equipos independientes ganando emisiones) fortalecería la tesis de Bittensor y del propio subnet.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-yellow"></div><div class="watch-text"><strong>Convergencia del precio entre fuentes:</strong> Si la brecha del 2.5x se estrecha con mayor liquidez y volumen, señala maduración del mercado de subnets. Seguir el precio en 3+ agregadores (CoinGecko, MEXC, LBank) simultáneamente — la convergencia sería una señal alcista estructural.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Lanzamiento de TEEs (queries privadas):</strong> Los Trusted Execution Environments para inferencia privada abrirían Chutes a uso enterprise regulado (salud, finanzas). Si se lanzan con adopción real, amplían el mercado direccionable más allá de developers cripto-nativos.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-emerald"></div><div class="watch-text"><strong>Posición relativa dentro de dTAO:</strong> Chutes lidera hoy, pero en dTAO el liderazgo se revalida a diario. Vigilar si mantiene su porcentaje de emisiones frente a subnets emergentes (Targon, Ridges AI). Perder el #1 giraría el flywheel a la baja rápidamente.</div></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong style="color:#10b981;">TokenFlow AI</strong> · Investigación de tokenómica AI y DePIN · Sin hype. Solo estructura.<br>
+  Fecha del análisis: 21 de agosto de 2026 · Este análisis no constituye asesoramiento de inversión. DYOR.<br>
+  Precio de referencia: CoinGecko (~$80M Mcap). Los precios de tokens de subnet varían significativamente entre fuentes — verifica siempre en 3+ agregadores.<br>
+  Fuentes: CoinGecko, CoinMarketCap, MEXC, LBank, Messari, OAK Research, The Defiant, tao.app, OpenRouter, datos on-chain de Bittensor
+</div>
+
+</body>
+</html>
