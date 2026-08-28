@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenFlow AI – Análisis Unibase (UB) 2026</title>
+<script data-goatcounter="https://tokenflowai.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'JetBrains Mono', monospace; background: #0a0e1a; color: #e2e8f0; line-height: 1.7; font-size: 14px; }
+
+  .header { background: linear-gradient(135deg, #0a0e1a 0%, #1a0a26 50%, #0a0e1a 100%); border-bottom: 1px solid #a855f7; padding: 44px 32px 36px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; background: radial-gradient(ellipse, rgba(168,85,247,0.10) 0%, transparent 70%); pointer-events: none; }
+  .brand { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #a855f7; margin-bottom: 14px; font-weight: 600; }
+  .title { font-size: 38px; font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -1px; }
+  .title span { color: #a855f7; }
+  .subtitle { font-size: 12px; color: #64748b; margin-bottom: 22px; letter-spacing: 1px; }
+  .verdict-badge { display: inline-block; padding: 8px 24px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid; font-family: 'JetBrains Mono', monospace; }
+  .badge-warning { background: #451a03; color: #fb923c; border-color: #9a3412; }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 36px 20px; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 36px; }
+  .stat-card { background: #0d1525; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; text-align: center; }
+  .stat-label { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .stat-value { font-size: 22px; font-weight: 800; color: #f8fafc; }
+  .stat-sub { font-size: 10px; color: #64748b; margin-top: 4px; }
+  .stat-purple { color: #a855f7; }
+  .stat-green { color: #4ade80; }
+  .stat-yellow { color: #fbbf24; }
+  .stat-red { color: #f87171; }
+  .stat-orange { color: #fb923c; }
+
+  .section { background: #0d1525; border: 1px solid #1e293b; border-radius: 8px; padding: 26px; margin-bottom: 18px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #1e293b; }
+  .section-icon { width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .icon-purple { background: #2e1065; }
+  .icon-orange { background: #431407; }
+  .icon-red { background: #450a0a; }
+  .icon-yellow { background: #422006; }
+  .icon-blue { background: #0c2a47; }
+  .icon-green { background: #052e16; }
+  .icon-cyan { background: #083344; }
+  .section-title { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+  .section-tag { font-size: 10px; color: #475569; margin-left: auto; letter-spacing: 1px; text-transform: uppercase; }
+
+  .concept-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .concept-card { background: #170e28; border: 1px solid #7e22ce; border-radius: 6px; padding: 16px; }
+  .concept-card-title { font-size: 11px; color: #a855f7; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .concept-card-text { font-size: 12px; color: #94a3b8; line-height: 1.6; }
+
+  .alloc-table { width: 100%; border-collapse: collapse; }
+  .alloc-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .alloc-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; font-size: 13px; vertical-align: middle; }
+  .alloc-table tr:last-child td { border-bottom: none; }
+  .alloc-bar-wrap { background: #1e293b; border-radius: 2px; height: 5px; width: 90px; display: inline-block; vertical-align: middle; margin-left: 8px; }
+  .alloc-bar { height: 5px; border-radius: 2px; display: block; }
+
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+  .pill-green { background: #052e16; color: #4ade80; }
+  .pill-yellow { background: #422006; color: #fbbf24; }
+  .pill-red { background: #450a0a; color: #f87171; }
+  .pill-purple { background: #2e1065; color: #d8b4fe; }
+
+  .pressure-meter { margin: 14px 0; }
+  .meter-label { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+  .meter-bar-wrap { background: #1e293b; border-radius: 3px; height: 10px; overflow: hidden; }
+  .meter-bar { height: 10px; border-radius: 3px; }
+  .meter-green { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .meter-orange { background: linear-gradient(90deg, #ea580c, #fb923c); }
+  .meter-red { background: linear-gradient(90deg, #dc2626, #f87171); }
+  .meter-purple { background: linear-gradient(90deg, #9333ea, #a855f7); }
+  .meter-yellow { background: linear-gradient(90deg, #ca8a04, #fbbf24); }
+  .meter-footer { display: flex; justify-content: space-between; font-size: 10px; color: #475569; margin-top: 4px; }
+
+  .verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .verdict-card { border-radius: 6px; padding: 20px; }
+  .verdict-bull { background: #052e16; border: 1px solid #166534; }
+  .verdict-bear { background: #450a0a; border: 1px solid #7f1d1d; }
+  .verdict-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .verdict-bull .verdict-title { color: #4ade80; }
+  .verdict-bear .verdict-title { color: #f87171; }
+  .verdict-item { font-size: 12px; color: #cbd5e1; margin-bottom: 9px; padding-left: 18px; position: relative; line-height: 1.5; }
+  .verdict-item::before { content: '→'; position: absolute; left: 0; font-weight: 700; }
+  .verdict-bull .verdict-item::before { color: #4ade80; }
+  .verdict-bear .verdict-item::before { color: #f87171; }
+
+  .final-verdict { background: linear-gradient(135deg, #170e28, #0f172a); border: 1px solid #7e22ce; border-radius: 8px; padding: 30px; margin-top: 8px; }
+  .final-title { font-size: 11px; color: #a855f7; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 14px; font-weight: 700; }
+  .final-score { display: flex; align-items: center; gap: 22px; margin-bottom: 18px; }
+  .score-number { font-size: 68px; font-weight: 900; color: #fbbf24; line-height: 1; }
+  .score-label { font-size: 20px; font-weight: 700; color: #f1f5f9; }
+  .score-sub { font-size: 12px; color: #64748b; margin-top: 6px; }
+  .final-text { font-size: 13px; color: #cbd5e1; line-height: 1.9; }
+
+  .watch-item { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid #1e293b; font-size: 13px; }
+  .watch-item:last-child { border-bottom: none; }
+  .watch-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #22c55e; }
+  .dot-purple { background: #a855f7; }
+  .watch-text { color: #cbd5e1; }
+  .watch-text strong { color: #f8fafc; }
+
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .comp-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .comp-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; vertical-align: middle; }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table tr.highlight-row { background: #170e28; }
+
+  .note-box { background: #0f0818; border-left: 3px solid #a855f7; border-radius: 0 6px 6px 0; padding: 14px 16px; font-size: 12px; color: #94a3b8; margin: 14px 0; line-height: 1.8; }
+  .note-box.warning { border-left-color: #f59e0b; background: #0d1105; }
+  .note-box.danger { border-left-color: #ef4444; background: #0d0808; }
+  .note-box.success { border-left-color: #22c55e; background: #050f05; }
+
+  .footer { text-align: center; padding: 28px; color: #334155; font-size: 11px; border-top: 1px solid #1e293b; margin-top: 36px; letter-spacing: 0.5px; line-height: 2; }
+
+  @media (max-width: 600px) {
+    .verdict-grid, .concept-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .score-number { font-size: 52px; }
+    .title { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">🟣 TokenFlow AI · Investigación de Tokenómica AI</div>
+  <div class="title">Unibase <span>UB</span></div>
+  <div class="subtitle">Análisis completo — La capa de memoria para la internet de los agentes de IA · 28 de agosto de 2026</div>
+  <div class="verdict-badge badge-warning">⚠ Vertical DePIN nueva · Integraciones reales · Solo 25% del supply circula</div>
+</div>
+
+<div class="container">
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Precio (USD)</div><div class="stat-value stat-purple">~$0.117</div><div class="stat-sub">28 de agosto, 2026</div></div>
+    <div class="stat-card"><div class="stat-label">Cap. de Mercado</div><div class="stat-value">~$293M</div><div class="stat-sub">#117–215 (varía)</div></div>
+    <div class="stat-card"><div class="stat-label">FDV</div><div class="stat-value stat-red">~$1.17B</div><div class="stat-sub">Mcap/FDV = 25% ⚠️</div></div>
+    <div class="stat-card"><div class="stat-label">Desde ATH</div><div class="stat-value stat-red">-50%</div><div class="stat-sub">ATH: $0.2425 (may. 2026)</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Circ.</div><div class="stat-value">2.5B</div><div class="stat-sub">25% de 10B</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Máx.</div><div class="stat-value">10B</div><div class="stat-sub">75% bloqueado</div></div>
+    <div class="stat-card"><div class="stat-label">Recuerdos on-chain</div><div class="stat-value stat-purple">12.4M+</div><div class="stat-sub">200+ agentes (testnet)</div></div>
+    <div class="stat-card"><div class="stat-label">Chain</div><div class="stat-value stat-purple">BNB + ETH</div><div class="stat-sub">TGE sept. 2025</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">🧠</div>
+      <div class="section-title">¿Qué es Unibase? — La memoria que a la IA le falta</div>
+      <div class="section-tag">Arquitectura Core</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">Hay un problema silencioso en la ola de agentes de IA: no tienen memoria persistente. Cada vez que un agente termina una tarea, olvida. No recuerda conversaciones pasadas, no aprende de sus errores acumulados, no comparte lo aprendido con otros agentes. Es como tener un empleado brillante con amnesia que reinicia cada mañana. Unibase ataca exactamente eso: es una capa de memoria descentralizada que da a los agentes de IA memoria de largo plazo, interoperabilidad entre plataformas y soberanía de datos. Es una vertical DePIN completamente nueva — no compute, no storage genérico, sino específicamente la infraestructura de memoria para "la internet abierta de los agentes".</p>
+
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="concept-card-title">Membase — memoria de largo plazo</div>
+        <div class="concept-card-text">Almacenamiento y gestión de memoria de IA seguro y escalable. Es donde los agentes guardan lo que aprenden de forma persistente y verificable — la base del sistema.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">AIP Protocol — agente a agente</div>
+        <div class="concept-card-text">Estándares Web3-nativos para comunicación entre agentes, identidad y estado compartido. Permite que agentes de distintos frameworks colaboren sin silos.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Unibase DA — data availability</div>
+        <div class="concept-card-text">Data availability verificada con zk, alto throughput (&gt;100GB/s), baja latencia. Garantiza acceso fiable a los datos para cargas de trabajo de IA en tiempo real.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Utilidad del token UB</div>
+        <div class="concept-card-text">Protocol fees (memoria, deployment de agentes, interoperabilidad), governance vía veUB, staking de agentes, e incentivos de "knowledge mining". Cuatro fuentes de demanda ligadas al uso.</div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <strong>🔑 Por qué es una vertical nueva en el mapa de TokenFlow AI:</strong> Hemos analizado GPU compute (Akash, Nosana, Chutes), storage (Filecoin), wireless (Helium), mapeo (Hivemapper, GEODNET), indexación (The Graph), oráculos (Chainlink), compute confidencial (Phala)... pero nunca la <em>memoria de agentes</em>. A medida que los agentes de IA pasan de demos a sistemas autónomos que operan 24/7, la memoria persistente deja de ser un lujo y se vuelve infraestructura crítica. Unibase apuesta a ser la capa por defecto de ese stack — un nicho que aún nadie domina.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">⚡</div>
+      <div class="section-title">Tracción real — Integraciones que no son humo</div>
+      <div class="section-tag">Ecosistema</div>
+    </div>
+
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:16px;">Lo que distingue a Unibase de tantos proyectos AI narrativos es que ya está integrado con los frameworks de agentes más relevantes del sector — precisamente los que necesitan resolver el problema de la memoria.</p>
+
+    <div class="concept-grid">
+      <div class="concept-card" style="border-color:#166534;background:#051206;">
+        <div class="concept-card-title" style="color:#4ade80;">✅ Frameworks integrados</div>
+        <div class="concept-card-text"><strong>Virtuals</strong> (que analizamos, 6.5/10), <strong>ElizaOS</strong> (el framework de agentes más usado), <strong>Swarms</strong> y <strong>MCP</strong> (el estándar de contexto de Anthropic). Estar integrado con estos es validación técnica real.</div>
+      </div>
+      <div class="concept-card" style="border-color:#166534;background:#051206;">
+        <div class="concept-card-title" style="color:#4ade80;">✅ Proyectos del ecosistema</div>
+        <div class="concept-card-text"><strong>BitAgent</strong> (colaboración multi-agente + staking), <strong>TradingFlow</strong> (agentes de trading autónomos), <strong>TwinX</strong> (agentes auto-evolutivos), <strong>Beeper</strong> (agente de Twitter basado en intents).</div>
+      </div>
+    </div>
+
+    <div class="note-box success">
+      <strong>✅ Métricas de uso verificables:</strong> A mediados de 2025, el testnet registró más de 200 agentes desplegados y 12.4 millones de entradas de memoria on-chain. No es una promesa de roadmap — es actividad medible. La integración con MCP (el protocolo de Anthropic que se está convirtiendo en estándar de la industria, ahora bajo la Agentic AI Foundation) posiciona a Unibase en el centro de la infraestructura de agentes que se está estandarizando en 2026.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📊</div>
+      <div class="section-title">El problema central — El 75% del supply que aún no existe</div>
+      <div class="section-tag">La Paradoja de Supply</div>
+    </div>
+
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:16px;">Aquí está la tensión que "Sin hype. Solo estructura." existe para nombrar. Unibase tiene tecnología real e integraciones reales — pero su estructura de supply es el riesgo más serio del token, y es exactamente el patrón que hemos visto castigar a proyecto tras proyecto.</p>
+
+    <table class="alloc-table" style="margin-bottom:16px;">
+      <thead>
+        <tr><th>Categoría</th><th>% Supply</th><th>Estado</th><th>Riesgo</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Circulante hoy</strong></td>
+          <td>25% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:25%;background:#a855f7;"></div></div></td>
+          <td><span class="status-pill pill-purple">2.5B de 10B</span></td>
+          <td>El resto presiona a futuro</td>
+        </tr>
+        <tr>
+          <td><strong>Treasury</strong></td>
+          <td>20% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:80%;background:#f97316;"></div></div></td>
+          <td><span class="status-pill pill-yellow">Cliff 6m + vesting 24m</span></td>
+          <td style="color:#fb923c;">⚠ Gran asignación bloqueada</td>
+        </tr>
+        <tr>
+          <td><strong>Team &amp; Advisors</strong></td>
+          <td>18% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:72%;background:#ef4444;"></div></div></td>
+          <td><span class="status-pill pill-red">Cliff 6m + vesting 24m</span></td>
+          <td style="color:#f87171;">⚠ Presión de venta futura</td>
+        </tr>
+        <tr>
+          <td><strong>Ecosistema + resto</strong></td>
+          <td>~37%</td>
+          <td><span class="status-pill pill-yellow">Emisión programada</span></td>
+          <td>Incentivos, liquidez, comunidad</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box danger">
+      <strong>🔴 Mcap/FDV = 25% — la señal de alerta:</strong> Con un market cap de ~$293M pero un FDV de ~$1.17B, solo una cuarta parte del valor total está en circulación. El 75% restante entrará al mercado en los próximos años vía emisión, cliffs y vesting. Es el mismo perfil estructural que penalizó a DoubleZero (35%), Story Protocol (38%) y — en su forma más extrema — Ocean (14%). Cuando el Team (18%) y el Treasury (20%) superen sus cliffs de 6 meses y empiecen el vesting lineal de 24 meses, la presión de dilución será constante. El precio ya cayó -50% desde su ATH de mayo, y parte de eso es el mercado anticipando esa dilución.
+    </div>
+
+    <div class="pressure-meter" style="margin-top:16px;">
+      <div class="meter-label">La carrera: demanda por uso real (protocol fees) vs. dilución del 75% restante</div>
+      <div class="meter-bar-wrap" style="height:12px;border-radius:6px;"><div class="meter-bar meter-orange" style="width:38%;height:12px;border-radius:6px;"></div></div>
+      <div class="meter-footer"><span>Dilución</span><span style="color:#fb923c;font-weight:700;">⚠ La adopción debe superar la emisión programada</span><span>Captura</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">⚔</div>
+      <div class="section-title">Posicionamiento competitivo</div>
+      <div class="section-tag">Memoria e Infraestructura de Agentes</div>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr><th>Proyecto</th><th>Enfoque</th><th>Mcap</th><th>vs. UB</th></tr>
+      </thead>
+      <tbody>
+        <tr class="highlight-row">
+          <td><strong style="color:#a855f7;">🟣 Unibase (UB)</strong></td>
+          <td>Memoria de agentes de IA</td>
+          <td>~$293M</td>
+          <td>— Vertical nueva, integraciones reales</td>
+        </tr>
+        <tr>
+          <td><strong>Virtuals (VIRTUAL)</strong></td>
+          <td>Plataforma de agentes de IA</td>
+          <td>~$1B+</td>
+          <td>Complementario — Unibase le da memoria</td>
+        </tr>
+        <tr>
+          <td><strong>The Graph (GRT)</strong></td>
+          <td>Indexación de datos on-chain</td>
+          <td>~$161M</td>
+          <td>Capa distinta — lectura vs. memoria</td>
+        </tr>
+        <tr>
+          <td><strong>Storage tradicional (Web3)</strong></td>
+          <td>Filecoin, Arweave</td>
+          <td>Mayores</td>
+          <td>Storage genérico vs. memoria especializada</td>
+        </tr>
+        <tr>
+          <td><strong>Soluciones centralizadas</strong></td>
+          <td>Memoria en LLM propietarios</td>
+          <td>—</td>
+          <td>Unibase = descentralizada, cross-framework</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box" style="margin-top:16px;">
+      <strong>La posición de Unibase:</strong> Su ventaja es ser de los primeros en una vertical específica y en crecimiento — la memoria de agentes — en lugar de competir en el saturado mercado de GPU compute. Al integrarse con Virtuals, ElizaOS, Swarms y MCP en lugar de competir con ellos, se posiciona como infraestructura horizontal que todos pueden usar. Su riesgo competitivo real no es otro token, sino que los grandes frameworks de agentes (o los LLM propietarios) construyan su propia solución de memoria nativa y hagan a Unibase redundante. Ser "la capa de memoria neutral y descentralizada" es su tesis — y su vulnerabilidad si el mercado prefiere soluciones integradas.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📉</div>
+      <div class="section-title">Estructura de precio y contexto</div>
+      <div class="section-tag">Estructura de Precio</div>
+    </div>
+
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Desde ATH</div><div class="stat-value stat-red">-50%</div><div class="stat-sub">ATH: $0.2425 (may. 2026)</div></div>
+      <div class="stat-card"><div class="stat-label">Sobre ATL</div><div class="stat-value stat-green">+1,263%</div><div class="stat-sub">ATL: $0.0103</div></div>
+      <div class="stat-card"><div class="stat-label">Volatilidad 30d</div><div class="stat-value stat-red">~22%</div><div class="stat-sub">Extrema</div></div>
+      <div class="stat-card"><div class="stat-label">Edad del token</div><div class="stat-value stat-yellow">~11 mes</div><div class="stat-sub">TGE sept. 2025</div></div>
+    </div>
+
+    <div class="pressure-meter"><div class="meter-label">Desde ATH (-50% — corrección desde el pico de mayo)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:50%;"></div></div><div class="meter-footer"><span>ATH</span><span style="color:#f87171;">🔴 Token joven, alta volatilidad</span><span>ATL</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Fundamentales de producto (integraciones, 12.4M recuerdos, MCP)</div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:70%;"></div></div><div class="meter-footer"><span>Débil</span><span style="color:#4ade80;font-weight:700;">✅ Vertical nueva con tracción real</span><span>Fuerte</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Supply overhang (75% bloqueado, Mcap/FDV 25% — el riesgo)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:75%;"></div></div><div class="meter-footer"><span>Bajo</span><span style="color:#f87171;">🔴 Alto — dilución estructural pendiente</span><span>Máximo</span></div></div>
+
+    <div class="note-box warning" style="margin-top:14px;">
+      <strong>⚠ Nota sobre el precio:</strong> El precio de UB varía entre fuentes (~$0.117 en CoinMarketCap y OKX, ~$0.139 en CoinGecko que agrega 21 exchanges). Es un token joven (~11 meses), con volatilidad del ~22% mensual (extrema), muy sensible al sentimiento del sector AI — subió +205% en una semana durante el rally de mayo, y cayó -50% desde el ATH después. La combinación de token joven + supply overhang + narrativa AI lo hace de alto riesgo y alta volatilidad. Como siempre en tokens jóvenes: verifica el precio en varias fuentes antes de actuar.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">⚖</div>
+      <div class="section-title">Argumentos alcistas vs. bajistas</div>
+      <div class="section-tag">Veredicto TokenFlow</div>
+    </div>
+
+    <div class="verdict-grid">
+      <div class="verdict-card verdict-bull">
+        <div class="verdict-title">🟢 Argumentos alcistas</div>
+        <div class="verdict-item">Vertical DePIN nueva — memoria de agentes, nicho sin líder claro</div>
+        <div class="verdict-item">Integraciones reales: Virtuals, ElizaOS, Swarms, MCP</div>
+        <div class="verdict-item">12.4M recuerdos on-chain, 200+ agentes — tracción medible</div>
+        <div class="verdict-item">Cuatro fuentes de demanda del token (fees, veUB, staking, mining)</div>
+        <div class="verdict-item">Alineado con MCP — el estándar de agentes que se consolida en 2026</div>
+        <div class="verdict-item">Arquitectura completa: memoria + interoperabilidad + DA</div>
+        <div class="verdict-item">Ecosistema propio: BitAgent, TradingFlow, TwinX, Beeper</div>
+        <div class="verdict-item">Mcap ~$293M — asimetría si la memoria de agentes escala</div>
+      </div>
+      <div class="verdict-card verdict-bear">
+        <div class="verdict-title">🔴 Argumentos bajistas</div>
+        <div class="verdict-item">Mcap/FDV = 25% — 75% del supply pendiente de entrar</div>
+        <div class="verdict-item">Team 18% + Treasury 20% — cliffs de 6m + vesting 24m</div>
+        <div class="verdict-item">-50% desde ATH — token joven, volatilidad extrema (~22%)</div>
+        <div class="verdict-item">Precio y Mcap varían entre fuentes — datos aún inmaduros</div>
+        <div class="verdict-item">Riesgo de que frameworks construyan memoria nativa propia</div>
+        <div class="verdict-item">Captura de valor del token aún sin probar a escala</div>
+        <div class="verdict-item">Métricas clave (200+ agentes) son de testnet, mid-2025</div>
+        <div class="verdict-item">Fuertemente dependiente del sentimiento del sector AI</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="final-verdict">
+    <div class="final-title">TokenFlow AI · Veredicto Final</div>
+    <div class="final-score">
+      <div class="score-number">5</div>
+      <div>
+        <div class="score-label">Vertical prometedora y real · Supply overhang que pesa</div>
+        <div class="score-sub">sobre 10 · La mejor idea nueva del trimestre, con la peor estructura de supply</div>
+      </div>
+    </div>
+    <div class="final-text">
+      Unibase es, conceptualmente, uno de los proyectos más interesantes que hemos traído a TokenFlow AI, porque abre una vertical DePIN que no habíamos tocado: la memoria de los agentes de IA. El problema que resuelve es real y creciente — los agentes autónomos sin memoria persistente son empleados con amnesia — y la arquitectura (Membase para memoria, AIP para comunicación agente-a-agente, Unibase DA para data availability con zk) es coherente y completa. Más importante aún: las integraciones no son humo. Estar conectado con Virtuals, ElizaOS, Swarms y especialmente MCP — el estándar de Anthropic que se está consolidando bajo la Agentic AI Foundation en 2026 — coloca a Unibase en el centro de la infraestructura de agentes que el sector está estandarizando. Los 12.4 millones de recuerdos on-chain y 200+ agentes demuestran actividad medible, no solo promesas.<br><br>
+      Pero "Sin hype. Solo estructura." obliga a poner el foco donde duele: la estructura de supply. Con un Mcap/FDV del 25%, tres cuartas partes del valor total de UB aún no están en circulación. El Team (18%) y el Treasury (20%) están bloqueados con cliffs de 6 meses seguidos de vesting lineal de 24 meses — lo que significa una presión de dilución constante durante los próximos años. Es exactamente el perfil que hemos visto penalizar a DoubleZero, Story Protocol y Ocean: buena tecnología, pero un muro de tokens esperando para entrar al mercado. El -50% desde el ATH de mayo es, en parte, el mercado anticipando esa dilución. Y siendo un token joven de apenas 11 meses, con volatilidad mensual del 22% y precio que varía entre fuentes, la incertidumbre estructural es alta.<br><br>
+      Por eso el 5. Si evaluáramos solo la idea y las integraciones, Unibase merecería un 6.5 — es genuinamente la vertical nueva más prometedora que hemos analizado en meses. Pero el supply overhang del 75% y la captura de valor aún sin probar a escala son riesgos serios que no se pueden maquillar. Es un perfil casi opuesto al de Nosana (5/10, supply 100% limpio pero producto por probar): Unibase tiene una idea y unas integraciones más fuertes, pero carga con una dilución que Nosana no tiene. Mismo número, espejos invertidos.<br><br>
+      <strong>¿Qué cambiaría el veredicto?</strong> Dos cosas medibles: primero, evidencia de que los protocol fees (memoria, deployment, interoperabilidad) generan demanda real de UB que crezca más rápido que la dilución programada — que el uso supere a la emisión. Segundo, que las métricas de mainnet (no testnet) confirmen que los 12.4M recuerdos se convierten en actividad recurrente y pagada. Si la memoria de agentes se vuelve infraestructura crítica y Unibase mantiene su posición como capa neutral integrada con MCP, un Mcap de $293M sería un punto de entrada temprano a una categoría nueva. Hasta entonces, es la mejor idea nueva del trimestre — envuelta en la estructura de supply que más cautela exige.
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:20px;">
+    <div class="section-header">
+      <div class="section-icon icon-purple">👁</div>
+      <div class="section-title">Qué vigilar en los próximos 30–90 días</div>
+      <div class="section-tag">Lista de Monitoreo</div>
+    </div>
+    <div class="watch-item"><div class="watch-dot dot-purple"></div><div class="watch-text"><strong>Métricas de mainnet vs. testnet:</strong> Los 200+ agentes y 12.4M recuerdos son de testnet (mid-2025). El indicador #1 es si esas cifras se replican y crecen en mainnet con uso real y pagado. Seguir el dashboard oficial de Unibase y datos on-chain en BNB Chain.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-red"></div><div class="watch-text"><strong>Calendario de cliffs y vesting:</strong> El mayor riesgo. Team (18%) y Treasury (20%) salen de sus cliffs de 6 meses hacia vesting lineal. Vigilar en tokenomist/CoinGecko las fechas exactas — cada desbloqueo grande añade presión de venta sobre un token de Mcap medio.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Profundidad de la integración con MCP:</strong> MCP se está volviendo el estándar de agentes bajo la Agentic AI Foundation. Si Unibase se consolida como la capa de memoria por defecto para agentes MCP, es el catalizador más fuerte. Seguir anuncios de integraciones y adopción por frameworks.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-yellow"></div><div class="watch-text"><strong>Demanda real de protocol fees:</strong> La tesis del token depende de que el uso (memoria, deployment, interoperabilidad) genere fees en UB. Vigilar si el volumen de fees crece de forma sostenida — es lo que debe superar a la dilución para que el token capture valor.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-purple"></div><div class="watch-text"><strong>Salud del ecosistema propio:</strong> BitAgent, TradingFlow, TwinX y Beeper son la prueba de que se construye sobre Unibase. Si estos proyectos ganan usuarios reales y consumen la capa de memoria, valida el flywheel. Si se estancan, la narrativa se debilita.</div></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong style="color:#a855f7;">TokenFlow AI</strong> · Investigación de tokenómica AI y DePIN · Sin hype. Solo estructura.<br>
+  Fecha del análisis: 28 de agosto de 2026 · Este análisis no constituye asesoramiento de inversión. DYOR.<br>
+  Precio de referencia: CoinMarketCap/OKX (~$0.117, ~$293M Mcap). Los precios varían entre fuentes — verifica en 3+ agregadores.<br>
+  Fuentes: CoinGecko, CoinMarketCap, OKX, CryptoRank, MEXC, Unibase Docs, coincheckup, datos on-chain de BNB Chain
+</div>
+
+</body>
+</html>
