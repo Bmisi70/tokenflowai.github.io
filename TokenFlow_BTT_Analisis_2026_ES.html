@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenFlow AI – Análisis BitTorrent (BTT) 2026</title>
+<script data-goatcounter="https://tokenflowai.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'JetBrains Mono', monospace; background: #0a0e1a; color: #e2e8f0; line-height: 1.7; font-size: 14px; }
+
+  .header { background: linear-gradient(135deg, #0a0e1a 0%, #26120a 50%, #0a0e1a 100%); border-bottom: 1px solid #f97316; padding: 44px 32px 36px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; background: radial-gradient(ellipse, rgba(249,115,22,0.09) 0%, transparent 70%); pointer-events: none; }
+  .brand { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #f97316; margin-bottom: 14px; font-weight: 600; }
+  .title { font-size: 38px; font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -1px; }
+  .title span { color: #f97316; }
+  .subtitle { font-size: 12px; color: #64748b; margin-bottom: 22px; letter-spacing: 1px; }
+  .verdict-badge { display: inline-block; padding: 8px 24px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid; font-family: 'JetBrains Mono', monospace; }
+  .badge-warning { background: #451a03; color: #fb923c; border-color: #9a3412; }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 36px 20px; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 36px; }
+  .stat-card { background: #0d1525; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; text-align: center; }
+  .stat-label { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .stat-value { font-size: 22px; font-weight: 800; color: #f8fafc; }
+  .stat-sub { font-size: 10px; color: #64748b; margin-top: 4px; }
+  .stat-orange { color: #f97316; }
+  .stat-green { color: #4ade80; }
+  .stat-yellow { color: #fbbf24; }
+  .stat-red { color: #f87171; }
+
+  .section { background: #0d1525; border: 1px solid #1e293b; border-radius: 8px; padding: 26px; margin-bottom: 18px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #1e293b; }
+  .section-icon { width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .icon-orange { background: #431407; }
+  .icon-red { background: #450a0a; }
+  .icon-yellow { background: #422006; }
+  .icon-blue { background: #0c2a47; }
+  .icon-green { background: #052e16; }
+  .icon-purple { background: #2e1065; }
+  .icon-cyan { background: #083344; }
+  .section-title { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+  .section-tag { font-size: 10px; color: #475569; margin-left: auto; letter-spacing: 1px; text-transform: uppercase; }
+
+  .concept-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .concept-card { background: #281508; border: 1px solid #c2410c; border-radius: 6px; padding: 16px; }
+  .concept-card-title { font-size: 11px; color: #f97316; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .concept-card-text { font-size: 12px; color: #94a3b8; line-height: 1.6; }
+
+  .alloc-table { width: 100%; border-collapse: collapse; }
+  .alloc-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .alloc-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; font-size: 13px; vertical-align: middle; }
+  .alloc-table tr:last-child td { border-bottom: none; }
+
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+  .pill-green { background: #052e16; color: #4ade80; }
+  .pill-yellow { background: #422006; color: #fbbf24; }
+  .pill-red { background: #450a0a; color: #f87171; }
+  .pill-orange { background: #431407; color: #fdba74; }
+
+  .pressure-meter { margin: 14px 0; }
+  .meter-label { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+  .meter-bar-wrap { background: #1e293b; border-radius: 3px; height: 10px; overflow: hidden; }
+  .meter-bar { height: 10px; border-radius: 3px; }
+  .meter-green { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .meter-orange { background: linear-gradient(90deg, #ea580c, #fb923c); }
+  .meter-red { background: linear-gradient(90deg, #dc2626, #f87171); }
+  .meter-yellow { background: linear-gradient(90deg, #ca8a04, #fbbf24); }
+  .meter-footer { display: flex; justify-content: space-between; font-size: 10px; color: #475569; margin-top: 4px; }
+
+  .verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .verdict-card { border-radius: 6px; padding: 20px; }
+  .verdict-bull { background: #052e16; border: 1px solid #166534; }
+  .verdict-bear { background: #450a0a; border: 1px solid #7f1d1d; }
+  .verdict-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .verdict-bull .verdict-title { color: #4ade80; }
+  .verdict-bear .verdict-title { color: #f87171; }
+  .verdict-item { font-size: 12px; color: #cbd5e1; margin-bottom: 9px; padding-left: 18px; position: relative; line-height: 1.5; }
+  .verdict-item::before { content: '→'; position: absolute; left: 0; font-weight: 700; }
+  .verdict-bull .verdict-item::before { color: #4ade80; }
+  .verdict-bear .verdict-item::before { color: #f87171; }
+
+  .final-verdict { background: linear-gradient(135deg, #281508, #0f172a); border: 1px solid #c2410c; border-radius: 8px; padding: 30px; margin-top: 8px; }
+  .final-title { font-size: 11px; color: #f97316; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 14px; font-weight: 700; }
+  .final-score { display: flex; align-items: center; gap: 22px; margin-bottom: 18px; }
+  .score-number { font-size: 68px; font-weight: 900; color: #fbbf24; line-height: 1; }
+  .score-label { font-size: 20px; font-weight: 700; color: #f1f5f9; }
+  .score-sub { font-size: 12px; color: #64748b; margin-top: 6px; }
+  .final-text { font-size: 13px; color: #cbd5e1; line-height: 1.9; }
+
+  .watch-item { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid #1e293b; font-size: 13px; }
+  .watch-item:last-child { border-bottom: none; }
+  .watch-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #22c55e; }
+  .dot-orange { background: #f97316; }
+  .watch-text { color: #cbd5e1; }
+  .watch-text strong { color: #f8fafc; }
+
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .comp-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .comp-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; vertical-align: middle; }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table tr.highlight-row { background: #281508; }
+
+  .note-box { background: #1a0e05; border-left: 3px solid #f97316; border-radius: 0 6px 6px 0; padding: 14px 16px; font-size: 12px; color: #94a3b8; margin: 14px 0; line-height: 1.8; }
+  .note-box.warning { border-left-color: #f59e0b; background: #0d1105; }
+  .note-box.danger { border-left-color: #ef4444; background: #0d0808; }
+  .note-box.success { border-left-color: #22c55e; background: #050f05; }
+
+  .footer { text-align: center; padding: 28px; color: #334155; font-size: 11px; border-top: 1px solid #1e293b; margin-top: 36px; letter-spacing: 0.5px; line-height: 2; }
+
+  @media (max-width: 600px) {
+    .verdict-grid, .concept-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .score-number { font-size: 52px; }
+    .title { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">🟠 TokenFlow AI · Investigación de Tokenómica DePIN</div>
+  <div class="title">BitTorrent <span>BTT</span></div>
+  <div class="subtitle">Análisis completo — El veterano P2P que apuesta por el buyback & burn · 4 de septiembre de 2026</div>
+  <div class="verdict-badge badge-warning">⚠ Buyback & burn con 100% de ingresos · 987 billones de supply · Primer burn en octubre</div>
+</div>
+
+<div class="container">
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Cap. de Mercado</div><div class="stat-value stat-orange">~$291M</div><div class="stat-sub">#132 CoinMarketCap</div></div>
+    <div class="stat-card"><div class="stat-label">Precio (USD)</div><div class="stat-value" style="font-size:15px;padding-top:6px;">~$0.00000029</div><div class="stat-sub">Ver nota de redenominación</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Circ.</div><div class="stat-value">987B*</div><div class="stat-sub">*billones (10¹²)</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Máx.</div><div class="stat-value">990B</div><div class="stat-sub">~99.7% circula</div></div>
+    <div class="stat-card"><div class="stat-label">Usuarios activos</div><div class="stat-value stat-orange">100M+</div><div class="stat-sub">1,000M+ dispositivos</div></div>
+    <div class="stat-card"><div class="stat-label">Buyback &amp; Burn</div><div class="stat-value stat-green">100%</div><div class="stat-sub">de ingresos descentralizados</div></div>
+    <div class="stat-card"><div class="stat-label">Primer burn</div><div class="stat-value stat-yellow">Oct 2026</div><div class="stat-sub">Mediados de octubre</div></div>
+    <div class="stat-card"><div class="stat-label">Ecosistema</div><div class="stat-value stat-orange">TRON</div><div class="stat-sub">BTFS, Speed, InferGrid</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-orange">📡</div>
+      <div class="section-title">¿Qué es BitTorrent? — El veterano que se reinventa</div>
+      <div class="section-tag">Arquitectura Core</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">BitTorrent es uno de los nombres más reconocibles de internet: el protocolo P2P que definió el intercambio de archivos hace más de dos décadas. Adquirido por TRON en 2018 y tokenizado como BTT, hoy sirve a más de 100 millones de usuarios activos con presencia en más de mil millones de dispositivos. Su ecosistema descentralizado incluye BTFS (BitTorrent File System, almacenamiento descentralizado), BitTorrent Speed (ancho de banda tokenizado), y ahora BTTInferGrid — una red DePIN construida específicamente para cargas de inferencia de IA. La tesis de 2026 es clara: convertir esa base de usuarios masiva y esos servicios en un motor de captura de valor real para el token.</p>
+
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="concept-card-title">BTFS — almacenamiento P2P</div>
+        <div class="concept-card-text">Sistema de archivos descentralizado sobre la red BitTorrent. Almacenamiento distribuido tokenizado — uno de los servicios que genera los ingresos destinados al buyback.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">BitTorrent Speed</div>
+        <div class="concept-card-text">Ancho de banda tokenizado: los usuarios ganan BTT por compartir ancho de banda y aceleran sus descargas. Integrado en µTorrent y BitTorrent, la base de usuarios más grande del ecosistema.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">BTTInferGrid — el giro AI</div>
+        <div class="concept-card-text">Red DePIN nueva, diseñada para cargas de inferencia de IA, optimizando el suministro de cómputo tradicional. Es la apuesta de BitTorrent por el sector AI/DePIN y una futura fuente de ingresos para los buybacks.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Parte del ecosistema TRON</div>
+        <div class="concept-card-text">BTT es uno de los tokens insignia de TRON, junto a JST, SUN y WIN — todos lanzando mecanismos de buyback & burn en 2026. TRON entra en su "era deflacionaria" coordinada.</div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <strong>🔑 Por qué BTT es interesante para TokenFlow AI ahora:</strong> En las últimas semanas diseccionamos el "value-capture gap" en The Graph (5/10) y Chainlink (6/10) — infraestructura dominante cuyos tokens no capturan el valor que generan. BTT es el caso contrario en intención: un token que históricamente fue pura utilidad/governance sin captura de valor, y que ahora implementa un mecanismo agresivo y explícito para capturarlo. La pregunta no es si el mecanismo existe — existe y está confirmado — sino si la escala de los ingresos puede mover una aguja de 987 billones de tokens.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">🔥</div>
+      <div class="section-title">El buyback & burn — El mecanismo que lo cambia todo (¿o no?)</div>
+      <div class="section-tag">Mecanismo Central</div>
+    </div>
+
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:16px;">El 6 de julio de 2026, BitTorrent anunció su programa de buyback & burn de largo plazo, y es el corazón de esta tesis. Los detalles importan, porque es un diseño más honesto que muchos del sector.</p>
+
+    <div class="concept-grid">
+      <div class="concept-card" style="border-color:#166534;background:#051206;">
+        <div class="concept-card-title" style="color:#4ade80;">✅ Lo que hace fuerte al diseño</div>
+        <div class="concept-card-text"><strong>100% de los ingresos</strong> de servicios descentralizados (BTFS, Speed, InferGrid) van a recomprar BTT en mercado abierto. La fuente son <strong>ingresos operativos reales</strong>, no reservas del treasury ni capital nuevo. Cada trimestre, con quema permanente.</div>
+      </div>
+      <div class="concept-card" style="border-color:#166534;background:#051206;">
+        <div class="concept-card-title" style="color:#4ade80;">✅ Transparencia verificable</div>
+        <div class="concept-card-text">BitTorrent promete publicar el total quemado, su porcentaje del supply, y el <strong>hash on-chain</strong> de cada transacción. El primer burn (ingresos Q3) está fijado para <strong>mediados de octubre 2026</strong>. Verificable, no autoreportado.</div>
+      </div>
+    </div>
+
+    <div class="note-box success">
+      <strong>✅ Por qué esto es genuinamente diferente:</strong> A diferencia de tantos burns "de marketing" que queman tokens del treasury (lo que no crea demanda real), el modelo de BTT ata la quema a ingresos operativos reales que deben usarse para comprar BTT en el mercado abierto. Eso sí crea presión compradora genuina. Es el mismo principio que elogiamos en el buy&burn del 80% de ingresos de GEODNET (7/10) y en el BME de Akash. En intención de diseño, es de los mejores mecanismos de captura de valor del sector.
+    </div>
+
+    <div class="note-box danger">
+      <strong>🔴 El problema de escala — 987 billones de tokens:</strong> Aquí está la razón por la que "Sin hype. Solo estructura." no puede dejarse llevar. El supply circulante de BTT es de ~987 billones (10¹²) de tokens. Para que un buyback & burn mueva la aguja de forma significativa sobre semejante base, los ingresos trimestrales tendrían que ser enormes y sostenidos. Un burn de, digamos, unos pocos millones de dólares en BTT recomprado representa una fracción minúscula del supply total. El mecanismo es correcto en diseño, pero la magnitud del supply es tan colosal que el impacto deflacionario real dependerá enteramente de que los ingresos — y especialmente los de BTTInferGrid — escalen a niveles que hoy no están probados.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">📊</div>
+      <div class="section-title">Nota sobre el precio y el supply</div>
+      <div class="section-tag">Aclaración de Datos</div>
+    </div>
+
+    <div class="note-box warning">
+      <strong>⚠ La redenominación 1:1000 — por qué verás precios distintos:</strong> BitTorrent migró a un nuevo contrato y algunas fuentes (como CoinGecko) redenominaron BTT a una ratio de 1:1000, mostrando un precio de ~$0.063 en lugar de ~$0.00000029. <strong>No son valoraciones distintas — es la misma valoración en escalas distintas.</strong> Para evitar confusión, en TokenFlow AI anclamos el análisis en el dato limpio e inequívoco: el market cap de ~$291M (rank #132), que no depende de la escala del precio unitario. Al valorar BTT, ignora el precio unitario y mira el market cap y el supply.
+    </div>
+
+    <table class="alloc-table" style="margin-top:16px;">
+      <thead>
+        <tr><th>Métrica</th><th>Valor</th><th>Lectura TokenFlow</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Market cap</strong></td>
+          <td>~$291M</td>
+          <td>El dato ancla — independiente de la escala de precio</td>
+        </tr>
+        <tr>
+          <td><strong>Supply circulante</strong></td>
+          <td>~987B (10¹²)</td>
+          <td style="color:#f87171;">~99.7% ya circula — sin overhang de unlocks</td>
+        </tr>
+        <tr>
+          <td><strong>Mcap/FDV</strong></td>
+          <td>~99.7%</td>
+          <td style="color:#4ade80;">✅ Supply limpio — nada bloqueado esperando</td>
+        </tr>
+        <tr>
+          <td><strong>Dinámica futura de supply</strong></td>
+          <td>Deflacionaria (burn)</td>
+          <td>La única dirección es hacia abajo, vía buyback</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box success" style="margin-top:14px;">
+      <strong>✅ Un punto a favor que se pierde en el ruido:</strong> A diferencia de proyectos como Unibase (25% circulante) o DoubleZero (35%), BTT no tiene overhang de dilución: ~99.7% del supply ya está en circulación. No hay muro de tokens de VCs o team esperando para entrar. Combinado con el buyback & burn, la única dirección estructural del supply es a la baja. El problema no es la dilución futura — es si el burn puede ser lo bastante grande para importar sobre una base tan enorme.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">⚔</div>
+      <div class="section-title">Posicionamiento competitivo</div>
+      <div class="section-tag">Storage + Inference DePIN</div>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr><th>Proyecto</th><th>Enfoque</th><th>Mcap</th><th>vs. BTT</th></tr>
+      </thead>
+      <tbody>
+        <tr class="highlight-row">
+          <td><strong style="color:#f97316;">🟠 BitTorrent (BTT)</strong></td>
+          <td>P2P storage/bandwidth + AI inference</td>
+          <td>~$291M</td>
+          <td>— 100M usuarios, buyback 100% ingresos</td>
+        </tr>
+        <tr>
+          <td><strong>Filecoin (FIL)</strong></td>
+          <td>Storage descentralizado</td>
+          <td>~$1.5B+</td>
+          <td>5x mayor — storage enterprise vs. P2P consumer</td>
+        </tr>
+        <tr>
+          <td><strong>Chutes (SN64)</strong></td>
+          <td>Inferencia AI (Bittensor)</td>
+          <td>~$80M</td>
+          <td>BTTInferGrid competiría aquí — sin probar aún</td>
+        </tr>
+        <tr>
+          <td><strong>Nosana (NOS)</strong></td>
+          <td>Inferencia AI (Solana)</td>
+          <td>~$26M</td>
+          <td>Competidor en inferencia — Nosana más enfocado</td>
+        </tr>
+        <tr>
+          <td><strong>JST, SUN, WIN (TRON)</strong></td>
+          <td>Ecosistema TRON deflacionario</td>
+          <td>Varios</td>
+          <td>Hermanos de ecosistema — misma ola de buybacks</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box" style="margin-top:16px;">
+      <strong>La posición de BitTorrent:</strong> Su mayor activo es también su mayor pregunta. Los 100 millones de usuarios y mil millones de dispositivos son una base de distribución que casi ningún DePIN puede igualar — pero históricamente esa base ha generado ingresos modestos en relación con el tamaño del supply. BTTInferGrid es la apuesta para cambiar eso: si logra capturar demanda real de inferencia AI (un mercado en expansión), los ingresos para el buyback crecerían. Su riesgo competitivo es que llega tarde y pequeño a un espacio de inferencia ya poblado por Chutes, Nosana, Akash e io.net, todos más enfocados. La ventaja de BTT no es la tecnología de inferencia — es la distribución masiva y el mecanismo de captura de valor ya activo.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">⚖</div>
+      <div class="section-title">Argumentos alcistas vs. bajistas</div>
+      <div class="section-tag">Veredicto TokenFlow</div>
+    </div>
+
+    <div class="verdict-grid">
+      <div class="verdict-card verdict-bull">
+        <div class="verdict-title">🟢 Argumentos alcistas</div>
+        <div class="verdict-item">Buyback & burn con 100% de ingresos reales (no treasury)</div>
+        <div class="verdict-item">Transparencia on-chain — hash y total de cada burn público</div>
+        <div class="verdict-item">100M+ usuarios, 1,000M+ dispositivos — distribución masiva</div>
+        <div class="verdict-item">~99.7% del supply circula — sin overhang de dilución</div>
+        <div class="verdict-item">BTTInferGrid — entrada al mercado de inferencia AI</div>
+        <div class="verdict-item">Supply solo puede ir a la baja vía burn estructural</div>
+        <div class="verdict-item">Marca reconocible con dos décadas de historia</div>
+        <div class="verdict-item">Parte de la ola deflacionaria coordinada de TRON</div>
+      </div>
+      <div class="verdict-card verdict-bear">
+        <div class="verdict-title">🔴 Argumentos bajistas</div>
+        <div class="verdict-item">987 billones de supply — el burn debe ser enorme para importar</div>
+        <div class="verdict-item">Ingresos de servicios históricamente modestos vs. supply</div>
+        <div class="verdict-item">BTTInferGrid sin métricas de adopción probadas</div>
+        <div class="verdict-item">Llega tarde y pequeño a la inferencia (Chutes, Nosana, Akash)</div>
+        <div class="verdict-item">Primer burn (octubre) aún no ejecutado — todo es promesa</div>
+        <div class="verdict-item">Redenominación 1:1000 genera confusión de precio</div>
+        <div class="verdict-item">Distribución masiva no se ha traducido en ingresos grandes</div>
+        <div class="verdict-item">El impacto real del primer burn podría decepcionar</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="final-verdict">
+    <div class="final-title">TokenFlow AI · Veredicto Final</div>
+    <div class="final-score">
+      <div class="score-number">5</div>
+      <div>
+        <div class="score-label">Mecanismo correcto · Escala que exige pruebas</div>
+        <div class="score-sub">sobre 10 · El buyback & burn está bien diseñado; el supply de 987 billones es el juez</div>
+      </div>
+    </div>
+    <div class="final-text">
+      BitTorrent presenta un caso genuinamente interesante para el análisis de tokenómica, porque hace algo que hemos echado en falta en proyecto tras proyecto: implementa un mecanismo de captura de valor honesto y explícito. El buyback & burn que arranca en Q3 2026 usa el 100% de los ingresos de servicios descentralizados — reales, operativos, no del treasury — para recomprar BTT en mercado abierto y quemarlo, con transparencia on-chain verificable. En diseño, es de los mejores mecanismos del sector, del mismo linaje que el buy&burn de GEODNET o el BME de Akash. Y a diferencia de tantos tokens jóvenes que analizamos, BTT no carga con overhang de dilución: el ~99.7% del supply ya circula, así que la única dirección estructural es a la baja. Sumemos una base de distribución que casi nadie puede igualar — 100 millones de usuarios, mil millones de dispositivos — y la tesis alcista tiene fundamentos reales.<br><br>
+      Pero "Sin hype. Solo estructura." obliga a mirar el número que lo condiciona todo: 987 billones de tokens. Sobre una base tan colosal, un buyback & burn solo mueve la aguja si los ingresos son enormes y sostenidos trimestre tras trimestre. Y ahí está la incógnita: históricamente, los servicios descentralizados de BitTorrent han generado ingresos modestos en relación con el tamaño del supply. La gran esperanza es BTTInferGrid — pero llega tarde y pequeño a un mercado de inferencia AI ya poblado por Chutes, Nosana, Akash e io.net, todos más enfocados, y sin métricas de adopción probadas todavía. El primer burn de octubre no se ha ejecutado: por ahora, todo es diseño y promesa.<br><br>
+      Por eso el 5. Si evaluáramos solo el diseño del mecanismo y la limpieza del supply, BTT merecería un 6.5. Pero la desproporción entre el tamaño del supply y los ingresos probados es un riesgo estructural que no se puede maquillar con la narrativa deflacionaria. Es un espejo invertido de The Graph y Chainlink: ellos tienen ingresos y uso reales pero un token que no captura el valor; BTT tiene el mecanismo de captura perfecto pero necesita demostrar que hay suficientes ingresos que capturar. Mismo destino — un 5 o 6 — por el problema opuesto.<br><br>
+      <strong>¿Qué cambiaría el veredicto?</strong> Un dato concreto y fechado: el primer burn de mediados de octubre. Su magnitud — cuántos dólares de ingresos se convirtieron en BTT quemado, y qué porcentaje del supply representa — será la prueba de realidad definitiva. Si es significativo y BTTInferGrid empieza a mostrar adopción real de inferencia que engorde los buybacks siguientes, BTT pasaría de "mecanismo prometedor" a "deflación demostrada" y el re-rating sería justificado. Si el primer burn resulta simbólico frente a los 987 billones, confirmará que el diseño es bueno pero la escala no acompaña. Octubre tiene la respuesta.
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:20px;">
+    <div class="section-header">
+      <div class="section-icon icon-orange">👁</div>
+      <div class="section-title">Qué vigilar en los próximos 30–90 días</div>
+      <div class="section-tag">Lista de Monitoreo</div>
+    </div>
+    <div class="watch-item"><div class="watch-dot dot-orange"></div><div class="watch-text"><strong>El primer burn de mediados de octubre:</strong> El catalizador #1 y la prueba de realidad de toda la tesis. Vigilar el total quemado en USD, su porcentaje del supply de 987 billones, y el hash on-chain que BitTorrent promete publicar. Un burn significativo valida el modelo; uno simbólico confirma el problema de escala.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Adopción real de BTTInferGrid:</strong> Es la fuente de ingresos que debe crecer para que los buybacks importen. Vigilar métricas de uso de inferencia — jobs procesados, clientes, revenue. Sin tracción aquí, el buyback se queda pequeño frente al supply.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-yellow"></div><div class="watch-text"><strong>Ingresos trimestrales de servicios descentralizados:</strong> BTFS, BitTorrent Speed y InferGrid alimentan el buyback. Si BitTorrent publica cifras de ingresos crecientes trimestre a trimestre, el mecanismo gana credibilidad. La transparencia prometida debe materializarse en datos verificables.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Consistencia de los burns trimestrales:</strong> Un solo burn no hace tendencia. El valor real del mecanismo depende de ejecución consistente y transparente cada trimestre. Vigilar si el segundo y tercer burn mantienen o aumentan la magnitud del primero.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-orange"></div><div class="watch-text"><strong>La ola deflacionaria de TRON:</strong> BTT es parte de una iniciativa coordinada con JST, SUN y WIN. Vigilar cómo evoluciona el conjunto — el éxito o fracaso de los buybacks hermanos ofrece pistas sobre la salud del enfoque deflacionario de todo el ecosistema TRON.</div></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong style="color:#f97316;">TokenFlow AI</strong> · Investigación de tokenómica AI y DePIN · Sin hype. Solo estructura.<br>
+  Fecha del análisis: 4 de septiembre de 2026 · Este análisis no constituye asesoramiento de inversión. DYOR.<br>
+  Dato ancla: market cap ~$291M (rank #132). El precio unitario varía por la redenominación 1:1000 — usa el market cap, no el precio unitario.<br>
+  Fuentes: CoinGecko, CoinMarketCap, Bybit, Blockchain.News, crypto.news, BitTorrent Medium oficial, datos on-chain de TRON
+</div>
+
+</body>
+</html>
