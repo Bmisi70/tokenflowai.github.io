@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenFlow AI – Análisis Ondo Finance (ONDO) 2026</title>
+<script data-goatcounter="https://tokenflowai.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'JetBrains Mono', monospace; background: #0a0e1a; color: #e2e8f0; line-height: 1.7; font-size: 14px; }
+
+  .header { background: linear-gradient(135deg, #0a0e1a 0%, #0a1a24 50%, #0a0e1a 100%); border-bottom: 1px solid #0ea5e9; padding: 44px 32px 36px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; background: radial-gradient(ellipse, rgba(14,165,233,0.10) 0%, transparent 70%); pointer-events: none; }
+  .brand { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #0ea5e9; margin-bottom: 14px; font-weight: 600; }
+  .title { font-size: 38px; font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -1px; }
+  .title span { color: #0ea5e9; }
+  .subtitle { font-size: 12px; color: #64748b; margin-bottom: 22px; letter-spacing: 1px; }
+  .verdict-badge { display: inline-block; padding: 8px 24px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid; font-family: 'JetBrains Mono', monospace; }
+  .badge-warning { background: #451a03; color: #fb923c; border-color: #9a3412; }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 36px 20px; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 36px; }
+  .stat-card { background: #0d1525; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; text-align: center; }
+  .stat-label { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .stat-value { font-size: 22px; font-weight: 800; color: #f8fafc; }
+  .stat-sub { font-size: 10px; color: #64748b; margin-top: 4px; }
+  .stat-sky { color: #0ea5e9; }
+  .stat-green { color: #4ade80; }
+  .stat-yellow { color: #fbbf24; }
+  .stat-red { color: #f87171; }
+
+  .section { background: #0d1525; border: 1px solid #1e293b; border-radius: 8px; padding: 26px; margin-bottom: 18px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #1e293b; }
+  .section-icon { width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .icon-sky { background: #072a3a; }
+  .icon-orange { background: #431407; }
+  .icon-red { background: #450a0a; }
+  .icon-yellow { background: #422006; }
+  .icon-blue { background: #0c2a47; }
+  .icon-green { background: #052e16; }
+  .icon-purple { background: #2e1065; }
+  .section-title { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+  .section-tag { font-size: 10px; color: #475569; margin-left: auto; letter-spacing: 1px; text-transform: uppercase; }
+
+  .concept-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .concept-card { background: #081c28; border: 1px solid #0369a1; border-radius: 6px; padding: 16px; }
+  .concept-card-title { font-size: 11px; color: #0ea5e9; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .concept-card-text { font-size: 12px; color: #94a3b8; line-height: 1.6; }
+
+  .alloc-table { width: 100%; border-collapse: collapse; }
+  .alloc-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .alloc-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; font-size: 13px; vertical-align: middle; }
+  .alloc-table tr:last-child td { border-bottom: none; }
+  .alloc-bar-wrap { background: #1e293b; border-radius: 2px; height: 5px; width: 90px; display: inline-block; vertical-align: middle; margin-left: 8px; }
+  .alloc-bar { height: 5px; border-radius: 2px; display: block; }
+
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+  .pill-green { background: #052e16; color: #4ade80; }
+  .pill-yellow { background: #422006; color: #fbbf24; }
+  .pill-red { background: #450a0a; color: #f87171; }
+  .pill-sky { background: #072a3a; color: #7dd3fc; }
+
+  .pressure-meter { margin: 14px 0; }
+  .meter-label { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+  .meter-bar-wrap { background: #1e293b; border-radius: 3px; height: 10px; overflow: hidden; }
+  .meter-bar { height: 10px; border-radius: 3px; }
+  .meter-green { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .meter-orange { background: linear-gradient(90deg, #ea580c, #fb923c); }
+  .meter-red { background: linear-gradient(90deg, #dc2626, #f87171); }
+  .meter-sky { background: linear-gradient(90deg, #0284c7, #0ea5e9); }
+  .meter-yellow { background: linear-gradient(90deg, #ca8a04, #fbbf24); }
+  .meter-footer { display: flex; justify-content: space-between; font-size: 10px; color: #475569; margin-top: 4px; }
+
+  .verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .verdict-card { border-radius: 6px; padding: 20px; }
+  .verdict-bull { background: #052e16; border: 1px solid #166534; }
+  .verdict-bear { background: #450a0a; border: 1px solid #7f1d1d; }
+  .verdict-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .verdict-bull .verdict-title { color: #4ade80; }
+  .verdict-bear .verdict-title { color: #f87171; }
+  .verdict-item { font-size: 12px; color: #cbd5e1; margin-bottom: 9px; padding-left: 18px; position: relative; line-height: 1.5; }
+  .verdict-item::before { content: '→'; position: absolute; left: 0; font-weight: 700; }
+  .verdict-bull .verdict-item::before { color: #4ade80; }
+  .verdict-bear .verdict-item::before { color: #f87171; }
+
+  .final-verdict { background: linear-gradient(135deg, #081c28, #0f172a); border: 1px solid #0369a1; border-radius: 8px; padding: 30px; margin-top: 8px; }
+  .final-title { font-size: 11px; color: #0ea5e9; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 14px; font-weight: 700; }
+  .final-score { display: flex; align-items: center; gap: 22px; margin-bottom: 18px; }
+  .score-number { font-size: 68px; font-weight: 900; color: #fbbf24; line-height: 1; }
+  .score-label { font-size: 20px; font-weight: 700; color: #f1f5f9; }
+  .score-sub { font-size: 12px; color: #64748b; margin-top: 6px; }
+  .final-text { font-size: 13px; color: #cbd5e1; line-height: 1.9; }
+
+  .watch-item { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid #1e293b; font-size: 13px; }
+  .watch-item:last-child { border-bottom: none; }
+  .watch-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #22c55e; }
+  .dot-sky { background: #0ea5e9; }
+  .watch-text { color: #cbd5e1; }
+  .watch-text strong { color: #f8fafc; }
+
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .comp-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .comp-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; vertical-align: middle; }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table tr.highlight-row { background: #081c28; }
+
+  .note-box { background: #05141c; border-left: 3px solid #0ea5e9; border-radius: 0 6px 6px 0; padding: 14px 16px; font-size: 12px; color: #94a3b8; margin: 14px 0; line-height: 1.8; }
+  .note-box.warning { border-left-color: #f59e0b; background: #0d1105; }
+  .note-box.danger { border-left-color: #ef4444; background: #0d0808; }
+  .note-box.success { border-left-color: #22c55e; background: #050f05; }
+
+  .footer { text-align: center; padding: 28px; color: #334155; font-size: 11px; border-top: 1px solid #1e293b; margin-top: 36px; letter-spacing: 0.5px; line-height: 2; }
+
+  @media (max-width: 600px) {
+    .verdict-grid, .concept-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .score-number { font-size: 52px; }
+    .title { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">🔵 TokenFlow AI · Investigación de Tokenómica RWA</div>
+  <div class="title">Ondo <span>ONDO</span></div>
+  <div class="subtitle">Análisis completo — El líder de la tokenización de activos reales y el vacío de su token · 11 de septiembre de 2026</div>
+  <div class="verdict-badge badge-warning">⚠ Líder RWA con socios institucionales · Value-capture void · Disputa legal por el control</div>
+</div>
+
+<div class="container">
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Precio (USD)</div><div class="stat-value stat-sky">~$0.35</div><div class="stat-sub">11 de septiembre, 2026</div></div>
+    <div class="stat-card"><div class="stat-label">Cap. de Mercado</div><div class="stat-value">~$1.7B</div><div class="stat-sub">#44 CoinMarketCap</div></div>
+    <div class="stat-card"><div class="stat-label">FDV</div><div class="stat-value stat-yellow">~$3.5B</div><div class="stat-sub">Mcap/FDV = 49%</div></div>
+    <div class="stat-card"><div class="stat-label">Desde ATH</div><div class="stat-value stat-red">-77%</div><div class="stat-sub">ATH: ~$2.14 (dic. 2024)</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Circ.</div><div class="stat-value">4.87B</div><div class="stat-sub">48.7% de 10B</div></div>
+    <div class="stat-card"><div class="stat-label">AUM tokenizado</div><div class="stat-value stat-sky">$3.43B</div><div class="stat-sub">~8% del sector RWA</div></div>
+    <div class="stat-card"><div class="stat-label">Ecosystem Growth</div><div class="stat-value stat-red">52.1%</div><div class="stat-sub">En vesting hasta 2029</div></div>
+    <div class="stat-card"><div class="stat-label">Tokenized equities</div><div class="stat-value stat-green">58–70%</div><div class="stat-sub">Cuota del segmento</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-sky">🏦</div>
+      <div class="section-title">¿Qué es Ondo? — Wall Street on-chain</div>
+      <div class="section-tag">Arquitectura Core</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">Ondo Finance es el líder de la tokenización de activos del mundo real (RWA): bonos del Tesoro de EE.UU., acciones, ETFs y otros instrumentos financieros tradicionales, llevados a la blockchain para operarse 24/7 sin necesidad de una cuenta de brokerage. Fundada en 2021 por Nathan Allman, exmiembro del equipo de activos digitales de Goldman Sachs, Ondo se ha convertido en un puente entre las finanzas tradicionales y DeFi. Con ~$3.43B en AUM tokenizado — cerca del 8% de todo el sector RWA — y controlando entre el 58% y el 70% del segmento de acciones tokenizadas, es el nombre dominante de una de las narrativas más fuertes de 2026. Es la primera vez que TokenFlow AI analiza un proyecto RWA, un vertical adyacente a nuestro foco AI/DePIN: la infraestructura financiera de los activos reales on-chain.</p>
+
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="concept-card-title">USDY — stablecoin con rendimiento</div>
+        <div class="concept-card-text">Un token estable respaldado por bonos del Tesoro de EE.UU. de corto plazo que acumula rendimiento. Supera los $2.1B en TVL — el producto estrella de Ondo y su mayor fuente de tracción.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">OUSG — fondo de Treasuries</div>
+        <div class="concept-card-text">Fondo tokenizado de bonos del gobierno de EE.UU. de corto plazo, ~$680M en TVL. Da acceso on-chain a deuda soberana estadounidense con minteo y redención 24/7.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Ondo Global Markets</div>
+        <div class="concept-card-text">Plataforma de acciones y ETFs tokenizados — 470+ activos, $1.5B+ TVL. La adquisición de Oasis Pro aportó licencias SEC que removieron barreras regulatorias clave en EE.UU.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Socios institucionales de primer nivel</div>
+        <div class="concept-card-text">BlackRock, JP Morgan, Morgan Stanley, Ripple, DTCC. Aprobación regulatoria en la UE cubriendo 30 mercados. Es infraestructura financiera real, no un experimento cripto.</div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <strong>🔑 Por qué Ondo encaja en TokenFlow AI:</strong> Ampliamos nuestro foco de AI/DePIN al vertical RWA porque comparten la misma tesis estructural: llevar infraestructura del mundo real a la blockchain con mecanismos de token. Y sobre todo, porque Ondo es el caso de estudio perfecto del problema que venimos diseccionando semana tras semana — el "value-capture gap". Como en The Graph, Chainlink y BitTorrent, aquí tenemos una plataforma dominante y exitosa, con la pregunta abierta de si su token captura algo de ese éxito. La diferencia: en Ondo el gap es aún más explícito, y viene acompañado de una segunda capa de riesgo poco común.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">💸</div>
+      <div class="section-title">El "value-capture void" — La plataforma gana, el token no</div>
+      <div class="section-tag">La Paradoja Central</div>
+    </div>
+
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:16px;">Esta es la observación que define el análisis, y la más pura expresión del patrón que hemos rastreado en todo el sector. Ondo tiene un negocio excelente y en crecimiento — pero el token ONDO captura casi nada de ese valor.</p>
+
+    <div class="concept-grid">
+      <div class="concept-card" style="border-color:#166534;background:#051206;">
+        <div class="concept-card-title" style="color:#4ade80;">✅ La plataforma tiene éxito</div>
+        <div class="concept-card-text">$3.43B AUM. USDY &gt;$2.1B. Ondo Global Markets $1.5B+ TVL. 58-70% de las acciones tokenizadas. Licencias SEC vía Oasis Pro. Aprobación UE en 30 mercados. Socios: BlackRock, JP Morgan, Ripple. Es un negocio real, rentable, en expansión.</div>
+      </div>
+      <div class="concept-card" style="border-color:#7f1d1d;background:#120505;">
+        <div class="concept-card-title" style="color:#f87171;">🔴 El token no lo captura</div>
+        <div class="concept-card-text">ONDO es un token de <em>governance puro</em>. No tiene fee-sharing, no tiene buybacks, no tiene reparto de ingresos. La plataforma genera revenue, pero ese revenue no fluye al token. Como resumió un analista: "el token captura casi nada de ello".</div>
+      </div>
+    </div>
+
+    <div class="note-box danger">
+      <strong>🔴 El diagnóstico de "Sin hype. Solo estructura.":</strong> A ~$0.35 y ~$1.7B de market cap, ONDO cotiza como si la tesis RWA hubiera fracasado. No ha fracasado — la plataforma crece con fuerza. El problema es exclusivamente de diseño del token: ONDO da derechos de governance sobre el Ondo DAO (y sobre Flux Finance), pero está estructuralmente desconectado de los productos que generan valor (USDY, OUSG, Global Markets). Un holder de ONDO participa en las decisiones, pero no recibe una porción de los ingresos que esas decisiones generan. Es exactamente el mismo "value-capture void" que penalizó a The Graph (5/10) y Chainlink (6/10) — infraestructura dominante, token desconectado del valor.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">📊</div>
+      <div class="section-title">Estructura del suministro — El segundo lastre</div>
+      <div class="section-tag">Supply Analysis</div>
+    </div>
+
+    <table class="alloc-table" style="margin-bottom:16px;">
+      <thead>
+        <tr><th>Categoría</th><th>% Supply</th><th>Estado</th><th>Riesgo</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Ecosystem Growth</strong></td>
+          <td>52.1% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:100%;background:#ef4444;"></div></div></td>
+          <td><span class="status-pill pill-red">Vesting hasta 2029</span></td>
+          <td style="color:#f87171;">⚠ 5.21B ONDO — el gran overhang</td>
+        </tr>
+        <tr>
+          <td><strong>Circulante hoy</strong></td>
+          <td>48.7% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:49%;background:#0ea5e9;"></div></div></td>
+          <td><span class="status-pill pill-sky">4.87B de 10B</span></td>
+          <td>Mcap/FDV ~49%</td>
+        </tr>
+        <tr>
+          <td><strong>Unlocks programados</strong></td>
+          <td>—</td>
+          <td><span class="status-pill pill-yellow">2027, 2028, 2029</span></td>
+          <td style="color:#fbbf24;">Presión de venta recurrente</td>
+        </tr>
+        <tr>
+          <td><strong>Utilidad del token</strong></td>
+          <td>Governance</td>
+          <td><span class="status-pill pill-red">Sin fee-sharing</span></td>
+          <td style="color:#f87171;">No absorbe la dilución</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box danger">
+      <strong>🔴 El doble golpe estructural:</strong> Con Mcap/FDV del 49%, más de la mitad del supply aún no circula, y el 52.1% (5.21B ONDO) asignado a Ecosystem Growth entra al mercado en cliffs programados hasta 2029. Este es exactamente el perfil de dilución que hemos visto penalizar a Unibase (25%), DoubleZero (35%) y Story Protocol (38%). Pero en Ondo el problema se agrava por el value-capture void: normalmente, un token con fee-sharing o buyback puede absorber la presión de unlocks porque la demanda generada por el uso compensa la dilución. ONDO no tiene ese mecanismo. Los unlocks añaden oferta, y no hay captura de valor que cree demanda compensatoria. Para que el precio suba, la adopción de la plataforma debe superar la inflación del token — sin que el token participe directamente de esa adopción.
+    </div>
+
+    <div class="pressure-meter" style="margin-top:16px;">
+      <div class="meter-label">La carrera: adopción de la plataforma vs. dilución (sin mecanismo de captura que ayude)</div>
+      <div class="meter-bar-wrap" style="height:12px;border-radius:6px;"><div class="meter-bar meter-orange" style="width:35%;height:12px;border-radius:6px;"></div></div>
+      <div class="meter-footer"><span>Dilución</span><span style="color:#fb923c;font-weight:700;">⚠ La adopción debe superar la inflación, sin ayuda del token</span><span>Captura</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">⚖</div>
+      <div class="section-title">La disputa por el control — Un riesgo poco común</div>
+      <div class="section-tag">Riesgo de Governance</div>
+    </div>
+
+    <div style="background:#1a0808;border:1px solid #7f1d1d;border-radius:8px;padding:20px;margin-bottom:14px;">
+      <div style="font-size:11px;color:#f87171;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">🔴 Batalla en la Delaware Chancery Court — agosto 2026</div>
+      <div style="font-size:12px;color:#cbd5e1;line-height:1.7;">El fundador y CEO Nathan Allman falleció inesperadamente a finales de mayo de 2026, a los 32 años (la causa no fue divulgada). Su participación de control quedó congelada en un proceso sucesorio. El expresidente Ian De Bode asumió el cargo de CEO. En agosto, el patrimonio del fundador — representado por su madre, Kathleen Allman — demandó a De Bode, alegando que se apropió indebidamente del control de la empresa durante el vacío de governance. Tres demandas piden a un tribunal de Delaware determinar quién controla legalmente Ondo. El token cayó ~6.45% cuando la disputa se hizo pública.</div>
+    </div>
+
+    <div class="note-box warning">
+      <strong>⚠ Por qué esto importa para el análisis:</strong> Es un tipo de riesgo que rara vez vemos en un proyecto de este tamaño: incertidumbre sobre quién controla legalmente la empresa líder de todo un sector. No es un problema técnico ni tokenómico — es corporativo y legal, en la Delaware Chancery Court. Mientras no se resuelva, pesa sobre la confianza institucional que es precisamente el mayor activo de Ondo. Los socios como BlackRock y JP Morgan valoran la estabilidad; una disputa pública de control introduce una variable que ningún competidor RWA tiene ahora mismo. De Bode califica las alegaciones de infundadas y dice mantener el respaldo de los inversores principales y la Ondo Foundation, pero el tribunal aún no ha dictado sentencia.
+    </div>
+
+    <div class="note-box">
+      <strong>📌 Contexto justo:</strong> Es importante no exagerar: la disputa es sobre el control corporativo de Ondo Finance (la empresa), y las operaciones de la plataforma — USDY, OUSG, Global Markets — siguen funcionando con normalidad. El negocio no se ha detenido. Pero para un inversor en el token, la incertidumbre de liderazgo es un riesgo real que se suma a los dos anteriores, y que un análisis honesto debe nombrar sin dramatizar.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">🏛️</div>
+      <div class="section-title">Catalizadores regulatorios — El caso alcista</div>
+      <div class="section-tag">Adopción Institucional</div>
+    </div>
+
+    <div style="margin:8px 0;">
+      <div style="display:flex;gap:16px;padding:10px 0;border-bottom:1px solid #1e293b;">
+        <div style="font-size:10px;color:#4ade80;font-weight:700;min-width:90px;padding-top:2px;">2026 ✅</div>
+        <div style="font-size:12px;color:#cbd5e1;"><strong>Oasis Pro / FINRA:</strong> La subsidiaria de Ondo recibió autorización FINRA para ofrecer acciones y ETFs tokenizados a inversores de EE.UU. — abre un mercado enorme y remueve un overhang regulatorio clave.</div>
+      </div>
+      <div style="display:flex;gap:16px;padding:10px 0;border-bottom:1px solid #1e293b;">
+        <div style="font-size:10px;color:#4ade80;font-weight:700;min-width:90px;padding-top:2px;">2026 ✅</div>
+        <div style="font-size:12px;color:#cbd5e1;"><strong>Licencias SEC + UE:</strong> La adquisición de Oasis Pro aportó licencias SEC; la aprobación regulatoria en la UE cubre 30 mercados. Ondo apuesta por el cumplimiento como ventaja competitiva.</div>
+      </div>
+      <div style="display:flex;gap:16px;padding:10px 0;border-bottom:1px solid #1e293b;">
+        <div style="font-size:10px;color:#4ade80;font-weight:700;min-width:90px;padding-top:2px;">2026 ✅</div>
+        <div style="font-size:12px;color:#cbd5e1;"><strong>KuCoin + integraciones:</strong> Soporte para valores tokenizados de Ondo — 40+ acciones y 8 ETFs. Minteo/redención 24/7 en Ethereum, BNB Chain y Solana, más integraciones DTCC.</div>
+      </div>
+      <div style="display:flex;gap:16px;padding:10px 0;">
+        <div style="font-size:10px;color:#fbbf24;font-weight:700;min-width:90px;padding-top:2px;">⏳</div>
+        <div style="font-size:12px;color:#cbd5e1;"><strong>CLARITY Act:</strong> La legislación de estructura de mercado cripto en EE.UU. podría remover barreras y acelerar la entrada institucional. Un catalizador macro para todo el sector RWA.</div>
+      </div>
+    </div>
+
+    <div class="note-box success">
+      <strong>✅ El sector RWA está en su mejor momento:</strong> Los activos del mundo real tokenizados alcanzaron ~$38B en agosto 2026, y CoinShares reportó que el volumen de RWA en plataformas de préstamo y DEXs pasó de $2.3B a $7.4B interanual. Ondo lidera esa ola. Si la tesis RWA se materializa como se proyecta, Ondo es la infraestructura por defecto — la pregunta de siempre es si el token ONDO capturará ese crecimiento o solo lo hará la empresa.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">⚔</div>
+      <div class="section-title">Posicionamiento competitivo</div>
+      <div class="section-tag">Tokenización RWA</div>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr><th>Proyecto</th><th>Enfoque</th><th>Mcap</th><th>vs. ONDO</th></tr>
+      </thead>
+      <tbody>
+        <tr class="highlight-row">
+          <td><strong style="color:#0ea5e9;">🔵 Ondo (ONDO)</strong></td>
+          <td>RWA: Treasuries + equities</td>
+          <td>~$1.7B</td>
+          <td>— Líder RWA, socios institucionales</td>
+        </tr>
+        <tr>
+          <td><strong>Chainlink (LINK)</strong></td>
+          <td>Oráculos + settlement RWA</td>
+          <td>~$6.6B</td>
+          <td>Infraestructura que Ondo usa — complementario</td>
+        </tr>
+        <tr>
+          <td><strong>Plume Network</strong></td>
+          <td>L1 modular para RWA</td>
+          <td>Menor</td>
+          <td>Emergente — Ondo domina en AUM</td>
+        </tr>
+        <tr>
+          <td><strong>Centrifuge (CFG)</strong></td>
+          <td>Crédito privado tokenizado</td>
+          <td>Menor</td>
+          <td>Nicho de crédito — Ondo en Treasuries/equities</td>
+        </tr>
+        <tr>
+          <td><strong>BlackRock BUIDL</strong></td>
+          <td>Fondo tokenizado directo</td>
+          <td>—</td>
+          <td>Socio y competidor — TradFi entrando directo</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box" style="margin-top:16px;">
+      <strong>La posición de Ondo:</strong> Es el líder claro entre los emisores nativos de cripto de RWA, con la mayor cuota de acciones tokenizadas y un AUM que ningún competidor cripto iguala. Su moat es regulatorio (licencias SEC, aprobación UE) y de partnerships (BlackRock, JP Morgan). Su riesgo competitivo real no es otro token cripto — es que las propias instituciones (como BlackRock con BUIDL) tokenicen directamente y se salten la capa de Ondo. Por ahora, Ondo es el socio de esas instituciones, no su víctima. Pero en un sector donde TradFi está entrando con fuerza, mantener esa posición de "infraestructura preferida" es la clave de largo plazo.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">⚖</div>
+      <div class="section-title">Argumentos alcistas vs. bajistas</div>
+      <div class="section-tag">Veredicto TokenFlow</div>
+    </div>
+
+    <div class="verdict-grid">
+      <div class="verdict-card verdict-bull">
+        <div class="verdict-title">🟢 Argumentos alcistas</div>
+        <div class="verdict-item">Líder RWA — $3.43B AUM, ~8% del sector</div>
+        <div class="verdict-item">58-70% del segmento de acciones tokenizadas</div>
+        <div class="verdict-item">Socios de primer nivel: BlackRock, JP Morgan, Ripple</div>
+        <div class="verdict-item">Licencias SEC (Oasis Pro) + aprobación UE en 30 mercados</div>
+        <div class="verdict-item">USDY &gt;$2.1B — producto estrella con tracción real</div>
+        <div class="verdict-item">Sector RWA en auge: $38B tokenizados, creciendo</div>
+        <div class="verdict-item">CLARITY Act como catalizador macro potencial</div>
+        <div class="verdict-item">La plataforma es rentable y en expansión</div>
+      </div>
+      <div class="verdict-card verdict-bear">
+        <div class="verdict-title">🔴 Argumentos bajistas</div>
+        <div class="verdict-item">Value-capture void — token sin fee-sharing ni buyback</div>
+        <div class="verdict-item">52.1% del supply (Ecosystem Growth) en vesting hasta 2029</div>
+        <div class="verdict-item">Mcap/FDV 49% — dilución programada sin demanda compensatoria</div>
+        <div class="verdict-item">Disputa legal por el control en Delaware — incertidumbre</div>
+        <div class="verdict-item">-77% desde ATH — el token no refleja el éxito del negocio</div>
+        <div class="verdict-item">Riesgo de que instituciones (BlackRock BUIDL) tokenicen directo</div>
+        <div class="verdict-item">Governance token desconectado de los productos de valor</div>
+        <div class="verdict-item">La adopción debe superar la inflación sin ayuda del token</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="final-verdict">
+    <div class="final-title">TokenFlow AI · Veredicto Final</div>
+    <div class="final-score">
+      <div class="score-number">5</div>
+      <div>
+        <div class="score-label">Negocio excelente · Token desconectado y doble riesgo</div>
+        <div class="score-sub">sobre 10 · El líder de un sector en auge, con el value-capture void más claro que hemos visto</div>
+      </div>
+    </div>
+    <div class="final-text">
+      Ondo es un negocio excelente. Es el líder indiscutible de la tokenización de activos del mundo real — el sector con mejor momentum institucional de 2026 — con $3.43B en AUM, entre el 58% y el 70% del mercado de acciones tokenizadas, y una lista de socios (BlackRock, JP Morgan, Morgan Stanley, Ripple) que ningún competidor cripto puede igualar. Las licencias SEC vía Oasis Pro y la aprobación regulatoria en la UE construyen un moat que combina cumplimiento y distribución. Si la tesis RWA se materializa como proyecta el mercado, Ondo es la infraestructura por defecto. Como primer análisis RWA de TokenFlow AI, es el mejor ejemplo posible de por qué el vertical importa.<br><br>
+      Pero "Sin hype. Solo estructura." obliga a separar el negocio del token, y aquí es donde Ondo se complica. Primero, el value-capture void: ONDO es un token de governance puro, sin fee-sharing ni buybacks, estructuralmente desconectado de los productos (USDY, OUSG, Global Markets) que generan el valor. La plataforma gana; el token captura casi nada. Es el mismo patrón de The Graph y Chainlink, pero en su forma más explícita — el propio mercado lo reconoce al cotizar ONDO a -77% del ATH mientras el negocio crece. Segundo, el supply overhang: 52.1% del total asignado a Ecosystem Growth en vesting hasta 2029, sin un mecanismo de captura que absorba esa dilución. Y tercero, un riesgo poco común: la disputa legal en Delaware sobre quién controla la empresa tras la muerte del fundador, que introduce incertidumbre justo en el activo más valioso de Ondo — la confianza institucional.<br><br>
+      Por eso el 5. Si evaluáramos solo el negocio, Ondo merecería un 7 — es un líder real en un sector en auge. Pero un análisis de tokenómica evalúa el token, y ONDO carga con la trifecta: no captura valor, se diluye hasta 2029, y opera bajo una nube legal. Es el mismo destino que The Graph (5) y BitTorrent (5), por una combinación de razones aún más pesada. La ironía es cruel: Ondo tiene el mejor negocio de todos los tokens que hemos analizado con este problema, y aún así el token no lo refleja.<br><br>
+      <strong>¿Qué cambiaría el veredicto?</strong> Una cosa por encima de todas: que Ondo implemente un mecanismo real de captura de valor — fee-sharing, buyback&burn con ingresos de la plataforma, o staking con reparto de revenue. Si ONDO empezara a capturar aunque sea una fracción del crecimiento de USDY, OUSG y Global Markets, la valoración se re-evaluaría de golpe, porque el negocio subyacente ya está probado. Sumado a la resolución favorable de la disputa de control, el re-rating podría ser significativo. Hasta entonces, ONDO es la mejor prueba del sector de que un token puede ser el eslabón débil de un gran negocio.
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:20px;">
+    <div class="section-header">
+      <div class="section-icon icon-sky">👁</div>
+      <div class="section-title">Qué vigilar en los próximos 30–90 días</div>
+      <div class="section-tag">Lista de Monitoreo</div>
+    </div>
+    <div class="watch-item"><div class="watch-dot dot-sky"></div><div class="watch-text"><strong>Cualquier mecanismo de captura de valor:</strong> El catalizador #1 y toda la tesis alcista del token. Vigilar propuestas del Ondo DAO sobre fee-sharing, buybacks o staking con reparto de revenue. Si ONDO empieza a capturar valor de la plataforma, cambia todo. Seguir los foros de governance de Ondo.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-red"></div><div class="watch-text"><strong>Resolución de la disputa en Delaware:</strong> El tribunal debe determinar quién controla legalmente Ondo. Cualquier fallo — a favor del patrimonio de Allman, de De Bode, o una estructura negociada — reduce la incertidumbre. Un liderazgo estable y claro restaura la confianza institucional. Seguir las filings de la Delaware Chancery Court.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-red"></div><div class="watch-text"><strong>Calendario de unlocks de Ecosystem Growth:</strong> Con 52.1% del supply en vesting hasta 2029, cada cliff añade presión de venta. Vigilar en tokenomist.ai las fechas exactas (próximos hitos 2027, 2028) — sin captura de valor que compense, cada unlock es un headwind directo.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Crecimiento de AUM (USDY, OUSG, Global Markets):</strong> El indicador de salud del negocio. Si el AUM sigue creciendo hacia los $5-10B que proyecta el caso alcista, valida la tesis RWA — aunque el token no lo capture directamente todavía. Seguir los reportes de TVL de Ondo.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>CLARITY Act y avances regulatorios:</strong> La legislación de estructura de mercado cripto en EE.UU. podría acelerar la entrada institucional a RWA. Cualquier avance legislativo es un catalizador macro para Ondo como líder del sector. Seguir el calendario legislativo del Senado de EE.UU.</div></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong style="color:#0ea5e9;">TokenFlow AI</strong> · Investigación de tokenómica AI, DePIN y RWA · Sin hype. Solo estructura.<br>
+  Fecha del análisis: 11 de septiembre de 2026 · Este análisis no constituye asesoramiento de inversión. DYOR.<br>
+  Precio de referencia: CoinMarketCap/Bybit (~$0.35, ~$1.7B Mcap). Los precios varían entre fuentes — verifica en 3+ agregadores.<br>
+  Fuentes: CoinGecko, CoinMarketCap, Bybit, CoinDesk, The Block, crypto.news, tokenomist.ai, ondo.finance, datos on-chain
+</div>
+
+</body>
+</html>
