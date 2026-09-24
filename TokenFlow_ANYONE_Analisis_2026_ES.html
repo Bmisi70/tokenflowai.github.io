@@ -4,226 +4,378 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TokenFlow AI – Análisis ANyONe Protocol (ANYONE) 2026</title>
-<meta name="description" content="Análisis tokenómico de ANyONe Protocol ($ANYONE): supply, emisión, captura de valor y riesgos. Sin hype. Solo estructura.">
 <script data-goatcounter="https://tokenflowai.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace; background: #0a0e1a; color: #e2e8f0; line-height: 1.7; font-size: 14px; }
-  a { color: #22d3ee; }
-  a:focus-visible { outline: 2px solid #a78bfa; outline-offset: 2px; }
+  body { font-family: 'JetBrains Mono', monospace; background: #0a0e1a; color: #e2e8f0; line-height: 1.7; font-size: 14px; }
 
-  .header { background: linear-gradient(135deg, #0a0e1a 0%, #140f26 50%, #0a0e1a 100%); border-bottom: 1px solid #7c5cd6; padding: 44px 24px 36px; text-align: center; }
-  .brand { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #22d3ee; margin-bottom: 14px; font-weight: 600; }
-  .title { font-size: 34px; font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -1px; }
-  .subtitle { font-size: 12px; color: #64748b; margin-bottom: 22px; }
-  .verdict-badge { display: inline-block; padding: 8px 22px; border-radius: 4px; font-size: 12px; font-weight: 700; letter-spacing: 1px; border: 1px solid #f59e0b; color: #fbbf24; background: rgba(245,158,11,0.08); }
+  .header { background: linear-gradient(135deg, #0a0e1a 0%, #1a1030 50%, #0a0e1a 100%); border-bottom: 1px solid #7c3aed; padding: 44px 32px 36px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; background: radial-gradient(ellipse, rgba(139,92,246,0.10) 0%, transparent 70%); pointer-events: none; }
+  .brand { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #a78bfa; margin-bottom: 14px; font-weight: 600; }
+  .title { font-size: 38px; font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -1px; }
+  .title span { color: #a78bfa; }
+  .subtitle { font-size: 12px; color: #64748b; margin-bottom: 22px; letter-spacing: 1px; }
+  .verdict-badge { display: inline-block; padding: 8px 24px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid; font-family: 'JetBrains Mono', monospace; }
+  .badge-warning { background: #451a03; color: #fb923c; border-color: #9a3412; }
 
-  .container { max-width: 820px; margin: 0 auto; padding: 32px 20px 60px; }
-  .section { margin-bottom: 40px; }
-  .section h2 { font-size: 17px; color: #c4b5fd; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid #1e2640; }
-  .section p { margin-bottom: 12px; color: #cbd5e1; }
-  strong { color: #f8fafc; }
+  .container { max-width: 920px; margin: 0 auto; padding: 36px 20px; }
 
-  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin: 16px 0; }
-  .stat { background: #0f1528; border: 1px solid #1e2640; border-radius: 6px; padding: 14px; }
-  .stat .v { font-size: 20px; font-weight: 800; color: #f8fafc; }
-  .stat .l { font-size: 11px; color: #64748b; }
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 36px; }
+  .stat-card { background: #0d1525; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; text-align: center; }
+  .stat-label { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .stat-value { font-size: 22px; font-weight: 800; color: #f8fafc; }
+  .stat-sub { font-size: 10px; color: #64748b; margin-top: 4px; }
+  .stat-purple { color: #a78bfa; }
+  .stat-green { color: #4ade80; }
+  .stat-yellow { color: #fbbf24; }
+  .stat-red { color: #f87171; }
+  .stat-orange { color: #fb923c; }
 
-  .band { border: 1px dashed #a78bfa; border-radius: 6px; padding: 18px; background: rgba(167,139,250,0.05); margin: 16px 0; }
-  .band h3 { font-size: 14px; color: #c4b5fd; margin-bottom: 8px; }
+  .section { background: #0d1525; border: 1px solid #1e293b; border-radius: 8px; padding: 26px; margin-bottom: 18px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #1e293b; }
+  .section-icon { width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .icon-blue { background: #1e3a5f; }
+  .icon-red { background: #450a0a; }
+  .icon-yellow { background: #422006; }
+  .icon-green { background: #052e16; }
+  .icon-purple { background: #2e1065; }
+  .section-title { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+  .section-tag { font-size: 10px; color: #475569; margin-left: auto; letter-spacing: 1px; text-transform: uppercase; }
 
-  .table-wrap { overflow-x: auto; margin: 14px 0; }
-  table { width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 480px; }
-  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid #1e2640; }
-  th { color: #94a3b8; font-weight: 600; }
-  td.num { font-variant-numeric: tabular-nums; }
-  tr.stale td { color: #64748b; }
+  .concept-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .concept-card { background: #140f2a; border: 1px solid #5b21b6; border-radius: 6px; padding: 16px; }
+  .concept-card-title { font-size: 11px; color: #a78bfa; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .concept-card-text { font-size: 12px; color: #94a3b8; line-height: 1.6; }
 
-  .onion { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; margin: 18px 0; }
-  .onion svg { flex: 0 0 auto; max-width: 100%; }
-  .onion ul { list-style: none; flex: 1 1 260px; }
-  .onion li { margin-bottom: 10px; padding-left: 16px; position: relative; color: #cbd5e1; }
-  .onion li::before { content: ''; position: absolute; left: 0; top: 8px; width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
+  .table-wrap { overflow-x: auto; }
+  .alloc-table { width: 100%; border-collapse: collapse; min-width: 520px; }
+  .alloc-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .alloc-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; font-size: 13px; vertical-align: middle; }
+  .alloc-table tr:last-child td { border-bottom: none; }
+  .alloc-table tr.stale td { color: #475569; }
+  .alloc-bar-wrap { background: #1e293b; border-radius: 2px; height: 5px; width: 90px; display: inline-block; vertical-align: middle; margin-left: 8px; }
+  .alloc-bar { height: 5px; border-radius: 2px; display: block; }
 
-  .callout { border-left: 3px solid #f43f5e; background: rgba(244,63,94,0.06); padding: 14px 16px; border-radius: 0 6px 6px 0; margin: 14px 0; }
-  .callout.ok { border-color: #10b981; background: rgba(16,185,129,0.06); }
-  .callout.warn { border-color: #f59e0b; background: rgba(245,158,11,0.06); }
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+  .pill-green { background: #052e16; color: #4ade80; }
+  .pill-yellow { background: #422006; color: #fbbf24; }
+  .pill-red { background: #450a0a; color: #f87171; }
+  .pill-purple { background: #2e1065; color: #c4b5fd; }
 
-  .score-row { display: grid; grid-template-columns: 1fr 140px 44px; gap: 12px; align-items: center; margin-bottom: 10px; font-size: 13px; }
-  .bar { height: 8px; background: #1e2640; border-radius: 4px; overflow: hidden; }
-  .bar span { display: block; height: 100%; background: #a78bfa; }
-  .score-total { margin-top: 18px; font-size: 22px; font-weight: 800; color: #fbbf24; }
+  .pressure-meter { margin: 14px 0; }
+  .meter-label { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+  .meter-bar-wrap { background: #1e293b; border-radius: 3px; height: 10px; overflow: hidden; }
+  .meter-bar { height: 10px; border-radius: 3px; }
+  .meter-green { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .meter-orange { background: linear-gradient(90deg, #ea580c, #fb923c); }
+  .meter-red { background: linear-gradient(90deg, #dc2626, #f87171); }
+  .meter-yellow { background: linear-gradient(90deg, #ca8a04, #fbbf24); }
+  .meter-purple { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
+  .meter-footer { display: flex; justify-content: space-between; font-size: 10px; color: #475569; margin-top: 4px; gap: 8px; }
 
-  .verdict { border: 1px solid #7c5cd6; border-radius: 8px; padding: 22px; background: #0f1528; }
-  .verdict .big { font-size: 20px; font-weight: 800; color: #f8fafc; margin-bottom: 10px; }
+  .verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .verdict-card { border-radius: 6px; padding: 20px; }
+  .verdict-bull { background: #052e16; border: 1px solid #166534; }
+  .verdict-bear { background: #450a0a; border: 1px solid #7f1d1d; }
+  .verdict-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .verdict-bull .verdict-title { color: #4ade80; }
+  .verdict-bear .verdict-title { color: #f87171; }
+  .verdict-item { font-size: 12px; color: #cbd5e1; margin-bottom: 9px; padding-left: 18px; position: relative; line-height: 1.5; }
+  .verdict-item::before { content: '→'; position: absolute; left: 0; font-weight: 700; }
+  .verdict-bull .verdict-item::before { color: #4ade80; }
+  .verdict-bear .verdict-item::before { color: #f87171; }
 
-  .disclaimer { font-size: 11.5px; color: #64748b; border-top: 1px solid #1e2640; padding-top: 18px; margin-top: 30px; }
-  .footer { text-align: center; padding: 30px 20px; border-top: 1px solid #1e2640; font-size: 12px; color: #64748b; }
-  .footer .tag { color: #22d3ee; font-weight: 700; margin-bottom: 6px; }
-  .cta { display: inline-block; margin: 12px 6px 0; padding: 10px 18px; border: 1px solid #22d3ee; border-radius: 4px; color: #22d3ee; text-decoration: none; font-weight: 600; }
+  .final-verdict { background: linear-gradient(135deg, #1a1030, #0f172a); border: 1px solid #7c3aed; border-radius: 8px; padding: 30px; margin-top: 8px; }
+  .final-title { font-size: 11px; color: #a78bfa; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 14px; font-weight: 700; }
+  .final-score { display: flex; align-items: center; gap: 22px; margin-bottom: 18px; }
+  .score-number { font-size: 68px; font-weight: 900; color: #fbbf24; line-height: 1; }
+  .score-label { font-size: 20px; font-weight: 700; color: #f1f5f9; }
+  .score-sub { font-size: 12px; color: #64748b; margin-top: 6px; }
+  .final-text { font-size: 13px; color: #cbd5e1; line-height: 1.9; }
 
-  @media (max-width: 560px) {
-    .title { font-size: 26px; }
-    .score-row { grid-template-columns: 1fr 90px 40px; }
+  .watch-item { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid #1e293b; font-size: 13px; }
+  .watch-item:last-child { border-bottom: none; }
+  .watch-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #22c55e; }
+  .dot-purple { background: #a78bfa; }
+  .watch-text { color: #cbd5e1; }
+  .watch-text strong { color: #f8fafc; }
+
+  .note-box { background: #0c0a18; border-left: 3px solid #a78bfa; border-radius: 0 6px 6px 0; padding: 14px 16px; font-size: 12px; color: #94a3b8; margin: 14px 0; line-height: 1.8; }
+  .note-box.warning { border-left-color: #f59e0b; background: #0d1105; }
+  .note-box.danger { border-left-color: #ef4444; background: #0d0808; }
+  .note-box.success { border-left-color: #22c55e; background: #050f05; }
+  .note-box strong { color: #e2e8f0; }
+
+  .footer { text-align: center; padding: 28px; color: #334155; font-size: 11px; border-top: 1px solid #1e293b; margin-top: 36px; letter-spacing: 0.5px; line-height: 2; }
+  .footer a { color: #a78bfa; }
+
+  @media (max-width: 600px) {
+    .verdict-grid, .concept-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .score-number { font-size: 52px; }
+    .title { font-size: 28px; }
+    .final-score { flex-direction: column; align-items: flex-start; }
   }
 </style>
 </head>
 <body>
 
-<header class="header">
-  <div class="brand">TokenFlow AI · Análisis semanal</div>
-  <h1 class="title">ANyONe Protocol ($ANYONE)</h1>
-  <p class="subtitle">Privacidad DePIN · Enrutamiento cebolla incentivado · Datos al 24 de septiembre de 2026</p>
-  <div class="verdict-badge">Veredicto: 5/10 · Supply limpio, ingresos pendientes</div>
-</header>
+<div class="header">
+  <div class="brand">🔵 TokenFlow AI · Investigación de Tokenómica DePIN</div>
+  <div class="title">ANy<span>ONe</span> · ANYONE</div>
+  <div class="subtitle">Análisis completo — La red de privacidad DePIN para cualquier app · 24 de septiembre de 2026</div>
+  <div class="verdict-badge badge-warning">⚠ Supply limpio · Captura de valor pendiente · Rally con liquidez fina</div>
+</div>
 
-<main class="container">
+<div class="container">
 
-  <section class="section">
-    <h2>Qué es ANyONe</h2>
-    <p>ANyONe (antes ATOR / AirTor) es una red de privacidad descentralizada que busca que <strong>cualquier aplicación</strong> pueda enrutar su tráfico de forma anónima, igual que Tor hace con el navegador. Cada paquete se cifra en varias capas y pasa por un circuito de 3 relays: ninguno conoce a la vez el origen y el destino.</p>
-    <p>La diferencia con Tor es económica: los operadores de relays reciben recompensas en $ANYONE según su ancho de banda y su tiempo activo (Proof of Uptime), y existe hardware propio, el <strong>Anyone Router</strong>, con un pool de recompensas dedicado. El token es un ERC-20 en Ethereum, con presencia en Base y Peaq.</p>
-  </section>
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Precio (USD)</div><div class="stat-value stat-purple">$0.26–0.33</div><div class="stat-sub">Banda · 24 sept. 2026</div></div>
+    <div class="stat-card"><div class="stat-label">Cap. de Mercado</div><div class="stat-value">$25–32M</div><div class="stat-sub">Según la fuente</div></div>
+    <div class="stat-card"><div class="stat-label">FDV</div><div class="stat-value">$26–33M</div><div class="stat-sub">Mcap/FDV ≈ 97% ✅</div></div>
+    <div class="stat-card"><div class="stat-label">30 días</div><div class="stat-value stat-green">~3x</div><div class="stat-sub">De ~$0.09 a ~$0.30</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Circ.</div><div class="stat-value">95–97.8M</div><div class="stat-sub">~97% del máximo</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Máx.</div><div class="stat-value">100M</div><div class="stat-sub">Sin función de mint ✅</div></div>
+    <div class="stat-card"><div class="stat-label">Volumen 24h</div><div class="stat-value stat-orange">$0.5–1.9M</div><div class="stat-sub">Liquidez fina</div></div>
+    <div class="stat-card"><div class="stat-label">Holders</div><div class="stat-value">~16.9K</div><div class="stat-sub">Etherscan</div></div>
+  </div>
 
-  <section class="section">
-    <h2>El precio: por qué damos una banda y no un número</h2>
-    <p>Esta semana, las fuentes públicas muestran precios entre <strong>$0.09 y $0.33</strong>. Revisando las fechas, la mayor parte de la diferencia no es un error de escala sino <strong>un rally real</strong>: el token cotizaba cerca de $0.09 a fines de agosto, rondaba $0.22 a principios de septiembre y hoy está alrededor de $0.30. Los agregadores que se actualizan tarde siguen mostrando el precio viejo.</p>
-    <p>La migración ATOR → ANYONE sí deja rastro en los datos históricos: el máximo histórico (ATH) aparece entre $2.28 y $3.97 según la fuente.</p>
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">🧅</div>
+      <div class="section-title">¿Qué es ANyONe? — Tor, pero con incentivos y para cualquier app</div>
+      <div class="section-tag">Privacidad DePIN</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">ANyONe (antes ATOR / AirTor) es una red de enrutamiento cebolla descentralizada. Cada paquete se cifra en varias capas y pasa por un circuito de 3 relays: ninguno conoce a la vez el origen y el destino. La diferencia con Tor es económica y de alcance: los operadores cobran en $ANYONE por aportar ancho de banda, y el objetivo es que cualquier aplicación, no solo el navegador, pueda enrutar su tráfico de forma privada.</p>
 
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="concept-card-title">Proof of Uptime</div>
+        <div class="concept-card-text">Los relays cobran según su ancho de banda y su tiempo activo. Una parte de las recompensas se reparte solo por uptime, lo que favorece a operadores pequeños y constantes.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Anyone Router</div>
+        <div class="concept-card-text">Hardware propio que se registra solo en la red, no necesita bloquear tokens y tiene un pool de recompensas exclusivo. Diversifica la red fuera de los grandes proveedores cloud.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">SDK y VPN de escritorio</div>
+        <div class="concept-card-text">El equipo reporta 81,000 instalaciones del SDK. La VPN de escritorio ya tiene versión comunitaria para macOS, Windows y Linux, con rutas por aplicación.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Mainnet y staking</div>
+        <div class="concept-card-text">Mainnet y staking activos desde el cuarto trimestre de 2025. Token ERC-20 en Ethereum, con presencia en Base y Peaq.</div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <strong>🔑 Por qué importa:</strong> La privacidad volvió a ser narrativa de mercado en 2026 (ZEC, XMR). ANyONe es de los pocos proyectos que la abordan desde la infraestructura física de red, no desde una cadena de pagos privados. Es DePIN aplicado a un derecho, no solo a un recurso.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">📡</div>
+      <div class="section-title">El precio — Por qué damos una banda y no un número</div>
+      <div class="section-tag">Transparencia de datos</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:16px;">Esta semana las fuentes muestran entre $0.09 y $0.33. Revisando fechas, la mayor parte de la diferencia es un rally real (~$0.09 a fines de agosto, ~$0.22 a principios de septiembre, ~$0.30 hoy) y agregadores que se actualizan tarde. La migración ATOR → ANYONE además dejó el ATH inconsistente: entre $2.28 y $3.97 según la fuente.</p>
     <div class="table-wrap">
-      <table>
+      <table class="alloc-table">
         <thead><tr><th>Fuente</th><th>Precio</th><th>Mcap</th><th>Estado</th></tr></thead>
         <tbody>
-          <tr><td>KuCoin</td><td class="num">$0.326</td><td class="num">$32.3M</td><td>Actual (+50% en 24h)</td></tr>
-          <tr><td>Kraken (índice)</td><td class="num">$0.32</td><td class="num">$30.4M</td><td>Actual</td></tr>
-          <tr><td>CoinGecko</td><td class="num">$0.302</td><td class="num">$28.8M</td><td>Actual</td></tr>
-          <tr><td>CoinMarketCap</td><td class="num">$0.266</td><td class="num">$26.0M</td><td>Actual</td></tr>
-          <tr><td>Coinbase (índice)</td><td class="num">$0.261</td><td class="num">$25.6M</td><td>Actual</td></tr>
-          <tr class="stale"><td>OKX</td><td class="num">$0.089</td><td class="num">$8.4M</td><td>Dato del 26 de agosto</td></tr>
-          <tr class="stale"><td>Crypto.com</td><td class="num">$0.087</td><td class="num">—</td><td>Desactualizado</td></tr>
+          <tr><td><strong>KuCoin</strong></td><td>$0.326</td><td>$32.3M</td><td><span class="status-pill pill-green">Actual · +50% 24h</span></td></tr>
+          <tr><td><strong>Etherscan</strong></td><td>$0.319</td><td>$30.4M</td><td><span class="status-pill pill-green">Actual</span></td></tr>
+          <tr><td><strong>CoinGecko</strong></td><td>$0.302</td><td>$28.8M</td><td><span class="status-pill pill-green">Actual</span></td></tr>
+          <tr><td><strong>CoinMarketCap</strong></td><td>$0.266</td><td>$26.0M</td><td><span class="status-pill pill-green">Actual</span></td></tr>
+          <tr class="stale"><td>OKX</td><td>$0.089</td><td>$8.4M</td><td><span class="status-pill pill-red">Dato del 26 ago.</span></td></tr>
+          <tr class="stale"><td>Crypto.com</td><td>$0.087</td><td>—</td><td><span class="status-pill pill-red">Desactualizado</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note-box warning">
+      <strong>Regla TokenFlow:</strong> si el mercado no tiene consenso sobre el precio, no inventamos uno. Trabajamos con la banda $0.26–0.33 / Mcap $25–32M. Verifica siempre la fecha del dato antes de decidir.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">📊</div>
+      <div class="section-title">Estructura del suministro — Limpia, pero con capas</div>
+      <div class="section-tag">Supply Analysis</div>
+    </div>
+
+    <div class="table-wrap">
+      <table class="alloc-table">
+        <thead><tr><th>Categoría</th><th>Tokens</th><th>Estado</th><th>Riesgo</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Pool de recompensas</strong></td>
+            <td>10M <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:100%;background:#a78bfa;"></div></div></td>
+            <td><span class="status-pill pill-yellow">Emite 0.1%/día</span></td>
+            <td style="color:#fbbf24;">Salida gradual al mercado</td>
+          </tr>
+          <tr>
+            <td><strong>Fundación</strong></td>
+            <td>4M <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:40%;background:#fb923c;"></div></div></td>
+            <td><span class="status-pill pill-yellow">Vesting lineal</span></td>
+            <td style="color:#fbbf24;">Presión gradual</td>
+          </tr>
+          <tr>
+            <td><strong>Listados / market making</strong></td>
+            <td>1.5M <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:15%;background:#f87171;"></div></div></td>
+            <td><span class="status-pill pill-purple">Billetera del proyecto</span></td>
+            <td>Liquidez operativa</td>
+          </tr>
+          <tr>
+            <td><strong>Resto del circulante</strong></td>
+            <td>~80M+ <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:100%;background:#4ade80;"></div></div></td>
+            <td><span class="status-pill pill-green">En mercado</span></td>
+            <td style="color:#4ade80;">Sin unlocks de VC pendientes</td>
+          </tr>
         </tbody>
       </table>
     </div>
 
-    <div class="band">
-      <h3>Banda de trabajo de TokenFlow</h3>
-      <div class="stat-grid">
-        <div class="stat"><div class="v">$0.26–0.33</div><div class="l">Precio</div></div>
-        <div class="stat"><div class="v">$25–32M</div><div class="l">Capitalización</div></div>
-        <div class="stat"><div class="v">$26–33M</div><div class="l">FDV</div></div>
-        <div class="stat"><div class="v">$0.5–1.9M</div><div class="l">Volumen diario (según fuente)</div></div>
+    <div class="pressure-meter" style="margin-top:20px;">
+      <div class="meter-label">Mcap/FDV — comparativa con tokens analizados por TokenFlow AI</div>
+      <div style="display:grid;gap:8px;margin-top:8px;">
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#a78bfa;font-weight:700;margin-bottom:3px;"><span>ANyONe (ANYONE)</span><span>~97% ✅</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-purple" style="width:97%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>IoTeX (IOTX)</span><span>94%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:94%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>Akash (AKT)</span><span>75%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:75%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>Story Protocol (IP)</span><span>38%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-orange" style="width:38%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>DoubleZero (2Z)</span><span>35%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:35%;"></div></div></div>
       </div>
-      <p style="margin:0">Regla de la casa: si el mercado no tiene consenso sobre el precio, no inventamos uno. Consulta varias fuentes antes de tomar cualquier decisión.</p>
-    </div>
-  </section>
-
-  <section class="section">
-    <h2>Estructura de supply: limpia, pero con capas</h2>
-    <div class="stat-grid">
-      <div class="stat"><div class="v">100M</div><div class="l">Supply máximo fijo</div></div>
-      <div class="stat"><div class="v">~95–97.8M</div><div class="l">Circulante declarado</div></div>
-      <div class="stat"><div class="v">~97%</div><div class="l">Ya en circulación</div></div>
-      <div class="stat"><div class="v">~1.03x</div><div class="l">FDV / Mcap</div></div>
-    </div>
-    <p>Pocas veces vemos una relación FDV/Mcap tan cercana a 1. No hay un muro de unlocks de inversores esperando. Esto es lo más sólido del proyecto.</p>
-
-    <div class="onion">
-      <svg width="220" height="220" viewBox="0 0 220 220" role="img" aria-label="Capas del supply de ANYONE">
-        <circle cx="110" cy="110" r="104" fill="#1e1640" stroke="#a78bfa" stroke-width="1.5"/>
-        <circle cx="110" cy="110" r="78" fill="#241a4d" stroke="#8b5cf6" stroke-width="1.5"/>
-        <circle cx="110" cy="110" r="50" fill="#0f2a33" stroke="#22d3ee" stroke-width="1.5"/>
-        <text x="110" y="106" text-anchor="middle" fill="#f8fafc" font-family="JetBrains Mono, monospace" font-size="13" font-weight="700">Flotante</text>
-        <text x="110" y="124" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono, monospace" font-size="10">real</text>
-        <text x="110" y="46" text-anchor="middle" fill="#c4b5fd" font-family="JetBrains Mono, monospace" font-size="10">billeteras</text>
-        <text x="110" y="22" text-anchor="middle" fill="#a78bfa" font-family="JetBrains Mono, monospace" font-size="10">100M</text>
-      </svg>
-      <ul>
-        <li style="--c:#a78bfa"><strong>Capa externa:</strong> 100M, supply máximo fijo según la documentación.</li>
-        <li style="--c:#8b5cf6"><strong>Capa media:</strong> billeteras del proyecto que los agregadores cuentan como circulantes: pool de recompensas (10M en origen), fundación con vesting lineal (4M) y market making / listados (1.5M).</li>
-        <li style="--c:#22d3ee"><strong>Núcleo:</strong> el flotante que realmente está en manos del mercado. Es menor que el ~97% declarado.</li>
-      </ul>
     </div>
 
-    <div class="callout warn">
-      <strong>Circulante no es lo mismo que flotante.</strong> Las recompensas de ANyONe no crean tokens nuevos: los trasladan desde billeteras del proyecto al mercado. La dilución real no está en el supply, sino en el ritmo de esas salidas.
+    <div class="note-box warning">
+      <strong>⚠ Circulante no es lo mismo que flotante:</strong> Los agregadores cuentan como circulantes las billeteras del proyecto (recompensas, fundación, market making). Las recompensas no crean tokens nuevos: los trasladan de esas billeteras al mercado. La dilución real no está en el supply máximo, sino en el ritmo de esas salidas. Aun así, frente a 2Z o IP, la diferencia es enorme: no hay un muro de unlocks de inversores esperando.
     </div>
-  </section>
+  </div>
 
-  <section class="section">
-    <h2>Mecánica del token</h2>
-    <p><strong>Emisión.</strong> El pool de recompensas emite el 0.1% diario de lo que le queda. El diseño apunta a una inflación de ~3.5% del circulante en el primer año, decreciente después, con una vida media del pool de ~693 días. Se reparte así: 70% para todos los relays, 20% para relays de hardware y 10% para roles de autoridad y staking.</p>
-    <p><strong>Bloqueo por relay.</strong> Cada relay de software bloquea 100 $ANYONE durante un mínimo de 180 días, con 14 días de desbloqueo. Los relays de hardware no bloquean.</p>
-    <div class="callout warn">
-      <strong>Detalle estructural:</strong> la documentación indica que el requisito de bloqueo se ajusta para mantener la entrada en torno a <strong>$100</strong>. Si el precio sube, se bloquean menos tokens por relay. El sumidero de tokens está anclado en dólares, no crece con el precio.
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">🔍</div>
+      <div class="section-title">Revisión del contrato on-chain — Verificado por TokenFlow</div>
+      <div class="section-tag">Seguridad</div>
     </div>
-    <p><strong>Staking delegado.</strong> Los holders pueden delegar en autoridades de ancho de banda, financiadas por un pool fijo de 1M de tokens para arrancar.</p>
-  </section>
-
-  <section class="section">
-    <h2>Captura de valor: la pregunta central</h2>
-    <p>El modelo de largo plazo depende de los <strong>circuitos premium</strong> ("paid exits"): usuarios o aplicaciones que pagan por tráfico prioritario. El 35% de esos pagos se redirigiría a los pools de recompensas, para reemplazar gradualmente las emisiones del tesoro por ingresos reales.</p>
-    <p>El equipo informa que está trabajando en la implementación técnica (credenciales con firma ciega, cambios en cliente y relays). A la fecha, <strong>no hay ingresos premium on-chain medibles</strong>.</p>
-    <div class="callout">
-      Sin ingresos premium, el pool de recompensas solo se vacía. La sostenibilidad del modelo depende de algo que todavía no existe en producción.
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:14px;">CoinGecko muestra una alerta automática de GoPlus: el creador del contrato podría acuñar tokens, bloquear ventas o cambiar comisiones. Revisamos el código verificado en Etherscan (<em>AnyoneProtocolToken</em>, 0xFeAc…9C0F9) función por función.</p>
+    <div class="note-box success">
+      <strong>✅ Sin función de mint:</strong> los 100M se crearon una sola vez al desplegar el contrato. El supply fijo es real.<br>
+      <strong>✅ Sin comisiones configurables:</strong> no existe ninguna función para cambiar tasas de compra o venta.<br>
+      <strong>✅ withdrawStuckTokens:</strong> solo recupera tokens enviados por error al propio contrato, no fondos de usuarios.
     </div>
-  </section>
-
-  <section class="section">
-    <h2>Métricas de red y adopción</h2>
-    <div class="stat-grid">
-      <div class="stat"><div class="v">81,000</div><div class="l">Instalaciones del SDK (dato del equipo)</div></div>
-      <div class="stat"><div class="v">4,000+</div><div class="l">Relays antes de los incentivos (2024)</div></div>
-      <div class="stat"><div class="v">3 SO</div><div class="l">VPN de escritorio: macOS, Windows, Linux</div></div>
+    <div class="note-box danger">
+      <strong>⚠ Lista negra:</strong> el owner puede marcar direcciones como "bot" (<em>setBots</em>) y así bloquear sus transferencias. Es un poder dirigido, no un bloqueo general de ventas, pero existe. La alerta de GoPlus exageraba, pero no era vacía. Si el owner renuncia al control (o lo pasa a un multisig público), este riesgo desaparece.
     </div>
-    <p>Hay producto real y código abierto: mainnet y staking activos desde el cuarto trimestre de 2025, una VPN de escritorio en versión comunitaria y un SDK con adopción creciente. Lo que falta es la otra mitad de la ecuación: demanda que pague.</p>
-    <p><strong>Posición competitiva:</strong> frente a Tor (gratuito, sin token) y a las VPN centralizadas, ANyONe apuesta por incentivos para escalar la red. Frente a otras redes de ancho de banda DePIN, su nicho es la privacidad, no la reventa de tráfico.</p>
-  </section>
+  </div>
 
-  <section class="section">
-    <h2>Riesgos</h2>
-    <div class="callout">
-      <strong>Permisos del contrato (revisado on-chain).</strong> CoinGecko muestra una alerta automática de GoPlus sobre posibles cambios en el contrato. Revisamos el código verificado en Etherscan (contrato <em>AnyoneProtocolToken</em>, 0xFeAc…9C0F9): <strong>no existe función de mint</strong> (los 100M se crearon al desplegarlo) y <strong>no hay comisiones configurables</strong>. Sí existe un poder real: el owner puede marcar direcciones como "bot" (<em>setBots</em>) y así bloquear sus transferencias. La alerta exageraba, pero no era vacía. Conviene comprobar en "Read Contract → owner" si ese control sigue activo.
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">🔥</div>
+      <div class="section-title">Tokenómica — Emisión baja, sumidero anclado en dólares</div>
+      <div class="section-tag">Mecanismo</div>
     </div>
-    <div class="callout warn">
-      <strong>Liquidez fina tras un rally parabólico.</strong> El precio se multiplicó por ~3 en un mes, con el RSI en zona de sobrecompra, mientras la narrativa de privacidad volvía al mercado. Con un volumen diario de $0.5–2M, el precio se mueve fácil en ambas direcciones.
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:16px;">El pool de recompensas emite el 0.1% diario de lo que le queda: ~3.5% de inflación del circulante el primer año, decreciente después, con una vida media de ~693 días. Se reparte 70% para todos los relays, 20% para hardware y 10% para roles de autoridad y staking delegado. Cada relay de software bloquea 100 $ANYONE durante un mínimo de 180 días.</p>
+
+    <div class="pressure-meter">
+      <div class="meter-label">Presión de emisión (frente a otros DePIN analizados)</div>
+      <div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:25%;"></div></div>
+      <div class="meter-footer"><span>Baja</span><span style="color:#4ade80;font-weight:700;">✅ Moderada-baja y decreciente</span><span>Alta</span></div>
     </div>
-    <div class="callout warn">
-      <strong>Datos fragmentados.</strong> La migración ATOR → ANYONE dejó históricos inconsistentes entre fuentes. Verifica siempre la fecha del dato.
+
+    <div class="note-box warning">
+      <strong>⚠ Detalle estructural:</strong> la documentación ajusta el bloqueo por relay para mantener la entrada en torno a <strong>$100</strong>. Si el precio sube, se bloquean menos tokens por relay. El sumidero de tokens no crece con el precio: es un freno de oferta que se debilita justo cuando más se necesitaría.
     </div>
-  </section>
+  </div>
 
-  <section class="section">
-    <h2>Puntuación TokenFlow</h2>
-    <div class="score-row"><span>Estructura de supply</span><div class="bar"><span style="width:80%"></span></div><strong>8</strong></div>
-    <div class="score-row"><span>Mecánica del token</span><div class="bar"><span style="width:50%"></span></div><strong>5</strong></div>
-    <div class="score-row"><span>Métricas de red</span><div class="bar"><span style="width:50%"></span></div><strong>5</strong></div>
-    <div class="score-row"><span>Captura de valor</span><div class="bar"><span style="width:30%"></span></div><strong>3</strong></div>
-    <div class="score-row"><span>Riesgo y liquidez</span><div class="bar"><span style="width:40%"></span></div><strong>4</strong></div>
-    <div class="score-total">Total: 5/10</div>
-  </section>
-
-  <section class="section">
-    <div class="verdict">
-      <div class="big">Supply limpio, modelo de ingresos pendiente.</div>
-      <p>ANyONe tiene una de las estructuras de supply más ordenadas que hemos analizado y un producto que funciona. Pero la captura de valor sigue en el papel, el owner del contrato conserva una lista negra de direcciones y el precio acaba de triplicarse con poca liquidez.</p>
-      <p style="margin:0"><strong>Qué cambiaría la nota:</strong> paid exits en producción con pagos on-chain medibles, y la renuncia (o el traspaso a un multisig público) del control de lista negra del contrato.</p>
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">💰</div>
+      <div class="section-title">Captura de valor — La pregunta central</div>
+      <div class="section-tag">Revenue</div>
     </div>
-  </section>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:16px;">El modelo de largo plazo depende de los circuitos premium ("paid exits"): usuarios y apps que pagan por tráfico prioritario. El 35% de esos pagos se redirigiría a los pools de recompensas, para reemplazar gradualmente las emisiones del tesoro por ingresos reales.</p>
+    <div class="pressure-meter">
+      <div class="meter-label">Madurez del modelo de ingresos</div>
+      <div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:20%;"></div></div>
+      <div class="meter-footer"><span>En papel</span><span style="color:#f87171;">🔴 En desarrollo técnico — sin ingresos on-chain medibles</span><span>En producción</span></div>
+    </div>
+    <div class="note-box danger">
+      <strong>🔴 El riesgo real:</strong> sin ingresos premium, el pool de recompensas solo se vacía. La sostenibilidad del modelo depende de algo que todavía no existe en producción.
+    </div>
+  </div>
 
-  <p class="disclaimer">
-    Este análisis es educativo y no constituye consejo financiero. Los datos provienen de fuentes públicas (documentación oficial de Anyone, CoinGecko, CoinMarketCap, KuCoin, Kraken, Coinbase, OKX, Crypto.com) consultadas el 24 de septiembre de 2026 y pueden cambiar. Haz tu propia investigación.
-  </p>
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">⚖</div>
+      <div class="section-title">Argumentos alcistas vs. bajistas</div>
+      <div class="section-tag">Veredicto TokenFlow</div>
+    </div>
+    <div class="verdict-grid">
+      <div class="verdict-card verdict-bull">
+        <div class="verdict-title">🟢 Argumentos alcistas</div>
+        <div class="verdict-item">Mcap/FDV ~97%: el supply más distribuido de la serie</div>
+        <div class="verdict-item">Sin función de mint ni comisiones: supply fijo verificado on-chain</div>
+        <div class="verdict-item">Emisión baja (~3.5% el primer año) y decreciente</div>
+        <div class="verdict-item">Producto real: SDK con 81K instalaciones, VPN de escritorio</div>
+        <div class="verdict-item">Hardware propio que diversifica la red</div>
+        <div class="verdict-item">Narrativa de privacidad de vuelta en el mercado</div>
+      </div>
+      <div class="verdict-card verdict-bear">
+        <div class="verdict-title">🔴 Argumentos bajistas</div>
+        <div class="verdict-item">Captura de valor (paid exits) todavía en desarrollo</div>
+        <div class="verdict-item">El owner conserva una lista negra de direcciones</div>
+        <div class="verdict-item">~3x en un mes con volumen de $0.5–2M diarios</div>
+        <div class="verdict-item">Circulante inflado por billeteras del proyecto</div>
+        <div class="verdict-item">Bloqueo por relay anclado en dólares: el sumidero no escala</div>
+        <div class="verdict-item">Datos fragmentados tras la migración ATOR → ANYONE</div>
+      </div>
+    </div>
+  </div>
 
-</main>
+  <div class="final-verdict">
+    <div class="final-title">TokenFlow AI · Veredicto Final</div>
+    <div class="final-score">
+      <div class="score-number">5.0</div>
+      <div>
+        <div class="score-label">Supply limpio · Modelo de ingresos pendiente</div>
+        <div class="score-sub">sobre 10 · La estructura más ordenada de la serie, sin captura de valor todavía</div>
+      </div>
+    </div>
+    <div class="final-text">
+      ANyONe tiene una de las estructuras de supply más limpias que hemos analizado. Casi todo está distribuido, la emisión es baja y decreciente, y verificamos en el contrato que no se pueden crear tokens nuevos. Tras analizar 2Z e IP, con dos tercios del supply bloqueado, el contraste es evidente.<br><br>
+      El producto también existe: una red de relays con hardware propio, un SDK con adopción y una VPN de escritorio. Pero a la pregunta clave de TokenFlow, de dónde sale el valor del token, hoy no hay respuesta en producción. Los paid exits están en desarrollo, y sin ellos el pool de recompensas solo se vacía.<br><br>
+      A esto se suma el contexto: el precio se triplicó en un mes con poca liquidez, y el owner del contrato conserva un poder de lista negra. Ninguno de los dos es fatal, pero ambos piden cautela.<br><br>
+      <strong>¿Qué cambiaría el veredicto?</strong> Dos cosas: paid exits en producción con pagos on-chain medibles, y la renuncia del owner (o el traspaso a un multisig público) al control de lista negra. Con ambas, ANyONe podría re-ratear a 6.5–7/10.
+    </div>
+  </div>
 
-<footer class="footer">
-  <div class="tag">🔵 TokenFlow AI · Sin hype. Solo estructura.</div>
-  <div>Análisis semanales de tokenómica en AI, DePIN y RWA</div>
-  <a class="cta" href="https://t.me/TokenFlowAI">Únete en Telegram</a>
-  <a class="cta" href="https://wa.me/?text=An%C3%A1lisis%20de%20ANyONe%20(%24ANYONE)%20por%20TokenFlow%20AI%3A%20https%3A%2F%2Fbmisi70.github.io%2Ftokenflowai.github.io%2FTokenFlow_ANYONE_Analisis_2026_ES.html">Compartir por WhatsApp</a>
-</footer>
+  <div class="section" style="margin-top:20px;">
+    <div class="section-header">
+      <div class="section-icon icon-blue">👁</div>
+      <div class="section-title">Qué vigilar en los próximos 30–90 días</div>
+      <div class="section-tag">Lista de Monitoreo</div>
+    </div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Lanzamiento de paid exits:</strong> el indicador más importante. El primer flujo de pagos on-chain hacia los pools de recompensas validaría el modelo de captura de valor.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-red"></div><div class="watch-text"><strong>Owner del contrato:</strong> comprobar en Etherscan (Read Contract → owner) si el control de lista negra sigue activo o se renuncia a él.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-yellow"></div><div class="watch-text"><strong>Consolidación del precio:</strong> tras un ~3x con RSI en sobrecompra y volumen bajo, una corrección fuerte es posible. Observar si el volumen acompaña o se seca.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-purple"></div><div class="watch-text"><strong>Salidas de billeteras del proyecto:</strong> seguir en Etherscan los movimientos del pool de recompensas y de la fundación hacia exchanges.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Adopción del SDK y la VPN:</strong> nuevas integraciones en apps de terceros serían la señal de demanda que falta.</div></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong style="color:#a78bfa;">TokenFlow AI</strong> · Investigación de tokenómica AI y DePIN · Sin hype. Solo estructura.<br>
+  Fecha del análisis: 24 de septiembre de 2026 · Este análisis no constituye asesoramiento de inversión. DYOR.<br>
+  Fuentes: docs.anyone.io, Etherscan (contrato verificado), CoinGecko, CoinMarketCap, KuCoin, Kraken, Coinbase, OKX, Crypto.com<br>
+  <a href="https://t.me/TokenFlowAI">Únete en Telegram</a> · <a href="https://wa.me/?text=An%C3%A1lisis%20de%20ANyONe%20(%24ANYONE)%20por%20TokenFlow%20AI%3A%20https%3A%2F%2Fbmisi70.github.io%2Ftokenflowai.github.io%2FTokenFlow_ANYONE_Analisis_2026_ES.html">Compartir por WhatsApp</a>
+</div>
 
 </body>
 </html>
