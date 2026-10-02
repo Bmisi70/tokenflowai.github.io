@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenFlow AI – Análisis Arweave (AR) 2026</title>
+<script data-goatcounter="https://tokenflowai.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'JetBrains Mono', monospace; background: #0a0e1a; color: #e2e8f0; line-height: 1.7; font-size: 14px; }
+
+  .header { background: linear-gradient(135deg, #0a0e1a 0%, #0b2226 50%, #0a0e1a 100%); border-bottom: 1px solid #0d9488; padding: 44px 32px 36px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; background: radial-gradient(ellipse, rgba(45,212,191,0.10) 0%, transparent 70%); pointer-events: none; }
+  .brand { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #2dd4bf; margin-bottom: 14px; font-weight: 600; }
+  .title { font-size: 38px; font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -1px; }
+  .title span { color: #2dd4bf; }
+  .subtitle { font-size: 12px; color: #64748b; margin-bottom: 22px; letter-spacing: 1px; }
+  .verdict-badge { display: inline-block; padding: 8px 24px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid; font-family: 'JetBrains Mono', monospace; }
+  .badge-warning { background: #451a03; color: #fb923c; border-color: #9a3412; }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 36px 20px; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 36px; }
+  .stat-card { background: #0d1525; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; text-align: center; }
+  .stat-label { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .stat-value { font-size: 22px; font-weight: 800; color: #f8fafc; }
+  .stat-sub { font-size: 10px; color: #64748b; margin-top: 4px; }
+  .stat-teal { color: #2dd4bf; }
+  .stat-green { color: #4ade80; }
+  .stat-yellow { color: #fbbf24; }
+  .stat-red { color: #f87171; }
+  .stat-orange { color: #fb923c; }
+
+  .section { background: #0d1525; border: 1px solid #1e293b; border-radius: 8px; padding: 26px; margin-bottom: 18px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #1e293b; }
+  .section-icon { width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .icon-blue { background: #1e3a5f; }
+  .icon-red { background: #450a0a; }
+  .icon-yellow { background: #422006; }
+  .icon-green { background: #052e16; }
+  .icon-teal { background: #042f2e; }
+  .section-title { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+  .section-tag { font-size: 10px; color: #475569; margin-left: auto; letter-spacing: 1px; text-transform: uppercase; }
+
+  .concept-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .concept-card { background: #0b1f22; border: 1px solid #115e59; border-radius: 6px; padding: 16px; }
+  .concept-card-title { font-size: 11px; color: #2dd4bf; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .concept-card-text { font-size: 12px; color: #94a3b8; line-height: 1.6; }
+
+  .table-wrap { overflow-x: auto; }
+  .alloc-table { width: 100%; border-collapse: collapse; min-width: 520px; }
+  .alloc-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .alloc-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; font-size: 13px; vertical-align: middle; }
+  .alloc-table tr:last-child td { border-bottom: none; }
+  .alloc-table tr.stale td { color: #475569; }
+  .alloc-bar-wrap { background: #1e293b; border-radius: 2px; height: 5px; width: 90px; display: inline-block; vertical-align: middle; margin-left: 8px; }
+  .alloc-bar { height: 5px; border-radius: 2px; display: block; }
+
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+  .pill-green { background: #052e16; color: #4ade80; }
+  .pill-yellow { background: #422006; color: #fbbf24; }
+  .pill-red { background: #450a0a; color: #f87171; }
+  .pill-teal { background: #042f2e; color: #99f6e4; }
+
+  .pressure-meter { margin: 14px 0; }
+  .meter-label { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+  .meter-bar-wrap { background: #1e293b; border-radius: 3px; height: 10px; overflow: hidden; }
+  .meter-bar { height: 10px; border-radius: 3px; }
+  .meter-green { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .meter-orange { background: linear-gradient(90deg, #ea580c, #fb923c); }
+  .meter-red { background: linear-gradient(90deg, #dc2626, #f87171); }
+  .meter-yellow { background: linear-gradient(90deg, #ca8a04, #fbbf24); }
+  .meter-teal { background: linear-gradient(90deg, #0d9488, #2dd4bf); }
+  .meter-footer { display: flex; justify-content: space-between; font-size: 10px; color: #475569; margin-top: 4px; gap: 8px; }
+
+  .verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .verdict-card { border-radius: 6px; padding: 20px; }
+  .verdict-bull { background: #052e16; border: 1px solid #166534; }
+  .verdict-bear { background: #450a0a; border: 1px solid #7f1d1d; }
+  .verdict-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .verdict-bull .verdict-title { color: #4ade80; }
+  .verdict-bear .verdict-title { color: #f87171; }
+  .verdict-item { font-size: 12px; color: #cbd5e1; margin-bottom: 9px; padding-left: 18px; position: relative; line-height: 1.5; }
+  .verdict-item::before { content: '→'; position: absolute; left: 0; font-weight: 700; }
+  .verdict-bull .verdict-item::before { color: #4ade80; }
+  .verdict-bear .verdict-item::before { color: #f87171; }
+
+  .final-verdict { background: linear-gradient(135deg, #0b2226, #0f172a); border: 1px solid #0d9488; border-radius: 8px; padding: 30px; margin-top: 8px; }
+  .final-title { font-size: 11px; color: #2dd4bf; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 14px; font-weight: 700; }
+  .final-score { display: flex; align-items: center; gap: 22px; margin-bottom: 18px; }
+  .score-number { font-size: 68px; font-weight: 900; color: #fbbf24; line-height: 1; }
+  .score-label { font-size: 20px; font-weight: 700; color: #f1f5f9; }
+  .score-sub { font-size: 12px; color: #64748b; margin-top: 6px; }
+  .final-text { font-size: 13px; color: #cbd5e1; line-height: 1.9; }
+
+  .watch-item { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid #1e293b; font-size: 13px; }
+  .watch-item:last-child { border-bottom: none; }
+  .watch-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #22c55e; }
+  .dot-teal { background: #2dd4bf; }
+  .watch-text { color: #cbd5e1; }
+  .watch-text strong { color: #f8fafc; }
+
+  .note-box { background: #07181a; border-left: 3px solid #2dd4bf; border-radius: 0 6px 6px 0; padding: 14px 16px; font-size: 12px; color: #94a3b8; margin: 14px 0; line-height: 1.8; }
+  .note-box.warning { border-left-color: #f59e0b; background: #0d1105; }
+  .note-box.danger { border-left-color: #ef4444; background: #0d0808; }
+  .note-box.success { border-left-color: #22c55e; background: #050f05; }
+  .note-box strong { color: #e2e8f0; }
+
+  .footer { text-align: center; padding: 28px; color: #334155; font-size: 11px; border-top: 1px solid #1e293b; margin-top: 36px; letter-spacing: 0.5px; line-height: 2; }
+  .footer a { color: #2dd4bf; }
+
+  @media (max-width: 600px) {
+    .verdict-grid, .concept-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .score-number { font-size: 52px; }
+    .title { font-size: 28px; }
+    .final-score { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">🔵 TokenFlow AI · Investigación de Tokenómica DePIN</div>
+  <div class="title">Ar<span>weave</span> · AR</div>
+  <div class="subtitle">Análisis completo — Almacenamiento permanente con un fondo de 200 años · 2 de octubre de 2026</div>
+  <div class="verdict-badge badge-warning">⚠ Supply casi perfecto · Endowment difícil de auditar · Rally apalancado</div>
+</div>
+
+<div class="container">
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Precio (USD)</div><div class="stat-value stat-teal">$4.31</div><div class="stat-sub">2 oct. · rango 7d $4.03–5.13</div></div>
+    <div class="stat-card"><div class="stat-label">Cap. de Mercado</div><div class="stat-value">~$283M</div><div class="stat-sub">#160 CoinGecko</div></div>
+    <div class="stat-card"><div class="stat-label">FDV</div><div class="stat-value stat-green">~$283M</div><div class="stat-sub">Mcap/FDV = 100% ✅</div></div>
+    <div class="stat-card"><div class="stat-label">30 días</div><div class="stat-value stat-green">+90%</div><div class="stat-sub">14 días: +64%</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Circ.</div><div class="stat-value">65.65M</div><div class="stat-sub">99.5% del máximo</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Máx.</div><div class="stat-value">66M</div><div class="stat-sub">Fijo desde 2018</div></div>
+    <div class="stat-card"><div class="stat-label">Desde ATH</div><div class="stat-value stat-red">-95%</div><div class="stat-sub">ATH: $89.24</div></div>
+    <div class="stat-card"><div class="stat-label">OI perpetuos</div><div class="stat-value stat-orange">~$87M</div><div class="stat-sub">31% del Mcap ⚠️</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-teal">🗄</div>
+      <div class="section-title">¿Qué es Arweave? — Pagar una vez, guardar para siempre</div>
+      <div class="section-tag">Almacenamiento DePIN</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">Las nubes tradicionales cobran una suscripción: si dejas de pagar, tus datos desaparecen. Arweave invierte la lógica. Pagas una sola vez en AR y la red está diseñada para conservar el archivo durante al menos 200 años. Es una blockchain de capa 1, lanzada en 2018, dedicada exclusivamente al almacenamiento permanente: webs, NFTs, archivos históricos y, cada vez más, datos para IA.</p>
+
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="concept-card-title">Blockweave + SPoRA</div>
+        <div class="concept-card-text">Cada bloque se enlaza con el anterior y con un bloque aleatorio del pasado. Para minar, hay que demostrar acceso a datos antiguos: los mineros cobran por guardar datos reales, no por resolver hashes vacíos.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Pago único</div>
+        <div class="concept-card-text">El precio por subir datos se ajusta de forma dinámica según las condiciones de la red. Una parte va al minero y la mayor parte a un fondo del protocolo: el endowment.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">AO — la capa de cómputo</div>
+        <div class="concept-card-text">Mainnet desde febrero de 2025. Permite ejecutar procesos y agentes sobre los datos guardados en Arweave. Su token AO se lanzó sin preventa, con una parte de la emisión para holders de AR.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Uso real</div>
+        <div class="concept-card-text">Plataformas de NFT como Nifty Gateway y Rodeo migraron sus datos a Arweave. Es la infraestructura de referencia cuando un proyecto necesita que sus archivos no dependan de un servidor.</div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <strong>🔑 Contexto de la serie:</strong> La semana pasada analizamos ANyONe, con un supply ~97% distribuido. Arweave lleva esa limpieza al extremo: Mcap/FDV = 1. Pero ambos comparten la misma pregunta de fondo: si el supply ya no es el problema, ¿de dónde sale el valor del token?
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">📊</div>
+      <div class="section-title">Estructura del suministro — La más limpia de la serie</div>
+      <div class="section-tag">Supply Analysis</div>
+    </div>
+
+    <div class="table-wrap">
+      <table class="alloc-table">
+        <thead><tr><th>Categoría</th><th>Tokens</th><th>Estado</th><th>Riesgo</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Génesis (2018)</strong></td>
+            <td>55M <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:100%;background:#2dd4bf;"></div></div></td>
+            <td><span class="status-pill pill-green">Distribuido</span></td>
+            <td style="color:#4ade80;">Sin unlocks pendientes</td>
+          </tr>
+          <tr>
+            <td><strong>Recompensas de minería</strong></td>
+            <td>11M <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:20%;background:#fbbf24;"></div></div></td>
+            <td><span class="status-pill pill-yellow">~97% ya emitido</span></td>
+            <td style="color:#fbbf24;">Quedan &lt;0.4M por emitir</td>
+          </tr>
+          <tr>
+            <td><strong>Circulante actual</strong></td>
+            <td>65.65M <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:99%;background:#4ade80;"></div></div></td>
+            <td><span class="status-pill pill-teal">99.5% del máximo</span></td>
+            <td>Prácticamente sin dilución</td>
+          </tr>
+          <tr>
+            <td><strong>Endowment</strong></td>
+            <td>Variable <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:30%;background:#f87171;"></div></div></td>
+            <td><span class="status-pill pill-red">Sin dato público actualizado</span></td>
+            <td style="color:#f87171;">Difícil de auditar</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pressure-meter" style="margin-top:20px;">
+      <div class="meter-label">Mcap/FDV — comparativa con tokens analizados por TokenFlow AI</div>
+      <div style="display:grid;gap:8px;margin-top:8px;">
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#2dd4bf;font-weight:700;margin-bottom:3px;"><span>Arweave (AR)</span><span>100% ✅</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-teal" style="width:100%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>ANyONe (ANYONE)</span><span>~97%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:97%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>IoTeX (IOTX)</span><span>94%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:94%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>Akash (AKT)</span><span>75%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:75%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>Story Protocol (IP)</span><span>38%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-orange" style="width:38%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>DoubleZero (2Z)</span><span>35%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:35%;"></div></div></div>
+      </div>
+    </div>
+
+    <div class="note-box warning">
+      <strong>⚠ El giro estructural:</strong> con menos de 0.4M AR por emitir, el subsidio de minería prácticamente terminó. Desde ahora, los mineros dependen de dos fuentes: las comisiones por subir datos y los pagos del endowment. Arweave entra en la fase que Bitcoin vivirá dentro de un siglo: la seguridad de la red tiene que sostenerse sin emisión nueva.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">🏦</div>
+      <div class="section-title">El endowment — Un plan de pensiones para los datos</div>
+      <div class="section-tag">Mecanismo</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:16px;">Cuando alguien paga por subir datos, la mayor parte del pago (~85% según el diseño original) entra a un fondo controlado por el protocolo. Ese fondo libera AR a los mineros a lo largo del tiempo, proporcionalmente a los datos que demuestran almacenar. El cálculo asume, de forma conservadora, que el costo de almacenar cae cada año, igual que ha caído históricamente el precio del disco.</p>
+
+    <div class="pressure-meter">
+      <div class="meter-label">Efecto sobre la oferta líquida si el uso crece</div>
+      <div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:65%;"></div></div>
+      <div class="meter-footer"><span>Neutral</span><span style="color:#4ade80;font-weight:700;">✅ Sumidero potencial: más datos = más AR inmovilizado</span><span>Contractivo</span></div>
+    </div>
+
+    <div class="note-box success">
+      <strong>✅ Por qué puede funcionar:</strong> los tokens que entran al endowment salen del mercado y solo se liberan si los mineros los necesitan. Si la demanda de almacenamiento crece, la oferta líquida se reduce de forma mecánica. Y si el precio de AR cae, la red cobra más AR por cada upload, lo que inmoviliza todavía más tokens.
+    </div>
+    <div class="note-box danger">
+      <strong>🔴 Por qué hay que vigilarlo:</strong> el modelo depende de dos supuestos externos: que el costo del almacenamiento siga cayendo y que la demanda crezca. Además, no encontramos un dato público, consolidado y actualizado del tamaño del endowment. Para un mecanismo que debe durar 200 años, la transparencia es parte del producto.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">💰</div>
+      <div class="section-title">Captura de valor — Sin maquillaje</div>
+      <div class="section-tag">Revenue</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:16px;">La ficha de transparencia de Blockworks (2026) lo dice de forma directa: los holders de AR no tienen derecho formal a los ingresos del protocolo, a la tesorería ni a distribuciones de gobernanza. Las comisiones van a los mineros y al endowment. AR es el medio de pago de la red: su valor depende de que haga falta comprarlo para guardar datos.</p>
+    <div class="pressure-meter">
+      <div class="meter-label">Vínculo directo entre uso de la red y el holder</div>
+      <div class="meter-bar-wrap"><div class="meter-bar meter-orange" style="width:40%;"></div></div>
+      <div class="meter-footer"><span>Ninguno</span><span style="color:#fb923c;">⚠ Indirecto: demanda de pago + sumidero + AO</span><span>Directo</span></div>
+    </div>
+    <div class="note-box">
+      <strong>📌 El extra de AO:</strong> el token AO (máximo 21M, emisión con halvings) se lanzó en febrero de 2025 sin preventa. Una parte de la emisión se reparte a quienes tienen AR, en proporción a su saldo. Para el holder, es lo más cercano a un rendimiento. Pero ese valor depende del mercado de AO, no del uso de Arweave.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">⚔</div>
+      <div class="section-title">Posicionamiento competitivo</div>
+      <div class="section-tag">Almacenamiento</div>
+    </div>
+    <div class="table-wrap">
+      <table class="alloc-table">
+        <thead><tr><th>Proyecto</th><th>Modelo</th><th>vs. AR</th></tr></thead>
+        <tbody>
+          <tr style="background:#0b1f22;"><td><strong style="color:#2dd4bf;">Arweave (AR)</strong></td><td>Pago único, permanente</td><td>— Único con endowment de 200 años</td></tr>
+          <tr><td><strong>Filecoin (FIL)</strong></td><td>Contratos de almacenamiento por plazo</td><td>Más capacidad, pero hay que renovar</td></tr>
+          <tr><td><strong>Walrus (WAL)</strong></td><td>Almacenamiento por épocas sobre Sui</td><td>Nuevo competidor, más barato a corto plazo</td></tr>
+          <tr><td><strong>AWS / Google Cloud</strong></td><td>Suscripción mensual</td><td>Más barato y rápido, pero centralizado y revocable</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note-box" style="margin-top:14px;">
+      <strong>Posición única:</strong> Arweave no compite en precio por gigabyte, compite en permanencia. Para datos que deben sobrevivir a la empresa que los creó (registros históricos, NFTs, archivos públicos), no tiene un sustituto directo. El riesgo es que ese nicho no crezca lo suficiente para sostener la red sin subsidio.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📉</div>
+      <div class="section-title">El rally — ¿Spot o apalancamiento?</div>
+      <div class="section-tag">Estructura de Precio</div>
+    </div>
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">OI / Mcap</div><div class="stat-value stat-orange">31%</div><div class="stat-sub">~$87M en perpetuos</div></div>
+      <div class="stat-card"><div class="stat-label">Perps / Spot</div><div class="stat-value stat-red">10.3x</div><div class="stat-sub">Volumen 24h</div></div>
+      <div class="stat-card"><div class="stat-label">Volumen spot 24h</div><div class="stat-value">~$35M</div><div class="stat-sub">CoinGecko</div></div>
+      <div class="stat-card"><div class="stat-label">Profundidad ±2%</div><div class="stat-value stat-yellow">~$85–96K</div><div class="stat-sub">Binance AR/USDT</div></div>
+    </div>
+    <div class="pressure-meter"><div class="meter-label">Peso de los derivados en el movimiento</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:80%;"></div></div><div class="meter-footer"><span>Spot</span><span style="color:#f87171;">🔴 Rally empujado por perpetuos</span><span>Derivados</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Recorrido desde ATH ($89.24)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:95%;"></div></div><div class="meter-footer"><span>ATH</span><span style="color:#f87171;">-95% pese al +90% mensual</span><span>ATL</span></div></div>
+    <div class="note-box warning" style="margin-top:14px;">
+      Con un interés abierto equivalente al 31% de la capitalización y un volumen de perpetuos diez veces mayor que el spot, el +90% mensual lo empujan sobre todo los derivados. Este tipo de movimiento puede revertirse rápido cuando se liquidan posiciones. La estructura del token es sólida; la del precio actual, no tanto.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">⚠</div>
+      <div class="section-title">Riesgos operativos</div>
+      <div class="section-tag">Fiabilidad</div>
+    </div>
+    <div class="note-box danger">
+      <strong>Red detenida más de 24 horas:</strong> a inicios de 2026, la red estuvo más de un día sin producir bloques. Para una red que vende permanencia, la fiabilidad no es un detalle: es el producto. Un incidente así, sin subsidio de minería detrás, pone a prueba el modelo de incentivos.
+    </div>
+    <div class="note-box warning">
+      <strong>Dependencia de infraestructura externa:</strong> el acceso a los datos depende también de gateways y servicios de terceros. En 2026, un servicio que daba acceso a contenido de Arweave sufrió un secuestro de dominio. Los datos de la red no se ven afectados, pero la experiencia del usuario sí.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-teal">⚖</div>
+      <div class="section-title">Argumentos alcistas vs. bajistas</div>
+      <div class="section-tag">Veredicto TokenFlow</div>
+    </div>
+    <div class="verdict-grid">
+      <div class="verdict-card verdict-bull">
+        <div class="verdict-title">🟢 Argumentos alcistas</div>
+        <div class="verdict-item">Mcap/FDV = 100%: el supply más limpio de la serie</div>
+        <div class="verdict-item">Sin VC, sin unlocks, sin emisión relevante pendiente</div>
+        <div class="verdict-item">Endowment como sumidero mecánico de AR</div>
+        <div class="verdict-item">Producto único: permanencia sin suscripción</div>
+        <div class="verdict-item">AO como capa de cómputo y fuente de rendimiento para holders</div>
+        <div class="verdict-item">Uso real en NFTs, archivos y datos para IA</div>
+      </div>
+      <div class="verdict-card verdict-bear">
+        <div class="verdict-title">🔴 Argumentos bajistas</div>
+        <div class="verdict-item">El holder no tiene derecho formal a ingresos</div>
+        <div class="verdict-item">Endowment sin dato público actualizado</div>
+        <div class="verdict-item">Seguridad de la red ya sin subsidio de minería</div>
+        <div class="verdict-item">Rally empujado por derivados (OI 31% del Mcap)</div>
+        <div class="verdict-item">Red detenida +24h a inicios de 2026</div>
+        <div class="verdict-item">-95% desde ATH: confianza aún por reconstruir</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="final-verdict">
+    <div class="final-title">TokenFlow AI · Veredicto Final</div>
+    <div class="final-score">
+      <div class="score-number">6.0</div>
+      <div>
+        <div class="score-label">Supply impecable · Apuesta de 200 años</div>
+        <div class="score-sub">sobre 10 · La estructura más limpia de la serie, con la pregunta más difícil</div>
+      </div>
+    </div>
+    <div class="final-text">
+      Arweave tiene la estructura de supply más limpia que hemos analizado en TokenFlow AI. Mcap igual a FDV, sin asignaciones a fondos esperando su unlock y sin emisión relevante por delante. Frente a 2Z o IP, con dos tercios del supply bloqueado, es otro planeta.<br><br>
+      Su producto también es único: almacenamiento permanente con un solo pago. Y el endowment es una de las ideas tokenómicas más originales del sector: un fondo que convierte cada upload en AR inmovilizado y que, si el uso crece, aprieta la oferta líquida de forma mecánica.<br><br>
+      Pero la pregunta de fondo no cambia: el holder no tiene derecho a los ingresos, el endowment no se puede auditar con facilidad desde fuera y, con el subsidio de minería casi agotado, la seguridad de la red depende ahora de que haya demanda real. A esto se suma un rally de +90% en un mes empujado sobre todo por perpetuos.<br><br>
+      <strong>¿Qué cambiaría el veredicto?</strong> Datos públicos y actualizados del endowment, y una demanda de almacenamiento que crezca de forma sostenida sin depender de la especulación. Con ambas, Arweave podría re-ratear a 7–7.5/10. Si el rally apalancado se deshace sin que el uso acompañe, la estructura seguirá siendo sólida, pero el precio no.
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:20px;">
+    <div class="section-header">
+      <div class="section-icon icon-blue">👁</div>
+      <div class="section-title">Qué vigilar en los próximos 30–90 días</div>
+      <div class="section-tag">Lista de Monitoreo</div>
+    </div>
+    <div class="watch-item"><div class="watch-dot dot-red"></div><div class="watch-text"><strong>Interés abierto en perpetuos:</strong> si el OI sigue por encima del 30% del Mcap, el riesgo de una cascada de liquidaciones es alto. Seguir el funding rate y el OI en CoinGecko o Coinglass.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Datos del endowment:</strong> cualquier publicación oficial y actualizada de su tamaño sería el dato más valioso para evaluar la sostenibilidad del modelo.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-teal"></div><div class="watch-text"><strong>Volumen de datos subidos:</strong> el único motor real de demanda de AR. Seguir el crecimiento del tamaño de la red en exploradores como ViewBlock.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-yellow"></div><div class="watch-text"><strong>Estabilidad de la red:</strong> sin subsidio de minería, cualquier nueva interrupción en la producción de bloques sería una señal de alerta sobre los incentivos.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Adopción de AO:</strong> nuevos procesos y agentes sobre AO aumentan el uso de Arweave como capa de datos, y sostienen el valor de la distribución de AO a holders de AR.</div></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong style="color:#2dd4bf;">TokenFlow AI</strong> · Investigación de tokenómica AI, DePIN y RWA · Sin hype. Solo estructura.<br>
+  Fecha del análisis: 2 de octubre de 2026 · Este análisis no constituye asesoramiento de inversión. DYOR.<br>
+  Fuentes: CoinGecko, Blockworks (ficha de transparencia 2026), Crypto.com, Arrington Capital, documentación de Arweave y AO<br>
+  <a href="https://t.me/TokenFlowAI">Únete en Telegram</a> · <a href="https://wa.me/?text=An%C3%A1lisis%20de%20Arweave%20(%24AR)%20por%20TokenFlow%20AI%3A%20https%3A%2F%2Fbmisi70.github.io%2Ftokenflowai.github.io%2FTokenFlow_AR_Analisis_2026_ES.html">Compartir por WhatsApp</a>
+</div>
+
+</body>
+</html>
