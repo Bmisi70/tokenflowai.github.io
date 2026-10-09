@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenFlow AI – Análisis Walrus (WAL) 2026</title>
+<meta name="description" content="Análisis tokenómico de Walrus ($WAL): la red de almacenamiento de Sui. Supply, desbloqueos, captura de valor y riesgos. Sin hype. Solo estructura.">
+<script data-goatcounter="https://tokenflowai.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'JetBrains Mono', monospace; background: #0a0e1a; color: #e2e8f0; line-height: 1.7; font-size: 14px; }
+
+  .header { background: linear-gradient(135deg, #0a0e1a 0%, #0b1c2e 50%, #0a0e1a 100%); border-bottom: 1px solid #0284c7; padding: 44px 32px 36px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; background: radial-gradient(ellipse, rgba(56,189,248,0.10) 0%, transparent 70%); pointer-events: none; }
+  .brand { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #38bdf8; margin-bottom: 14px; font-weight: 600; }
+  .title { font-size: 38px; font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -1px; }
+  .title span { color: #38bdf8; }
+  .subtitle { font-size: 12px; color: #64748b; margin-bottom: 22px; letter-spacing: 1px; }
+  .verdict-badge { display: inline-block; padding: 8px 24px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid; font-family: 'JetBrains Mono', monospace; }
+  .badge-warning { background: #451a03; color: #fb923c; border-color: #9a3412; }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 36px 20px; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 36px; }
+  .stat-card { background: #0d1525; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; text-align: center; }
+  .stat-label { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .stat-value { font-size: 22px; font-weight: 800; color: #f8fafc; }
+  .stat-sub { font-size: 10px; color: #64748b; margin-top: 4px; }
+  .stat-sky { color: #38bdf8; }
+  .stat-green { color: #4ade80; }
+  .stat-yellow { color: #fbbf24; }
+  .stat-red { color: #f87171; }
+  .stat-orange { color: #fb923c; }
+
+  .section { background: #0d1525; border: 1px solid #1e293b; border-radius: 8px; padding: 26px; margin-bottom: 18px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #1e293b; }
+  .section-icon { width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .icon-blue { background: #1e3a5f; }
+  .icon-red { background: #450a0a; }
+  .icon-yellow { background: #422006; }
+  .icon-green { background: #052e16; }
+  .icon-sky { background: #082f49; }
+  .section-title { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+  .section-tag { font-size: 10px; color: #475569; margin-left: auto; letter-spacing: 1px; text-transform: uppercase; }
+
+  .concept-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .concept-card { background: #0a1a2a; border: 1px solid #075985; border-radius: 6px; padding: 16px; }
+  .concept-card-title { font-size: 11px; color: #38bdf8; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .concept-card-text { font-size: 12px; color: #94a3b8; line-height: 1.6; }
+
+  .table-wrap { overflow-x: auto; }
+  .alloc-table { width: 100%; border-collapse: collapse; min-width: 520px; }
+  .alloc-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .alloc-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; font-size: 13px; vertical-align: middle; }
+  .alloc-table tr:last-child td { border-bottom: none; }
+  .alloc-table tr.stale td { color: #475569; }
+  .alloc-bar-wrap { background: #1e293b; border-radius: 2px; height: 5px; width: 90px; display: inline-block; vertical-align: middle; margin-left: 8px; }
+  .alloc-bar { height: 5px; border-radius: 2px; display: block; }
+
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+  .pill-green { background: #052e16; color: #4ade80; }
+  .pill-yellow { background: #422006; color: #fbbf24; }
+  .pill-red { background: #450a0a; color: #f87171; }
+  .pill-sky { background: #082f49; color: #bae6fd; }
+
+  .pressure-meter { margin: 14px 0; }
+  .meter-label { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+  .meter-bar-wrap { background: #1e293b; border-radius: 3px; height: 10px; overflow: hidden; }
+  .meter-bar { height: 10px; border-radius: 3px; }
+  .meter-green { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .meter-orange { background: linear-gradient(90deg, #ea580c, #fb923c); }
+  .meter-red { background: linear-gradient(90deg, #dc2626, #f87171); }
+  .meter-yellow { background: linear-gradient(90deg, #ca8a04, #fbbf24); }
+  .meter-sky { background: linear-gradient(90deg, #0284c7, #38bdf8); }
+  .meter-footer { display: flex; justify-content: space-between; font-size: 10px; color: #475569; margin-top: 4px; gap: 8px; }
+
+  .verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .verdict-card { border-radius: 6px; padding: 20px; }
+  .verdict-bull { background: #052e16; border: 1px solid #166534; }
+  .verdict-bear { background: #450a0a; border: 1px solid #7f1d1d; }
+  .verdict-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .verdict-bull .verdict-title { color: #4ade80; }
+  .verdict-bear .verdict-title { color: #f87171; }
+  .verdict-item { font-size: 12px; color: #cbd5e1; margin-bottom: 9px; padding-left: 18px; position: relative; line-height: 1.5; }
+  .verdict-item::before { content: '→'; position: absolute; left: 0; font-weight: 700; }
+  .verdict-bull .verdict-item::before { color: #4ade80; }
+  .verdict-bear .verdict-item::before { color: #f87171; }
+
+  .final-verdict { background: linear-gradient(135deg, #0b1c2e, #0f172a); border: 1px solid #0284c7; border-radius: 8px; padding: 30px; margin-top: 8px; }
+  .final-title { font-size: 11px; color: #38bdf8; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 14px; font-weight: 700; }
+  .final-score { display: flex; align-items: center; gap: 22px; margin-bottom: 18px; }
+  .score-number { font-size: 68px; font-weight: 900; color: #fbbf24; line-height: 1; }
+  .score-label { font-size: 20px; font-weight: 700; color: #f1f5f9; }
+  .score-sub { font-size: 12px; color: #64748b; margin-top: 6px; }
+  .final-text { font-size: 13px; color: #cbd5e1; line-height: 1.9; }
+
+  .watch-item { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid #1e293b; font-size: 13px; }
+  .watch-item:last-child { border-bottom: none; }
+  .watch-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #22c55e; }
+  .dot-sky { background: #38bdf8; }
+  .watch-text { color: #cbd5e1; }
+  .watch-text strong { color: #f8fafc; }
+
+  .note-box { background: #07131d; border-left: 3px solid #38bdf8; border-radius: 0 6px 6px 0; padding: 14px 16px; font-size: 12px; color: #94a3b8; margin: 14px 0; line-height: 1.8; }
+  .note-box.warning { border-left-color: #f59e0b; background: #0d1105; }
+  .note-box.danger { border-left-color: #ef4444; background: #0d0808; }
+  .note-box.success { border-left-color: #22c55e; background: #050f05; }
+  .note-box strong { color: #e2e8f0; }
+
+  .footer { text-align: center; padding: 28px; color: #334155; font-size: 11px; border-top: 1px solid #1e293b; margin-top: 36px; letter-spacing: 0.5px; line-height: 2; }
+  .footer a { color: #38bdf8; }
+
+  @media (max-width: 600px) {
+    .verdict-grid, .concept-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .score-number { font-size: 52px; }
+    .title { font-size: 28px; }
+    .final-score { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">🔵 TokenFlow AI · Investigación de Tokenómica DePIN</div>
+  <div class="title">Wal<span>rus</span> · WAL</div>
+  <div class="subtitle">Análisis completo — La red de almacenamiento de Sui · 8 de octubre de 2026</div>
+  <div class="verdict-badge badge-warning">⚠ Red en crecimiento · 48% del supply por desbloquear · Perpetuos 17x el spot</div>
+</div>
+
+<div class="container">
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Precio (USD)</div><div class="stat-value stat-sky">$0.036</div><div class="stat-sub">8 oct. · rango 7d $0.033–0.038</div></div>
+    <div class="stat-card"><div class="stat-label">Cap. de Mercado</div><div class="stat-value">~$95M</div><div class="stat-sub">#300 CoinGecko</div></div>
+    <div class="stat-card"><div class="stat-label">FDV</div><div class="stat-value stat-orange">~$181M</div><div class="stat-sub">Mcap/FDV = 52% ⚠️</div></div>
+    <div class="stat-card"><div class="stat-label">Desde ATH</div><div class="stat-value stat-red">-95%</div><div class="stat-sub">ATH: $0.76</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Circ.</div><div class="stat-value">2.62B</div><div class="stat-sub">52% del máximo</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Máx.</div><div class="stat-value">5B</div><div class="stat-sub">Desbloqueo hasta 2033</div></div>
+    <div class="stat-card"><div class="stat-label">Datos guardados</div><div class="stat-value stat-green">686 TB</div><div class="stat-sub">Julio 2026</div></div>
+    <div class="stat-card"><div class="stat-label">Perps / Spot</div><div class="stat-value stat-red">17.2x</div><div class="stat-sub">Volumen 24h</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-sky">🦭</div>
+      <div class="section-title">¿Qué es Walrus? — Almacenamiento descentralizado sobre Sui</div>
+      <div class="section-tag">Almacenamiento DePIN</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">Walrus es una red de almacenamiento descentralizado creada por Mysten Labs, el equipo detrás de la blockchain Sui. Está pensada para archivos grandes ("blobs"): video, imágenes, datasets para IA e historiales de blockchains. Sui coordina la red y registra la propiedad de cada archivo, mientras que los datos viven en los nodos de Walrus. Mainnet desde marzo de 2025.</p>
+
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="concept-card-title">Red Stuff</div>
+        <div class="concept-card-text">Codificación bidimensional que reparte cada archivo en fragmentos entre los nodos. Con un factor de replicación de solo ~4.5x, la red puede reconstruir datos perdidos sin coordinación central.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Alquiler por épocas</div>
+        <div class="concept-card-text">A diferencia de Arweave, Walrus no vende permanencia. El usuario paga en WAL por mantener sus datos durante un número de épocas de 2 semanas. Más barato y flexible, pero hay que renovar.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Almacenamiento programable</div>
+        <div class="concept-card-text">Cada archivo tiene un objeto en Sui, así que los contratos inteligentes pueden controlar acceso, renovación o venta de datos. Es la base de su apuesta por los mercados de datos para IA.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Clientes reales</div>
+        <div class="concept-card-text">Team Liquid (contenido de esports), Chainbase y Allium (datos de blockchains), Blockticity (registros comerciales). Esta semana: Walrus Console y un proyecto de IA verificable de Mysten Labs con Google Cloud.</div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <strong>🔑 Contexto de la serie:</strong> La semana pasada analizamos Arweave: token impecable (Mcap/FDV = 100%), pero una red que guarda menos datos. Walrus es exactamente lo contrario: más uso, pero un token con la mitad del supply todavía por salir.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">📈</div>
+      <div class="section-title">La red — Donde Walrus sí está ganando</div>
+      <div class="section-tag">Métricas de Uso</div>
+    </div>
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Datos guardados</div><div class="stat-value stat-green">686 TB</div><div class="stat-sub">Julio 2026</div></div>
+      <div class="stat-card"><div class="stat-label">Nodos</div><div class="stat-value">95</div><div class="stat-sub">En 17 países</div></div>
+      <div class="stat-card"><div class="stat-label">Récord diario</div><div class="stat-value">21 TB</div><div class="stat-sub">29 ene. 2026</div></div>
+      <div class="stat-card"><div class="stat-label">Replicación</div><div class="stat-value stat-sky">~4.5x</div><div class="stat-sub">Red Stuff</div></div>
+    </div>
+    <div class="pressure-meter"><div class="meter-label">Crecimiento de datos almacenados</div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:80%;"></div></div><div class="meter-footer"><span>Estancado</span><span style="color:#4ade80;font-weight:700;">✅ ~450 TB en abril → 686 TB en julio</span><span>Fuerte</span></div></div>
+    <div class="note-box success">
+      <strong>✅ El dato más fuerte:</strong> en abril de 2026, Walrus ya había superado a Arweave en datos almacenados (~450 TB frente a ~385 TB, según BlockEden). Las cifras de julio provienen del paper técnico de Walrus aceptado en la conferencia académica ACM CCS 2026. Es uso real, con clientes que migran cientos de terabytes.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📊</div>
+      <div class="section-title">Estructura del suministro — El problema central</div>
+      <div class="section-tag">Supply Analysis</div>
+    </div>
+
+    <div class="table-wrap">
+      <table class="alloc-table">
+        <thead><tr><th>Categoría</th><th>% Supply</th><th>Estado</th><th>Riesgo</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Reserva comunitaria</strong></td>
+            <td>43% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:100%;background:#38bdf8;"></div></div></td>
+            <td><span class="status-pill pill-yellow">Lineal hasta mar. 2033</span></td>
+            <td style="color:#fbbf24;">Controlada por la Fundación</td>
+          </tr>
+          <tr>
+            <td><strong>Contribuidores clave</strong></td>
+            <td>30% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:70%;background:#ef4444;"></div></div></td>
+            <td><span class="status-pill pill-red">Cliff terminado (mar. 2026)</span></td>
+            <td style="color:#f87171;">⚠ Equipo + Mysten Labs</td>
+          </tr>
+          <tr>
+            <td><strong>Airdrops a usuarios</strong></td>
+            <td>10% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:23%;background:#4ade80;"></div></div></td>
+            <td><span class="status-pill pill-green">Parte distribuida</span></td>
+            <td>Reserva para futuros drops</td>
+          </tr>
+          <tr>
+            <td><strong>Subsidios de almacenamiento</strong></td>
+            <td>10% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:23%;background:#fb923c;"></div></div></td>
+            <td><span class="status-pill pill-yellow">Liberación gradual</span></td>
+            <td style="color:#fbbf24;">Financia recompensas</td>
+          </tr>
+          <tr>
+            <td><strong>Inversores</strong></td>
+            <td>7% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:16%;background:#f87171;"></div></div></td>
+            <td><span class="status-pill pill-red">Cliff terminado (mar. 2026)</span></td>
+            <td style="color:#f87171;">⚠ Entraron a ~$2,000M</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pressure-meter" style="margin-top:20px;">
+      <div class="meter-label">Mcap/FDV — comparativa con tokens analizados por TokenFlow AI</div>
+      <div style="display:grid;gap:8px;margin-top:8px;">
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>Arweave (AR)</span><span>100%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:100%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>ANyONe (ANYONE)</span><span>~97%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:97%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>Akash (AKT)</span><span>75%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:75%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#38bdf8;font-weight:700;margin-bottom:3px;"><span>Walrus (WAL)</span><span>52% ⚠</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-sky" style="width:52%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>Story Protocol (IP)</span><span>38%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-orange" style="width:38%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>DoubleZero (2Z)</span><span>35%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:35%;"></div></div></div>
+      </div>
+    </div>
+
+    <div class="note-box danger">
+      <strong>🔴 El dato que explica el precio:</strong> Walrus levantó $140M (a16z, Standard Crypto) a una valuación de ~$2,000M. Hoy el FDV es ~$181M, un 91% menos. Desde marzo de 2026 terminaron los cliffs de inversores y contribuidores, y el calendario libera ~60M WAL cada mes (~1.2% del supply) hasta 2033. Al precio actual son ~$2.2M mensuales, ~2.3% del Mcap: la demanda tiene que absorber esa oferta cada mes solo para que el precio no baje.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">🔥</div>
+      <div class="section-title">Tokenómica — Comisiones para stakers, subsidios de por medio</div>
+      <div class="section-tag">Mecanismo</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:16px;">El usuario paga el almacenamiento por adelantado en WAL. Ese pago se reparte a lo largo de las épocas contratadas entre los nodos de almacenamiento y quienes delegan WAL en ellos (staking delegado). Un 10% del supply está reservado para subsidiar esas recompensas mientras las comisiones crecen.</p>
+
+    <div class="pressure-meter">
+      <div class="meter-label">Vínculo entre uso de la red y el holder que hace staking</div>
+      <div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:65%;"></div></div>
+      <div class="meter-footer"><span>Ninguno</span><span style="color:#4ade80;font-weight:700;">✅ Directo: los delegadores cobran comisiones</span><span>Total</span></div>
+    </div>
+
+    <div class="note-box success">
+      <strong>✅ La gran diferencia con Arweave:</strong> en AR, el holder no tiene derecho a los ingresos del protocolo. En WAL, quien hace staking sí participa en las comisiones de almacenamiento. Es un modelo de captura de valor más directo.
+    </div>
+    <div class="note-box warning">
+      <strong>⚠ La letra chica:</strong> no encontramos un dato público consolidado de comisiones. Mientras los subsidios sigan pesando, no se puede separar cuánto del rendimiento viene de uso real y cuánto del 10% reservado.
+    </div>
+    <div class="note-box">
+      <strong>📌 Quema de tokens (según el diseño):</strong> mover el stake entre nodos en poco tiempo genera una penalización que se quema en parte, y el slashing a nodos que fallan también quema tokens. El sitio oficial presenta el slashing como una función futura, y no hay datos públicos del volumen quemado.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">⚔</div>
+      <div class="section-title">Posicionamiento competitivo</div>
+      <div class="section-tag">Almacenamiento</div>
+    </div>
+    <div class="table-wrap">
+      <table class="alloc-table">
+        <thead><tr><th>Proyecto</th><th>Modelo</th><th>Mcap/FDV</th><th>vs. WAL</th></tr></thead>
+        <tbody>
+          <tr style="background:#0a1a2a;"><td><strong style="color:#38bdf8;">Walrus (WAL)</strong></td><td>Alquiler por épocas</td><td>52%</td><td>— Más datos, token con overhang</td></tr>
+          <tr><td><strong>Arweave (AR)</strong></td><td>Pago único, permanente</td><td>100%</td><td>Token limpio, menos datos</td></tr>
+          <tr><td><strong>Filecoin (FIL)</strong></td><td>Contratos de almacenamiento</td><td>—</td><td>Más capacidad, modelo más complejo</td></tr>
+          <tr><td><strong>AWS / Google Cloud</strong></td><td>Suscripción mensual</td><td>—</td><td>Más baratos, pero centralizados</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note-box" style="margin-top:14px;">
+      <strong>Posición de Walrus:</strong> no compite en permanencia como Arweave, sino en costo, velocidad y programabilidad. Su gran ventaja es estar integrado con Sui; su gran dependencia, también. Si el ecosistema Sui pierde tracción, Walrus pierde su principal fuente de usuarios.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📉</div>
+      <div class="section-title">Estructura del precio — Derivados y desbloqueos</div>
+      <div class="section-tag">Estructura de Precio</div>
+    </div>
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Perps / Spot</div><div class="stat-value stat-red">17.2x</div><div class="stat-sub">Volumen 24h</div></div>
+      <div class="stat-card"><div class="stat-label">OI / Mcap</div><div class="stat-value stat-yellow">9.6%</div><div class="stat-sub">~$9.1M en perpetuos</div></div>
+      <div class="stat-card"><div class="stat-label">Abril 2026</div><div class="stat-value">~$0.098</div><div class="stat-sub">Hoy: ~$0.036</div></div>
+      <div class="stat-card"><div class="stat-label">30 días</div><div class="stat-value stat-green">+30%</div><div class="stat-sub">Rebote desde mínimos</div></div>
+    </div>
+    <div class="pressure-meter"><div class="meter-label">Recorrido desde ATH ($0.76)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:95%;"></div></div><div class="meter-footer"><span>ATH</span><span style="color:#f87171;">🔴 -95%, +81% sobre el mínimo de $0.020</span><span>ATL</span></div></div>
+    <div class="pressure-meter"><div class="meter-label">Presión de desbloqueos (~1.2% del supply al mes hasta 2033)</div><div class="meter-bar-wrap"><div class="meter-bar meter-orange" style="width:60%;"></div></div><div class="meter-footer"><span>Baja</span><span style="color:#fb923c;">⚠ Constante y larga</span><span>Alta</span></div></div>
+    <div class="note-box warning" style="margin-top:14px;">
+      El volumen de perpetuos es 17 veces el del spot: el precio de corto plazo lo marcan sobre todo los derivados. El interés abierto es menor que el de Arweave (9.6% del Mcap frente a 31%), así que el riesgo de cascada es más bajo, pero la presión de los desbloqueos mensuales es constante.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-sky">⚖</div>
+      <div class="section-title">Argumentos alcistas vs. bajistas</div>
+      <div class="section-tag">Veredicto TokenFlow</div>
+    </div>
+    <div class="verdict-grid">
+      <div class="verdict-card verdict-bull">
+        <div class="verdict-title">🟢 Argumentos alcistas</div>
+        <div class="verdict-item">686 TB guardados, más que Arweave desde abril</div>
+        <div class="verdict-item">Clientes reales migrando cientos de TB</div>
+        <div class="verdict-item">Los stakers participan en las comisiones</div>
+        <div class="verdict-item">Tecnología eficiente (Red Stuff, ~4.5x)</div>
+        <div class="verdict-item">Respaldo de Mysten Labs y proyecto con Google Cloud</div>
+        <div class="verdict-item">Narrativa de datos para IA con producto real</div>
+      </div>
+      <div class="verdict-card verdict-bear">
+        <div class="verdict-title">🔴 Argumentos bajistas</div>
+        <div class="verdict-item">Mcap/FDV = 52%: 48% del supply por desbloquear</div>
+        <div class="verdict-item">~60M WAL nuevos cada mes hasta 2033</div>
+        <div class="verdict-item">Inversores y equipo ya sin cliff</div>
+        <div class="verdict-item">Comisiones reales sin dato público</div>
+        <div class="verdict-item">Perpetuos 17x el spot</div>
+        <div class="verdict-item">Dependencia fuerte del ecosistema Sui</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="final-verdict">
+    <div class="final-title">TokenFlow AI · Veredicto Final</div>
+    <div class="final-score">
+      <div class="score-number">5.0</div>
+      <div>
+        <div class="score-label">La red ganó · El token aún no</div>
+        <div class="score-sub">sobre 10 · Uso real y creciente, lastrado por un supply a medio desbloquear</div>
+      </div>
+    </div>
+    <div class="final-text">
+      Walrus es, en uso, uno de los proyectos de almacenamiento más exitosos del ciclo. En poco más de un año pasó a guardar más datos que Arweave, con clientes que migran cientos de terabytes y una tecnología publicada en una de las conferencias académicas de seguridad más exigentes. Y a diferencia de Arweave, quien hace staking participa en las comisiones.<br><br>
+      El problema es el token. Con solo el 52% del supply en circulación, ~60M WAL nuevos cada mes hasta 2033 y los cliffs de inversores y equipo ya terminados, la oferta crece de forma constante. Los inversores entraron a ~$2,000M; hoy el FDV es ~$181M. El mercado ya castigó mucho, pero la presión sigue.<br><br>
+      La comparación con la semana pasada lo resume: Arweave tiene el token impecable y menos datos; Walrus, más datos y el token pesado. Ninguno de los dos tiene todavía las dos cosas a la vez.<br><br>
+      <strong>¿Qué cambiaría el veredicto?</strong> Datos públicos de comisiones que muestren que el uso real ya supera a los subsidios, y una demanda de almacenamiento que crezca más rápido que los desbloqueos. Con ambas, Walrus podría re-ratear a 6.5–7/10.
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:20px;">
+    <div class="section-header">
+      <div class="section-icon icon-blue">👁</div>
+      <div class="section-title">Qué vigilar en los próximos 30–90 días</div>
+      <div class="section-tag">Lista de Monitoreo</div>
+    </div>
+    <div class="watch-item"><div class="watch-dot dot-red"></div><div class="watch-text"><strong>Desbloqueos mensuales (día 27):</strong> seguir en Tokenomist o tokenomics.com cuánto se libera y a quién. Los envíos de wallets de inversores a exchanges serían la señal de alerta.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Datos almacenados:</strong> el motor de la tesis. Si el crecimiento de abril a julio (~450 a 686 TB) se mantiene, la demanda de WAL para pagar almacenamiento sube.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-yellow"></div><div class="watch-text"><strong>Comisiones vs. subsidios:</strong> cualquier publicación oficial de ingresos por almacenamiento sería el dato más valioso para medir la sostenibilidad del modelo.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-sky"></div><div class="watch-text"><strong>Proyectos de IA:</strong> la integración con Google Cloud y Walrus Console. Si se traducen en volumen de datos, validan la narrativa de mercados de datos para IA.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-red"></div><div class="watch-text"><strong>Salud del ecosistema Sui:</strong> la principal fuente de usuarios de Walrus. Una caída de actividad en Sui se traslada directamente a Walrus.</div></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong style="color:#38bdf8;">TokenFlow AI</strong> · Investigación de tokenómica AI, DePIN y RWA · Sin hype. Solo estructura.<br>
+  Fecha del análisis: 8 de octubre de 2026 · Este análisis no constituye asesoramiento de inversión. DYOR.<br>
+  Fuentes: CoinGecko, walrus.xyz, paper técnico de Walrus (ACM CCS 2026), tokenomics.com, 4Pillars, BlockEden, Everstake<br>
+  <a href="https://t.me/TokenFlowAI">Únete en Telegram</a> · <a href="https://wa.me/?text=An%C3%A1lisis%20de%20Walrus%20(%24WAL)%20por%20TokenFlow%20AI%3A%20https%3A%2F%2Fbmisi70.github.io%2Ftokenflowai.github.io%2FTokenFlow_WAL_Analisis_2026_ES.html">Compartir por WhatsApp</a>
+</div>
+
+</body>
+</html>
