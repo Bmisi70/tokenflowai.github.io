@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenFlow AI – Análisis Maple Finance (SYRUP) 2026</title>
+<meta name="description" content="Análisis tokenómico de Maple Finance ($SYRUP): ingresos reales, recompras, supply y riesgos. Sin hype. Solo estructura.">
+<script data-goatcounter="https://tokenflowai.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'JetBrains Mono', monospace; background: #0a0e1a; color: #e2e8f0; line-height: 1.7; font-size: 14px; }
+
+  .header { background: linear-gradient(135deg, #0a0e1a 0%, #200d16 50%, #0a0e1a 100%); border-bottom: 1px solid #e11d48; padding: 44px 32px 36px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; background: radial-gradient(ellipse, rgba(251,113,133,0.10) 0%, transparent 70%); pointer-events: none; }
+  .brand { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #fb7185; margin-bottom: 14px; font-weight: 600; }
+  .title { font-size: 38px; font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -1px; }
+  .title span { color: #fb7185; }
+  .subtitle { font-size: 12px; color: #64748b; margin-bottom: 22px; letter-spacing: 1px; }
+  .verdict-badge { display: inline-block; padding: 8px 24px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid; font-family: 'JetBrains Mono', monospace; }
+  .badge-warning { background: #451a03; color: #fb923c; border-color: #9a3412; }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 36px 20px; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 36px; }
+  .stat-card { background: #0d1525; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; text-align: center; }
+  .stat-label { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .stat-value { font-size: 22px; font-weight: 800; color: #f8fafc; }
+  .stat-sub { font-size: 10px; color: #64748b; margin-top: 4px; }
+  .stat-rose { color: #fb7185; }
+  .stat-green { color: #4ade80; }
+  .stat-yellow { color: #fbbf24; }
+  .stat-red { color: #f87171; }
+  .stat-orange { color: #fb923c; }
+
+  .section { background: #0d1525; border: 1px solid #1e293b; border-radius: 8px; padding: 26px; margin-bottom: 18px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #1e293b; }
+  .section-icon { width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .icon-blue { background: #1e3a5f; }
+  .icon-red { background: #450a0a; }
+  .icon-yellow { background: #422006; }
+  .icon-green { background: #052e16; }
+  .icon-rose { background: #4c0519; }
+  .section-title { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+  .section-tag { font-size: 10px; color: #475569; margin-left: auto; letter-spacing: 1px; text-transform: uppercase; }
+
+  .concept-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .concept-card { background: #1f0d14; border: 1px solid #9f1239; border-radius: 6px; padding: 16px; }
+  .concept-card-title { font-size: 11px; color: #fb7185; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .concept-card-text { font-size: 12px; color: #94a3b8; line-height: 1.6; }
+
+  .table-wrap { overflow-x: auto; }
+  .alloc-table { width: 100%; border-collapse: collapse; min-width: 520px; }
+  .alloc-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .alloc-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; font-size: 13px; vertical-align: middle; }
+  .alloc-table tr:last-child td { border-bottom: none; }
+  .alloc-table tr.stale td { color: #475569; }
+  .alloc-bar-wrap { background: #1e293b; border-radius: 2px; height: 5px; width: 90px; display: inline-block; vertical-align: middle; margin-left: 8px; }
+  .alloc-bar { height: 5px; border-radius: 2px; display: block; }
+
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+  .pill-green { background: #052e16; color: #4ade80; }
+  .pill-yellow { background: #422006; color: #fbbf24; }
+  .pill-red { background: #450a0a; color: #f87171; }
+  .pill-rose { background: #4c0519; color: #fecdd3; }
+
+  .pressure-meter { margin: 14px 0; }
+  .meter-label { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+  .meter-bar-wrap { background: #1e293b; border-radius: 3px; height: 10px; overflow: hidden; }
+  .meter-bar { height: 10px; border-radius: 3px; }
+  .meter-green { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .meter-orange { background: linear-gradient(90deg, #ea580c, #fb923c); }
+  .meter-red { background: linear-gradient(90deg, #dc2626, #f87171); }
+  .meter-yellow { background: linear-gradient(90deg, #ca8a04, #fbbf24); }
+  .meter-rose { background: linear-gradient(90deg, #e11d48, #fb7185); }
+  .meter-footer { display: flex; justify-content: space-between; font-size: 10px; color: #475569; margin-top: 4px; gap: 8px; }
+
+  .verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .verdict-card { border-radius: 6px; padding: 20px; }
+  .verdict-bull { background: #052e16; border: 1px solid #166534; }
+  .verdict-bear { background: #450a0a; border: 1px solid #7f1d1d; }
+  .verdict-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .verdict-bull .verdict-title { color: #4ade80; }
+  .verdict-bear .verdict-title { color: #f87171; }
+  .verdict-item { font-size: 12px; color: #cbd5e1; margin-bottom: 9px; padding-left: 18px; position: relative; line-height: 1.5; }
+  .verdict-item::before { content: '→'; position: absolute; left: 0; font-weight: 700; }
+  .verdict-bull .verdict-item::before { color: #4ade80; }
+  .verdict-bear .verdict-item::before { color: #f87171; }
+
+  .final-verdict { background: linear-gradient(135deg, #200d16, #0f172a); border: 1px solid #e11d48; border-radius: 8px; padding: 30px; margin-top: 8px; }
+  .final-title { font-size: 11px; color: #fb7185; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 14px; font-weight: 700; }
+  .final-score { display: flex; align-items: center; gap: 22px; margin-bottom: 18px; }
+  .score-number { font-size: 68px; font-weight: 900; color: #fbbf24; line-height: 1; }
+  .score-label { font-size: 20px; font-weight: 700; color: #f1f5f9; }
+  .score-sub { font-size: 12px; color: #64748b; margin-top: 6px; }
+  .final-text { font-size: 13px; color: #cbd5e1; line-height: 1.9; }
+
+  .watch-item { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid #1e293b; font-size: 13px; }
+  .watch-item:last-child { border-bottom: none; }
+  .watch-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #22c55e; }
+  .dot-rose { background: #fb7185; }
+  .watch-text { color: #cbd5e1; }
+  .watch-text strong { color: #f8fafc; }
+
+  .note-box { background: #160a0f; border-left: 3px solid #fb7185; border-radius: 0 6px 6px 0; padding: 14px 16px; font-size: 12px; color: #94a3b8; margin: 14px 0; line-height: 1.8; }
+  .note-box.warning { border-left-color: #f59e0b; background: #0d1105; }
+  .note-box.danger { border-left-color: #ef4444; background: #0d0808; }
+  .note-box.success { border-left-color: #22c55e; background: #050f05; }
+  .note-box strong { color: #e2e8f0; }
+
+  .footer { text-align: center; padding: 28px; color: #334155; font-size: 11px; border-top: 1px solid #1e293b; margin-top: 36px; letter-spacing: 0.5px; line-height: 2; }
+  .footer a { color: #fb7185; }
+
+  @media (max-width: 600px) {
+    .verdict-grid, .concept-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .score-number { font-size: 52px; }
+    .title { font-size: 28px; }
+    .final-score { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">🔵 TokenFlow AI · Investigación de Tokenómica RWA</div>
+  <div class="title">Maple · <span>SYRUP</span></div>
+  <div class="subtitle">Análisis completo — Crédito institucional on-chain con ingresos reales · 16 de octubre de 2026</div>
+  <div class="verdict-badge badge-warning">✅ Ingresos y recompras reales · ⚠ Riesgo de crédito · Sin supply máximo fijo</div>
+</div>
+
+<div class="container">
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Precio (USD)</div><div class="stat-value stat-rose">$0.20</div><div class="stat-sub">16 oct. · rango 7d $0.195–0.27</div></div>
+    <div class="stat-card"><div class="stat-label">Cap. de Mercado</div><div class="stat-value">~$236M</div><div class="stat-sub">#167 CoinGecko</div></div>
+    <div class="stat-card"><div class="stat-label">FDV</div><div class="stat-value stat-green">~$256M</div><div class="stat-sub">Mcap/FDV = 92% ✅</div></div>
+    <div class="stat-card"><div class="stat-label">Desde ATH</div><div class="stat-value stat-red">-69%</div><div class="stat-sub">ATH: $0.65</div></div>
+    <div class="stat-card"><div class="stat-label">AUM</div><div class="stat-value stat-green">~$4.7B</div><div class="stat-sub">+81% interanual (H1)</div></div>
+    <div class="stat-card"><div class="stat-label">TVL</div><div class="stat-value">~$2.75B</div><div class="stat-sub">Mcap/TVL = 0.09</div></div>
+    <div class="stat-card"><div class="stat-label">Ingresos sept.</div><div class="stat-value stat-green">$1.57M</div><div class="stat-sub">Revenue del protocolo</div></div>
+    <div class="stat-card"><div class="stat-label">Recompra sept.</div><div class="stat-value stat-rose">$314K</div><div class="stat-sub">1.37M SYRUP</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-rose">🍁</div>
+      <div class="section-title">¿Qué es Maple? — Crédito institucional on-chain</div>
+      <div class="section-tag">RWA / Crédito</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">Maple Finance, fundada en 2019 por exbanqueros y profesionales del crédito, presta a instituciones cripto (fondos, market makers, empresas) contra garantías superiores al valor del préstamo. Los prestamistas reciben los intereses que pagan esos prestatarios, y Maple cobra una comisión por gestionar el proceso. Con el producto Syrup, cualquier usuario de DeFi puede acceder a ese rendimiento institucional, hoy en torno al 5% anual en dólares.</p>
+
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="concept-card-title">syrupUSDC / syrupUSDT</div>
+        <div class="concept-card-text">Tokens de rendimiento que representan depósitos en el motor de préstamos de Maple. Rinden ~5.1% anual y se usan en otros protocolos de DeFi.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Préstamos con garantía</div>
+        <div class="concept-card-text">Los prestatarios pasan un proceso de evaluación y depositan garantías en activos digitales. Tras el colapso de 2022, el modelo pasó de préstamos sin garantía a préstamos sobregarantizados.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Distribución institucional</div>
+        <div class="concept-card-text">Integraciones con Anchorage Digital, BitGo, Morpho y Aave; syrupUSDG en Robinhood; un acuerdo de préstamo con Kraken y servicios bancarios con IRACE Digital Bank.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">El token SYRUP</div>
+        <div class="concept-card-text">Token de gobernanza de Maple. Desde finales de 2025, su valor se vincula a los ingresos del protocolo mediante recompras mensuales con reglas públicas.</div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <strong>🔑 Contexto de la serie:</strong> ANyONe, Arweave y Walrus terminaron con la misma pregunta abierta: ¿de dónde sale el valor del token? Maple es el primer caso en semanas con una respuesta medible: ingresos mensuales publicados y una parte destinada a comprar SYRUP en el mercado.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">📈</div>
+      <div class="section-title">El negocio — Creciendo contra la marea</div>
+      <div class="section-tag">Métricas Fundamentales</div>
+    </div>
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">AUM H1 2026</div><div class="stat-value stat-green">$4.6B</div><div class="stat-sub">+81% interanual</div></div>
+      <div class="stat-card"><div class="stat-label">Ingresos Q2</div><div class="stat-value stat-green">+47%</div><div class="stat-sub">vs. Q2 2025</div></div>
+      <div class="stat-card"><div class="stat-label">TVL de DeFi</div><div class="stat-value stat-red">-38%</div><div class="stat-sub">Mismo período</div></div>
+      <div class="stat-card"><div class="stat-label">Mcap / ingresos</div><div class="stat-value stat-yellow">~12x</div><div class="stat-sub">Anualizado (sept.)</div></div>
+    </div>
+    <div class="note-box success">
+      <strong>✅ El dato más fuerte:</strong> según su propio informe semestral, Maple cerró el primer semestre de 2026 con $4.6B de AUM (+81% interanual) y unos ingresos del segundo trimestre un 47% superiores al año anterior, mientras el TVL total de DeFi caía cerca de un 38%. La demanda institucional de crédito on-chain se comportó de forma estructural, no cíclica.
+    </div>
+    <div class="note-box">
+      <strong>📌 Fees ≠ revenue:</strong> en un día reciente, Maple generó ~$812K en comisiones (fees), pero solo ~$99K quedaron como ingreso del protocolo (revenue), según Token Terminal. La mayor parte de los intereses va a los prestamistas. Para valuar el token, el número que importa es el revenue.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">🔄</div>
+      <div class="section-title">Captura de valor — Recompras con reglas (MIP-021)</div>
+      <div class="section-tag">Mecanismo</div>
+    </div>
+    <div class="table-wrap">
+      <table class="alloc-table">
+        <thead><tr><th>Ingresos mensuales</th><th>% a recompras</th><th>Estado</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Menos de $1.5M</strong></td><td>10% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:33%;background:#fbbf24;"></div></div></td><td><span class="status-pill pill-yellow">Tramo bajo</span></td></tr>
+          <tr style="background:#1f0d14;"><td><strong style="color:#fb7185;">$1.5M – $2M</strong></td><td>20% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:66%;background:#fb7185;"></div></div></td><td><span class="status-pill pill-rose">Septiembre 2026</span></td></tr>
+          <tr><td><strong>Más de $2M</strong></td><td>30% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:100%;background:#4ade80;"></div></div></td><td><span class="status-pill pill-green">Objetivo</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note-box success" style="margin-top:14px;">
+      <strong>✅ Septiembre 2026 en la práctica:</strong> ingresos de $1.57M → 20% destinado a recompras → $314,116 → 1,371,166 SYRUP comprados a un precio medio de $0.229. El mecanismo está escalonado: cuanto más gana Maple, mayor es el porcentaje que vuelve al token.
+    </div>
+    <div class="note-box">
+      <strong>📌 El cambio de 2025:</strong> en octubre de 2025, los holders aprobaron con un 91% de apoyo terminar las recompensas de staking y reemplazarlas por recompras. Menos emisión nueva para pagar staking y más demanda del propio protocolo: lo contrario de lo que hace la mayoría de los tokens.
+    </div>
+    <div class="pressure-meter">
+      <div class="meter-label">Vínculo entre ingresos del protocolo y el token</div>
+      <div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:80%;"></div></div>
+      <div class="meter-footer"><span>Ninguno</span><span style="color:#4ade80;font-weight:700;">✅ Directo y medible: recompras mensuales</span><span>Total</span></div>
+    </div>
+    <div class="note-box warning">
+      <strong>⚠ La letra chica:</strong> las recompras de septiembre equivalen a ~0.12% del supply circulante. A este ritmo, ~1.4% al año. Es un soporte real, pero no suficiente para mover el precio por sí solo frente al sentimiento del mercado. Además, Maple aclara que la recompra no es un dividendo ni un reparto de beneficios.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">📊</div>
+      <div class="section-title">Estructura del suministro — Casi todo circula, pero sin tope</div>
+      <div class="section-tag">Supply Analysis</div>
+    </div>
+    <div class="table-wrap">
+      <table class="alloc-table">
+        <thead><tr><th>Métrica</th><th>Valor</th><th>Lectura</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Circulante</strong></td><td>1.167B</td><td style="color:#4ade80;">92% del total</td></tr>
+          <tr><td><strong>Total</strong></td><td>1.268B</td><td>Incluye tesorería y tokens no circulantes</td></tr>
+          <tr><td><strong>Máximo</strong></td><td>Ilimitado</td><td style="color:#fbbf24;">⚠ Sin tope fijo</td></tr>
+          <tr><td><strong>Emisión para staking</strong></td><td>Terminada (nov. 2025)</td><td style="color:#4ade80;">Antes: 5% anual</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pressure-meter" style="margin-top:20px;">
+      <div class="meter-label">Mcap/FDV — comparativa con tokens analizados por TokenFlow AI</div>
+      <div style="display:grid;gap:8px;margin-top:8px;">
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>Arweave (AR)</span><span>100%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:100%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>ANyONe (ANYONE)</span><span>~97%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:97%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#fb7185;font-weight:700;margin-bottom:3px;"><span>Maple (SYRUP)</span><span>92% ✅</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-rose" style="width:92%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>Walrus (WAL)</span><span>52%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-orange" style="width:52%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>DoubleZero (2Z)</span><span>35%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:35%;"></div></div></div>
+      </div>
+    </div>
+
+    <div class="note-box warning">
+      <strong>⚠ Sin supply máximo fijo:</strong> CoinGecko muestra el máximo de SYRUP como ilimitado. Hasta 2025, el token tenía una inflación anual del 5% destinada al staking; esa emisión terminó con el fin del staking. Aun así, sin un tope en el contrato, conviene vigilar el supply total cada trimestre.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">⚠</div>
+      <div class="section-title">Riesgos — El negocio es prestar dinero</div>
+      <div class="section-tag">Riesgo de Crédito</div>
+    </div>
+    <div class="note-box danger">
+      <strong>🔴 Riesgo de crédito:</strong> si los prestatarios no pagan y las garantías no alcanzan, el negocio sufre. En 2022, con su modelo anterior de préstamos sin garantía, Maple sufrió impagos importantes. Hoy exige garantías superiores al préstamo, y en la caída del 10 de octubre de 2025 cumplió todas las llamadas de margen en pocas horas. El riesgo es menor, pero no es cero.
+    </div>
+    <div class="note-box warning">
+      <strong>⚠ Dependencia del mercado cripto:</strong> la demanda de préstamos y el valor de las garantías dependen del ciclo cripto. Un mercado bajista prolongado reduce la demanda de crédito y presiona los ingresos.
+    </div>
+    <div class="note-box warning">
+      <strong>⚠ Riesgo regulatorio:</strong> Maple opera en la frontera entre las finanzas tradicionales y DeFi. Cambios regulatorios sobre crédito o productos de rendimiento podrían afectar su distribución.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📉</div>
+      <div class="section-title">Estructura del precio</div>
+      <div class="section-tag">Mercado</div>
+    </div>
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Perps / Spot</div><div class="stat-value stat-red">11.2x</div><div class="stat-sub">Volumen 24h</div></div>
+      <div class="stat-card"><div class="stat-label">OI / Mcap</div><div class="stat-value stat-yellow">15.7%</div><div class="stat-sub">~$37M en perpetuos</div></div>
+      <div class="stat-card"><div class="stat-label">7 días</div><div class="stat-value stat-red">-10.8%</div><div class="stat-sub">Caída del sector RWA</div></div>
+      <div class="stat-card"><div class="stat-label">Volumen 24h</div><div class="stat-value">~$7.6M</div><div class="stat-sub">Spot</div></div>
+    </div>
+    <div class="pressure-meter"><div class="meter-label">Recorrido desde ATH ($0.65)</div><div class="meter-bar-wrap"><div class="meter-bar meter-orange" style="width:69%;"></div></div><div class="meter-footer"><span>ATH</span><span style="color:#fb923c;">⚠ -69%, +137% sobre el mínimo de $0.085</span><span>ATL</span></div></div>
+    <div class="note-box warning" style="margin-top:14px;">
+      El negocio crece, pero el precio sigue el sentimiento del mercado y del sector RWA. Con perpetuos que mueven 11 veces el volumen del spot, el corto plazo lo marcan los derivados. La diferencia con otros tokens es que aquí hay un comprador recurrente: el propio protocolo.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-rose">⚖</div>
+      <div class="section-title">Argumentos alcistas vs. bajistas</div>
+      <div class="section-tag">Veredicto TokenFlow</div>
+    </div>
+    <div class="verdict-grid">
+      <div class="verdict-card verdict-bull">
+        <div class="verdict-title">🟢 Argumentos alcistas</div>
+        <div class="verdict-item">Ingresos reales: $1.57M en septiembre de 2026</div>
+        <div class="verdict-item">AUM +81% interanual en un mercado bajista</div>
+        <div class="verdict-item">Recompras mensuales con reglas públicas</div>
+        <div class="verdict-item">Fin del staking: menos emisión nueva</div>
+        <div class="verdict-item">Mcap/FDV = 92%, sin muro de desbloqueos</div>
+        <div class="verdict-item">Distribución institucional (Robinhood, Kraken, Aave)</div>
+      </div>
+      <div class="verdict-card verdict-bear">
+        <div class="verdict-title">🔴 Argumentos bajistas</div>
+        <div class="verdict-item">Riesgo de crédito: el negocio es prestar</div>
+        <div class="verdict-item">Historial de impagos en 2022 (modelo anterior)</div>
+        <div class="verdict-item">Sin supply máximo fijo</div>
+        <div class="verdict-item">Recompras de ~1.4% del supply al año</div>
+        <div class="verdict-item">Perpetuos 11x el spot</div>
+        <div class="verdict-item">Dependencia del ciclo cripto y de la regulación</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="final-verdict">
+    <div class="final-title">TokenFlow AI · Veredicto Final</div>
+    <div class="final-score">
+      <div class="score-number">7.0</div>
+      <div>
+        <div class="score-label">Ingresos reales · Recompras con reglas</div>
+        <div class="score-sub">sobre 10 · El primer token en semanas que responde de dónde sale su valor</div>
+      </div>
+    </div>
+    <div class="final-text">
+      Después de tres análisis con la misma pregunta abierta, Maple ofrece una respuesta concreta. Tiene un negocio que genera ingresos medibles, que creció un 81% en AUM mientras DeFi se contraía, y un mecanismo público que destina entre el 10% y el 30% de esos ingresos a comprar SYRUP en el mercado. El supply está casi todo en circulación y la emisión para staking ya terminó.<br><br>
+      A una valuación de ~12 veces los ingresos anualizados, SYRUP se puede analizar como se analiza una empresa. Eso, en este sector, es raro.<br><br>
+      Pero no es un token sin riesgos. El negocio es prestar dinero, y Maple ya vivió impagos en 2022 con su modelo anterior. El supply no tiene un tope fijo, las recompras todavía son pequeñas frente al Mcap y el precio de corto plazo lo mueven los derivados.<br><br>
+      <strong>¿Qué cambiaría el veredicto?</strong> Ingresos sostenidos por encima de $2M al mes, que activan el tramo de recompra del 30%, y un tope de supply explícito. Con ambos, Maple podría subir a 7.5–8/10. Un evento de crédito relevante lo haría bajar con rapidez.
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:20px;">
+    <div class="section-header">
+      <div class="section-icon icon-blue">👁</div>
+      <div class="section-title">Qué vigilar en los próximos 30–90 días</div>
+      <div class="section-tag">Lista de Monitoreo</div>
+    </div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Ingresos mensuales:</strong> si superan los $2M, la recompra sube al 30%. Es el catalizador más directo para el token.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-rose"></div><div class="watch-text"><strong>Informe de recompras:</strong> cada mes Maple publica cuánto recompró y a qué precio. Seguirlo en su Transparency Dashboard.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-red"></div><div class="watch-text"><strong>Salud del libro de préstamos:</strong> cualquier impago o liquidación relevante sería la principal señal de alerta.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-yellow"></div><div class="watch-text"><strong>Supply total:</strong> sin tope fijo, conviene comprobar cada trimestre que el supply total no crece por nuevas emisiones.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Sector RWA:</strong> SYRUP cayó junto al sector esta semana. Una recuperación del sentimiento RWA suele arrastrar a los líderes con ingresos reales.</div></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong style="color:#fb7185;">TokenFlow AI</strong> · Investigación de tokenómica AI, DePIN y RWA · Sin hype. Solo estructura.<br>
+  Fecha del análisis: 16 de octubre de 2026 · Este análisis no constituye asesoramiento de inversión. DYOR.<br>
+  Fuentes: CoinGecko, Token Terminal, Maple Memo (julio 2026), anuncios de recompra de Maple, Messari, crypto.news, The Defiant<br>
+  <a href="https://t.me/TokenFlowAI">Únete en Telegram</a> · <a href="https://wa.me/?text=An%C3%A1lisis%20de%20Maple%20(%24SYRUP)%20por%20TokenFlow%20AI%3A%20https%3A%2F%2Fbmisi70.github.io%2Ftokenflowai.github.io%2FTokenFlow_SYRUP_Analisis_2026_ES.html">Compartir por WhatsApp</a>
+</div>
+
+</body>
+</html>
