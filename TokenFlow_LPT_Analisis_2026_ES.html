@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenFlow AI – Análisis Livepeer (LPT) 2026</title>
+<meta name="description" content="Análisis tokenómico de Livepeer ($LPT): uso real en video e IA, inflación dinámica, comisiones y captura de valor. Sin hype. Solo estructura.">
+<script data-goatcounter="https://tokenflowai.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'JetBrains Mono', monospace; background: #0a0e1a; color: #e2e8f0; line-height: 1.7; font-size: 14px; }
+
+  .header { background: linear-gradient(135deg, #0a0e1a 0%, #15200a 50%, #0a0e1a 100%); border-bottom: 1px solid #65a30d; padding: 44px 32px 36px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; background: radial-gradient(ellipse, rgba(163,230,53,0.10) 0%, transparent 70%); pointer-events: none; }
+  .brand { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #a3e635; margin-bottom: 14px; font-weight: 600; }
+  .title { font-size: 38px; font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -1px; }
+  .title span { color: #a3e635; }
+  .subtitle { font-size: 12px; color: #64748b; margin-bottom: 22px; letter-spacing: 1px; }
+  .verdict-badge { display: inline-block; padding: 8px 24px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid; font-family: 'JetBrains Mono', monospace; }
+  .badge-warning { background: #451a03; color: #fb923c; border-color: #9a3412; }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 36px 20px; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 36px; }
+  .stat-card { background: #0d1525; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; text-align: center; }
+  .stat-label { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .stat-value { font-size: 22px; font-weight: 800; color: #f8fafc; }
+  .stat-sub { font-size: 10px; color: #64748b; margin-top: 4px; }
+  .stat-lime { color: #a3e635; }
+  .stat-green { color: #4ade80; }
+  .stat-yellow { color: #fbbf24; }
+  .stat-red { color: #f87171; }
+  .stat-orange { color: #fb923c; }
+
+  .section { background: #0d1525; border: 1px solid #1e293b; border-radius: 8px; padding: 26px; margin-bottom: 18px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #1e293b; }
+  .section-icon { width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .icon-blue { background: #1e3a5f; }
+  .icon-red { background: #450a0a; }
+  .icon-yellow { background: #422006; }
+  .icon-green { background: #052e16; }
+  .icon-lime { background: #1a2e05; }
+  .section-title { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+  .section-tag { font-size: 10px; color: #475569; margin-left: auto; letter-spacing: 1px; text-transform: uppercase; }
+
+  .concept-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .concept-card { background: #141f08; border: 1px solid #3f6212; border-radius: 6px; padding: 16px; }
+  .concept-card-title { font-size: 11px; color: #a3e635; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .concept-card-text { font-size: 12px; color: #94a3b8; line-height: 1.6; }
+
+  .table-wrap { overflow-x: auto; }
+  .alloc-table { width: 100%; border-collapse: collapse; min-width: 520px; }
+  .alloc-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .alloc-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; font-size: 13px; vertical-align: middle; }
+  .alloc-table tr:last-child td { border-bottom: none; }
+  .alloc-table tr.stale td { color: #475569; }
+  .alloc-bar-wrap { background: #1e293b; border-radius: 2px; height: 5px; width: 90px; display: inline-block; vertical-align: middle; margin-left: 8px; }
+  .alloc-bar { height: 5px; border-radius: 2px; display: block; }
+
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+  .pill-green { background: #052e16; color: #4ade80; }
+  .pill-yellow { background: #422006; color: #fbbf24; }
+  .pill-red { background: #450a0a; color: #f87171; }
+  .pill-lime { background: #1a2e05; color: #d9f99d; }
+
+  .pressure-meter { margin: 14px 0; }
+  .meter-label { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+  .meter-bar-wrap { background: #1e293b; border-radius: 3px; height: 10px; overflow: hidden; }
+  .meter-bar { height: 10px; border-radius: 3px; }
+  .meter-green { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .meter-orange { background: linear-gradient(90deg, #ea580c, #fb923c); }
+  .meter-red { background: linear-gradient(90deg, #dc2626, #f87171); }
+  .meter-yellow { background: linear-gradient(90deg, #ca8a04, #fbbf24); }
+  .meter-lime { background: linear-gradient(90deg, #65a30d, #a3e635); }
+  .meter-footer { display: flex; justify-content: space-between; font-size: 10px; color: #475569; margin-top: 4px; gap: 8px; }
+
+  .verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .verdict-card { border-radius: 6px; padding: 20px; }
+  .verdict-bull { background: #052e16; border: 1px solid #166534; }
+  .verdict-bear { background: #450a0a; border: 1px solid #7f1d1d; }
+  .verdict-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .verdict-bull .verdict-title { color: #4ade80; }
+  .verdict-bear .verdict-title { color: #f87171; }
+  .verdict-item { font-size: 12px; color: #cbd5e1; margin-bottom: 9px; padding-left: 18px; position: relative; line-height: 1.5; }
+  .verdict-item::before { content: '→'; position: absolute; left: 0; font-weight: 700; }
+  .verdict-bull .verdict-item::before { color: #4ade80; }
+  .verdict-bear .verdict-item::before { color: #f87171; }
+
+  .final-verdict { background: linear-gradient(135deg, #15200a, #0f172a); border: 1px solid #65a30d; border-radius: 8px; padding: 30px; margin-top: 8px; }
+  .final-title { font-size: 11px; color: #a3e635; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 14px; font-weight: 700; }
+  .final-score { display: flex; align-items: center; gap: 22px; margin-bottom: 18px; }
+  .score-number { font-size: 68px; font-weight: 900; color: #fbbf24; line-height: 1; }
+  .score-label { font-size: 20px; font-weight: 700; color: #f1f5f9; }
+  .score-sub { font-size: 12px; color: #64748b; margin-top: 6px; }
+  .final-text { font-size: 13px; color: #cbd5e1; line-height: 1.9; }
+
+  .watch-item { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid #1e293b; font-size: 13px; }
+  .watch-item:last-child { border-bottom: none; }
+  .watch-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #22c55e; }
+  .dot-lime { background: #a3e635; }
+  .watch-text { color: #cbd5e1; }
+  .watch-text strong { color: #f8fafc; }
+
+  .note-box { background: #0e1506; border-left: 3px solid #a3e635; border-radius: 0 6px 6px 0; padding: 14px 16px; font-size: 12px; color: #94a3b8; margin: 14px 0; line-height: 1.8; }
+  .note-box.warning { border-left-color: #f59e0b; background: #0d1105; }
+  .note-box.danger { border-left-color: #ef4444; background: #0d0808; }
+  .note-box.success { border-left-color: #22c55e; background: #050f05; }
+  .note-box strong { color: #e2e8f0; }
+
+  .footer { text-align: center; padding: 28px; color: #334155; font-size: 11px; border-top: 1px solid #1e293b; margin-top: 36px; letter-spacing: 0.5px; line-height: 2; }
+  .footer a { color: #a3e635; }
+
+  @media (max-width: 600px) {
+    .verdict-grid, .concept-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .score-number { font-size: 52px; }
+    .title { font-size: 28px; }
+    .final-score { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">🔵 TokenFlow AI · Investigación de Tokenómica DePIN</div>
+  <div class="title">Live<span>peer</span> · LPT</div>
+  <div class="subtitle">Análisis completo — GPUs descentralizadas para video e IA en tiempo real · 23 de octubre de 2026</div>
+  <div class="verdict-badge badge-warning">⚠ Uso real · Sin supply máximo · Emisión ~40x mayor que las comisiones</div>
+</div>
+
+<div class="container">
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Precio (USD)</div><div class="stat-value stat-lime">$1.57</div><div class="stat-sub">23 oct. · rango 7d $1.55–1.77</div></div>
+    <div class="stat-card"><div class="stat-label">Cap. de Mercado</div><div class="stat-value">~$78M</div><div class="stat-sub">#323 CoinGecko</div></div>
+    <div class="stat-card"><div class="stat-label">FDV</div><div class="stat-value stat-yellow">~$78M</div><div class="stat-sub">Mcap/FDV = 100% ⚠ engañoso</div></div>
+    <div class="stat-card"><div class="stat-label">Desde ATH</div><div class="stat-value stat-red">-98%</div><div class="stat-sub">ATH: $99.03</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Circ.</div><div class="stat-value">49.7M</div><div class="stat-sub">Ago. 2025: ~43.2M</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Máx.</div><div class="stat-value stat-red">∞</div><div class="stat-sub">Sin tope</div></div>
+    <div class="stat-card"><div class="stat-label">Inflación</div><div class="stat-value stat-orange">~18%</div><div class="stat-sub">Anualizada · 0.0498%/ronda</div></div>
+    <div class="stat-card"><div class="stat-label">En staking</div><div class="stat-value stat-green">51.3%</div><div class="stat-sub">Objetivo: 50%</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-lime">🎥</div>
+      <div class="section-title">¿Qué es Livepeer? — GPUs descentralizadas para video e IA</div>
+      <div class="section-tag">DePIN / AI</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">Livepeer, lanzado en 2017 sobre Ethereum (hoy con staking en Arbitrum), es una red de GPUs que procesa video para aplicaciones de terceros. Empezó con la transcodificación (convertir un video a distintos formatos y calidades) y hoy su motor de crecimiento es la IA en tiempo real: generar, transformar y entregar video mientras se produce.</p>
+
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="concept-card-title">Orchestrators</div>
+        <div class="concept-card-text">Operadores de nodos con GPU que hacen el trabajo. Para recibir tareas deben tener LPT en staking (propio o delegado). Cuanto más stake, más trabajo pueden recibir.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Delegadores</div>
+        <div class="concept-card-text">Holders de LPT que delegan su stake en un orchestrator. Reciben una parte de la inflación en LPT y de las comisiones en ETH que genera ese nodo.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Pagos en ETH</div>
+        <div class="concept-card-text">Los clientes (broadcasters y apps de IA) pagan en ETH, no en LPT. LPT es un token de trabajo y seguridad: coordina quién hace el trabajo y garantiza que se haga bien.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">El giro a la IA</div>
+        <div class="concept-card-text">En el Q1 2026, el 60% de las comisiones vino de IA. Livepeer lideró además rankings de actividad de desarrolladores en el sector de IA y big data.</div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <strong>🔑 Contexto de la serie:</strong> la semana pasada, Maple (SYRUP) mostró cómo los ingresos vuelven al token mediante recompras. Livepeer también tiene ingresos reales, pero el camino es el inverso: las comisiones van a los operadores en ETH y el token se sostiene con emisión nueva.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">📈</div>
+      <div class="section-title">El uso — Real y récord en 2026</div>
+      <div class="section-tag">Métricas de Red</div>
+    </div>
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Minutos Q1 2026</div><div class="stat-value stat-green">134.4M</div><div class="stat-sub">+72% trimestral</div></div>
+      <div class="stat-card"><div class="stat-label">Comisiones Q1</div><div class="stat-value stat-green">$257K</div><div class="stat-sub">Récord · +34% trimestral</div></div>
+      <div class="stat-card"><div class="stat-label">Comisiones de IA</div><div class="stat-value stat-lime">60%</div><div class="stat-sub">$154.7K en el Q1</div></div>
+      <div class="stat-card"><div class="stat-label">Últimos 7 días</div><div class="stat-value stat-orange">~$6.3K</div><div class="stat-sub">Livepeer Explorer</div></div>
+    </div>
+    <div class="note-box success">
+      <strong>✅ Lo que funciona:</strong> según el informe de Messari sobre el Q1 2026, Livepeer procesó 134.4 millones de minutos (+72% frente al trimestre anterior) y cobró $257,300 en comisiones, un récord. La IA ya es el principal generador de comisiones. No es un testnet especulativo: es infraestructura usada por aplicaciones reales.
+    </div>
+    <div class="note-box warning">
+      <strong>⚠ Pero no en línea recta:</strong> el récord del Q1 equivale a ~$20K por semana. En los últimos 7 días, el explorador de Livepeer registra ~$6.3K. Además, el costo medio por minuto procesado viene bajando: la red se vuelve más eficiente para el cliente, pero cobra menos por unidad de trabajo.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">🔥</div>
+      <div class="section-title">Tokenómica — Inflación dinámica sin tope</div>
+      <div class="section-tag">Mecanismo</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:16px;">Livepeer no tiene supply máximo. En cada ronda (aproximadamente un día) se emite LPT nuevo para los orchestrators y sus delegadores. La tasa se ajusta sola hacia un objetivo: que el 50% del supply esté en staking. Si la participación cae por debajo del 50%, la inflación sube para atraer más staking; si la supera, baja.</p>
+
+    <div class="table-wrap">
+      <table class="alloc-table">
+        <thead><tr><th>Participación en staking</th><th>Efecto en la inflación</th><th>Estado actual</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Menos del 50%</strong></td><td>Sube cada ronda</td><td><span class="status-pill pill-red">Más emisión</span></td></tr>
+          <tr style="background:#141f08;"><td><strong style="color:#a3e635;">Más del 50%</strong></td><td>Baja cada ronda</td><td><span class="status-pill pill-lime">Hoy: 51.3%</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pressure-meter" style="margin-top:16px;">
+      <div class="meter-label">Inflación anualizada: Q1 2026 (26.2%) → hoy (~18%)</div>
+      <div class="meter-bar-wrap"><div class="meter-bar meter-orange" style="width:70%;"></div></div>
+      <div class="meter-footer"><span>Baja</span><span style="color:#fb923c;">⚠ Bajando, pero todavía muy alta</span><span>Alta</span></div>
+    </div>
+
+    <div class="note-box warning">
+      <strong>⚠ Quién paga la inflación:</strong> quien hace staking recibe los tokens nuevos, así que casi no pierde participación en la red. Quien solo compra y guarda LPT sí: su porción se diluye en torno al 18% al año. En Livepeer, no hacer staking tiene un costo directo.
+    </div>
+    <div class="note-box success">
+      <strong>✅ Lo coherente del diseño:</strong> desde 2026, un 10% de la inflación vuelve a ir a una tesorería comunitaria (LIP-101), que financia desarrollo e infraestructura de IA. No hay desbloqueos de inversores pendientes: el token se lanzó en 2018 y su distribución inicial terminó hace años.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📊</div>
+      <div class="section-title">Mcap/FDV = 100% — Por qué aquí engaña</div>
+      <div class="section-tag">Supply Analysis</div>
+    </div>
+    <div class="table-wrap">
+      <table class="alloc-table">
+        <thead><tr><th>Fecha</th><th>Supply circulante</th><th>Cambio</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Agosto 2025</strong></td><td>~43.2M LPT</td><td>—</td></tr>
+          <tr><td><strong>Octubre 2026</strong></td><td>~49.7M LPT</td><td style="color:#f87171;">+15% en ~14 meses</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pressure-meter" style="margin-top:20px;">
+      <div class="meter-label">Mcap/FDV — comparativa con tokens analizados por TokenFlow AI</div>
+      <div style="display:grid;gap:8px;margin-top:8px;">
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>Arweave (AR) · supply fijo</span><span>100%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:100%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#a3e635;font-weight:700;margin-bottom:3px;"><span>Livepeer (LPT) · sin tope</span><span>100% ⚠</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-lime" style="width:100%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>Maple (SYRUP) · sin tope</span><span>92%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:92%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>Walrus (WAL) · 5B fijo</span><span>52%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-orange" style="width:52%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>DoubleZero (2Z)</span><span>35%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:35%;"></div></div></div>
+      </div>
+    </div>
+
+    <div class="note-box danger">
+      <strong>🔴 Lección TokenFlow:</strong> Arweave y Livepeer muestran el mismo Mcap/FDV del 100%, pero significan cosas opuestas. En Arweave, el supply está fijo. En Livepeer, el FDV de hoy no es el de mañana: cada día se emiten tokens nuevos. Antes de confiar en este ratio, comprueba si el token tiene supply máximo.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">💰</div>
+      <div class="section-title">Captura de valor — La comparación que importa</div>
+      <div class="section-tag">Revenue vs. Emisión</div>
+    </div>
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Emisión anual</div><div class="stat-value stat-red">~$14M</div><div class="stat-sub">~18% de $78M</div></div>
+      <div class="stat-card"><div class="stat-label">Comisiones anuales</div><div class="stat-value stat-yellow">~$330K</div><div class="stat-sub">Ritmo de los últimos 7 días</div></div>
+      <div class="stat-card"><div class="stat-label">Ratio</div><div class="stat-value stat-red">~40x</div><div class="stat-sub">~14x al ritmo récord del Q1</div></div>
+      <div class="stat-card"><div class="stat-label">Revenue del protocolo</div><div class="stat-value stat-red">$0</div><div class="stat-sub">Token Terminal</div></div>
+    </div>
+    <div class="pressure-meter">
+      <div class="meter-label">Vínculo entre uso de la red y demanda de LPT</div>
+      <div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:25%;"></div></div>
+      <div class="meter-footer"><span>Ninguno</span><span style="color:#f87171;">🔴 Indirecto: hay que tener LPT para trabajar, pero se paga en ETH</span><span>Directo</span></div>
+    </div>
+    <div class="note-box danger">
+      <strong>🔴 El núcleo del problema:</strong> por cada dólar de comisiones, la red emite unos 40 dólares en LPT nuevo (unos 14 al ritmo récord del Q1). Las comisiones se pagan en ETH, así que usar la red no obliga a nadie a comprar LPT. No hay recompras ni quema, y el protocolo no retiene una parte de las comisiones.
+    </div>
+    <div class="note-box">
+      <strong>📌 La comparación con Maple:</strong> en SYRUP, los ingresos se convierten en compras de token en el mercado. En LPT, las comisiones van a los operadores en ETH y la emisión va a los stakers. Ambos tienen uso real; solo uno lo transforma en demanda del token.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">⚔</div>
+      <div class="section-title">Posicionamiento competitivo</div>
+      <div class="section-tag">Cómputo para IA</div>
+    </div>
+    <div class="table-wrap">
+      <table class="alloc-table">
+        <thead><tr><th>Proyecto</th><th>Enfoque</th><th>vs. LPT</th></tr></thead>
+        <tbody>
+          <tr style="background:#141f08;"><td><strong style="color:#a3e635;">Livepeer (LPT)</strong></td><td>Video e IA en tiempo real</td><td>— Nicho especializado, con uso</td></tr>
+          <tr><td><strong>Akash (AKT)</strong></td><td>Nube descentralizada general</td><td>Más amplio, menos especializado en video</td></tr>
+          <tr><td><strong>io.net (IO)</strong></td><td>GPUs agregadas para IA</td><td>Más escala, menos foco en tiempo real</td></tr>
+          <tr><td><strong>AWS / Mux</strong></td><td>Video centralizado</td><td>Más maduros, más caros</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note-box" style="margin-top:14px;">
+      <strong>Posición de Livepeer:</strong> no compite como nube genérica de GPUs, sino en un nicho concreto: video e IA de baja latencia. Es una ventaja frente a competidores más amplios, pero también limita el tamaño del mercado al que puede cobrar.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📉</div>
+      <div class="section-title">Estructura del precio</div>
+      <div class="section-tag">Mercado</div>
+    </div>
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Perps / Spot</div><div class="stat-value stat-green">2.8x</div><div class="stat-sub">Baja especulación</div></div>
+      <div class="stat-card"><div class="stat-label">OI / Mcap</div><div class="stat-value stat-yellow">19.2%</div><div class="stat-sub">~$15M en perpetuos</div></div>
+      <div class="stat-card"><div class="stat-label">7 días</div><div class="stat-value stat-red">-10%</div><div class="stat-sub">Peor que el mercado</div></div>
+      <div class="stat-card"><div class="stat-label">Agosto 2025</div><div class="stat-value">~$7</div><div class="stat-sub">Hoy: $1.57</div></div>
+    </div>
+    <div class="pressure-meter"><div class="meter-label">Recorrido desde ATH ($99.03)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:98%;"></div></div><div class="meter-footer"><span>ATH</span><span style="color:#f87171;">🔴 -98%, +342% sobre el mínimo de $0.35</span><span>ATL</span></div></div>
+    <div class="note-box warning" style="margin-top:14px;">
+      A diferencia de Walrus o Maple, aquí los perpetuos mueven menos de 3 veces el volumen spot. La presión principal sobre el precio no parece venir del apalancamiento, sino de la emisión constante: los stakers que venden sus recompensas generan oferta todos los días.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-lime">⚖</div>
+      <div class="section-title">Argumentos alcistas vs. bajistas</div>
+      <div class="section-tag">Veredicto TokenFlow</div>
+    </div>
+    <div class="verdict-grid">
+      <div class="verdict-card verdict-bull">
+        <div class="verdict-title">🟢 Argumentos alcistas</div>
+        <div class="verdict-item">Uso real: 134.4M minutos en el Q1 2026</div>
+        <div class="verdict-item">60% de las comisiones ya viene de IA</div>
+        <div class="verdict-item">Inflación dinámica que protege a los stakers</div>
+        <div class="verdict-item">Sin desbloqueos de inversores pendientes</div>
+        <div class="verdict-item">Tesorería comunitaria reactivada (10%)</div>
+        <div class="verdict-item">Baja especulación con derivados</div>
+      </div>
+      <div class="verdict-card verdict-bear">
+        <div class="verdict-title">🔴 Argumentos bajistas</div>
+        <div class="verdict-item">Sin supply máximo: ~18% de inflación anual</div>
+        <div class="verdict-item">Emisión ~40x mayor que las comisiones</div>
+        <div class="verdict-item">Comisiones en ETH: el uso no compra LPT</div>
+        <div class="verdict-item">Sin recompras ni quema</div>
+        <div class="verdict-item">Comisiones recientes lejos del récord del Q1</div>
+        <div class="verdict-item">-98% desde ATH y -77% desde agosto 2025</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="final-verdict">
+    <div class="final-title">TokenFlow AI · Veredicto Final</div>
+    <div class="final-score">
+      <div class="score-number">4.5</div>
+      <div>
+        <div class="score-label">Producto real · Token sin captura de valor</div>
+        <div class="score-sub">sobre 10 · El uso crece; el token se diluye</div>
+      </div>
+    </div>
+    <div class="final-text">
+      Livepeer es uno de los proyectos DePIN más antiguos y con más uso real del sector. Procesa cientos de millones de minutos de video, ya cobra la mayor parte de sus comisiones por IA en tiempo real y tiene un diseño de inflación pensado para proteger a quien participa en la red.<br><br>
+      El problema está en la escala. La red emite cada año unos $14M en LPT nuevo, mientras las comisiones recientes rondan los $330K anualizados. Esas comisiones se pagan en ETH, sin recompras ni quema, así que el uso de la red no se traduce en demanda del token. Para quien solo mantiene LPT sin hacer staking, la dilución ronda el 18% anual.<br><br>
+      La comparación con la semana pasada lo resume: Maple convierte ingresos en recompras de su token; Livepeer convierte inflación en recompensas para stakers. Uno captura valor; el otro, por ahora, lo reparte.<br><br>
+      <strong>¿Qué cambiaría el veredicto?</strong> Comisiones que se acerquen a la emisión, una inflación que siga bajando hacia un dígito, o un mecanismo que conecte las comisiones en ETH con la compra o quema de LPT. Con dos de las tres, Livepeer podría subir a 6–6.5/10.
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:20px;">
+    <div class="section-header">
+      <div class="section-icon icon-blue">👁</div>
+      <div class="section-title">Qué vigilar en los próximos 30–90 días</div>
+      <div class="section-tag">Lista de Monitoreo</div>
+    </div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Comisiones semanales:</strong> el indicador clave. Seguirlas en el Livepeer Explorer y comprobar si vuelven al ritmo récord del Q1 (~$20K por semana) o lo superan.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-red"></div><div class="watch-text"><strong>Tasa de inflación:</strong> mientras la participación siga por encima del 50%, la inflación baja. Si cae por debajo, vuelve a subir.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-lime"></div><div class="watch-text"><strong>Demanda de IA en tiempo real:</strong> nuevas aplicaciones de video generado por IA serían el motor para que las comisiones crezcan de verdad.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-yellow"></div><div class="watch-text"><strong>Propuestas de gobernanza (LIPs):</strong> cualquier propuesta para conectar comisiones con compra o quema de LPT cambiaría por completo la tesis.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Uso de la tesorería:</strong> si financia aplicaciones que generen demanda pagada, la inflación que recibe se justifica.</div></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong style="color:#a3e635;">TokenFlow AI</strong> · Investigación de tokenómica AI, DePIN y RWA · Sin hype. Solo estructura.<br>
+  Fecha del análisis: 23 de octubre de 2026 · Este análisis no constituye asesoramiento de inversión. DYOR.<br>
+  Fuentes: CoinGecko, Livepeer Explorer, Messari (State of Livepeer Q1 2026), blog de Livepeer, Token Terminal, Gemini<br>
+  <a href="https://t.me/TokenFlowAI">Únete en Telegram</a> · <a href="https://wa.me/?text=An%C3%A1lisis%20de%20Livepeer%20(%24LPT)%20por%20TokenFlow%20AI%3A%20https%3A%2F%2Fbmisi70.github.io%2Ftokenflowai.github.io%2FTokenFlow_LPT_Analisis_2026_ES.html">Compartir por WhatsApp</a>
+</div>
+
+</body>
+</html>
