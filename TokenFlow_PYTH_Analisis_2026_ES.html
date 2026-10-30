@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenFlow AI – Análisis Pyth Network (PYTH) 2026</title>
+<meta name="description" content="Análisis tokenómico de Pyth Network ($PYTH): la regla del 100% de recompras, ingresos, desbloqueo de 2027 y riesgos. Sin hype. Solo estructura.">
+<script data-goatcounter="https://tokenflowai.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'JetBrains Mono', monospace; background: #0a0e1a; color: #e2e8f0; line-height: 1.7; font-size: 14px; }
+
+  .header { background: linear-gradient(135deg, #0a0e1a 0%, #200b22 50%, #0a0e1a 100%); border-bottom: 1px solid #c026d3; padding: 44px 32px 36px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; background: radial-gradient(ellipse, rgba(232,121,249,0.10) 0%, transparent 70%); pointer-events: none; }
+  .brand { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #e879f9; margin-bottom: 14px; font-weight: 600; }
+  .title { font-size: 38px; font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -1px; }
+  .title span { color: #e879f9; }
+  .subtitle { font-size: 12px; color: #64748b; margin-bottom: 22px; letter-spacing: 1px; }
+  .verdict-badge { display: inline-block; padding: 8px 24px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid; font-family: 'JetBrains Mono', monospace; }
+  .badge-warning { background: #451a03; color: #fb923c; border-color: #9a3412; }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 36px 20px; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 36px; }
+  .stat-card { background: #0d1525; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; text-align: center; }
+  .stat-label { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .stat-value { font-size: 22px; font-weight: 800; color: #f8fafc; }
+  .stat-sub { font-size: 10px; color: #64748b; margin-top: 4px; }
+  .stat-fx { color: #e879f9; }
+  .stat-green { color: #4ade80; }
+  .stat-yellow { color: #fbbf24; }
+  .stat-red { color: #f87171; }
+  .stat-orange { color: #fb923c; }
+
+  .section { background: #0d1525; border: 1px solid #1e293b; border-radius: 8px; padding: 26px; margin-bottom: 18px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #1e293b; }
+  .section-icon { width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .icon-blue { background: #1e3a5f; }
+  .icon-red { background: #450a0a; }
+  .icon-yellow { background: #422006; }
+  .icon-green { background: #052e16; }
+  .icon-fx { background: #4a044e; }
+  .section-title { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+  .section-tag { font-size: 10px; color: #475569; margin-left: auto; letter-spacing: 1px; text-transform: uppercase; }
+
+  .concept-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .concept-card { background: #1f0a21; border: 1px solid #86198f; border-radius: 6px; padding: 16px; }
+  .concept-card-title { font-size: 11px; color: #e879f9; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .concept-card-text { font-size: 12px; color: #94a3b8; line-height: 1.6; }
+
+  .table-wrap { overflow-x: auto; }
+  .alloc-table { width: 100%; border-collapse: collapse; min-width: 520px; }
+  .alloc-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .alloc-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; font-size: 13px; vertical-align: middle; }
+  .alloc-table tr:last-child td { border-bottom: none; }
+  .alloc-table tr.stale td { color: #475569; }
+  .alloc-bar-wrap { background: #1e293b; border-radius: 2px; height: 5px; width: 90px; display: inline-block; vertical-align: middle; margin-left: 8px; }
+  .alloc-bar { height: 5px; border-radius: 2px; display: block; }
+
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+  .pill-green { background: #052e16; color: #4ade80; }
+  .pill-yellow { background: #422006; color: #fbbf24; }
+  .pill-red { background: #450a0a; color: #f87171; }
+  .pill-fx { background: #4a044e; color: #f5d0fe; }
+
+  .pressure-meter { margin: 14px 0; }
+  .meter-label { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+  .meter-bar-wrap { background: #1e293b; border-radius: 3px; height: 10px; overflow: hidden; }
+  .meter-bar { height: 10px; border-radius: 3px; }
+  .meter-green { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .meter-orange { background: linear-gradient(90deg, #ea580c, #fb923c); }
+  .meter-red { background: linear-gradient(90deg, #dc2626, #f87171); }
+  .meter-yellow { background: linear-gradient(90deg, #ca8a04, #fbbf24); }
+  .meter-fx { background: linear-gradient(90deg, #c026d3, #e879f9); }
+  .meter-footer { display: flex; justify-content: space-between; font-size: 10px; color: #475569; margin-top: 4px; gap: 8px; }
+
+  .verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .verdict-card { border-radius: 6px; padding: 20px; }
+  .verdict-bull { background: #052e16; border: 1px solid #166534; }
+  .verdict-bear { background: #450a0a; border: 1px solid #7f1d1d; }
+  .verdict-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .verdict-bull .verdict-title { color: #4ade80; }
+  .verdict-bear .verdict-title { color: #f87171; }
+  .verdict-item { font-size: 12px; color: #cbd5e1; margin-bottom: 9px; padding-left: 18px; position: relative; line-height: 1.5; }
+  .verdict-item::before { content: '→'; position: absolute; left: 0; font-weight: 700; }
+  .verdict-bull .verdict-item::before { color: #4ade80; }
+  .verdict-bear .verdict-item::before { color: #f87171; }
+
+  .final-verdict { background: linear-gradient(135deg, #200b22, #0f172a); border: 1px solid #c026d3; border-radius: 8px; padding: 30px; margin-top: 8px; }
+  .final-title { font-size: 11px; color: #e879f9; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 14px; font-weight: 700; }
+  .final-score { display: flex; align-items: center; gap: 22px; margin-bottom: 18px; }
+  .score-number { font-size: 68px; font-weight: 900; color: #fbbf24; line-height: 1; }
+  .score-label { font-size: 20px; font-weight: 700; color: #f1f5f9; }
+  .score-sub { font-size: 12px; color: #64748b; margin-top: 6px; }
+  .final-text { font-size: 13px; color: #cbd5e1; line-height: 1.9; }
+
+  .watch-item { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid #1e293b; font-size: 13px; }
+  .watch-item:last-child { border-bottom: none; }
+  .watch-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #22c55e; }
+  .dot-fx { background: #e879f9; }
+  .watch-text { color: #cbd5e1; }
+  .watch-text strong { color: #f8fafc; }
+
+  .note-box { background: #14071a; border-left: 3px solid #e879f9; border-radius: 0 6px 6px 0; padding: 14px 16px; font-size: 12px; color: #94a3b8; margin: 14px 0; line-height: 1.8; }
+  .note-box.warning { border-left-color: #f59e0b; background: #0d1105; }
+  .note-box.danger { border-left-color: #ef4444; background: #0d0808; }
+  .note-box.success { border-left-color: #22c55e; background: #050f05; }
+  .note-box strong { color: #e2e8f0; }
+
+  .footer { text-align: center; padding: 28px; color: #334155; font-size: 11px; border-top: 1px solid #1e293b; margin-top: 36px; letter-spacing: 0.5px; line-height: 2; }
+  .footer a { color: #e879f9; }
+
+  @media (max-width: 600px) {
+    .verdict-grid, .concept-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .score-number { font-size: 52px; }
+    .title { font-size: 28px; }
+    .final-score { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">🔵 TokenFlow AI · Investigación de Tokenómica DePIN / RWA</div>
+  <div class="title">Pyth · <span>PYTH</span></div>
+  <div class="subtitle">Análisis completo — El oráculo que destina el 100% de sus ingresos a recompras · 30 de octubre de 2026</div>
+  <div class="verdict-badge badge-warning">✅ Regla del 100% · ⚠ Desbloqueo del 27% del circulante en mayo 2027</div>
+</div>
+
+<div class="container">
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Precio (USD)</div><div class="stat-value stat-fx">$0.062</div><div class="stat-sub">30 oct. · rango 7d $0.059–0.077</div></div>
+    <div class="stat-card"><div class="stat-label">Cap. de Mercado</div><div class="stat-value">~$490M</div><div class="stat-sub">#107 CoinGecko</div></div>
+    <div class="stat-card"><div class="stat-label">FDV</div><div class="stat-value stat-yellow">~$622M</div><div class="stat-sub">Mcap/FDV = 79%</div></div>
+    <div class="stat-card"><div class="stat-label">Desde ATH</div><div class="stat-value stat-red">-95%</div><div class="stat-sub">ATH: $1.20 · ATL: $0.0295</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Circ.</div><div class="stat-value">7.875B</div><div class="stat-sub">78.75% del máximo</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Máx.</div><div class="stat-value stat-green">10B</div><div class="stat-sub">Fijo</div></div>
+    <div class="stat-card"><div class="stat-label">Ingresos recurrentes</div><div class="stat-value stat-green">~$11.5M</div><div class="stat-sub">Anualizados · sept. 2026</div></div>
+    <div class="stat-card"><div class="stat-label">Próximo desbloqueo</div><div class="stat-value stat-red">2.125B</div><div class="stat-sub">19 de mayo de 2027</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-fx">🔮</div>
+      <div class="section-title">¿Qué es Pyth? — Datos de mercado en tiempo real para la blockchain</div>
+      <div class="section-tag">Oráculo</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">Una blockchain no puede saber por sí sola cuánto vale el bitcoin, una acción o un bono. Los oráculos traen esos datos del mundo real. Pyth lo hace con un modelo de "primera mano": los propios exchanges, market makers e instituciones financieras publican sus precios directamente en la red, que los agrega y distribuye a más de 40 blockchains.</p>
+
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="concept-card-title">Proveedores de datos</div>
+        <div class="concept-card-text">Más de 90 instituciones publican sus propios precios: Jane Street, Cboe, Binance, OKX, Optiver, Susquehanna y otros. Los datos llegan de quienes forman los precios, no de intermediarios.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Pyth Pro</div>
+        <div class="concept-card-text">Servicio de datos de pago para instituciones y aplicaciones. Esta semana añadió curvas de rendimiento de bonos del Tesoro de EE.UU. en tiempo real, de 2 a 30 años.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Fin de los datos gratis</div>
+        <div class="concept-card-text">El 31 de julio de 2026 se apagó Pyth Core, el oráculo gratuito. Desde entonces, las aplicaciones pagan suscripciones desde $500 al mes. El negocio pasó de subsidiado a cobrado.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Uso real</div>
+        <div class="concept-card-text">Según DefiLlama, los oráculos de Pyth aseguran hoy unos $3.1B en activos. Además es el proveedor de precios dominante en varios mercados de perpetuos sobre activos reales.</div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <strong>🔑 Contexto de la serie:</strong> en las últimas semanas medimos cuánto de lo que gana un protocolo vuelve a su token. Livepeer: 0% (las comisiones van a los operadores). Maple: entre 10% y 30% de los ingresos a recompras. Pyth acaba de fijar el 100%: es el extremo de la escala.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">🔄</div>
+      <div class="section-title">La regla del 100% — OP-PIP-136</div>
+      <div class="section-tag">Captura de Valor</div>
+    </div>
+    <div class="table-wrap">
+      <table class="alloc-table">
+        <thead><tr><th>Protocolo analizado</th><th>Ingresos que vuelven al token</th><th>Mecanismo</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Livepeer (LPT)</strong></td><td>0% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:2%;background:#f87171;"></div></div></td><td><span class="status-pill pill-red">Comisiones en ETH a operadores</span></td></tr>
+          <tr><td><strong>Maple (SYRUP)</strong></td><td>10–30% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:30%;background:#fbbf24;"></div></div></td><td><span class="status-pill pill-yellow">Recompras escalonadas</span></td></tr>
+          <tr style="background:#1f0a21;"><td><strong style="color:#e879f9;">Pyth (PYTH)</strong></td><td>100% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:100%;background:#e879f9;"></div></div></td><td><span class="status-pill pill-fx">Recompras mensuales</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note-box success" style="margin-top:14px;">
+      <strong>✅ Qué aprobó la DAO:</strong> el 8 de octubre de 2026, la DAO de Pyth aprobó la propuesta OP-PIP-136, conocida como "la regla del 100%". Todos los ingresos elegibles de productos (Pyth Pro, el mercado de datos y los índices de Pyth) se destinan a compras mensuales de PYTH en el mercado abierto. Ya existía un programa de recompras desde diciembre de 2025, pero con una fracción menor.
+    </div>
+    <div class="pressure-meter">
+      <div class="meter-label">Vínculo entre ingresos del protocolo y el token</div>
+      <div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:95%;"></div></div>
+      <div class="meter-footer"><span>Ninguno</span><span style="color:#4ade80;font-weight:700;">✅ El más directo de la serie</span><span>Total</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">📈</div>
+      <div class="section-title">El negocio — De gratuito a cobrado</div>
+      <div class="section-tag">Métricas Fundamentales</div>
+    </div>
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Ingresos recurrentes</div><div class="stat-value stat-green">~$11.5M</div><div class="stat-sub">Anualizados (sept.)</div></div>
+      <div class="stat-card"><div class="stat-label">Crecimiento</div><div class="stat-value stat-green">+86%</div><div class="stat-sub">Último trimestre, según reportes</div></div>
+      <div class="stat-card"><div class="stat-label">Recibido por la DAO</div><div class="stat-value stat-fx">~$554K</div><div class="stat-sub">Informe del 5 de octubre</div></div>
+      <div class="stat-card"><div class="stat-label">Activos asegurados</div><div class="stat-value">~$3.1B</div><div class="stat-sub">DefiLlama</div></div>
+    </div>
+    <div class="note-box success">
+      <strong>✅ Lo que funciona:</strong> cerrar el oráculo gratuito era una apuesta arriesgada: los usuarios podían irse a la competencia. Los datos de los meses siguientes muestran lo contrario. Los ingresos recurrentes siguieron creciendo, y Pyth sigue ampliando su catálogo hacia mercados tradicionales: bonos, acciones, divisas y materias primas.
+    </div>
+    <div class="note-box">
+      <strong>📌 Nota sobre los datos:</strong> las cifras de ingresos proceden de informes públicos de Douro Labs (principal contribuidor) y de agregadores. Las cifras de ingresos anualizados y lo efectivamente transferido a la DAO cada mes miden cosas distintas; aquí usamos lo transferido para estimar las recompras.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📊</div>
+      <div class="section-title">Estructura del suministro — Queda un último bloque</div>
+      <div class="section-tag">Supply Analysis</div>
+    </div>
+    <div class="table-wrap">
+      <table class="alloc-table">
+        <thead><tr><th>Evento</th><th>Tokens</th><th>Circulante después</th><th>Estado</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Lanzamiento (nov. 2023)</strong></td><td>1.5B</td><td>15%</td><td><span class="status-pill pill-green">Hecho</span></td></tr>
+          <tr><td><strong>Desbloqueos 2024–2025</strong></td><td>2 × 2.125B</td><td>57.5%</td><td><span class="status-pill pill-green">Hecho</span></td></tr>
+          <tr><td><strong>Mayo 2026</strong></td><td>2.13B</td><td>78.75%</td><td><span class="status-pill pill-green">Hecho · mínimo en junio</span></td></tr>
+          <tr style="background:#1f0a21;"><td><strong style="color:#e879f9;">19 de mayo de 2027</strong></td><td>2.125B</td><td>100%</td><td><span class="status-pill pill-red">Pendiente · ~27% del circulante</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pressure-meter" style="margin-top:20px;">
+      <div class="meter-label">Mcap/FDV — comparativa con tokens analizados por TokenFlow AI</div>
+      <div style="display:grid;gap:8px;margin-top:8px;">
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>Arweave (AR) · supply fijo</span><span>100%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:100%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>Maple (SYRUP)</span><span>92%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:92%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#e879f9;font-weight:700;margin-bottom:3px;"><span>Pyth (PYTH) · 10B fijo</span><span>79% ⚠</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-fx" style="width:79%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>Walrus (WAL)</span><span>52%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-orange" style="width:52%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>DoubleZero (2Z)</span><span>35%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:35%;"></div></div></div>
+      </div>
+    </div>
+
+    <div class="note-box danger">
+      <strong>🔴 La cuenta que importa:</strong> el desbloqueo de mayo de 2027 libera 2,125M PYTH, unos $130M al precio actual. Si la DAO sigue recibiendo ~$554K al mes y lo destina al 100% a recompras, son ~$6.6M al año. El desbloqueo equivale a unas 20 veces las recompras anuales. Para equilibrar esa oferta, los ingresos tendrían que multiplicarse antes de mayo.
+    </div>
+    <div class="note-box warning">
+      <strong>⚠ Matiz importante:</strong> según Tokenomist, ese bloque va a crecimiento del ecosistema, y en el desbloqueo de mayo de 2026 gran parte de los tokens se destinó a programas de largo plazo, no a venta inmediata. Además, ese desbloqueo ya se superó una vez: el precio tocó su mínimo histórico en junio de 2026 ($0.0295) y desde entonces subió ~110%.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">⚖</div>
+      <div class="section-title">Valuación — El mercado ya paga una prima</div>
+      <div class="section-tag">Precio vs. Ingresos</div>
+    </div>
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Pyth (PYTH)</div><div class="stat-value stat-orange">~43x</div><div class="stat-sub">Mcap / ingresos anualizados</div></div>
+      <div class="stat-card"><div class="stat-label">Maple (SYRUP)</div><div class="stat-value stat-green">~12x</div><div class="stat-sub">Análisis del 16 oct.</div></div>
+      <div class="stat-card"><div class="stat-label">Recompra anual</div><div class="stat-value">~1.35%</div><div class="stat-sub">Del Mcap, al ritmo actual</div></div>
+      <div class="stat-card"><div class="stat-label">Desbloqueo / recompra</div><div class="stat-value stat-red">~20x</div><div class="stat-sub">Mayo 2027</div></div>
+    </div>
+    <div class="note-box warning">
+      Con una capitalización de ~$490M y ~$11.5M de ingresos recurrentes anualizados, PYTH cotiza a unas 43 veces sus ingresos. Maple, con un mecanismo de recompras menos agresivo, cotiza a unas 12 veces. El mercado ya descuenta un crecimiento fuerte de Pyth: la regla del 100% solo cambia la tesis si los ingresos siguen creciendo al ritmo actual.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">⚔</div>
+      <div class="section-title">Posicionamiento competitivo</div>
+      <div class="section-tag">Oráculos</div>
+    </div>
+    <div class="table-wrap">
+      <table class="alloc-table">
+        <thead><tr><th>Proyecto</th><th>Modelo</th><th>vs. PYTH</th></tr></thead>
+        <tbody>
+          <tr style="background:#1f0a21;"><td><strong style="color:#e879f9;">Pyth (PYTH)</strong></td><td>Datos de primera mano, de pago</td><td>— Fuerte en baja latencia y mercados financieros</td></tr>
+          <tr><td><strong>Chainlink (LINK)</strong></td><td>Red de nodos, líder histórico</td><td>Más grande y establecido; ya lo analizamos</td></tr>
+          <tr><td><strong>Bloomberg / Refinitiv</strong></td><td>Datos tradicionales</td><td>El verdadero mercado al que apunta Pyth Pro</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note-box" style="margin-top:14px;">
+      <strong>Posición de Pyth:</strong> en DeFi compite con Chainlink, el líder histórico. Pero su apuesta de fondo es otra: vender datos de mercado a instituciones, un negocio dominado por proveedores tradicionales. Los nuevos datos de bonos del Tesoro de EE.UU. van en esa dirección.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">⚠</div>
+      <div class="section-title">Riesgos y estructura del precio</div>
+      <div class="section-tag">Mercado</div>
+    </div>
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Perps / Spot</div><div class="stat-value stat-orange">6.0x</div><div class="stat-sub">Volumen 24h</div></div>
+      <div class="stat-card"><div class="stat-label">OI / Mcap</div><div class="stat-value stat-yellow">14.8%</div><div class="stat-sub">~$72M en perpetuos</div></div>
+      <div class="stat-card"><div class="stat-label">7 días</div><div class="stat-value stat-red">-14.7%</div><div class="stat-sub">Peor que el mercado</div></div>
+      <div class="stat-card"><div class="stat-label">Desde el mínimo</div><div class="stat-value stat-green">+110%</div><div class="stat-sub">Junio 2026</div></div>
+    </div>
+    <div class="note-box danger">
+      <strong>🔴 Fiabilidad:</strong> en mayo de 2026, Pyth sufrió una caída de su servicio principal y tuvo que restaurar sus feeds. Para un oráculo, la fiabilidad es el producto: un error de precio puede provocar liquidaciones en los protocolos que dependen de él.
+    </div>
+    <div class="note-box warning">
+      <strong>⚠ Volatilidad:</strong> los perpetuos mueven 6 veces el volumen spot y el token cayó un 14.7% en la última semana, peor que el mercado. La regla del 100% impulsó una subida del 15% el 12 de octubre, que no se sostuvo. Las buenas noticias no bastan si el mercado general cae.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-fx">⚖</div>
+      <div class="section-title">Argumentos alcistas vs. bajistas</div>
+      <div class="section-tag">Veredicto TokenFlow</div>
+    </div>
+    <div class="verdict-grid">
+      <div class="verdict-card verdict-bull">
+        <div class="verdict-title">🟢 Argumentos alcistas</div>
+        <div class="verdict-item">100% de los ingresos de productos a recompras</div>
+        <div class="verdict-item">Negocio de pago creciendo tras eliminar los datos gratis</div>
+        <div class="verdict-item">Supply máximo fijo de 10,000M</div>
+        <div class="verdict-item">Proveedores de primer nivel (Jane Street, Cboe…)</div>
+        <div class="verdict-item">Expansión hacia datos de mercados tradicionales</div>
+        <div class="verdict-item">Ya superó un desbloqueo de tamaño similar en 2026</div>
+      </div>
+      <div class="verdict-card verdict-bear">
+        <div class="verdict-title">🔴 Argumentos bajistas</div>
+        <div class="verdict-item">Desbloqueo de 2,125M (27% del circulante) en mayo 2027</div>
+        <div class="verdict-item">Recompras actuales ~20x menores que ese desbloqueo</div>
+        <div class="verdict-item">Valuación exigente: ~43x los ingresos</div>
+        <div class="verdict-item">Competencia directa de Chainlink</div>
+        <div class="verdict-item">Caída del servicio en mayo de 2026</div>
+        <div class="verdict-item">Perpetuos 6x el spot</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="final-verdict">
+    <div class="final-title">TokenFlow AI · Veredicto Final</div>
+    <div class="final-score">
+      <div class="score-number">6.0</div>
+      <div>
+        <div class="score-label">La mejor captura de valor · El mayor desbloqueo pendiente</div>
+        <div class="score-sub">sobre 10 · La regla del 100% contra el reloj de mayo de 2027</div>
+      </div>
+    </div>
+    <div class="final-text">
+      Pyth tiene la política de captura de valor más directa que hemos analizado: todo lo que ingresa por sus productos se usa para comprar PYTH en el mercado. Y no es una promesa sobre un negocio futuro: Pyth ya cerró su oráculo gratuito, cobra suscripciones y sus ingresos recurrentes siguen creciendo.<br><br>
+      El problema es el calendario. En mayo de 2027 se desbloquea el último bloque de 2,125M de tokens, el 27% del circulante actual. Al ritmo actual de ingresos, las recompras de todo un año equivalen a una vigésima parte de ese desbloqueo. Y a ~43 veces sus ingresos, el mercado ya paga por un crecimiento que todavía tiene que llegar.<br><br>
+      La comparación con la serie lo resume: Livepeer devuelve el 0% de sus ingresos al token, Maple entre el 10% y el 30%, Pyth el 100%. Pero Maple casi no tiene desbloqueos pendientes, y Pyth sí. Por eso Maple obtiene una nota mayor.<br><br>
+      <strong>¿Qué cambiaría el veredicto?</strong> Que los ingresos crezcan lo suficiente antes de mayo de 2027 para que las recompras absorban una parte relevante del desbloqueo, y que el desbloqueo se distribuya de forma gradual. Con ambos, Pyth podría subir a 7–7.5/10.
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:20px;">
+    <div class="section-header">
+      <div class="section-icon icon-blue">👁</div>
+      <div class="section-title">Qué vigilar en los próximos 30–90 días</div>
+      <div class="section-tag">Lista de Monitoreo</div>
+    </div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Informes mensuales de recompra:</strong> cuánto recibe la DAO y cuánto PYTH compra cada mes. Es la prueba de que la regla del 100% funciona.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-fx"></div><div class="watch-text"><strong>Crecimiento de Pyth Pro:</strong> nuevos clientes institucionales y nuevos productos, como los datos del Tesoro de EE.UU. Es el motor de las recompras.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-red"></div><div class="watch-text"><strong>Desbloqueo de mayo de 2027:</strong> cualquier propuesta de la DAO para repartirlo en el tiempo o vincularlo a staking cambiaría el riesgo principal.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-yellow"></div><div class="watch-text"><strong>Fiabilidad del servicio:</strong> tras la caída de mayo de 2026, cualquier nuevo incidente sería una señal de alerta.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Competencia con Chainlink:</strong> cuota en nuevos mercados de perpetuos y de activos reales tokenizados.</div></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong style="color:#e879f9;">TokenFlow AI</strong> · Investigación de tokenómica AI, DePIN y RWA · Sin hype. Solo estructura.<br>
+  Fecha del análisis: 30 de octubre de 2026 · Este análisis no constituye asesoramiento de inversión. DYOR.<br>
+  Fuentes: CoinGecko, Tokenomist, foro de la DAO de Pyth, Douro Labs, DefiLlama, CoinStats, Crypto Briefing, The Block<br>
+  <a href="https://t.me/TokenFlowAI">Únete en Telegram</a> · <a href="https://wa.me/?text=An%C3%A1lisis%20de%20Pyth%20(%24PYTH)%20por%20TokenFlow%20AI%3A%20https%3A%2F%2Fbmisi70.github.io%2Ftokenflowai.github.io%2FTokenFlow_PYTH_Analisis_2026_ES.html">Compartir por WhatsApp</a>
+</div>
+
+</body>
+</html>
