@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenFlow AI – Análisis Centrifuge (CFG) 2026</title>
+<meta name="description" content="Análisis tokenómico de Centrifuge ($CFG): la conversión de token a acciones (CP172), el negocio institucional y lo que le queda al token. Sin hype. Solo estructura.">
+<script data-goatcounter="https://tokenflowai.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'JetBrains Mono', monospace; background: #0a0e1a; color: #e2e8f0; line-height: 1.7; font-size: 14px; }
+
+  .header { background: linear-gradient(135deg, #0a0e1a 0%, #14142d 50%, #0a0e1a 100%); border-bottom: 1px solid #4f46e5; padding: 44px 32px 36px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; background: radial-gradient(ellipse, rgba(129,140,248,0.10) 0%, transparent 70%); pointer-events: none; }
+  .brand { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #818cf8; margin-bottom: 14px; font-weight: 600; }
+  .title { font-size: 38px; font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -1px; }
+  .title span { color: #818cf8; }
+  .subtitle { font-size: 12px; color: #64748b; margin-bottom: 22px; letter-spacing: 1px; }
+  .verdict-badge { display: inline-block; padding: 8px 24px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid; font-family: 'JetBrains Mono', monospace; }
+  .badge-warning { background: #451a03; color: #fb923c; border-color: #9a3412; }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 36px 20px; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 36px; }
+  .stat-card { background: #0d1525; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; text-align: center; }
+  .stat-label { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .stat-value { font-size: 22px; font-weight: 800; color: #f8fafc; }
+  .stat-sub { font-size: 10px; color: #64748b; margin-top: 4px; }
+  .stat-ind { color: #818cf8; }
+  .stat-green { color: #4ade80; }
+  .stat-yellow { color: #fbbf24; }
+  .stat-red { color: #f87171; }
+  .stat-orange { color: #fb923c; }
+
+  .section { background: #0d1525; border: 1px solid #1e293b; border-radius: 8px; padding: 26px; margin-bottom: 18px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #1e293b; }
+  .section-icon { width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .icon-blue { background: #1e3a5f; }
+  .icon-red { background: #450a0a; }
+  .icon-yellow { background: #422006; }
+  .icon-green { background: #052e16; }
+  .icon-ind { background: #1e1b4b; }
+  .section-title { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+  .section-tag { font-size: 10px; color: #475569; margin-left: auto; letter-spacing: 1px; text-transform: uppercase; }
+
+  .concept-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .concept-card { background: #13132b; border: 1px solid #3730a3; border-radius: 6px; padding: 16px; }
+  .concept-card-title { font-size: 11px; color: #818cf8; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .concept-card-text { font-size: 12px; color: #94a3b8; line-height: 1.6; }
+
+  .table-wrap { overflow-x: auto; }
+  .alloc-table { width: 100%; border-collapse: collapse; min-width: 520px; }
+  .alloc-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .alloc-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; font-size: 13px; vertical-align: middle; }
+  .alloc-table tr:last-child td { border-bottom: none; }
+  .alloc-table tr.stale td { color: #475569; }
+  .alloc-bar-wrap { background: #1e293b; border-radius: 2px; height: 5px; width: 90px; display: inline-block; vertical-align: middle; margin-left: 8px; }
+  .alloc-bar { height: 5px; border-radius: 2px; display: block; }
+
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+  .pill-green { background: #052e16; color: #4ade80; }
+  .pill-yellow { background: #422006; color: #fbbf24; }
+  .pill-red { background: #450a0a; color: #f87171; }
+  .pill-ind { background: #1e1b4b; color: #c7d2fe; }
+
+  .pressure-meter { margin: 14px 0; }
+  .meter-label { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+  .meter-bar-wrap { background: #1e293b; border-radius: 3px; height: 10px; overflow: hidden; }
+  .meter-bar { height: 10px; border-radius: 3px; }
+  .meter-green { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .meter-orange { background: linear-gradient(90deg, #ea580c, #fb923c); }
+  .meter-red { background: linear-gradient(90deg, #dc2626, #f87171); }
+  .meter-yellow { background: linear-gradient(90deg, #ca8a04, #fbbf24); }
+  .meter-ind { background: linear-gradient(90deg, #4f46e5, #818cf8); }
+  .meter-footer { display: flex; justify-content: space-between; font-size: 10px; color: #475569; margin-top: 4px; gap: 8px; }
+
+  .verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .verdict-card { border-radius: 6px; padding: 20px; }
+  .verdict-bull { background: #052e16; border: 1px solid #166534; }
+  .verdict-bear { background: #450a0a; border: 1px solid #7f1d1d; }
+  .verdict-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .verdict-bull .verdict-title { color: #4ade80; }
+  .verdict-bear .verdict-title { color: #f87171; }
+  .verdict-item { font-size: 12px; color: #cbd5e1; margin-bottom: 9px; padding-left: 18px; position: relative; line-height: 1.5; }
+  .verdict-item::before { content: '→'; position: absolute; left: 0; font-weight: 700; }
+  .verdict-bull .verdict-item::before { color: #4ade80; }
+  .verdict-bear .verdict-item::before { color: #f87171; }
+
+  .final-verdict { background: linear-gradient(135deg, #14142d, #0f172a); border: 1px solid #4f46e5; border-radius: 8px; padding: 30px; margin-top: 8px; }
+  .final-title { font-size: 11px; color: #818cf8; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 14px; font-weight: 700; }
+  .final-score { display: flex; align-items: center; gap: 22px; margin-bottom: 18px; }
+  .score-number { font-size: 68px; font-weight: 900; color: #fbbf24; line-height: 1; }
+  .score-label { font-size: 20px; font-weight: 700; color: #f1f5f9; }
+  .score-sub { font-size: 12px; color: #64748b; margin-top: 6px; }
+  .final-text { font-size: 13px; color: #cbd5e1; line-height: 1.9; }
+
+  .watch-item { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid #1e293b; font-size: 13px; }
+  .watch-item:last-child { border-bottom: none; }
+  .watch-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #22c55e; }
+  .dot-ind { background: #818cf8; }
+  .watch-text { color: #cbd5e1; }
+  .watch-text strong { color: #f8fafc; }
+
+  .note-box { background: #0c0c1f; border-left: 3px solid #818cf8; border-radius: 0 6px 6px 0; padding: 14px 16px; font-size: 12px; color: #94a3b8; margin: 14px 0; line-height: 1.8; }
+  .note-box.warning { border-left-color: #f59e0b; background: #0d1105; }
+  .note-box.danger { border-left-color: #ef4444; background: #0d0808; }
+  .note-box.success { border-left-color: #22c55e; background: #050f05; }
+  .note-box strong { color: #e2e8f0; }
+
+  .footer { text-align: center; padding: 28px; color: #334155; font-size: 11px; border-top: 1px solid #1e293b; margin-top: 36px; letter-spacing: 0.5px; line-height: 2; }
+  .footer a { color: #818cf8; }
+
+  @media (max-width: 600px) {
+    .verdict-grid, .concept-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .score-number { font-size: 52px; }
+    .title { font-size: 28px; }
+    .final-score { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">🔵 TokenFlow AI · Investigación de Tokenómica RWA</div>
+  <div class="title">Centrifuge · <span>CFG</span></div>
+  <div class="subtitle">Análisis completo — El primer token que se convierte en acciones · 7 de noviembre de 2026</div>
+  <div class="verdict-badge badge-warning">⚠ Negocio en crecimiento · El valor pasa a las acciones · Sin supply máximo</div>
+</div>
+
+<div class="container">
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Precio (USD)</div><div class="stat-value stat-ind">$0.096</div><div class="stat-sub">7 nov. · rango 7d $0.089–0.104</div></div>
+    <div class="stat-card"><div class="stat-label">Cap. de Mercado</div><div class="stat-value stat-yellow">$37–55M</div><div class="stat-sub">Según el circulante usado</div></div>
+    <div class="stat-card"><div class="stat-label">FDV</div><div class="stat-value">~$65M</div><div class="stat-sub">680M tokens</div></div>
+    <div class="stat-card"><div class="stat-label">Desde ATH</div><div class="stat-value stat-red">-76%</div><div class="stat-sub">ATH: $0.40 (ago. 2025)</div></div>
+    <div class="stat-card"><div class="stat-label">Circulante</div><div class="stat-value">380–577M</div><div class="stat-sub">CoinGecko vs. DefiLlama</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Máx.</div><div class="stat-value stat-red">∞</div><div class="stat-sub">3% de inflación anual</div></div>
+    <div class="stat-card"><div class="stat-label">CP172</div><div class="stat-value stat-green">98.5%</div><div class="stat-sub">A favor · sept. 2026</div></div>
+    <div class="stat-card"><div class="stat-label">Perps / Spot</div><div class="stat-value stat-red">15.7x</div><div class="stat-sub">Volumen 24h</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-ind">🏦</div>
+      <div class="section-title">¿Qué es Centrifuge? — La fábrica de fondos tokenizados</div>
+      <div class="section-tag">RWA / Tokenización</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">Centrifuge es una de las plataformas más antiguas del sector RWA. Permite a gestoras tradicionales llevar sus fondos a la blockchain: bonos, deuda, índices bursátiles. El inversor compra un token que representa una participación en el fondo, y ese token puede usarse en DeFi como garantía o en mercados de rendimiento fijo.</p>
+
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="concept-card-title">Clientes institucionales</div>
+        <div class="concept-card-text">En los últimos días: Schroders llevó un fondo de deuda emergente a Solana, New York Life tokenizó una estrategia de bonos high yield y Janus Henderson lanzó un fondo que replica el Nasdaq-100 (JQQQ).</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Coinbase</div>
+        <div class="concept-card-text">En 2026, Coinbase invirtió en Centrifuge y la nombró proveedor preferido de infraestructura de tokenización. En Consensus 2026 se anunció que Coinbase tokenizará el S&amp;P 500 en Base usando Centrifuge.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Multicadena</div>
+        <div class="concept-card-text">Desde la versión 3, Centrifuge funciona sobre Ethereum y se extiende a Base, Solana, Avalanche y Stellar. El token CFG migró de Polkadot a un ERC-20 en Ethereum.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">DeFi integrado</div>
+        <div class="concept-card-text">Los fondos tokenizados se usan en Aave, Sky (antes MakerDAO) y, desde octubre, en mercados de tasa fija con Pendle en Base.</div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <strong>🔑 Contexto de la serie:</strong> en las últimas semanas medimos cuánto de lo que gana un protocolo vuelve a su token. Livepeer: 0%. Maple: 10–30%. Pyth: 100%. Centrifuge da una respuesta nueva: el valor no irá al token, sino a acciones de la empresa.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">🔍</div>
+      <div class="section-title">La paradoja — La empresa gana, el token no</div>
+      <div class="section-tag">Captura de Valor</div>
+    </div>
+    <div class="note-box danger">
+      <strong>🔴 Lo que dice Alea Research:</strong> según un informe de fines de octubre de 2026, el tamaño de los fondos de Centrifuge cayó cerca de un 40% tras la salida de grandes inversores, pero los ingresos por comisiones aumentaron, porque un fondo de crédito AAA con comisiones más altas reemplazó a un fondo de bonos del Tesoro más barato. El problema: esas comisiones son de los gestores de los fondos. Los holders de CFG no capturan nada.
+    </div>
+    <div class="pressure-meter">
+      <div class="meter-label">Vínculo entre el negocio y el token CFG</div>
+      <div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:10%;"></div></div>
+      <div class="meter-footer"><span>Ninguno</span><span style="color:#f87171;">🔴 Casi nulo: el valor pasa a las acciones</span><span>Directo</span></div>
+    </div>
+    <div class="table-wrap">
+      <table class="alloc-table">
+        <thead><tr><th>Protocolo</th><th>Ingresos que vuelven al token</th><th>Mecanismo</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Livepeer (LPT)</strong></td><td>0%</td><td><span class="status-pill pill-red">Comisiones a operadores</span></td></tr>
+          <tr><td><strong>Maple (SYRUP)</strong></td><td>10–30%</td><td><span class="status-pill pill-yellow">Recompras escalonadas</span></td></tr>
+          <tr><td><strong>Pyth (PYTH)</strong></td><td>100%</td><td><span class="status-pill pill-green">Recompras mensuales</span></td></tr>
+          <tr style="background:#13132b;"><td><strong style="color:#818cf8;">Centrifuge (CFG)</strong></td><td>→ Acciones</td><td><span class="status-pill pill-ind">Conversión token → acción</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">🔄</div>
+      <div class="section-title">CP172 — De token a acción</div>
+      <div class="section-tag">El Giro</div>
+    </div>
+    <div class="table-wrap">
+      <table class="alloc-table">
+        <thead><tr><th>Fecha</th><th>Decisión</th><th>Resultado</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Noviembre 2025 (CP171)</strong></td><td>Todo el valor del ecosistema fluye por CFG, sin negocio de acciones</td><td><span class="status-pill pill-green">Aprobado</span></td></tr>
+          <tr><td><strong>17 de agosto de 2026</strong></td><td>Se publica la propuesta CP172: convertir CFG en acciones</td><td><span class="status-pill pill-yellow">Comentarios</span></td></tr>
+          <tr style="background:#13132b;"><td><strong style="color:#818cf8;">3–10 de septiembre de 2026</strong></td><td>Votación de CP172</td><td><span class="status-pill pill-ind">98.53% a favor</span></td></tr>
+          <tr><td><strong>Hoy</strong></td><td>Aprobaciones y análisis legal</td><td><span class="status-pill pill-red">Conversión aún no abierta</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="concept-grid" style="margin-top:16px;">
+      <div class="concept-card">
+        <div class="concept-card-title">1 CFG = 1 acción</div>
+        <div class="concept-card-text">La Centrifuge Network Foundation se reestructura como Centrifuge, Inc., una sociedad exenta de las Islas Caimán. Cada CFG podrá cambiarse por una acción tokenizada, sin costo adicional.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Dos vías</div>
+        <div class="concept-card-text">Con 100,000 CFG o más, el holder queda registrado como accionista directo. Con menos, participa a través de un fideicomiso gestionado por CoinList.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Voluntario</div>
+        <div class="concept-card-text">Nadie está obligado a convertir. Quien quiera puede quedarse con su CFG o venderlo en el mercado.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Asesores</div>
+        <div class="concept-card-text">La propuesta cuenta con asesoría legal de Ogier y apoyo de Galaxy Digital Labs y la Tokenized Asset Coalition.</div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <strong>📌 Por qué lo hacen, según el equipo:</strong> para un negocio institucional, un token público implica volatilidad, exposición regulatoria, límites de gobernanza y el costo de mantener liquidez y listados. Las acciones, además, facilitan la entrada de fondos de venture capital e inversores estratégicos.
+    </div>
+    <div class="note-box warning">
+      <strong>⚠ Un dato sobre el 98.5%:</strong> participó alrededor del 10.6% del supply circulante. Es una mayoría aplastante de una minoría de holders, algo habitual en la gobernanza cripto, pero que conviene tener presente.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">❓</div>
+      <div class="section-title">La pregunta incómoda — ¿Qué le queda al token?</div>
+      <div class="section-tag">Riesgo Principal</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:16px;">La propuesta reemplaza el modelo en el que el valor de la empresa fluía hacia el token público por uno en el que las acciones son la única vía para participar de ese valor. El CFG que no se convierta queda principalmente como token de gobernanza.</p>
+    <div class="table-wrap">
+      <table class="alloc-table">
+        <thead><tr><th>Pendiente de definir</th><th>Por qué importa</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Quién será elegible</strong></td><td>Los requisitos legales pueden excluir a holders de ciertos países</td></tr>
+          <tr><td><strong>Derechos de las acciones</strong></td><td>Voto, dividendos y prioridad aún no publicados</td></tr>
+          <tr><td><strong>Cómo se venden</strong></td><td>Una acción sin mercado líquido puede ser más difícil de vender que un token</td></tr>
+          <tr><td><strong>Cuándo abre la conversión</strong></td><td>Sin fecha: sigue sujeta a aprobaciones</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note-box warning" style="margin-top:14px;">
+      <strong>⚠ Para un holder latinoamericano:</strong> los requisitos de elegibilidad aún no se conocen. Antes de comprar CFG pensando en la conversión, conviene esperar a que se publiquen los requisitos legales y comprobar si aplican en tu país.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">📊</div>
+      <div class="section-title">Estructura del suministro — Sin tope y con datos dispares</div>
+      <div class="section-tag">Supply Analysis</div>
+    </div>
+    <div class="table-wrap">
+      <table class="alloc-table">
+        <thead><tr><th>Métrica</th><th>Valor</th><th>Lectura</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Total</strong></td><td>~680–697M</td><td>Incluye 115M creados para incentivos en 2025</td></tr>
+          <tr><td><strong>Circulante</strong></td><td>380M–577M</td><td style="color:#fbbf24;">⚠ CoinGecko y DefiLlama no coinciden</td></tr>
+          <tr><td><strong>Máximo</strong></td><td>Ilimitado</td><td style="color:#f87171;">⚠ Sin tope</td></tr>
+          <tr><td><strong>Inflación</strong></td><td>3% anual</td><td>Va a la tesorería</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note-box warning" style="margin-top:14px;">
+      <strong>⚠ Regla TokenFlow:</strong> las fuentes no coinciden sobre cuántos tokens circulan, así que no damos un único Mcap. Con el precio actual, la capitalización está entre ~$37M y ~$55M, y el FDV ronda los $65M.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📉</div>
+      <div class="section-title">Estructura del precio</div>
+      <div class="section-tag">Mercado</div>
+    </div>
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Perps / Spot</div><div class="stat-value stat-red">15.7x</div><div class="stat-sub">Volumen 24h</div></div>
+      <div class="stat-card"><div class="stat-label">OI / Mcap</div><div class="stat-value stat-orange">24.3%</div><div class="stat-sub">~$8.9M en perpetuos</div></div>
+      <div class="stat-card"><div class="stat-label">Volumen spot 24h</div><div class="stat-value">~$4.4M</div><div class="stat-sub">CoinGecko</div></div>
+      <div class="stat-card"><div class="stat-label">Desde el mínimo</div><div class="stat-value stat-green">+43%</div><div class="stat-sub">ATL $0.067 (feb. 2026)</div></div>
+    </div>
+    <div class="note-box warning">
+      Los perpetuos mueven casi 16 veces el volumen spot, y el interés abierto equivale a una cuarta parte de la capitalización. Es un token en transición: la especulación pesa mucho más que la liquidez real.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-ind">⚖</div>
+      <div class="section-title">Argumentos alcistas vs. bajistas</div>
+      <div class="section-tag">Veredicto TokenFlow</div>
+    </div>
+    <div class="verdict-grid">
+      <div class="verdict-card verdict-bull">
+        <div class="verdict-title">🟢 Argumentos alcistas</div>
+        <div class="verdict-item">Clientes de primer nivel: Schroders, Janus Henderson, New York Life</div>
+        <div class="verdict-item">Coinbase como inversor y socio estratégico</div>
+        <div class="verdict-item">Opción de convertir el token en acciones de la empresa</div>
+        <div class="verdict-item">Ingresos por comisiones en aumento, según Alea</div>
+        <div class="verdict-item">Presencia en las principales cadenas</div>
+      </div>
+      <div class="verdict-card verdict-bear">
+        <div class="verdict-title">🔴 Argumentos bajistas</div>
+        <div class="verdict-item">El token no captura las comisiones del negocio</div>
+        <div class="verdict-item">El valor futuro se traslada a las acciones</div>
+        <div class="verdict-item">Elegibilidad y derechos de las acciones sin definir</div>
+        <div class="verdict-item">Sin supply máximo, 3% de inflación anual</div>
+        <div class="verdict-item">Cambio de rumbo en 10 meses</div>
+        <div class="verdict-item">Perpetuos 15.7x el spot</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="final-verdict">
+    <div class="final-title">TokenFlow AI · Veredicto Final</div>
+    <div class="final-score">
+      <div class="score-number">4.0</div>
+      <div>
+        <div class="score-label">Buena empresa · Token en retirada</div>
+        <div class="score-sub">sobre 10 · La nota es para el token CFG, no para el negocio de Centrifuge</div>
+      </div>
+    </div>
+    <div class="final-text">
+      Como negocio, Centrifuge vive su mejor momento. Gestoras como Schroders, Janus Henderson y New York Life usan su infraestructura, y Coinbase la eligió como socio de tokenización. Pocos proyectos RWA pueden mostrar una lista de clientes así.<br><br>
+      Pero esta es una nota para el token, y el propio proyecto concluyó que un token público no era la mejor forma de compartir el valor de la empresa. Las comisiones de los fondos son de los gestores, el CFG no captura ese negocio y, con CP172, el valor futuro se traslada a acciones de Centrifuge, Inc.<br><br>
+      La conversión puede ser una buena opción para algunos holders: pasan de un token sin captura de valor a una participación en la empresa. Pero todavía no se sabe quién podrá convertir, qué derechos tendrán las acciones ni cómo se podrán vender.<br><br>
+      <strong>¿Qué cambiaría el veredicto?</strong> Que se publiquen los requisitos de elegibilidad y los derechos de las acciones, con una vía clara de venta. Si la conversión resulta accesible y las acciones tienen derechos económicos reales, la opción de convertir valdría más que el token en sí.
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:20px;">
+    <div class="section-header">
+      <div class="section-icon icon-blue">👁</div>
+      <div class="section-title">Qué vigilar en los próximos 30–90 días</div>
+      <div class="section-tag">Lista de Monitoreo</div>
+    </div>
+    <div class="watch-item"><div class="watch-dot dot-red"></div><div class="watch-text"><strong>Requisitos de elegibilidad:</strong> el dato más importante. Define quién podrá convertir y quién se quedará solo con el token.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-ind"></div><div class="watch-text"><strong>Derechos de las acciones:</strong> voto, dividendos y forma de venta. Sin esto, es imposible valorar la conversión.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-yellow"></div><div class="watch-text"><strong>Fecha de apertura de la conversión:</strong> a partir de ese momento, la liquidez del token puede cambiar con rapidez.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Nuevos fondos tokenizados:</strong> el negocio sigue creciendo. Más clientes institucionales refuerzan el valor de las futuras acciones.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-red"></div><div class="watch-text"><strong>Liquidez del token:</strong> si muchos holders convierten, el CFG restante puede volverse más ilíquido y volátil.</div></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong style="color:#818cf8;">TokenFlow AI</strong> · Investigación de tokenómica AI, DePIN y RWA · Sin hype. Solo estructura.<br>
+  Fecha del análisis: 7 de noviembre de 2026 · Este análisis no constituye asesoramiento de inversión. DYOR.<br>
+  Fuentes: CoinGecko, DefiLlama, foro de gobernanza de Centrifuge (CP171, CP172), blog de Centrifuge (Q3 2026), Alea Research, Bankless, TokenPost, Crypto Briefing, CoinDesk<br>
+  <a href="https://t.me/TokenFlowAI">Únete en Telegram</a> · <a href="https://wa.me/?text=An%C3%A1lisis%20de%20Centrifuge%20(%24CFG)%20por%20TokenFlow%20AI%3A%20https%3A%2F%2Fbmisi70.github.io%2Ftokenflowai.github.io%2FTokenFlow_CFG_Analisis_2026_ES.html">Compartir por WhatsApp</a>
+</div>
+
+</body>
+</html>
