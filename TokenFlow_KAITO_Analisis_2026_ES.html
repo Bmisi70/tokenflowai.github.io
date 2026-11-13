@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenFlow AI – Análisis Kaito (KAITO) 2026</title>
+<meta name="description" content="Análisis tokenómico de Kaito ($KAITO): riesgo de plataforma con X, desbloqueos, captura de valor y riesgos. Sin hype. Solo estructura.">
+<script data-goatcounter="https://tokenflowai.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'JetBrains Mono', monospace; background: #0a0e1a; color: #e2e8f0; line-height: 1.7; font-size: 14px; }
+
+  .header { background: linear-gradient(135deg, #0a0e1a 0%, #0b1d26 50%, #0a0e1a 100%); border-bottom: 1px solid #0891b2; padding: 44px 32px 36px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; background: radial-gradient(ellipse, rgba(34,211,238,0.10) 0%, transparent 70%); pointer-events: none; }
+  .brand { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #22d3ee; margin-bottom: 14px; font-weight: 600; }
+  .title { font-size: 38px; font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -1px; }
+  .title span { color: #22d3ee; }
+  .subtitle { font-size: 12px; color: #64748b; margin-bottom: 22px; letter-spacing: 1px; }
+  .verdict-badge { display: inline-block; padding: 8px 24px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid; font-family: 'JetBrains Mono', monospace; }
+  .badge-warning { background: #451a03; color: #fb923c; border-color: #9a3412; }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 36px 20px; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 36px; }
+  .stat-card { background: #0d1525; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; text-align: center; }
+  .stat-label { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .stat-value { font-size: 22px; font-weight: 800; color: #f8fafc; }
+  .stat-sub { font-size: 10px; color: #64748b; margin-top: 4px; }
+  .stat-cy { color: #22d3ee; }
+  .stat-green { color: #4ade80; }
+  .stat-yellow { color: #fbbf24; }
+  .stat-red { color: #f87171; }
+  .stat-orange { color: #fb923c; }
+
+  .section { background: #0d1525; border: 1px solid #1e293b; border-radius: 8px; padding: 26px; margin-bottom: 18px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #1e293b; }
+  .section-icon { width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .icon-blue { background: #1e3a5f; }
+  .icon-red { background: #450a0a; }
+  .icon-yellow { background: #422006; }
+  .icon-green { background: #052e16; }
+  .icon-cy { background: #083344; }
+  .section-title { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+  .section-tag { font-size: 10px; color: #475569; margin-left: auto; letter-spacing: 1px; text-transform: uppercase; }
+
+  .concept-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .concept-card { background: #0a1c24; border: 1px solid #155e75; border-radius: 6px; padding: 16px; }
+  .concept-card-title { font-size: 11px; color: #22d3ee; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .concept-card-text { font-size: 12px; color: #94a3b8; line-height: 1.6; }
+
+  .table-wrap { overflow-x: auto; }
+  .alloc-table { width: 100%; border-collapse: collapse; min-width: 520px; }
+  .alloc-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .alloc-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; font-size: 13px; vertical-align: middle; }
+  .alloc-table tr:last-child td { border-bottom: none; }
+  .alloc-table tr.stale td { color: #475569; }
+  .alloc-bar-wrap { background: #1e293b; border-radius: 2px; height: 5px; width: 90px; display: inline-block; vertical-align: middle; margin-left: 8px; }
+  .alloc-bar { height: 5px; border-radius: 2px; display: block; }
+
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+  .pill-green { background: #052e16; color: #4ade80; }
+  .pill-yellow { background: #422006; color: #fbbf24; }
+  .pill-red { background: #450a0a; color: #f87171; }
+  .pill-cy { background: #083344; color: #a5f3fc; }
+
+  .pressure-meter { margin: 14px 0; }
+  .meter-label { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+  .meter-bar-wrap { background: #1e293b; border-radius: 3px; height: 10px; overflow: hidden; }
+  .meter-bar { height: 10px; border-radius: 3px; }
+  .meter-green { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .meter-orange { background: linear-gradient(90deg, #ea580c, #fb923c); }
+  .meter-red { background: linear-gradient(90deg, #dc2626, #f87171); }
+  .meter-yellow { background: linear-gradient(90deg, #ca8a04, #fbbf24); }
+  .meter-cy { background: linear-gradient(90deg, #0891b2, #22d3ee); }
+  .meter-footer { display: flex; justify-content: space-between; font-size: 10px; color: #475569; margin-top: 4px; gap: 8px; }
+
+  .verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .verdict-card { border-radius: 6px; padding: 20px; }
+  .verdict-bull { background: #052e16; border: 1px solid #166534; }
+  .verdict-bear { background: #450a0a; border: 1px solid #7f1d1d; }
+  .verdict-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .verdict-bull .verdict-title { color: #4ade80; }
+  .verdict-bear .verdict-title { color: #f87171; }
+  .verdict-item { font-size: 12px; color: #cbd5e1; margin-bottom: 9px; padding-left: 18px; position: relative; line-height: 1.5; }
+  .verdict-item::before { content: '→'; position: absolute; left: 0; font-weight: 700; }
+  .verdict-bull .verdict-item::before { color: #4ade80; }
+  .verdict-bear .verdict-item::before { color: #f87171; }
+
+  .final-verdict { background: linear-gradient(135deg, #0b1d26, #0f172a); border: 1px solid #0891b2; border-radius: 8px; padding: 30px; margin-top: 8px; }
+  .final-title { font-size: 11px; color: #22d3ee; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 14px; font-weight: 700; }
+  .final-score { display: flex; align-items: center; gap: 22px; margin-bottom: 18px; }
+  .score-number { font-size: 68px; font-weight: 900; color: #fbbf24; line-height: 1; }
+  .score-label { font-size: 20px; font-weight: 700; color: #f1f5f9; }
+  .score-sub { font-size: 12px; color: #64748b; margin-top: 6px; }
+  .final-text { font-size: 13px; color: #cbd5e1; line-height: 1.9; }
+
+  .watch-item { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid #1e293b; font-size: 13px; }
+  .watch-item:last-child { border-bottom: none; }
+  .watch-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #22c55e; }
+  .dot-cy { background: #22d3ee; }
+  .watch-text { color: #cbd5e1; }
+  .watch-text strong { color: #f8fafc; }
+
+  .note-box { background: #06141a; border-left: 3px solid #22d3ee; border-radius: 0 6px 6px 0; padding: 14px 16px; font-size: 12px; color: #94a3b8; margin: 14px 0; line-height: 1.8; }
+  .note-box.warning { border-left-color: #f59e0b; background: #0d1105; }
+  .note-box.danger { border-left-color: #ef4444; background: #0d0808; }
+  .note-box.success { border-left-color: #22c55e; background: #050f05; }
+  .note-box strong { color: #e2e8f0; }
+
+  .footer { text-align: center; padding: 28px; color: #334155; font-size: 11px; border-top: 1px solid #1e293b; margin-top: 36px; letter-spacing: 0.5px; line-height: 2; }
+  .footer a { color: #22d3ee; }
+
+  @media (max-width: 600px) {
+    .verdict-grid, .concept-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .score-number { font-size: 52px; }
+    .title { font-size: 28px; }
+    .final-score { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">🔵 TokenFlow AI · Investigación de Tokenómica AI</div>
+  <div class="title">Kaito · <span>KAITO</span></div>
+  <div class="subtitle">Análisis completo — La InfoFi y el riesgo de depender de otra plataforma · 13 de noviembre de 2026</div>
+  <div class="verdict-badge badge-warning">⚠ Riesgo de plataforma · Solo 24% en circulación · Desbloqueo el 20 de noviembre</div>
+</div>
+
+<div class="container">
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Precio (USD)</div><div class="stat-value stat-cy">$0.21</div><div class="stat-sub">13 nov. · mínimos del ciclo</div></div>
+    <div class="stat-card"><div class="stat-label">Cap. de Mercado</div><div class="stat-value">~$50M</div><div class="stat-sub">Blockworks</div></div>
+    <div class="stat-card"><div class="stat-label">FDV</div><div class="stat-value stat-red">~$208M</div><div class="stat-sub">Mcap/FDV = 24% ⚠️</div></div>
+    <div class="stat-card"><div class="stat-label">Desde ATH</div><div class="stat-value stat-red">-96%</div><div class="stat-sub">ATH: $5.77 (feb. 2025)</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Circ.</div><div class="stat-value">241.4M</div><div class="stat-sub">24% del máximo</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Máx.</div><div class="stat-value">1B</div><div class="stat-sub">Fijo</div></div>
+    <div class="stat-card"><div class="stat-label">Próximo desbloqueo</div><div class="stat-value stat-red">20.7M</div><div class="stat-sub">20 nov. · 8.6% del circulante</div></div>
+    <div class="stat-card"><div class="stat-label">Futuros / Spot</div><div class="stat-value stat-red">~24x</div><div class="stat-sub">Volumen 24h</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-cy">🧠</div>
+      <div class="section-title">¿Qué es Kaito? — IA para la conversación cripto</div>
+      <div class="section-tag">AI / InfoFi</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">Kaito es una plataforma de inteligencia artificial que indexa y analiza la conversación del sector cripto: publicaciones en X, foros de gobernanza, noticias, investigación y podcasts. Su objetivo es medir la atención: qué proyectos generan conversación, quién influye y cómo cambia el sentimiento. A partir de ahí nació la "InfoFi" (finanzas de la información): convertir la atención en algo medible y recompensable.</p>
+
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="concept-card-title">Kaito Pro</div>
+        <div class="concept-card-text">Herramienta de búsqueda y análisis con IA para profesionales e instituciones. Es el producto de suscripción original de la empresa.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Yaps (cerrado)</div>
+        <div class="concept-card-text">Ranking que recompensaba a quienes publicaban sobre proyectos cripto en X. Fue el producto viral de Kaito y el motor de su token, hasta que X lo dejó sin acceso en enero de 2026.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Katalyst</div>
+        <div class="concept-card-text">Lanzado en julio de 2026: campañas para creadores que pagan por resultados medibles, no por cantidad de publicaciones. Diseñado para no volver a llenar X de ruido.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Otros productos</div>
+        <div class="concept-card-text">Kaito Studio, Capital Launchpad (acceso a nuevos proyectos) y mercados de atención con Polymarket, donde se apuesta sobre cuánto se hablará de un tema.</div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <strong>🔑 Contexto de la serie:</strong> Livepeer, Maple, Pyth y Centrifuge giraron en torno a una pregunta: ¿cómo llega el valor del negocio al token? Kaito añade otra: ¿qué vale un token cuando el producto que lo sostiene depende de la plataforma de otra empresa?
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">⚡</div>
+      <div class="section-title">2026: el año que X decidió por Kaito</div>
+      <div class="section-tag">Riesgo de Plataforma</div>
+    </div>
+    <div class="table-wrap">
+      <table class="alloc-table">
+        <thead><tr><th>Fecha</th><th>Qué pasó</th><th>Efecto</th></tr></thead>
+        <tbody>
+          <tr><td><strong>15 de enero</strong></td><td>X prohíbe las apps que pagan por publicar, por el spam generado con IA, y revoca su acceso</td><td><span class="status-pill pill-red">Cierre de Yaps</span></td></tr>
+          <tr><td><strong>Enero–junio</strong></td><td>Kaito trabaja sin su producto estrella</td><td><span class="status-pill pill-yellow">Silencio</span></td></tr>
+          <tr style="background:#0a1c24;"><td><strong style="color:#22d3ee;">Julio</strong></td><td>Acuerdo de datos con X y lanzamiento de Katalyst</td><td><span class="status-pill pill-green">Rally</span></td></tr>
+          <tr><td><strong>Agosto</strong></td><td>Desbloqueos y caída del 68% que borra el rally</td><td><span class="status-pill pill-red">Desplome</span></td></tr>
+          <tr><td><strong>Agosto–octubre</strong></td><td>Nuevas reglas de staking para recibir airdrops</td><td><span class="status-pill pill-yellow">Ajustes</span></td></tr>
+          <tr><td><strong>30 de octubre</strong></td><td>Nuevo mínimo del ciclo</td><td><span class="status-pill pill-red">~$0.23</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note-box danger" style="margin-top:14px;">
+      <strong>🔴 El golpe:</strong> según estimaciones del sector, Yaps representaba en torno al 70% de la utilidad práctica del token. Cuando X revocó el acceso, Kaito tuvo que cerrar su producto más usado de un día para otro. Ningún cambio en el código de Kaito lo habría evitado: la decisión fue de otra empresa.
+    </div>
+    <div class="note-box warning">
+      <strong>⚠ El acuerdo con X:</strong> el acuerdo de julio da a Kaito un acceso oficial a los datos, mucho más sólido que la antigua API para desarrolladores. Pero ni Kaito ni X publicaron su alcance, costo, duración ni exclusividad. Lo que X abrió por contrato también puede cerrarlo.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📊</div>
+      <div class="section-title">Estructura del suministro — Tres cuartas partes por salir</div>
+      <div class="section-tag">Supply Analysis</div>
+    </div>
+    <div class="table-wrap">
+      <table class="alloc-table">
+        <thead><tr><th>Categoría</th><th>% Supply</th><th>Riesgo</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Ecosistema y crecimiento de la red</strong></td><td>32.2% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:100%;background:#22d3ee;"></div></div></td><td style="color:#fbbf24;">Liberación gradual</td></tr>
+          <tr><td><strong>Contribuidores clave</strong></td><td>25% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:78%;background:#ef4444;"></div></div></td><td style="color:#f87171;">⚠ Desbloqueos periódicos</td></tr>
+          <tr><td><strong>Fundación</strong></td><td>10% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:31%;background:#fb923c;"></div></div></td><td>Gestionada por el proyecto</td></tr>
+          <tr><td><strong>Reclamo inicial de la comunidad</strong></td><td>10% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:31%;background:#4ade80;"></div></div></td><td>Ya distribuido en el airdrop</td></tr>
+          <tr><td><strong>Inversores</strong></td><td>8.3% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:26%;background:#f87171;"></div></div></td><td style="color:#f87171;">⚠ Desbloqueos periódicos</td></tr>
+          <tr><td><strong>Creadores, bonos y liquidez</strong></td><td>14.5% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:45%;background:#fbbf24;"></div></div></td><td>Incentivos</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pressure-meter" style="margin-top:20px;">
+      <div class="meter-label">Mcap/FDV — comparativa con tokens analizados por TokenFlow AI</div>
+      <div style="display:grid;gap:8px;margin-top:8px;">
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>Maple (SYRUP)</span><span>92%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:92%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>Pyth (PYTH)</span><span>79%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:79%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>Walrus (WAL)</span><span>52%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-orange" style="width:52%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>DoubleZero (2Z)</span><span>35%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:35%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#22d3ee;font-weight:700;margin-bottom:3px;"><span>Kaito (KAITO)</span><span>24% ⚠</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-cy" style="width:24%;"></div></div></div>
+      </div>
+    </div>
+
+    <div class="note-box danger">
+      <strong>🔴 El calendario:</strong> el 20 de noviembre se desbloquean 20.7M KAITO, unos $4.3M al precio actual y el 8.6% del circulante. Y no es el último: quedan unos 760M tokens por entrar al mercado en los próximos años. Equipo e inversores suman cerca del 33% del supply total.
+    </div>
+    <div class="note-box">
+      <strong>📌 Nota sobre los datos:</strong> la distribución procede de la documentación de Kaito (2025). Algunos agregadores muestran el mismo circulante (241.4M) desde septiembre pese a los desbloqueos posteriores, por lo que el circulante real podría ser algo mayor. Las cifras de esta sección son aproximadas.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">💰</div>
+      <div class="section-title">Captura de valor — Sin puente al token</div>
+      <div class="section-tag">Mecanismo</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:16px;">Kaito tiene un negocio: vende suscripciones a Kaito Pro y cobra a los proyectos por sus campañas. Pero no hay un mecanismo público que lleve esos ingresos al token. KAITO se usa para gobernanza y para staking, que da acceso a airdrops, campañas y al Capital Launchpad.</p>
+    <div class="pressure-meter">
+      <div class="meter-label">Vínculo entre los ingresos de Kaito y el token</div>
+      <div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:15%;"></div></div>
+      <div class="meter-footer"><span>Ninguno</span><span style="color:#f87171;">🔴 Indirecto: utilidad de acceso, sin recompras ni reparto</span><span>Directo</span></div>
+    </div>
+    <div class="table-wrap" style="margin-top:14px;">
+      <table class="alloc-table">
+        <thead><tr><th>Protocolo</th><th>Cómo llega el valor al token</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Livepeer (LPT)</strong></td><td>No llega: comisiones a operadores, inflación a stakers</td></tr>
+          <tr><td><strong>Maple (SYRUP)</strong></td><td>10–30% de los ingresos a recompras</td></tr>
+          <tr><td><strong>Pyth (PYTH)</strong></td><td>100% de los ingresos de productos a recompras</td></tr>
+          <tr><td><strong>Centrifuge (CFG)</strong></td><td>El valor pasa a acciones de la empresa</td></tr>
+          <tr style="background:#0a1c24;"><td><strong style="color:#22d3ee;">Kaito (KAITO)</strong></td><td>Acceso a airdrops y campañas mediante staking</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note-box warning" style="margin-top:14px;">
+      <strong>⚠ Reglas en movimiento:</strong> en agosto de 2026, Kaito pasó a exigir que el stake se mantenga durante toda la campaña para recibir airdrops; en octubre añadió un registro previo. Los cambios frenan a quien entra y sale rápido, pero también muestran que la utilidad del token se redefine cada pocos meses.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">⚔</div>
+      <div class="section-title">Posicionamiento competitivo</div>
+      <div class="section-tag">Datos y Atención</div>
+    </div>
+    <div class="table-wrap">
+      <table class="alloc-table">
+        <thead><tr><th>Proyecto</th><th>Enfoque</th><th>vs. KAITO</th></tr></thead>
+        <tbody>
+          <tr style="background:#0a1c24;"><td><strong style="color:#22d3ee;">Kaito (KAITO)</strong></td><td>IA + atención + campañas</td><td>— Acuerdo oficial con X</td></tr>
+          <tr><td><strong>LunarCrush</strong></td><td>Analítica social de cripto</td><td>Veterano del sector</td></tr>
+          <tr><td><strong>Santiment</strong></td><td>Sentimiento y datos on-chain</td><td>Más foco en datos que en creadores</td></tr>
+          <tr><td><strong>Plataformas de marketing tradicionales</strong></td><td>Campañas con influencers</td><td>Sin token, sin InfoFi</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note-box" style="margin-top:14px;">
+      <strong>Posición de Kaito:</strong> el acuerdo con X es una ventaja real frente a competidores que dependen de accesos menos estables. Pero esa misma ventaja concentra el riesgo: el principal activo de Kaito es un contrato con una sola plataforma.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📉</div>
+      <div class="section-title">Estructura del precio</div>
+      <div class="section-tag">Mercado</div>
+    </div>
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Futuros 24h</div><div class="stat-value stat-red">~$160M</div><div class="stat-sub">Spot: ~$6.7M</div></div>
+      <div class="stat-card"><div class="stat-label">OI / Mcap</div><div class="stat-value stat-orange">~28%</div><div class="stat-sub">~$14M</div></div>
+      <div class="stat-card"><div class="stat-label">Volatilidad 30d</div><div class="stat-value stat-orange">67%</div><div class="stat-sub">Blockworks</div></div>
+      <div class="stat-card"><div class="stat-label">Agosto 2026</div><div class="stat-value stat-red">-68%</div><div class="stat-sub">Caída tras el rally</div></div>
+    </div>
+    <div class="pressure-meter"><div class="meter-label">Recorrido desde ATH ($5.77)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:96%;"></div></div><div class="meter-footer"><span>ATH</span><span style="color:#f87171;">🔴 -96%, en mínimos del ciclo</span><span>ATL</span></div></div>
+    <div class="note-box warning" style="margin-top:14px;">
+      Los futuros mueven unas 24 veces el volumen spot, la proporción más alta que hemos visto en la serie. Con un desbloqueo del 8.6% del circulante a una semana, el precio de corto plazo depende casi por completo del posicionamiento en derivados.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-cy">⚖</div>
+      <div class="section-title">Argumentos alcistas vs. bajistas</div>
+      <div class="section-tag">Veredicto TokenFlow</div>
+    </div>
+    <div class="verdict-grid">
+      <div class="verdict-card verdict-bull">
+        <div class="verdict-title">🟢 Argumentos alcistas</div>
+        <div class="verdict-item">Marca muy reconocida en el sector cripto</div>
+        <div class="verdict-item">Acuerdo oficial de datos con X</div>
+        <div class="verdict-item">Katalyst: un modelo de campañas más sostenible</div>
+        <div class="verdict-item">Nuevos productos: Studio, Launchpad, mercados con Polymarket</div>
+        <div class="verdict-item">Supply máximo fijo de 1,000M</div>
+      </div>
+      <div class="verdict-card verdict-bear">
+        <div class="verdict-title">🔴 Argumentos bajistas</div>
+        <div class="verdict-item">Dependencia de una sola plataforma (X)</div>
+        <div class="verdict-item">Solo 24% del supply en circulación</div>
+        <div class="verdict-item">Desbloqueo del 8.6% del circulante el 20 de noviembre</div>
+        <div class="verdict-item">Sin mecanismo que lleve ingresos al token</div>
+        <div class="verdict-item">Reglas de staking que cambian cada pocos meses</div>
+        <div class="verdict-item">Futuros ~24x el spot</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="final-verdict">
+    <div class="final-title">TokenFlow AI · Veredicto Final</div>
+    <div class="final-score">
+      <div class="score-number">3.0</div>
+      <div>
+        <div class="score-label">Producto vivo · Token sin ancla</div>
+        <div class="score-sub">sobre 10 · El riesgo de plataforma, más un supply por liberar</div>
+      </div>
+    </div>
+    <div class="final-text">
+      Kaito demostró algo importante en 2026: sobrevivió a perder su producto estrella. Cerró Yaps, negoció un acuerdo oficial con X y relanzó su modelo con Katalyst, más pensado para no generar spam. Como empresa, sigue siendo una de las marcas más reconocidas del sector.<br><br>
+      El token cuenta otra historia. Solo una cuarta parte del supply está en circulación, hay desbloqueos regulares por delante (el próximo, el 20 de noviembre) y no existe ningún mecanismo que lleve los ingresos de Kaito al token. Su utilidad depende de reglas de staking que cambian cada pocos meses, y su producto más popular dependía de una plataforma ajena.<br><br>
+      En la serie, Livepeer, Maple, Pyth y Centrifuge dieron cada uno una respuesta distinta a la pregunta de cómo llega el valor al token. Kaito, por ahora, no tiene respuesta.<br><br>
+      <strong>¿Qué cambiaría el veredicto?</strong> Un mecanismo público que conecte los ingresos de Kaito Pro y Katalyst con el token (recompras o reparto), detalles del acuerdo con X que reduzcan el riesgo de plataforma, y que el mercado absorba los próximos desbloqueos sin nuevos mínimos.
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:20px;">
+    <div class="section-header">
+      <div class="section-icon icon-blue">👁</div>
+      <div class="section-title">Qué vigilar en los próximos 30–90 días</div>
+      <div class="section-tag">Lista de Monitoreo</div>
+    </div>
+    <div class="watch-item"><div class="watch-dot dot-red"></div><div class="watch-text"><strong>Desbloqueo del 20 de noviembre:</strong> 20.7M KAITO. Seguir en Tokenomist o Blockworks si los tokens llegan a exchanges.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-cy"></div><div class="watch-text"><strong>Detalles del acuerdo con X:</strong> cualquier información sobre duración o exclusividad cambia el perfil de riesgo.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Tracción de Katalyst:</strong> número de campañas y proyectos que pagan. Es la prueba de que el modelo nuevo funciona.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-yellow"></div><div class="watch-text"><strong>Cambios en la utilidad del token:</strong> cualquier propuesta de recompras o de reparto de ingresos sería un giro importante.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-red"></div><div class="watch-text"><strong>Movimientos de la multisig:</strong> en octubre se movieron 8M KAITO desde la multisig del proyecto. Nuevas transferencias pueden anticipar ventas.</div></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong style="color:#22d3ee;">TokenFlow AI</strong> · Investigación de tokenómica AI, DePIN y RWA · Sin hype. Solo estructura.<br>
+  Fecha del análisis: 13 de noviembre de 2026 · Este análisis no constituye asesoramiento de inversión. DYOR.<br>
+  Fuentes: Blockworks, Messari, documentación de Kaito, KuCoin Research, Crypto Briefing, The Block, AMBCrypto, TokenPost<br>
+  <a href="https://t.me/TokenFlowAI">Únete en Telegram</a> · <a href="https://wa.me/?text=An%C3%A1lisis%20de%20Kaito%20(%24KAITO)%20por%20TokenFlow%20AI%3A%20https%3A%2F%2Fbmisi70.github.io%2Ftokenflowai.github.io%2FTokenFlow_KAITO_Analisis_2026_ES.html">Compartir por WhatsApp</a>
+</div>
+
+</body>
+</html>
