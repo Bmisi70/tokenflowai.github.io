@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenFlow AI – Análisis Plume (PLUME) 2026</title>
+<meta name="description" content="Análisis tokenómico de Plume ($PLUME): licencias de la SEC, vaults RWA, desbloqueos mensuales, captura de valor y riesgos. Sin hype. Solo estructura.">
+<script data-goatcounter="https://tokenflowai.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'JetBrains Mono', monospace; background: #0a0e1a; color: #e2e8f0; line-height: 1.7; font-size: 14px; }
+
+  .header { background: linear-gradient(135deg, #0a0e1a 0%, #0b2119 50%, #0a0e1a 100%); border-bottom: 1px solid #059669; padding: 44px 32px 36px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; background: radial-gradient(ellipse, rgba(52,211,153,0.10) 0%, transparent 70%); pointer-events: none; }
+  .brand { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #34d399; margin-bottom: 14px; font-weight: 600; }
+  .title { font-size: 38px; font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -1px; }
+  .title span { color: #34d399; }
+  .subtitle { font-size: 12px; color: #64748b; margin-bottom: 22px; letter-spacing: 1px; }
+  .verdict-badge { display: inline-block; padding: 8px 24px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid; font-family: 'JetBrains Mono', monospace; }
+  .badge-warning { background: #451a03; color: #fb923c; border-color: #9a3412; }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 36px 20px; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 36px; }
+  .stat-card { background: #0d1525; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; text-align: center; }
+  .stat-label { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .stat-value { font-size: 22px; font-weight: 800; color: #f8fafc; }
+  .stat-sub { font-size: 10px; color: #64748b; margin-top: 4px; }
+  .stat-em { color: #34d399; }
+  .stat-green { color: #4ade80; }
+  .stat-yellow { color: #fbbf24; }
+  .stat-red { color: #f87171; }
+  .stat-orange { color: #fb923c; }
+
+  .section { background: #0d1525; border: 1px solid #1e293b; border-radius: 8px; padding: 26px; margin-bottom: 18px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #1e293b; }
+  .section-icon { width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .icon-blue { background: #1e3a5f; }
+  .icon-red { background: #450a0a; }
+  .icon-yellow { background: #422006; }
+  .icon-green { background: #052e16; }
+  .icon-em { background: #022c22; }
+  .section-title { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+  .section-tag { font-size: 10px; color: #475569; margin-left: auto; letter-spacing: 1px; text-transform: uppercase; }
+
+  .concept-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .concept-card { background: #0a1f18; border: 1px solid #065f46; border-radius: 6px; padding: 16px; }
+  .concept-card-title { font-size: 11px; color: #34d399; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .concept-card-text { font-size: 12px; color: #94a3b8; line-height: 1.6; }
+
+  .table-wrap { overflow-x: auto; }
+  .alloc-table { width: 100%; border-collapse: collapse; min-width: 520px; }
+  .alloc-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .alloc-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; font-size: 13px; vertical-align: middle; }
+  .alloc-table tr:last-child td { border-bottom: none; }
+  .alloc-table tr.stale td { color: #475569; }
+  .alloc-bar-wrap { background: #1e293b; border-radius: 2px; height: 5px; width: 90px; display: inline-block; vertical-align: middle; margin-left: 8px; }
+  .alloc-bar { height: 5px; border-radius: 2px; display: block; }
+
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+  .pill-green { background: #052e16; color: #4ade80; }
+  .pill-yellow { background: #422006; color: #fbbf24; }
+  .pill-red { background: #450a0a; color: #f87171; }
+  .pill-em { background: #022c22; color: #a7f3d0; }
+
+  .pressure-meter { margin: 14px 0; }
+  .meter-label { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+  .meter-bar-wrap { background: #1e293b; border-radius: 3px; height: 10px; overflow: hidden; }
+  .meter-bar { height: 10px; border-radius: 3px; }
+  .meter-green { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .meter-orange { background: linear-gradient(90deg, #ea580c, #fb923c); }
+  .meter-red { background: linear-gradient(90deg, #dc2626, #f87171); }
+  .meter-yellow { background: linear-gradient(90deg, #ca8a04, #fbbf24); }
+  .meter-em { background: linear-gradient(90deg, #059669, #34d399); }
+  .meter-footer { display: flex; justify-content: space-between; font-size: 10px; color: #475569; margin-top: 4px; gap: 8px; }
+
+  .verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .verdict-card { border-radius: 6px; padding: 20px; }
+  .verdict-bull { background: #052e16; border: 1px solid #166534; }
+  .verdict-bear { background: #450a0a; border: 1px solid #7f1d1d; }
+  .verdict-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .verdict-bull .verdict-title { color: #4ade80; }
+  .verdict-bear .verdict-title { color: #f87171; }
+  .verdict-item { font-size: 12px; color: #cbd5e1; margin-bottom: 9px; padding-left: 18px; position: relative; line-height: 1.5; }
+  .verdict-item::before { content: '→'; position: absolute; left: 0; font-weight: 700; }
+  .verdict-bull .verdict-item::before { color: #4ade80; }
+  .verdict-bear .verdict-item::before { color: #f87171; }
+
+  .final-verdict { background: linear-gradient(135deg, #0b2119, #0f172a); border: 1px solid #059669; border-radius: 8px; padding: 30px; margin-top: 8px; }
+  .final-title { font-size: 11px; color: #34d399; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 14px; font-weight: 700; }
+  .final-score { display: flex; align-items: center; gap: 22px; margin-bottom: 18px; }
+  .score-number { font-size: 68px; font-weight: 900; color: #fbbf24; line-height: 1; }
+  .score-label { font-size: 20px; font-weight: 700; color: #f1f5f9; }
+  .score-sub { font-size: 12px; color: #64748b; margin-top: 6px; }
+  .final-text { font-size: 13px; color: #cbd5e1; line-height: 1.9; }
+
+  .watch-item { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid #1e293b; font-size: 13px; }
+  .watch-item:last-child { border-bottom: none; }
+  .watch-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #22c55e; }
+  .dot-em { background: #34d399; }
+  .watch-text { color: #cbd5e1; }
+  .watch-text strong { color: #f8fafc; }
+
+  .note-box { background: #06170f; border-left: 3px solid #34d399; border-radius: 0 6px 6px 0; padding: 14px 16px; font-size: 12px; color: #94a3b8; margin: 14px 0; line-height: 1.8; }
+  .note-box.warning { border-left-color: #f59e0b; background: #0d1105; }
+  .note-box.danger { border-left-color: #ef4444; background: #0d0808; }
+  .note-box.success { border-left-color: #22c55e; background: #050f05; }
+  .note-box strong { color: #e2e8f0; }
+
+  .footer { text-align: center; padding: 28px; color: #334155; font-size: 11px; border-top: 1px solid #1e293b; margin-top: 36px; letter-spacing: 0.5px; line-height: 2; }
+  .footer a { color: #34d399; }
+
+  @media (max-width: 600px) {
+    .verdict-grid, .concept-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .score-number { font-size: 52px; }
+    .title { font-size: 28px; }
+    .final-score { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">🔵 TokenFlow AI · Investigación de Tokenómica AI</div>
+  <div class="title">Plume · <span>PLUME</span></div>
+  <div class="subtitle">Análisis completo — Licencias de la SEC y una cadena con poca actividad · 20 de noviembre de 2026</div>
+  <div class="verdict-badge badge-warning">⚠ Regulación fuerte · Sin captura de valor · Wormhole sale el 2 de diciembre</div>
+</div>
+
+<div class="container">
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Precio (USD)</div><div class="stat-value stat-em">$0.0118</div><div class="stat-sub">20 nov. · CoinGecko</div></div>
+    <div class="stat-card"><div class="stat-label">Cap. de Mercado</div><div class="stat-value">~$80M</div><div class="stat-sub">#281</div></div>
+    <div class="stat-card"><div class="stat-label">FDV</div><div class="stat-value stat-orange">~$118M</div><div class="stat-sub">Mcap/FDV = 68%</div></div>
+    <div class="stat-card"><div class="stat-label">Desde ATH</div><div class="stat-value stat-red">-95%</div><div class="stat-sub">ATH: $0.2475</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Circ.</div><div class="stat-value">6,820M</div><div class="stat-sub">68% del máximo</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Máx.</div><div class="stat-value">10,000M</div><div class="stat-sub">Fijo, sin emisión</div></div>
+    <div class="stat-card"><div class="stat-label">Desbloqueo mensual</div><div class="stat-value stat-red">~212M</div><div class="stat-sub">Cada día 21 · hasta ene. 2028</div></div>
+    <div class="stat-card"><div class="stat-label">Futuros / Spot</div><div class="stat-value stat-red">~20x</div><div class="stat-sub">Volumen 24h</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-em">🏛</div>
+      <div class="section-title">¿Qué es Plume? — Una cadena solo para RWA</div>
+      <div class="section-tag">RWA / L2</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">Plume es una red de capa 2 modular construida sobre Arbitrum (tecnología Nitro), diseñada exclusivamente para activos del mundo real: crédito privado, bonos del Tesoro, materias primas y acciones tokenizadas. Su apuesta es reunir en una sola cadena la emisión, el cumplimiento normativo y el uso en DeFi de esos activos. El token PLUME se usa para pagar el gas, para el staking de la red y para la gobernanza.</p>
+
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="concept-card-title">Plume Chain</div>
+        <div class="concept-card-text">L2 sobre Arbitrum Nitro con herramientas de cumplimiento integradas. Actualizada a ArbOS 51 en febrero de 2026.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Nest</div>
+        <div class="concept-card-text">Protocolo de vaults que ofrece rendimientos de activos reales. Según Plume, sus vaults RWA superan los $220M.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">nOPAL</div>
+        <div class="concept-card-text">Uno de sus productos de rendimiento más grandes: más de $100M según la actualización del tercer trimestre.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">Brazo regulado</div>
+        <div class="concept-card-text">Agente de transferencia registrado ante la SEC y un afiliado con licencia de broker-dealer, para acciones reales de EE.UU. en wallets cripto.</div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <strong>🔑 Contexto de la serie:</strong> Livepeer, Maple, Pyth, Centrifuge y Kaito giraron en torno a una pregunta: ¿cómo llega el valor del negocio al token? Plume añade una variante: ¿cuánto vale una licencia regulatoria para el token si la cadena casi no tiene actividad?
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">⚖</div>
+      <div class="section-title">La regulación — El activo más fuerte de Plume</div>
+      <div class="section-tag">Licencias</div>
+    </div>
+    <div class="table-wrap">
+      <table class="alloc-table">
+        <thead><tr><th>Fecha</th><th>Qué pasó</th><th>Efecto</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Enero 2025</strong></td><td>Lanzamiento del token (TGE) y airdrop del 7% del supply</td><td><span class="status-pill pill-em">Inicio</span></td></tr>
+          <tr><td><strong>Octubre 2025</strong></td><td>Registro ante la SEC como agente de transferencia: libros de accionistas onchain e interoperabilidad con la DTCC</td><td><span class="status-pill pill-green">+25% en el día</span></td></tr>
+          <tr><td><strong>Enero 2026</strong></td><td>Fin del cliff de 12 meses de inversores y equipo</td><td><span class="status-pill pill-red">Más oferta</span></td></tr>
+          <tr><td><strong>Q3 2026</strong></td><td>Vaults RWA por encima de $220M; nOPAL supera los $100M</td><td><span class="status-pill pill-green">Tracción</span></td></tr>
+          <tr style="background:#0a1f18;"><td><strong style="color:#34d399;">Noviembre 2026</strong></td><td>Un afiliado obtiene licencia de broker-dealer: acciones reales de EE.UU. en wallets cripto</td><td><span class="status-pill pill-green">Hito</span></td></tr>
+          <tr><td><strong>2 de diciembre 2026</strong></td><td>Wormhole deja de dar soporte a Plume</td><td><span class="status-pill pill-yellow">Atención</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note-box success" style="margin-top:14px;">
+      <strong>🟢 Lo que pocos tienen:</strong> el gran cuello de botella del sector RWA no es la tecnología, sino los permisos. Un agente de transferencia registrado puede llevar el registro oficial de accionistas en la blockchain, y una licencia de broker-dealer permite ofrecer valores reales. Plume busca además licencias ATS (sistema alternativo de negociación) y apunta a IPOs onchain y fondos regulados.
+    </div>
+    <div class="note-box warning">
+      <strong>⚠ Pero la licencia es de la empresa:</strong> los permisos pertenecen a Plume y a sus afiliados, no a quienes tienen el token. No hay ningún mecanismo público que convierta los ingresos de esos negocios regulados en demanda de PLUME.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">🔍</div>
+      <div class="section-title">La brecha — $220M en vaults, $14.8M en la cadena</div>
+      <div class="section-tag">Actividad Onchain</div>
+    </div>
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Vaults RWA</div><div class="stat-value stat-em">$220M+</div><div class="stat-sub">Según Plume (Q3)</div></div>
+      <div class="stat-card"><div class="stat-label">TVL de la cadena</div><div class="stat-value stat-red">~$14.8M</div><div class="stat-sub">DefiLlama</div></div>
+      <div class="stat-card"><div class="stat-label">Rooster (DEX)</div><div class="stat-value stat-red">~$25K</div><div class="stat-sub">Volumen semanal</div></div>
+      <div class="stat-card"><div class="stat-label">Camelot (DEX)</div><div class="stat-value stat-red">~$22K</div><div class="stat-sub">Volumen semanal</div></div>
+    </div>
+    <div class="pressure-meter">
+      <div class="meter-label">TVL medible en la cadena vs. vaults RWA declarados</div>
+      <div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:7%;"></div></div>
+      <div class="meter-footer"><span>0%</span><span style="color:#f87171;">🔴 ~7%: la mayor parte no es visible onchain</span><span>100%</span></div>
+    </div>
+    <div class="note-box danger" style="margin-top:14px;">
+      <strong>🔴 Pregunta abierta, no acusación:</strong> que los vaults RWA sumen más de $220M y la cadena muestre ~$14.8M de TVL puede tener explicaciones legítimas: activos registrados en otras redes, posiciones fuera de DeFi o diferencias de metodología. Pero para el token, lo que importa es la actividad que paga gas en Plume, y esa hoy es mínima. La actividad en DEX subió un 60% en una semana, pero desde una base muy pequeña.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📊</div>
+      <div class="section-title">Estructura del suministro — Un tercio por salir</div>
+      <div class="section-tag">Supply Analysis</div>
+    </div>
+    <div class="table-wrap">
+      <table class="alloc-table">
+        <thead><tr><th>Categoría</th><th>% Supply</th><th>Calendario</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Comunidad y ecosistema</strong></td><td>39% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:100%;background:#34d399;"></div></div></td><td style="color:#fbbf24;">29.5% en el TGE, resto lineal 36 meses</td></tr>
+          <tr><td><strong>Inversores privados</strong></td><td>21% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:54%;background:#ef4444;"></div></div></td><td style="color:#f87171;">⚠ Cliff 12 meses, 33%, luego lineal 24 meses</td></tr>
+          <tr><td><strong>Equipo (core contributors)</strong></td><td>20% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:51%;background:#f87171;"></div></div></td><td style="color:#f87171;">⚠ Mismo calendario que inversores</td></tr>
+          <tr><td><strong>Fundación</strong></td><td>13% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:33%;background:#fb923c;"></div></div></td><td>11.5% en el TGE, resto lineal 36 meses</td></tr>
+          <tr><td><strong>Airdrop de la comunidad</strong></td><td>7% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:18%;background:#4ade80;"></div></div></td><td>100% distribuido en el TGE</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pressure-meter" style="margin-top:20px;">
+      <div class="meter-label">Mcap/FDV — comparativa con tokens analizados por TokenFlow AI</div>
+      <div style="display:grid;gap:8px;margin-top:8px;">
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>Maple (SYRUP)</span><span>92%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:92%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>Pyth (PYTH)</span><span>79%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:79%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#34d399;font-weight:700;margin-bottom:3px;"><span>Plume (PLUME)</span><span>68% ⚠</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-em" style="width:68%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>Walrus (WAL)</span><span>52%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-orange" style="width:52%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>DoubleZero (2Z)</span><span>35%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:35%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>Kaito (KAITO)</span><span>24%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:24%;"></div></div></div>
+      </div>
+    </div>
+
+    <div class="note-box danger">
+      <strong>🔴 El calendario:</strong> el día 21 de cada mes se liberan unos 212M PLUME, alrededor de $2.5M al precio actual y un 3.1% del circulante. El próximo es el 21 de noviembre, y el último, en enero de 2028. Quedan 15 desbloqueos y ~3,180M tokens. En el de noviembre, cerca del 54% va a inversores y equipo.
+    </div>
+    <div class="note-box">
+      <strong>📌 Nota sobre los datos:</strong> la distribución y el calendario proceden de Tokenomist y de la documentación de Plume. El supply no tiene emisión: crece solo por los desbloqueos. Los porcentajes de cada desbloqueo varían ligeramente según la fuente.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">💰</div>
+      <div class="section-title">Captura de valor — Licencias sin puente al token</div>
+      <div class="section-tag">Mecanismo</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:16px;">PLUME tiene tres usos: pagar el gas de la red, hacer staking para asegurarla y votar en la gobernanza. En teoría, más actividad significa más demanda de gas. En la práctica, con ~$14.8M de TVL y volúmenes de DEX de pocos miles de dólares, las comisiones son mínimas. No hay recompras, ni quema de comisiones, ni reparto de ingresos de los negocios regulados.</p>
+    <div class="pressure-meter">
+      <div class="meter-label">Vínculo entre los negocios de Plume y el token</div>
+      <div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:15%;"></div></div>
+      <div class="meter-footer"><span>Ninguno</span><span style="color:#f87171;">🔴 Indirecto: gas y staking, sin recompras ni reparto</span><span>Directo</span></div>
+    </div>
+    <div class="table-wrap" style="margin-top:14px;">
+      <table class="alloc-table">
+        <thead><tr><th>Protocolo</th><th>Cómo llega el valor al token</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Livepeer (LPT)</strong></td><td>No llega: comisiones a operadores, inflación a stakers</td></tr>
+          <tr><td><strong>Maple (SYRUP)</strong></td><td>10–30% de los ingresos a recompras</td></tr>
+          <tr><td><strong>Pyth (PYTH)</strong></td><td>100% de los ingresos de productos a recompras</td></tr>
+          <tr><td><strong>Centrifuge (CFG)</strong></td><td>El valor pasa a acciones de la empresa</td></tr>
+          <tr><td><strong>Kaito (KAITO)</strong></td><td>Acceso a airdrops y campañas mediante staking</td></tr>
+          <tr style="background:#0a1f18;"><td><strong style="color:#34d399;">Plume (PLUME)</strong></td><td>Gas y staking; las licencias quedan en la empresa</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">🌉</div>
+      <div class="section-title">2 de diciembre — Wormhole deja Plume</div>
+      <div class="section-tag">Aviso Práctico</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:16px;">El 4 de noviembre, Wormhole anunció que dejará de dar soporte a Plume el 2 de diciembre de 2026. Quien tenga en Plume activos puenteados con Wormhole debería devolverlos a su red de origen antes de esa fecha.</p>
+    <div class="note-box warning">
+      <strong>⚠ Por qué importa:</strong> para una cadena cuyo objetivo es mover activos reales entre ecosistemas, perder un puente reduce las vías de entrada y salida de liquidez. No es un fallo de seguridad, pero sí una señal sobre el interés de los socios de infraestructura en la actividad actual de la red.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">⚔</div>
+      <div class="section-title">Posicionamiento competitivo</div>
+      <div class="section-tag">RWA</div>
+    </div>
+    <div class="table-wrap">
+      <table class="alloc-table">
+        <thead><tr><th>Proyecto</th><th>Enfoque</th><th>vs. PLUME</th></tr></thead>
+        <tbody>
+          <tr style="background:#0a1f18;"><td><strong style="color:#34d399;">Plume (PLUME)</strong></td><td>Cadena propia para RWA + licencias</td><td>— Agente de transferencia SEC</td></tr>
+          <tr><td><strong>Ondo (ONDO)</strong></td><td>Tesoros y acciones tokenizadas</td><td>Mucho más AUM, presente en varias cadenas</td></tr>
+          <tr><td><strong>Centrifuge (CFG)</strong></td><td>Infraestructura para fondos RWA</td><td>Socios institucionales, valor hacia el equity</td></tr>
+          <tr><td><strong>Maple (SYRUP)</strong></td><td>Crédito institucional</td><td>Ingresos reales y recompras</td></tr>
+          <tr><td><strong>Ethereum y L2 generalistas</strong></td><td>Donde hoy vive la mayoría del RWA</td><td>Más liquidez, sin foco exclusivo</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note-box" style="margin-top:14px;">
+      <strong>Posición de Plume:</strong> sus permisos regulatorios son una ventaja que pocos competidores igualan. Pero la mayoría de los emisores prefiere lanzar sus activos donde ya está la liquidez. El reto de Plume es convencer a esos emisores de que vale la pena estar en una cadena dedicada.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📉</div>
+      <div class="section-title">Estructura del precio</div>
+      <div class="section-tag">Mercado</div>
+    </div>
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Futuros / Spot</div><div class="stat-value stat-red">~20x</div><div class="stat-sub">Spot 24h: ~$5.9M</div></div>
+      <div class="stat-card"><div class="stat-label">OI / Mcap</div><div class="stat-value stat-orange">~26%</div><div class="stat-sub">~$20.6M</div></div>
+      <div class="stat-card"><div class="stat-label">7 días</div><div class="stat-value stat-red">-8.6%</div><div class="stat-sub">CoinGecko</div></div>
+      <div class="stat-card"><div class="stat-label">Desde el ATL</div><div class="stat-value stat-em">+38%</div><div class="stat-sub">ATL: $0.0085</div></div>
+    </div>
+    <div class="pressure-meter"><div class="meter-label">Recorrido desde ATH ($0.2475)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:95%;"></div></div><div class="meter-footer"><span>ATH</span><span style="color:#f87171;">🔴 -95%, cerca de mínimos</span><span>ATL</span></div></div>
+    <div class="note-box warning" style="margin-top:14px;">
+      Los futuros mueven unas 20 veces el volumen spot y el open interest equivale a una cuarta parte del Mcap. Con desbloqueos cada mes, el precio de corto plazo depende más del posicionamiento en derivados que del uso de la cadena. En julio de 2026, cuatro wallets vendieron $161K en 30 minutos: la liquidez es delgada.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-em">⚖</div>
+      <div class="section-title">Argumentos alcistas vs. bajistas</div>
+      <div class="section-tag">Veredicto TokenFlow</div>
+    </div>
+    <div class="verdict-grid">
+      <div class="verdict-card verdict-bull">
+        <div class="verdict-title">🟢 Argumentos alcistas</div>
+        <div class="verdict-item">Agente de transferencia registrado ante la SEC</div>
+        <div class="verdict-item">Afiliado con licencia de broker-dealer</div>
+        <div class="verdict-item">Vaults RWA por encima de $220M</div>
+        <div class="verdict-item">Supply fijo, sin emisión; 68% ya en circulación</div>
+        <div class="verdict-item">Sector RWA en pleno crecimiento</div>
+      </div>
+      <div class="verdict-card verdict-bear">
+        <div class="verdict-title">🔴 Argumentos bajistas</div>
+        <div class="verdict-item">Solo ~$14.8M de TVL medible en la cadena</div>
+        <div class="verdict-item">~212M PLUME desbloqueados cada mes hasta 2028</div>
+        <div class="verdict-item">Sin recompras, quema ni reparto de ingresos</div>
+        <div class="verdict-item">Wormhole sale el 2 de diciembre</div>
+        <div class="verdict-item">Futuros ~20x el spot</div>
+        <div class="verdict-item">-95% desde el máximo</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="final-verdict">
+    <div class="final-title">TokenFlow AI · Veredicto Final</div>
+    <div class="final-score">
+      <div class="score-number">4.0</div>
+      <div>
+        <div class="score-label">Empresa con licencias · Token sin ancla</div>
+        <div class="score-sub">sobre 10 · Permisos reales, actividad y captura de valor ausentes</div>
+      </div>
+    </div>
+    <div class="final-text">
+      Plume tiene lo que el sector RWA más necesita y lo que menos proyectos consiguen: permisos regulatorios. Es agente de transferencia registrado ante la SEC, un afiliado obtuvo licencia de broker-dealer y sus vaults superan los $220M. Como empresa, está mejor posicionada que la mayoría de sus competidores.<br><br>
+      El token cuenta otra historia. La cadena muestra ~$14.8M de TVL y volúmenes de DEX de pocos miles de dólares por semana, así que el gas, su principal uso, genera poca demanda. Cada mes salen ~212M tokens hasta 2028, y la mitad de cada desbloqueo va a inversores y equipo. No hay recompras ni reparto, y Wormhole deja la red el 2 de diciembre.<br><br>
+      En la serie, Plume se parece a Centrifuge: el valor regulatorio se queda en la empresa. Puntúa por encima de Kaito porque tiene más supply en circulación y sus licencias no dependen de una sola plataforma.<br><br>
+      <strong>¿Qué cambiaría el veredicto?</strong> Un mecanismo público que conecte los ingresos de los negocios regulados con el token, un TVL onchain que se acerque a la cifra de los vaults, y que el mercado absorba los desbloqueos mensuales sin nuevos mínimos.
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:20px;">
+    <div class="section-header">
+      <div class="section-icon icon-blue">👁</div>
+      <div class="section-title">Qué vigilar en los próximos 30–90 días</div>
+      <div class="section-tag">Lista de Monitoreo</div>
+    </div>
+    <div class="watch-item"><div class="watch-dot dot-red"></div><div class="watch-text"><strong>Desbloqueos del día 21:</strong> ~212M PLUME cada mes. Seguir en Tokenomist si los tokens de inversores llegan a exchanges.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-yellow"></div><div class="watch-text"><strong>2 de diciembre:</strong> fin del soporte de Wormhole. Ver si sale liquidez de la red y qué puente lo reemplaza.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-em"></div><div class="watch-text"><strong>TVL en DefiLlama:</strong> la señal más clara de si la actividad llega a la cadena. Comparar con la cifra de los vaults.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Uso del broker-dealer:</strong> primeras acciones reales ofrecidas en wallets y si eso pasa por Plume Chain.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-yellow"></div><div class="watch-text"><strong>Captura de valor:</strong> cualquier propuesta de recompras o de reparto de ingresos sería un giro importante.</div></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong style="color:#34d399;">TokenFlow AI</strong> · Investigación de tokenómica AI, DePIN y RWA · Sin hype. Solo estructura.<br>
+  Fecha del análisis: 20 de noviembre de 2026 · Este análisis no constituye asesoramiento de inversión. DYOR.<br>
+  Fuentes: CoinGecko, Tokenomist, DefiLlama, documentación de Plume, CoinDesk, BSC News, Blockonomi, Wormhole<br>
+  <a href="https://t.me/TokenFlowAI">Únete en Telegram</a> · <a href="https://wa.me/?text=An%C3%A1lisis%20de%20Plume%20(%24PLUME)%20por%20TokenFlow%20AI%3A%20https%3A%2F%2Fbmisi70.github.io%2Ftokenflowai.github.io%2FTokenFlow_PLUME_Analisis_2026_ES.html">Compartir por WhatsApp</a>
+</div>
+
+</body>
+</html>
