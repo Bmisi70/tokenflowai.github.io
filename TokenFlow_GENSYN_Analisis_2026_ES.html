@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenFlow AI – Análisis Gensyn (AI) 2026</title>
+<meta name="description" content="Análisis tokenómico de Gensyn ($AI): 13% en circulación, desbloqueos de inversores desde 2027, recompra y quema con Delphi, y riesgos. Sin hype. Solo estructura.">
+<script data-goatcounter="https://tokenflowai.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'JetBrains Mono', monospace; background: #0a0e1a; color: #e2e8f0; line-height: 1.7; font-size: 14px; }
+
+  .header { background: linear-gradient(135deg, #0a0e1a 0%, #170f28 50%, #0a0e1a 100%); border-bottom: 1px solid #7c3aed; padding: 44px 32px 36px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; background: radial-gradient(ellipse, rgba(167,139,250,0.10) 0%, transparent 70%); pointer-events: none; }
+  .brand { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #a78bfa; margin-bottom: 14px; font-weight: 600; }
+  .title { font-size: 38px; font-weight: 800; color: #f8fafc; margin-bottom: 8px; letter-spacing: -1px; }
+  .title span { color: #a78bfa; }
+  .subtitle { font-size: 12px; color: #64748b; margin-bottom: 22px; letter-spacing: 1px; }
+  .verdict-badge { display: inline-block; padding: 8px 24px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid; font-family: 'JetBrains Mono', monospace; }
+  .badge-warning { background: #451a03; color: #fb923c; border-color: #9a3412; }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 36px 20px; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 36px; }
+  .stat-card { background: #0d1525; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; text-align: center; }
+  .stat-label { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .stat-value { font-size: 22px; font-weight: 800; color: #f8fafc; }
+  .stat-sub { font-size: 10px; color: #64748b; margin-top: 4px; }
+  .stat-vi { color: #a78bfa; }
+  .stat-green { color: #4ade80; }
+  .stat-yellow { color: #fbbf24; }
+  .stat-red { color: #f87171; }
+  .stat-orange { color: #fb923c; }
+
+  .section { background: #0d1525; border: 1px solid #1e293b; border-radius: 8px; padding: 26px; margin-bottom: 18px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #1e293b; }
+  .section-icon { width: 34px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .icon-blue { background: #1e3a5f; }
+  .icon-red { background: #450a0a; }
+  .icon-yellow { background: #422006; }
+  .icon-green { background: #052e16; }
+  .icon-vi { background: #2e1065; }
+  .section-title { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+  .section-tag { font-size: 10px; color: #475569; margin-left: auto; letter-spacing: 1px; text-transform: uppercase; }
+
+  .concept-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .concept-card { background: #150f24; border: 1px solid #5b21b6; border-radius: 6px; padding: 16px; }
+  .concept-card-title { font-size: 11px; color: #a78bfa; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .concept-card-text { font-size: 12px; color: #94a3b8; line-height: 1.6; }
+
+  .table-wrap { overflow-x: auto; }
+  .alloc-table { width: 100%; border-collapse: collapse; min-width: 520px; }
+  .alloc-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #475569; text-align: left; padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .alloc-table td { padding: 11px 12px; border-bottom: 1px solid #0f172a; font-size: 13px; vertical-align: middle; }
+  .alloc-table tr:last-child td { border-bottom: none; }
+  .alloc-table tr.stale td { color: #475569; }
+  .alloc-bar-wrap { background: #1e293b; border-radius: 2px; height: 5px; width: 90px; display: inline-block; vertical-align: middle; margin-left: 8px; }
+  .alloc-bar { height: 5px; border-radius: 2px; display: block; }
+
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+  .pill-green { background: #052e16; color: #4ade80; }
+  .pill-yellow { background: #422006; color: #fbbf24; }
+  .pill-red { background: #450a0a; color: #f87171; }
+  .pill-vi { background: #2e1065; color: #ddd6fe; }
+
+  .pressure-meter { margin: 14px 0; }
+  .meter-label { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+  .meter-bar-wrap { background: #1e293b; border-radius: 3px; height: 10px; overflow: hidden; }
+  .meter-bar { height: 10px; border-radius: 3px; }
+  .meter-green { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .meter-orange { background: linear-gradient(90deg, #ea580c, #fb923c); }
+  .meter-red { background: linear-gradient(90deg, #dc2626, #f87171); }
+  .meter-yellow { background: linear-gradient(90deg, #ca8a04, #fbbf24); }
+  .meter-vi { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
+  .meter-footer { display: flex; justify-content: space-between; font-size: 10px; color: #475569; margin-top: 4px; gap: 8px; }
+
+  .verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .verdict-card { border-radius: 6px; padding: 20px; }
+  .verdict-bull { background: #052e16; border: 1px solid #166534; }
+  .verdict-bear { background: #450a0a; border: 1px solid #7f1d1d; }
+  .verdict-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .verdict-bull .verdict-title { color: #4ade80; }
+  .verdict-bear .verdict-title { color: #f87171; }
+  .verdict-item { font-size: 12px; color: #cbd5e1; margin-bottom: 9px; padding-left: 18px; position: relative; line-height: 1.5; }
+  .verdict-item::before { content: '→'; position: absolute; left: 0; font-weight: 700; }
+  .verdict-bull .verdict-item::before { color: #4ade80; }
+  .verdict-bear .verdict-item::before { color: #f87171; }
+
+  .final-verdict { background: linear-gradient(135deg, #170f28, #0f172a); border: 1px solid #7c3aed; border-radius: 8px; padding: 30px; margin-top: 8px; }
+  .final-title { font-size: 11px; color: #a78bfa; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 14px; font-weight: 700; }
+  .final-score { display: flex; align-items: center; gap: 22px; margin-bottom: 18px; }
+  .score-number { font-size: 68px; font-weight: 900; color: #fbbf24; line-height: 1; }
+  .score-label { font-size: 20px; font-weight: 700; color: #f1f5f9; }
+  .score-sub { font-size: 12px; color: #64748b; margin-top: 6px; }
+  .final-text { font-size: 13px; color: #cbd5e1; line-height: 1.9; }
+
+  .watch-item { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-bottom: 1px solid #1e293b; font-size: 13px; }
+  .watch-item:last-child { border-bottom: none; }
+  .watch-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #22c55e; }
+  .dot-vi { background: #a78bfa; }
+  .watch-text { color: #cbd5e1; }
+  .watch-text strong { color: #f8fafc; }
+
+  .note-box { background: #0f0a1a; border-left: 3px solid #a78bfa; border-radius: 0 6px 6px 0; padding: 14px 16px; font-size: 12px; color: #94a3b8; margin: 14px 0; line-height: 1.8; }
+  .note-box.warning { border-left-color: #f59e0b; background: #0d1105; }
+  .note-box.danger { border-left-color: #ef4444; background: #0d0808; }
+  .note-box.success { border-left-color: #22c55e; background: #050f05; }
+  .note-box strong { color: #e2e8f0; }
+
+  .footer { text-align: center; padding: 28px; color: #334155; font-size: 11px; border-top: 1px solid #1e293b; margin-top: 36px; letter-spacing: 0.5px; line-height: 2; }
+  .footer a { color: #a78bfa; }
+
+  @media (max-width: 600px) {
+    .verdict-grid, .concept-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .score-number { font-size: 52px; }
+    .title { font-size: 28px; }
+    .final-score { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">🔵 TokenFlow AI · Investigación de Tokenómica AI</div>
+  <div class="title">Gensyn · <span>AI</span></div>
+  <div class="subtitle">Análisis completo — Buena tecnología, mecanismo de quema y el float más bajo de la serie · 27 de noviembre de 2026</div>
+  <div class="verdict-badge badge-warning">⚠ Solo 13% en circulación · Inversores desbloquean desde 2027 · Quema sin datos públicos</div>
+</div>
+
+<div class="container">
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Precio (USD)</div><div class="stat-value stat-vi">~$0.0155</div><div class="stat-sub">27 nov. · banda $0.015–0.016</div></div>
+    <div class="stat-card"><div class="stat-label">Cap. de Mercado</div><div class="stat-value">~$20M</div><div class="stat-sub">CoinMarketCap / CoinGecko</div></div>
+    <div class="stat-card"><div class="stat-label">FDV</div><div class="stat-value stat-red">~$155M</div><div class="stat-sub">Mcap/FDV = 13% ⚠️</div></div>
+    <div class="stat-card"><div class="stat-label">Desde ATH</div><div class="stat-value stat-red">-85%</div><div class="stat-sub">ATH: $0.103 (29 abr. 2026)</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Circ.</div><div class="stat-value">~1,300M</div><div class="stat-sub">13% del máximo</div></div>
+    <div class="stat-card"><div class="stat-label">Suministro Máx.</div><div class="stat-value">10,000M</div><div class="stat-sub">Fijo, sin inflación</div></div>
+    <div class="stat-card"><div class="stat-label">Inversores + equipo</div><div class="stat-value stat-red">54.6%</div><div class="stat-sub">Del supply total</div></div>
+    <div class="stat-card"><div class="stat-label">Quema</div><div class="stat-value stat-orange">0.35%</div><div class="stat-sub">Del volumen de Delphi</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-vi">🧬</div>
+      <div class="section-title">¿Qué es Gensyn? — Infraestructura de IA verificable</div>
+      <div class="section-tag">AI / Compute</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:18px;">Gensyn es una red descentralizada para entrenar, ejecutar y verificar modelos de inteligencia artificial. Su idea central es la verificabilidad: que cualquier operación de IA se pueda repetir y comprobar con el mismo resultado, sin confiar en una empresa intermediaria. Funciona sobre su propia L2 en Ethereum (OP Stack). La empresa existe desde 2020, ha levantado más de $78M y cuenta con a16z crypto como inversor principal. El token AI se lanzó el 29 de abril de 2026.</p>
+
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="concept-card-title">Delphi</div>
+        <div class="concept-card-text">Mercados de información que se resuelven con modelos de IA cuyos pesos se fijan antes de abrir el mercado. En mainnet desde el 22 de abril de 2026.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">REE</div>
+        <div class="concept-card-text">Entorno de ejecución reproducible: busca que un modelo dé exactamente el mismo resultado en distintas GPU, CPU y centros de datos.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">open-1b / open-8b</div>
+        <div class="concept-card-text">Modelos diseñados para ser auditados, no para que se confíe en ellos a ciegas. open-8b sigue en entrenamiento (noviembre de 2026).</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-title">AXL y RL Swarm</div>
+        <div class="concept-card-text">Comunicación entre agentes de IA de par a par y entrenamiento colaborativo, base de la red de cómputo distribuido.</div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <strong>🔑 Contexto de la serie:</strong> Livepeer, Maple, Pyth, Centrifuge, Kaito y Plume giraron en torno a una pregunta: ¿cómo llega el valor del negocio al token? Gensyn sí tiene respuesta en el papel, con recompra y quema. Pero añade otra pregunta: ¿alcanza un buen mecanismo cuando el 87% del supply todavía no está en el mercado?
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">💸</div>
+      <div class="section-title">De $1,000M a ~$155M — La valoración</div>
+      <div class="section-tag">Rondas y Venta</div>
+    </div>
+    <div class="table-wrap">
+      <table class="alloc-table">
+        <thead><tr><th>Fecha</th><th>Evento</th><th>Valoración / Monto</th></tr></thead>
+        <tbody>
+          <tr><td><strong>2021–2022</strong></td><td>Pre-seed y seed (CoinFund, 7percent)</td><td>~$7.6M</td></tr>
+          <tr><td><strong>Junio 2023</strong></td><td>Serie A liderada por a16z crypto</td><td>$43M</td></tr>
+          <tr><td><strong>Octubre 2025</strong></td><td>Ronda liderada por a16z crypto</td><td><span class="status-pill pill-vi">$1,000M FDV</span></td></tr>
+          <tr><td><strong>Diciembre 2025</strong></td><td>Venta pública en Sonar (subasta, 3% del supply)</td><td>Tope de $1,000M FDV · $11.7M netos</td></tr>
+          <tr><td><strong>29 abril 2026</strong></td><td>Lanzamiento del token y máximo histórico</td><td><span class="status-pill pill-yellow">$0.103 · ~$1,030M FDV</span></td></tr>
+          <tr><td><strong>14 noviembre 2026</strong></td><td>Mínimo histórico</td><td><span class="status-pill pill-red">$0.0117</span></td></tr>
+          <tr style="background:#150f24;"><td><strong style="color:#a78bfa;">27 noviembre 2026</strong></td><td>Hoy</td><td><span class="status-pill pill-red">~$155M FDV</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note-box danger" style="margin-top:14px;">
+      <strong>🔴 La brecha:</strong> la última ronda de a16z y el tope de la venta pública valoraban la red en $1,000M. El mercado hoy la valora en ~$155M de FDV, un 85% menos. Quien compró cerca del lanzamiento está en pérdidas profundas, y los inversores privados todavía no han podido vender.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📊</div>
+      <div class="section-title">Estructura del suministro — El 87% fuera del mercado</div>
+      <div class="section-tag">Supply Analysis</div>
+    </div>
+    <div class="table-wrap">
+      <table class="alloc-table">
+        <thead><tr><th>Categoría</th><th>% Supply</th><th>Calendario</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Tesoro comunitario</strong></td><td>40.4% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:100%;background:#a78bfa;"></div></div></td><td style="color:#fbbf24;">Por hitos y acciones onchain, sin calendario fijo</td></tr>
+          <tr><td><strong>Inversores</strong></td><td>29.6% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:73%;background:#ef4444;"></div></div></td><td style="color:#f87171;">⚠ 12 meses bloqueados, luego 24 meses lineales</td></tr>
+          <tr><td><strong>Equipo</strong></td><td>25% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:62%;background:#f87171;"></div></div></td><td style="color:#f87171;">⚠ Calendario detallado no publicado</td></tr>
+          <tr><td><strong>Venta pública</strong></td><td>3% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:7%;background:#4ade80;"></div></div></td><td>Distribuida en el lanzamiento</td></tr>
+          <tr><td><strong>Recompensas de testnet</strong></td><td>2% <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:5%;background:#4ade80;"></div></div></td><td>Bonificación a usuarios de la testnet</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pressure-meter" style="margin-top:20px;">
+      <div class="meter-label">Mcap/FDV — comparativa con tokens analizados por TokenFlow AI</div>
+      <div style="display:grid;gap:8px;margin-top:8px;">
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>Maple (SYRUP)</span><span>92%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:92%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>Pyth (PYTH)</span><span>79%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-green" style="width:79%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>Plume (PLUME)</span><span>68%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-orange" style="width:68%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>Walrus (WAL)</span><span>52%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-orange" style="width:52%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>DoubleZero (2Z)</span><span>35%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:35%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:3px;"><span>Kaito (KAITO)</span><span>24%</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:24%;"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:11px;color:#a78bfa;font-weight:700;margin-bottom:3px;"><span>Gensyn (AI)</span><span>13% ⚠</span></div><div class="meter-bar-wrap"><div class="meter-bar meter-vi" style="width:13%;"></div></div></div>
+      </div>
+    </div>
+
+    <div class="pressure-meter">
+      <div class="meter-label">Desbloqueo mensual de inversores (desde la primavera de 2027) vs. circulante actual</div>
+      <div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:9%;"></div></div>
+      <div class="meter-footer"><span>0%</span><span style="color:#f87171;">🔴 ~123M AI al mes ≈ 9% del circulante de hoy</span><span>100%</span></div>
+    </div>
+
+    <div class="note-box danger">
+      <strong>🔴 El calendario:</strong> 2,960M AI de los inversores quedan bloqueados 12 meses desde el lanzamiento y después se liberan durante 24 meses. Desde la primavera de 2027 serían unos 123M AI al mes, casi un 9% del circulante actual cada mes. Inversores y equipo suman 5,460M AI: más de cuatro veces todo lo que circula hoy.
+    </div>
+    <div class="note-box">
+      <strong>📌 Nota sobre los datos:</strong> Gensyn no ha publicado un calendario de vesting completo. Tokenomist muestra la distribución pero marca el token como "totalmente desbloqueado", lo que contradice su propio dato del 13% en circulación. El calendario de inversores procede de fuentes secundarias (CryptoTicker); el del equipo no está detallado. Las cifras de esta sección son aproximadas.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">🔥</div>
+      <div class="section-title">Captura de valor — Recompra y quema con Delphi</div>
+      <div class="section-tag">Mecanismo</div>
+    </div>
+    <p style="font-size:13px;color:#94a3b8;margin-bottom:16px;">Delphi cobra un 0.5% sobre todo el volumen operado. Con esa comisión, el protocolo compra AI en el mercado y reparte lo comprado: 70% se quema, 29% va al tesoro comunitario y 1% a los ejecutores. Los creadores de mercados cobran aparte un 1.5% en USDC. El token también se usa para staking, pagos y gobernanza de la red. Es, sobre el papel, uno de los diseños más directos que hemos visto en la serie.</p>
+    <div class="pressure-meter">
+      <div class="meter-label">Vínculo entre la actividad de la red y el token</div>
+      <div class="meter-bar-wrap"><div class="meter-bar meter-orange" style="width:60%;"></div></div>
+      <div class="meter-footer"><span>Ninguno</span><span style="color:#fb923c;">🟠 Directo en diseño, sin verificación pública</span><span>Directo</span></div>
+    </div>
+    <div class="stats-grid" style="margin-top:16px;margin-bottom:6px;">
+      <div class="stat-card"><div class="stat-label">Comisión de Delphi</div><div class="stat-value stat-vi">0.5%</div><div class="stat-sub">Sobre el volumen</div></div>
+      <div class="stat-card"><div class="stat-label">Parte quemada</div><div class="stat-value stat-vi">70%</div><div class="stat-sub">De lo recomprado</div></div>
+      <div class="stat-card"><div class="stat-label">Para quemar $1M/año</div><div class="stat-value stat-orange">~$286M</div><div class="stat-sub">Volumen anual necesario</div></div>
+      <div class="stat-card"><div class="stat-label">Quemado (datos públicos)</div><div class="stat-value stat-red">—</div><div class="stat-sub">Sin panel oficial</div></div>
+    </div>
+    <div class="table-wrap" style="margin-top:14px;">
+      <table class="alloc-table">
+        <thead><tr><th>Protocolo</th><th>Cómo llega el valor al token</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Livepeer (LPT)</strong></td><td>No llega: comisiones a operadores, inflación a stakers</td></tr>
+          <tr><td><strong>Maple (SYRUP)</strong></td><td>10–30% de los ingresos a recompras</td></tr>
+          <tr><td><strong>Pyth (PYTH)</strong></td><td>100% de los ingresos de productos a recompras</td></tr>
+          <tr><td><strong>Centrifuge (CFG)</strong></td><td>El valor pasa a acciones de la empresa</td></tr>
+          <tr><td><strong>Kaito (KAITO)</strong></td><td>Acceso a airdrops y campañas mediante staking</td></tr>
+          <tr><td><strong>Plume (PLUME)</strong></td><td>Gas y staking; las licencias quedan en la empresa</td></tr>
+          <tr style="background:#150f24;"><td><strong style="color:#a78bfa;">Gensyn (AI)</strong></td><td>0.5% del volumen de Delphi a recompras; 70% se quema</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note-box warning" style="margin-top:14px;">
+      <strong>⚠ El mecanismo depende del volumen:</strong> solo el 0.35% del volumen de Delphi termina quemado. Para quemar $1M al año hacen falta unos $286M de volumen anual. En la testnet, un mercado deportivo movió $4.88M. Gensyn no publica un panel con el volumen de mainnet ni con los tokens quemados, y Tokenomist todavía no registra quemas. Frente a 123M AI al mes en desbloqueos futuros, la quema tendría que crecer mucho para compensar.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">⚔</div>
+      <div class="section-title">Posicionamiento competitivo</div>
+      <div class="section-tag">IA Descentralizada</div>
+    </div>
+    <div class="table-wrap">
+      <table class="alloc-table">
+        <thead><tr><th>Proyecto</th><th>Enfoque</th><th>vs. AI</th></tr></thead>
+        <tbody>
+          <tr style="background:#150f24;"><td><strong style="color:#a78bfa;">Gensyn (AI)</strong></td><td>Entrenamiento y verificación de IA + Delphi</td><td>— Respaldo de a16z, quema por volumen</td></tr>
+          <tr><td><strong>Bittensor (TAO)</strong></td><td>Red de subredes de IA con incentivos</td><td>Mucho mayor y más líquido; analizado por TokenFlow</td></tr>
+          <tr><td><strong>Prime Intellect</strong></td><td>Entrenamiento descentralizado de modelos</td><td>Competidor técnico directo, sin token líquido</td></tr>
+          <tr><td><strong>io.net (IO) / Akash (AKT)</strong></td><td>Mercados de GPU</td><td>Venden cómputo; Gensyn apunta a la verificación</td></tr>
+          <tr><td><strong>Polymarket</strong></td><td>Mercados de predicción</td><td>Rival de Delphi en volumen, sin resolución por IA</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note-box" style="margin-top:14px;">
+      <strong>Posición de Gensyn:</strong> pocos equipos de IA descentralizada tienen su nivel técnico y su respaldo. Pero su producto con ingresos, Delphi, compite en mercados de información, un sector dominado por Polymarket. El valor del token depende de que Delphi gane volumen, no solo de la calidad de la investigación.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-red">📉</div>
+      <div class="section-title">Estructura del precio</div>
+      <div class="section-tag">Mercado</div>
+    </div>
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-label">Volumen 24h</div><div class="stat-value stat-orange">$6–11M</div><div class="stat-sub">≈30–50% del Mcap</div></div>
+      <div class="stat-card"><div class="stat-label">Liquidez / Mcap</div><div class="stat-value stat-red">~1%</div><div class="stat-sub">CoinMarketCap</div></div>
+      <div class="stat-card"><div class="stat-label">Última semana</div><div class="stat-value stat-vi">+27%</div><div class="stat-sub">Volumen +774% (TokenPost)</div></div>
+      <div class="stat-card"><div class="stat-label">Desde el ATL</div><div class="stat-value stat-vi">+30%</div><div class="stat-sub">ATL: $0.0117 (14 nov.)</div></div>
+    </div>
+    <div class="pressure-meter"><div class="meter-label">Recorrido desde ATH ($0.103)</div><div class="meter-bar-wrap"><div class="meter-bar meter-red" style="width:85%;"></div></div><div class="meter-footer"><span>ATH</span><span style="color:#f87171;">🔴 -85%, rebote desde mínimos</span><span>ATL</span></div></div>
+    <div class="note-box warning" style="margin-top:14px;">
+      El máximo histórico se marcó el mismo día del lanzamiento y desde entonces el precio cayó casi sin pausa hasta el mínimo del 14 de noviembre. El rebote de esta semana llegó con un volumen 7 veces mayor. Con un Mcap de ~$20M, un float del 13% y una liquidez de solo el 1% del Mcap, los movimientos de ±30% en una semana son normales en ambas direcciones.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-vi">⚖</div>
+      <div class="section-title">Argumentos alcistas vs. bajistas</div>
+      <div class="section-tag">Veredicto TokenFlow</div>
+    </div>
+    <div class="verdict-grid">
+      <div class="verdict-card verdict-bull">
+        <div class="verdict-title">🟢 Argumentos alcistas</div>
+        <div class="verdict-item">Equipo técnico sólido y respaldo de a16z crypto</div>
+        <div class="verdict-item">Mecanismo de recompra y quema ligado al volumen</div>
+        <div class="verdict-item">Supply fijo de 10,000M, sin inflación</div>
+        <div class="verdict-item">Producto en mainnet (Delphi) y avances reales en investigación</div>
+        <div class="verdict-item">Hasta la primavera de 2027 no desbloquean los inversores</div>
+      </div>
+      <div class="verdict-card verdict-bear">
+        <div class="verdict-title">🔴 Argumentos bajistas</div>
+        <div class="verdict-item">Solo 13% del supply en circulación, el más bajo de la serie</div>
+        <div class="verdict-item">Inversores + equipo: 54.6% del supply total</div>
+        <div class="verdict-item">~123M AI al mes de inversores desde 2027</div>
+        <div class="verdict-item">Sin datos públicos de volumen de Delphi ni de quemas</div>
+        <div class="verdict-item">Tesoro del 40.4% sin calendario fijo</div>
+        <div class="verdict-item">Liquidez muy baja: ~1% del Mcap</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="final-verdict">
+    <div class="final-title">TokenFlow AI · Veredicto Final</div>
+    <div class="final-score">
+      <div class="score-number">3.5</div>
+      <div>
+        <div class="score-label">Buen mecanismo · Supply por llegar</div>
+        <div class="score-sub">sobre 10 · El diseño es correcto; la estructura del supply, no</div>
+      </div>
+    </div>
+    <div class="final-text">
+      Gensyn es, en lo técnico, uno de los proyectos más serios de la IA descentralizada. Tiene a a16z detrás, investigación publicada, un producto en mainnet y, a diferencia de Kaito o Plume, un mecanismo concreto que conecta la actividad con el token: el 0.5% del volumen de Delphi recompra AI y el 70% se quema.<br><br>
+      El problema es la estructura. Solo el 13% del supply está en circulación, el porcentaje más bajo que hemos analizado. Inversores y equipo tienen más de cuatro veces todo lo que circula hoy, y los inversores empiezan a desbloquear en la primavera de 2027. El tesoro, el bloque más grande, se libera sin calendario fijo. Y el mecanismo de quema, que es la principal defensa, todavía no tiene datos públicos.<br><br>
+      En la serie, Gensyn es el caso inverso a Plume: Plume tiene supply en circulación pero ningún mecanismo; Gensyn tiene mecanismo pero casi nada de supply en circulación.<br><br>
+      <strong>¿Qué cambiaría el veredicto?</strong> Un panel público con el volumen de Delphi y los tokens quemados, un calendario de vesting completo y oficial (sobre todo del equipo y del tesoro), y que el volumen de Delphi crezca lo suficiente como para que la quema sea relevante antes de 2027.
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:20px;">
+    <div class="section-header">
+      <div class="section-icon icon-blue">👁</div>
+      <div class="section-title">Qué vigilar en los próximos 30–90 días</div>
+      <div class="section-tag">Lista de Monitoreo</div>
+    </div>
+    <div class="watch-item"><div class="watch-dot dot-vi"></div><div class="watch-text"><strong>Volumen de Delphi:</strong> es lo que alimenta la quema. Cualquier panel o dato oficial es la señal más importante.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-red"></div><div class="watch-text"><strong>Movimientos del tesoro comunitario:</strong> el 40.4% se libera por hitos. Transferencias a exchanges pueden anticipar ventas.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-yellow"></div><div class="watch-text"><strong>Calendario oficial de vesting:</strong> sobre todo el del equipo (25%), que hoy no está detallado.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-green"></div><div class="watch-text"><strong>Lanzamiento de open-8b:</strong> un modelo auditable funcionando reforzaría la tesis técnica.</div></div>
+    <div class="watch-item"><div class="watch-dot dot-red"></div><div class="watch-text"><strong>Sostenibilidad del rebote:</strong> tras el +27% semanal con volumen 7x, ver si el precio se mantiene por encima del mínimo del 14 de noviembre.</div></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong style="color:#a78bfa;">TokenFlow AI</strong> · Investigación de tokenómica AI, DePIN y RWA · Sin hype. Solo estructura.<br>
+  Fecha del análisis: 27 de noviembre de 2026 · Este análisis no constituye asesoramiento de inversión. DYOR.<br>
+  Fuentes: CoinGecko, CoinMarketCap, Tokenomist, Binance Research, The Block, Gensyn, CryptoTicker, TokenPost, Coin Gabbar, PR Newswire<br>
+  <a href="https://t.me/TokenFlowAI">Únete en Telegram</a> · <a href="https://wa.me/?text=An%C3%A1lisis%20de%20Gensyn%20(%24AI)%20por%20TokenFlow%20AI%3A%20https%3A%2F%2Fbmisi70.github.io%2Ftokenflowai.github.io%2FTokenFlow_GENSYN_Analisis_2026_ES.html">Compartir por WhatsApp</a>
+</div>
+
+</body>
+</html>
